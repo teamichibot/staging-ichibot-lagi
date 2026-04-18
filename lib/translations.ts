@@ -7,6 +7,7 @@ export const t = {
     caseStudies: { id: 'Studi Kasus',      en: 'Case Studies' },
     blog:        { id: 'Blog',             en: 'Blog' },
     about:       { id: 'Tentang Kami',     en: 'About Us' },
+    contact:     { id: 'Kontak',           en: 'Contact' },
     cta:         { id: 'Konsultasi Gratis', en: 'Free Consultation' },
   },
 
