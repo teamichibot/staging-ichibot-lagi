@@ -1,0 +1,50 @@
+---
+title: "Computer Vision untuk Quality Control: Studi Kasus Lini Produksi"
+date: "2025-11-28"
+category: "AI"
+excerpt: "Bagaimana kamera AI mampu mendeteksi cacat produk 10x lebih cepat dari inspektur manusia — dan apa trade-off-nya."
+---
+
+Quality control di lini produksi adalah salah satu proses yang paling mahal dan paling rentan terhadap human error. Inspektur manusia bisa lelah, kehilangan fokus, dan memiliki standar yang tidak konsisten.
+
+AI Computer Vision hadir untuk mengatasi masalah ini — tapi bukan tanpa trade-off.
+
+## Bagaimana Sistem Ini Bekerja
+
+Secara sederhana, sistem computer vision untuk quality control terdiri dari:
+
+- Kamera resolusi tinggi yang dipasang di titik inspeksi (biasanya di conveyor atau sebelum packaging)
+- Model AI yang dilatih untuk mengenali produk "OK" vs "NG" (Not Good)
+- Sistem trigger untuk mengeluarkan atau menandai produk NG secara otomatis
+- Dashboard untuk melihat statistik reject rate, tren cacat, dan alert
+
+## Kecepatan vs Akurasi
+
+Dalam pengujian kami di beberapa lini produksi:
+
+- **Inspektur manusia**: bisa memeriksa 200–400 unit/jam dengan akurasi ~85–90%
+- **Sistem CV**: bisa memeriksa 2.000–5.000 unit/jam dengan akurasi 95–99% (setelah training cukup)
+
+Angka akurasi bergantung sangat besar pada kualitas data training. Model yang dilatih dengan 200 gambar cacat akan berbeda jauh dengan model yang dilatih dengan 5.000 gambar berlabel.
+
+## Trade-Off yang Perlu Diketahui
+
+Sebelum memutuskan investasi di computer vision, ada beberapa hal yang perlu dipahami:
+
+- **Biaya data labeling**: Butuh ratusan hingga ribuan gambar produk cacat yang sudah dilabeli
+- **Sensitivitas pencahayaan**: Perubahan pencahayaan kecil bisa menurunkan akurasi signifikan
+- **Variasi produk baru**: Setiap kali ada perubahan desain produk, model perlu diretrain
+- **False positive**: Sistem bisa menolak produk yang sebenarnya OK — ini juga ada biayanya
+
+## Kapan Layak Diinvestasikan?
+
+Berdasarkan pengalaman kami, investasi computer vision untuk QC layak ketika:
+
+- Volume produksi di atas 500 unit/jam
+- Defect rate saat ini di atas 2–3%
+- Konsekuensi lolos inspeksi tinggi (safety, recall risk)
+- Biaya tenaga inspektur signifikan
+
+Untuk produksi skala lebih kecil atau produk dengan variasi tinggi, pendekatan hybrid (manusia + AI sebagai second check) sering lebih cost-effective.
+
+Diskusikan situasi spesifik lini produksi Anda dengan tim kami untuk assessment yang lebih akurat.
