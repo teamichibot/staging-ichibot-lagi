@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLang } from '@/contexts/LanguageContext'
 import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 
@@ -15,10 +16,19 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="font-display text-2xl font-bold text-white">
-              Ichibot
+            <Link href="/" className="inline-block mb-4">
+              <Image
+                src="/logos/logo.svg"
+                alt="Ichibot"
+                width={120}
+                height={36}
+                className="brightness-0 invert"
+              />
             </Link>
-            <p className="mt-3 text-white/60 text-sm leading-relaxed max-w-xs">
+            <h3 className="text-white font-bold tracking-wider text-sm mb-2">
+              PT. GASGAS ANAGATA SEMESTA
+            </h3>
+            <p className="text-white/60 text-sm leading-relaxed max-w-xs">
               {tx(t.footer.tagline)}
             </p>
             <div className="flex items-center gap-4 mt-6">
