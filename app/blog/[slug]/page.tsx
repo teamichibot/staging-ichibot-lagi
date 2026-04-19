@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.excerpt,
       type: 'article',
       publishedTime: post.date,
+      ...(post.image ? { images: [post.image] } : {}),
     },
   }
 }
@@ -43,18 +44,20 @@ export default async function BlogPostPage({ params }: Props) {
     <div className="pt-24 pb-24 md:pt-32 bg-white min-h-screen">
       <div className="max-w-3xl mx-auto px-6">
         {/* Back */}
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 text-muted hover:text-navy text-sm font-medium mb-10 transition-colors"
-        >
-          <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
-            <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
-          </svg>
-          Kembali ke Blog
-        </Link>
+        <div className="mb-10">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-muted hover:text-navy text-sm font-medium transition-colors"
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+              <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Kembali ke Blog
+          </Link>
+        </div>
 
         {/* Header */}
-        <div className="mb-10">
+        <div className="mb-8">
           <div className="flex items-center gap-3 mb-5">
             <span
               className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
@@ -77,9 +80,21 @@ export default async function BlogPostPage({ params }: Props) {
           <p className="text-muted text-lg leading-relaxed">{post.excerpt}</p>
         </div>
 
+        {/* Hero Image */}
+        {post.image && (
+          <div className="mb-10 rounded-2xl overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-64 md:h-80 object-cover"
+            />
+          </div>
+        )}
+
         <div className="border-t border-border mb-10" />
 
-        {/* Content rendered as plain text paragraphs */}
+        {/* Content */}
         <div className="prose prose-slate max-w-none prose-headings:font-display prose-a:text-teal">
           {post.content.split('\n\n').map((para, i) => {
             if (para.startsWith('## ')) {

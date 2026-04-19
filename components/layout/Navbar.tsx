@@ -51,7 +51,14 @@ export function Navbar() {
   }
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none">
+    <>
+      {/* Blur Overlay Backdrop */}
+      <div 
+        className={`fixed inset-0 z-40 transition-all duration-500 ease-in-out ${activeDropdown || mobileOpen ? 'opacity-100 backdrop-blur-md bg-navy/30 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => { setMobileOpen(false); setActiveDropdown(null); }}
+      />
+
+      <header className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none">
       {/* Floating pill */}
       <nav className="pointer-events-auto max-w-4xl mx-auto flex items-center justify-between h-14 px-5 rounded-2xl bg-navy/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300">
 
@@ -202,5 +209,6 @@ export function Navbar() {
         </div>
       )}
     </header>
+    </>
   )
 }

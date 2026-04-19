@@ -3,16 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLang } from '@/contexts/LanguageContext'
-import { t, WHATSAPP_NUMBER } from '@/lib/translations'
-
-const productImages = [
-  // Energy Usage Monitoring
-  'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&q=80&w=600&h=800',
-  // Equipment Monitoring
-  'https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=600&h=800',
-  // Maintenance AI Chatbot
-  'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=600&h=800',
-]
+import { t } from '@/lib/translations'
+import { productsData } from '@/lib/products-data'
 
 export function Products() {
   const { lang } = useLang()
@@ -20,7 +12,6 @@ export function Products() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
-  const waMessage = encodeURIComponent(t.whatsapp.message[lang])
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
@@ -54,57 +45,60 @@ export function Products() {
         </div>
 
         {/* Product cards - Immersive UI with Horizontal Scroll */}
-        <div 
+        <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
           className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
         >
-          {t.products.items.map((item, i) => (
-            <div
-              key={i}
-              className="reveal flex-none w-[85vw] md:w-[400px] snap-center group relative h-[500px] flex flex-col rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 cursor-pointer"
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              {/* Background Image */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={productImages[i]} 
-                alt={tx(item.title)}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                loading="lazy"
-              />
-              
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
-              
-              {/* Content block positioned at the bottom */}
-              <div className="relative flex flex-col flex-1 justify-end p-8 pb-10 w-full h-full z-10 text-white text-left">
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="font-display text-2xl font-bold mb-3 text-white">
-                    {tx(item.title)}
-                  </h3>
-                  <p className="text-white/80 text-sm leading-relaxed mb-8">
-                    {tx(item.desc)}
-                  </p>
-                  
-                  {/* CTA Buttons */}
-                  <div className="flex gap-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-                    <Link
-                      href="/contact"
-                      className="inline-flex items-center justify-center text-sm font-semibold text-white bg-teal/90 backdrop-blur-md hover:bg-teal py-2.5 px-6 rounded-full transition-all duration-300 group/btn"
-                    >
-                      {tx(t.products.ctaLearn)}
-                      <svg className="w-4 h-4 ml-2 transform transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                    </Link>
+          {t.products.items.map((item, i) => {
+            const productData = productsData[i]
+            return (
+              <div
+                key={i}
+                className="reveal flex-none w-[85vw] md:w-[400px] snap-center group relative h-[500px] flex flex-col rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 cursor-pointer"
+                style={{ transitionDelay: `${i * 100}ms` }}
+              >
+                {/* Background Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={productData.image}
+                  alt={tx(item.title)}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  loading="lazy"
+                />
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+
+                {/* Content block positioned at the bottom */}
+                <div className="relative flex flex-col flex-1 justify-end p-8 pb-10 w-full h-full z-10 text-white text-left">
+                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <h3 className="font-display text-2xl font-bold mb-3 text-white">
+                      {tx(item.title)}
+                    </h3>
+                    <p className="text-white/80 text-sm leading-relaxed mb-8">
+                      {tx(item.desc)}
+                    </p>
+
+                    {/* CTA Buttons */}
+                    <div className="flex gap-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                      <Link
+                        href={`/produk/${productData.slug}`}
+                        className="inline-flex items-center justify-center text-sm font-semibold text-white bg-teal/90 backdrop-blur-md hover:bg-teal py-2.5 px-6 rounded-full transition-all duration-300 group/btn"
+                      >
+                        {tx(t.products.ctaLearn)}
+                        <svg className="w-4 h-4 ml-2 transform transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
 
           {/* View All Products Card */}
           <Link
-            href="/contact"
+            href="/produk"
             className="reveal flex-none w-[85vw] md:w-[400px] snap-center group relative h-[500px] flex flex-col justify-center items-center rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-navy"
             style={{ transitionDelay: `${t.products.items.length * 100}ms` }}
           >
@@ -124,7 +118,7 @@ export function Products() {
 
         {/* Scroll Progress Indicator */}
         <div className="max-w-[120px] mx-auto h-2 bg-navy/5 rounded-full overflow-hidden mt-2 relative">
-          <div 
+          <div
             className="absolute top-0 bottom-0 left-0 w-1/4 bg-teal rounded-full transition-transform duration-100 ease-out"
             style={{ transform: `translateX(${scrollProgress * 3}%)` }}
           />

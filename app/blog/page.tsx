@@ -41,7 +41,22 @@ export default function BlogPage() {
                 href={`/blog/${post.slug}`}
                 className="group flex flex-col bg-white rounded-2xl border border-border hover:border-teal/30 hover:shadow-lg transition-all duration-300 overflow-hidden"
               >
-                <div className="h-1.5 bg-gradient-to-r from-teal to-teal-light" />
+                {/* Image */}
+                {post.image ? (
+                  <div className="relative w-full h-48 overflow-hidden bg-navy/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                  </div>
+                ) : (
+                  <div className="h-1.5 bg-gradient-to-r from-teal to-teal-light" />
+                )}
+
                 <div className="p-7 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-4">
                     <span

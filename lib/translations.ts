@@ -148,9 +148,9 @@ export const t = {
     },
     items: [
       {
-        title: { id: 'Terjangkau',    en: 'Affordable' },
-        desc:  { id: 'Digitalisasi tanpa biaya ratusan juta. Kami optimalkan untuk anggaran industri Indonesia.',
-                 en: 'Digitalization without hundred-million rupiah budgets. Optimized for Indonesian industry budgets.' },
+        title: { id: 'Cost-effective',    en: 'Cost-effective' },
+        desc:  { id: 'Sistem yang independen dan efisien, tanpa kaku mengikat pabrik Anda pada ekosistem brand tertentu.',
+                 en: 'An independent and efficient system, without rigidly tying your factory to a specific brand ecosystem.' },
       },
       {
         title: { id: 'Praktis',       en: 'Practical' },
