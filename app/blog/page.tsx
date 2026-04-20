@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { getAllPostsMerged } from '@/lib/blog'
 import type { Metadata } from 'next'

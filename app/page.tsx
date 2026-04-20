@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { Hero } from '@/components/home/Hero'
 import { SocialProof } from '@/components/home/SocialProof'
 import { Services } from '@/components/home/Services'

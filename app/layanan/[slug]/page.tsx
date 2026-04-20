@@ -4,6 +4,7 @@ import { getServiceBySlugLive } from '@/lib/server-data'
 import { servicesData } from '@/lib/services-data'
 import { ServiceDetail } from '@/components/layanan/ServiceDetail'
 
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 interface Props {

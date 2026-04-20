@@ -4,6 +4,7 @@ import { getProductBySlugLive } from '@/lib/server-data'
 import { productsData } from '@/lib/products-data'
 import { ProductDetail } from '@/components/produk/ProductDetail'
 
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 interface Props {
