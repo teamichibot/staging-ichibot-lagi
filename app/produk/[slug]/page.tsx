@@ -1,15 +1,17 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getAllProducts, getProductBySlugLive } from '@/lib/server-data'
+import { getProductBySlugLive } from '@/lib/server-data'
+import { productsData } from '@/lib/products-data'
 import { ProductDetail } from '@/components/produk/ProductDetail'
+
+export const dynamicParams = true
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const products = await getAllProducts()
-  return products.map((p) => ({ slug: p.slug }))
+  return productsData.map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

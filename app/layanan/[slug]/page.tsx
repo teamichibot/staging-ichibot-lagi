@@ -1,15 +1,17 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getAllServices, getServiceBySlugLive } from '@/lib/server-data'
+import { getServiceBySlugLive } from '@/lib/server-data'
+import { servicesData } from '@/lib/services-data'
 import { ServiceDetail } from '@/components/layanan/ServiceDetail'
+
+export const dynamicParams = true
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const services = await getAllServices()
-  return services.map((s) => ({ slug: s.slug }))
+  return servicesData.map((s) => ({ slug: s.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
