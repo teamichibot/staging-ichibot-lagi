@@ -110,7 +110,7 @@ export function Navbar() {
             </Link>
             {activeDropdown === 'layanan' && (
               <div
-                className="absolute top-full left-0 mt-2 w-64 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden"
+                className="absolute top-full left-0 mt-2 w-64 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
                 onMouseEnter={() => open('layanan')}
                 onMouseLeave={close}
               >
@@ -178,7 +178,7 @@ export function Navbar() {
             </button>
             {activeDropdown === 'perusahaan' && (
               <div
-                className="absolute top-full left-0 mt-2 w-52 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden"
+                className="absolute top-full left-0 mt-2 w-52 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
                 onMouseEnter={() => open('perusahaan')}
                 onMouseLeave={close}
               >
