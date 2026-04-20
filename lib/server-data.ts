@@ -1,33 +1,22 @@
 import 'server-only'
-import fs from 'fs'
-import path from 'path'
+import { readData } from './admin-data'
 import { servicesData, type ServiceData } from './services-data'
 import { productsData, type ProductData } from './products-data'
 
-function readJson<T>(filename: string, fallback: T): T {
-  try {
-    const file = path.join(process.cwd(), 'data', filename)
-    if (fs.existsSync(file)) {
-      return JSON.parse(fs.readFileSync(file, 'utf8')) as T
-    }
-  } catch {
-    // fall through
-  }
-  return fallback
+export async function getAllServices(): Promise<ServiceData[]> {
+  return readData('services', servicesData)
 }
 
-export function getAllServices(): ServiceData[] {
-  return readJson('services.json', servicesData)
+export async function getServiceBySlugLive(slug: string): Promise<ServiceData | undefined> {
+  const list = await getAllServices()
+  return list.find((s) => s.slug === slug)
 }
 
-export function getServiceBySlugLive(slug: string): ServiceData | undefined {
-  return getAllServices().find((s) => s.slug === slug)
+export async function getAllProducts(): Promise<ProductData[]> {
+  return readData('products', productsData)
 }
 
-export function getAllProducts(): ProductData[] {
-  return readJson('products.json', productsData)
-}
-
-export function getProductBySlugLive(slug: string): ProductData | undefined {
-  return getAllProducts().find((p) => p.slug === slug)
+export async function getProductBySlugLive(slug: string): Promise<ProductData | undefined> {
+  const list = await getAllProducts()
+  return list.find((p) => p.slug === slug)
 }

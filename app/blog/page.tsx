@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllPosts } from '@/lib/blog'
+import { getAllPostsMerged } from '@/lib/blog'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -14,8 +14,8 @@ const categoryColors: Record<string, string> = {
   Tutorial: 'bg-green-50 text-green-700',
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts()
+export default async function BlogPage() {
+  const posts = await getAllPostsMerged()
 
   return (
     <div className="pt-24 pb-24 md:pt-32 bg-off-white min-h-screen">

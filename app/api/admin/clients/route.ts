@@ -9,12 +9,12 @@ const defaultClients = {
 }
 
 export async function GET() {
-  return NextResponse.json(readData('clients.json', defaultClients))
+  return NextResponse.json(await readData('clients', defaultClients))
 }
 
 export async function PUT(request: Request) {
   const body = await request.json()
-  writeData('clients.json', body)
+  await writeData('clients', body)
   revalidatePath('/')
   return NextResponse.json({ ok: true })
 }

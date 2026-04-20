@@ -7,7 +7,7 @@ type Params = { params: Promise<{ slug: string }> }
 
 export async function GET(_req: Request, { params }: Params) {
   const { slug } = await params
-  const list = readData('products.json', productsData)
+  const list = await readData('products', productsData)
   const item = list.find((p) => p.slug === slug)
   if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(item)
@@ -16,11 +16,11 @@ export async function GET(_req: Request, { params }: Params) {
 export async function PUT(request: Request, { params }: Params) {
   const { slug } = await params
   const updated = await request.json()
-  const list = readData('products.json', productsData)
+  const list = await readData('products', productsData)
   const idx = list.findIndex((p) => p.slug === slug)
   if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   list[idx] = updated
-  writeData('products.json', list)
+  await writeData('products', list)
   revalidatePath('/')
   revalidatePath(`/produk/${slug}`)
   return NextResponse.json({ ok: true })
@@ -28,9 +28,8 @@ export async function PUT(request: Request, { params }: Params) {
 
 export async function DELETE(_req: Request, { params }: Params) {
   const { slug } = await params
-  const list = readData('products.json', productsData)
-  const filtered = list.filter((p) => p.slug !== slug)
-  writeData('products.json', filtered)
+  const list = await readData('products', productsData)
+  await writeData('products', list.filter((p) => p.slug !== slug))
   revalidatePath('/')
   return NextResponse.json({ ok: true })
 }

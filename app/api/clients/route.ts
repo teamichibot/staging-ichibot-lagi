@@ -8,6 +8,6 @@ const defaultClients = {
 }
 
 export async function GET() {
-  const data = readData('clients.json', defaultClients)
+  const data = await readData('clients', defaultClients)
   return NextResponse.json(data)
 }

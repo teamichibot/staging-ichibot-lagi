@@ -4,14 +4,14 @@ import { productsData } from '@/lib/products-data'
 import { revalidatePath } from 'next/cache'
 
 export async function GET() {
-  return NextResponse.json(readData('products.json', productsData))
+  return NextResponse.json(await readData('products', productsData))
 }
 
 export async function POST(request: Request) {
   const newItem = await request.json()
-  const list = readData('products.json', productsData)
+  const list = await readData('products', productsData)
   list.push(newItem)
-  writeData('products.json', list)
+  await writeData('products', list)
   revalidatePath('/')
   revalidatePath('/produk/[slug]', 'page')
   return NextResponse.json({ ok: true })
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   const body = await request.json()
-  writeData('products.json', body)
+  await writeData('products', body)
   revalidatePath('/')
   revalidatePath('/produk/[slug]', 'page')
   return NextResponse.json({ ok: true })

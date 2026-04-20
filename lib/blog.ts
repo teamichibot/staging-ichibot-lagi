@@ -1,6 +1,8 @@
+import 'server-only'
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { supabase } from './supabase'
 
 export interface PostMeta {
   slug: string
@@ -38,6 +40,43 @@ export function getAllPosts(): PostMeta[] {
       } satisfies PostMeta
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1))
+}
+
+export async function getAllPostsMerged(): Promise<PostMeta[]> {
+  const mdxPosts = getAllPosts()
+  const { data: dbRows } = await supabase
+    .from('blog_posts')
+    .select('slug, title, date, category, excerpt, image, video_url')
+    .order('date', { ascending: false })
+  const dbPosts: PostMeta[] = (dbRows ?? []).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    date: p.date ?? '',
+    category: p.category ?? '',
+    excerpt: p.excerpt ?? '',
+    image: p.image ?? '',
+    videoUrl: p.video_url ?? '',
+  }))
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug))
+  const uniqueMdx = mdxPosts.filter((p) => !dbSlugs.has(p.slug))
+  return [...dbPosts, ...uniqueMdx].sort((a, b) => (a.date < b.date ? 1 : -1))
+}
+
+export async function getPostBySlugMerged(slug: string): Promise<Post | null> {
+  const mdx = getPostBySlug(slug)
+  if (mdx) return mdx
+  const { data } = await supabase.from('blog_posts').select('*').eq('slug', slug).single()
+  if (!data) return null
+  return {
+    slug: data.slug,
+    title: data.title,
+    date: data.date ?? '',
+    category: data.category ?? '',
+    excerpt: data.excerpt ?? '',
+    image: data.image ?? '',
+    videoUrl: data.video_url ?? '',
+    content: data.content ?? '',
+  }
 }
 
 export function getPostBySlug(slug: string): Post | null {

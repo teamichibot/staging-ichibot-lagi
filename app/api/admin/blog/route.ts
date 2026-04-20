@@ -1,14 +1,11 @@
 import { NextResponse } from 'next/server'
-import { getAllPosts } from '@/lib/blog'
+import { getAllPostsMerged } from '@/lib/blog'
 import { validatePostContent } from '@/lib/content-guard'
-import fs from 'fs'
-import path from 'path'
+import { supabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
 
-const POSTS_DIR = path.join(process.cwd(), 'content', 'blog')
-
 export async function GET() {
-  const posts = getAllPosts()
+  const posts = await getAllPostsMerged()
   return NextResponse.json(posts)
 }
 
@@ -22,25 +19,29 @@ export async function POST(request: Request) {
   const blocked = validatePostContent({ title, excerpt: excerpt ?? '', content: content ?? '' })
   if (blocked) return NextResponse.json({ error: blocked }, { status: 422 })
 
-  const frontmatter = [
-    '---',
-    `title: "${title}"`,
-    `date: "${date}"`,
-    `category: "${category}"`,
-    `excerpt: "${excerpt}"`,
-    image ? `image: "${image}"` : null,
-    videoUrl ? `videoUrl: "${videoUrl}"` : null,
-    '---',
-  ].filter(Boolean).join('\n')
+  const { error: existsError, data: existing } = await supabase
+    .from('blog_posts')
+    .select('slug')
+    .eq('slug', slug)
+    .single()
 
-  const fileContent = `${frontmatter}\n\n${content ?? ''}`
-  const filePath = path.join(POSTS_DIR, `${slug}.mdx`)
-
-  if (fs.existsSync(filePath)) {
+  if (!existsError && existing) {
     return NextResponse.json({ error: 'Slug sudah dipakai' }, { status: 409 })
   }
 
-  fs.writeFileSync(filePath, fileContent, 'utf8')
+  const { error } = await supabase.from('blog_posts').insert({
+    slug,
+    title,
+    date: date ?? '',
+    category: category ?? '',
+    excerpt: excerpt ?? '',
+    image: image ?? '',
+    video_url: videoUrl ?? '',
+    content: content ?? '',
+  })
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
   revalidatePath('/blog')
   revalidatePath(`/blog/${slug}`)
   return NextResponse.json({ ok: true })

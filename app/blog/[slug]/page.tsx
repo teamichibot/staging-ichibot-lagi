@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
 
@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlugMerged(slug)
   if (!post) return {}
   return {
     title: `${post.title} — Ichibot Blog`,
@@ -38,7 +38,7 @@ const categoryColors: Record<string, string> = {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlugMerged(slug)
   if (!post) notFound()
 
   return (

@@ -8,12 +8,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllProducts().map((p) => ({ slug: p.slug }))
+  const products = await getAllProducts()
+  return products.map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const product = getProductBySlugLive(slug)
+  const product = await getProductBySlugLive(slug)
   if (!product) return {}
   return {
     title: `${product.title.id} — Ichibot`,
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProdukDetailPage({ params }: Props) {
   const { slug } = await params
-  const product = getProductBySlugLive(slug)
+  const product = await getProductBySlugLive(slug)
   if (!product) notFound()
   return <ProductDetail product={product} />
 }

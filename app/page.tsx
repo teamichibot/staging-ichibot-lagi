@@ -6,10 +6,10 @@ import { CaseStudy } from '@/components/home/CaseStudy'
 import { WhyIchibot } from '@/components/home/WhyIchibot'
 import { CTASection } from '@/components/home/CTASection'
 import { BlogPreview } from '@/components/home/BlogPreview'
-import { getAllPosts } from '@/lib/blog'
+import { getAllPostsMerged } from '@/lib/blog'
 
-export default function HomePage() {
-  const allPosts = getAllPosts()
+export default async function HomePage() {
+  const allPosts = await getAllPostsMerged()
   const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 3)
   const previewPosts = allPosts.slice(0, 3)
 

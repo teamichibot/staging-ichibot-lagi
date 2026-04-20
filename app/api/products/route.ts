@@ -3,6 +3,6 @@ import { readData } from '@/lib/admin-data'
 import { productsData } from '@/lib/products-data'
 
 export async function GET() {
-  const data = readData('products.json', productsData)
+  const data = await readData('products', productsData)
   return NextResponse.json(data)
 }
