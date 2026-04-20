@@ -9,16 +9,6 @@ import { t } from '@/lib/translations'
 import { servicesData } from '@/lib/services-data'
 import { productsData } from '@/lib/products-data'
 
-const serviceLinks = t.services.items.map((item, i) => ({
-  label: item.title,
-  href: `/layanan/${servicesData[i].slug}`,
-}))
-
-const productLinks = t.products.items.map((item, i) => ({
-  label: item.title,
-  href: `/produk/${productsData[i].slug}`,
-}))
-
 function NavLogo() {
   const [imgError, setImgError] = useState(false)
   if (imgError) {
@@ -44,6 +34,22 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const [serviceLinks, setServiceLinks] = useState(
+    servicesData.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` }))
+  )
+  const [productLinks, setProductLinks] = useState(
+    productsData.map((p) => ({ label: p.title, href: `/produk/${p.slug}` }))
+  )
+
+  useEffect(() => {
+    fetch('/api/services').then(r => r.json()).then(data => {
+      if (Array.isArray(data)) setServiceLinks(data.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` })))
+    }).catch(() => {})
+    fetch('/api/products').then(r => r.json()).then(data => {
+      if (Array.isArray(data)) setProductLinks(data.map((p) => ({ label: p.title, href: `/produk/${p.slug}` })))
+    }).catch(() => {})
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
