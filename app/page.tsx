@@ -9,7 +9,6 @@ import { WhyIchibot } from '@/components/home/WhyIchibot'
 import { CTASection } from '@/components/home/CTASection'
 import { BlogPreview } from '@/components/home/BlogPreview'
 import { getAllPostsMerged } from '@/lib/blog'
-import { productsData } from '@/lib/products-data'
 import { getAllServices, getAllProducts } from '@/lib/server-data'
 
 export default async function HomePage() {
@@ -21,11 +20,10 @@ export default async function HomePage() {
 
   const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 2)
   const previewPosts = allPosts.slice(0, 3)
-  const heroProducts = productsData.slice(0, 2)
 
   return (
     <>
-      <Hero caseStudies={caseStudyPosts} products={heroProducts} />
+      <Hero caseStudies={caseStudyPosts} products={productItems.slice(0, 2)} />
       <SocialProof />
       <Services serviceItems={serviceItems} />
       <Products productItems={productItems} />
