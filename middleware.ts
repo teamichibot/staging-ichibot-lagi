@@ -12,7 +12,8 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Protect /api/admin/* — return 401 JSON (no redirect)
-  if (pathname.startsWith('/api/admin/')) {
+  // /api/admin/auth is the login endpoint itself, must stay open
+  if (pathname.startsWith('/api/admin/') && pathname !== '/api/admin/auth') {
     if (!isAuthenticated(request)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

@@ -9,7 +9,9 @@ import { BlogPreview } from '@/components/home/BlogPreview'
 import { getAllPosts } from '@/lib/blog'
 
 export default function HomePage() {
-  const caseStudyPosts = getAllPosts().filter((p) => p.category === 'Case Study').slice(0, 3)
+  const allPosts = getAllPosts()
+  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 3)
+  const previewPosts = allPosts.slice(0, 3)
 
   return (
     <>
@@ -20,7 +22,7 @@ export default function HomePage() {
       <CaseStudy posts={caseStudyPosts} />
       <WhyIchibot />
       <CTASection />
-      <BlogPreview />
+      <BlogPreview posts={previewPosts} />
     </>
   )
 }

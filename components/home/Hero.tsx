@@ -6,12 +6,7 @@ import { useLang } from '@/contexts/LanguageContext'
 import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 import type { PostMeta } from '@/lib/blog'
 
-const slideImages = [
-  'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1200',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200',
-  'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200',
-  'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200',
-]
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1200'
 
 interface HeroProps {
   caseStudies?: PostMeta[]
@@ -36,11 +31,11 @@ export function Hero({ caseStudies = [] }: HeroProps) {
 
   const slides = [
     defaultSlide,
-    ...caseStudies.map((cs, i) => ({
+    ...caseStudies.map((cs) => ({
       isDefault: false,
       headline: [cs.title],
       subheadline: cs.excerpt,
-      image: slideImages[i % slideImages.length],
+      image: cs.image || FALLBACK_IMAGE,
       tag: 'Case Study',
       href: `/blog/${cs.slug}`
     }))

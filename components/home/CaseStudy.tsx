@@ -10,13 +10,6 @@ interface Props {
   posts: PostMeta[]
 }
 
-// Define generic images for case studies mapping by index
-const caseStudyImages = [
-  'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600&h=400',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=600&h=400',
-  'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600&h=400',
-  'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=600&h=400',
-]
 
 export function CaseStudy({ posts }: Props) {
   const { lang } = useLang()
@@ -75,9 +68,9 @@ export function CaseStudy({ posts }: Props) {
                 {/* Image Cover */}
                 <div className="relative w-full h-48 overflow-hidden bg-navy/5">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src={caseStudyImages[i % caseStudyImages.length]} 
-                    alt={post.title} 
+                  <img
+                    src={post.image || 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600&h=400'}
+                    alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />

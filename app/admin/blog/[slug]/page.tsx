@@ -91,10 +91,17 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Slug</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Slug <span className="text-gray-400 font-normal">(auto URL-safe)</span></label>
                 <input
                   value={form.slug}
-                  onChange={(e) => set('slug', e.target.value)}
+                  onChange={(e) => {
+                    const safe = e.target.value
+                      .toLowerCase()
+                      .replace(/[^a-z0-9\s-]/g, '')
+                      .replace(/\s+/g, '-')
+                      .replace(/-+/g, '-')
+                    set('slug', safe)
+                  }}
                   placeholder="judul-artikel-saya"
                   required
                   disabled={!isNew}
