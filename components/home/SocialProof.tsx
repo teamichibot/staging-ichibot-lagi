@@ -1,33 +1,25 @@
 'use client'
 
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { useLang } from '@/contexts/LanguageContext'
 import { t } from '@/lib/translations'
 
-interface Logo {
-  name: string
-  src: string
-  w: number   // display width at h=40
-  invert?: boolean  // for logos with dark background
-}
-
-const logos: Logo[] = [
-  { name: 'Toyota (TMMIN)',   src: '/logos/toyota.png',            w: 96  },
-  { name: 'Pertamina',        src: '/logos/Pertamina_Logo.svg',    w: 130 },
-  { name: 'BCA',              src: '/logos/bca.png',               w: 100 },
-  { name: 'Johnson Controls', src: '/logos/johnson-controls.png',  w: 150 },
-  { name: 'Asperio',          src: '/logos/asperio.png',           w: 72,  invert: true },
-  { name: 'Kuanta',           src: '/logos/kuanta.webp',           w: 130 },
-  { name: 'DocO',             src: '/logos/doco.png',              w: 100 },
-  { name: 'EKRAF',            src: '/logos/ekraf.png',             w: 120 },
-  { name: 'Erlangga',         src: '',                             w: 110 }, // logo menyusul
-]
-
-const track = [...logos, ...logos]
+type Client = { id: string; name: string; logo: string }
 
 export function SocialProof() {
   const { lang } = useLang()
   const tx = (obj: { id: string; en: string }) => obj[lang]
+  const [clients, setClients] = useState<Client[]>([])
+
+  useEffect(() => {
+    fetch('/api/clients')
+      .then((r) => r.json())
+      .then((d: { industry: Client[]; academic: Client[] }) => {
+        setClients(d.industry ?? [])
+      })
+  }, [])
+
+  const track = clients.length > 0 ? [...clients, ...clients] : []
 
   return (
     <section id="client-logos" className="relative z-20 -mt-16 md:-mt-24 pb-16 md:pb-24 px-4 sm:px-6">
@@ -36,48 +28,34 @@ export function SocialProof() {
           {tx(t.socialProof.industryLabel)}
         </p>
 
-        <div 
-          className="relative"
-          style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
-        >
-          <div className="flex animate-marquee gap-12 w-max items-center">
-            {track.map((logo, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 flex items-center justify-center"
-                style={{ width: logo.w, height: 40 }}
-              >
-                {logo.src ? (
-                  <div className="relative w-full h-full group/logo">
-                    <Image
-                      src={logo.src}
-                      alt={logo.name}
-                      fill
-                      sizes={`${logo.w}px`}
-                      className="object-contain transition-all duration-300"
-                      style={{
-                        filter: logo.invert
-                          ? 'brightness(0) grayscale(1) opacity(0.55)'
-                          : 'grayscale(1) opacity(0.55)',
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.filter = logo.invert ? 'brightness(1) grayscale(0) opacity(1)' : 'grayscale(0) opacity(1)'
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.filter = logo.invert ? 'brightness(0) grayscale(1) opacity(0.55)' : 'grayscale(1) opacity(0.55)'
-                      }}
+        {track.length > 0 && (
+          <div
+            className="relative"
+            style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
+          >
+            <div className="flex animate-marquee gap-12 w-max items-center">
+              {track.map((client, i) => (
+                <div key={i} className="flex-shrink-0 flex items-center justify-center h-10">
+                  {client.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={client.logo}
+                      alt={client.name}
+                      className="h-10 w-auto max-w-[140px] object-contain transition-all duration-300"
+                      style={{ filter: 'grayscale(1) opacity(0.55)' }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0) opacity(1)' }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(1) opacity(0.55)' }}
                     />
-                  </div>
-                ) : (
-                  /* Placeholder untuk logo yang belum ada */
-                  <span className="text-navy/30 font-semibold text-sm whitespace-nowrap select-none border border-border rounded px-3 py-1">
-                    {logo.name}
-                  </span>
-                )}
-              </div>
-            ))}
+                  ) : (
+                    <span className="text-navy/30 font-semibold text-sm whitespace-nowrap select-none border border-border rounded px-3 py-1">
+                      {client.name}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )

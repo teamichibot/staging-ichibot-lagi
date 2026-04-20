@@ -1,0 +1,101 @@
+{
+  "industry": [
+    {
+      "id": "0",
+      "name": "Toyota (TMMIN)",
+      "logo": ""
+    },
+    {
+      "id": "1",
+      "name": "Pertamina",
+      "logo": ""
+    },
+    {
+      "id": "2",
+      "name": "BCA",
+      "logo": ""
+    },
+    {
+      "id": "3",
+      "name": "Johnson Controls",
+      "logo": ""
+    },
+    {
+      "id": "4",
+      "name": "Erlangga",
+      "logo": "https://emir.co.id/wp-content/uploads/2016/11/RevisiOpsiLogo_10feb22-fix.png"
+    },
+    {
+      "id": "5",
+      "name": "Asperio",
+      "logo": ""
+    },
+    {
+      "id": "6",
+      "name": "Kuanta",
+      "logo": ""
+    },
+    {
+      "id": "7",
+      "name": "DocO",
+      "logo": ""
+    },
+    {
+      "id": "8",
+      "name": "EKRAF",
+      "logo": ""
+    }
+  ],
+  "academic": [
+    {
+      "id": "0",
+      "name": "UGM",
+      "logo": ""
+    },
+    {
+      "id": "1",
+      "name": "Telkom University",
+      "logo": ""
+    },
+    {
+      "id": "2",
+      "name": "PENS",
+      "logo": ""
+    },
+    {
+      "id": "3",
+      "name": "UIN",
+      "logo": ""
+    },
+    {
+      "id": "4",
+      "name": "UMS",
+      "logo": ""
+    },
+    {
+      "id": "5",
+      "name": "UNW",
+      "logo": ""
+    },
+    {
+      "id": "6",
+      "name": "Itekraf",
+      "logo": ""
+    },
+    {
+      "id": "7",
+      "name": "Amikom",
+      "logo": ""
+    },
+    {
+      "id": "8",
+      "name": "AKTI",
+      "logo": ""
+    },
+    {
+      "id": "9",
+      "name": "UNY",
+      "logo": ""
+    }
+  ]
+}

@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { LanguageProvider } from '@/contexts/LanguageContext'
-import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
-import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
+import { SiteShell } from '@/components/layout/SiteShell'
 
 export const metadata: Metadata = {
   title: 'Ichibot — IoT & AI untuk Industri Indonesia',
@@ -28,12 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" className="h-full antialiased scroll-smooth">
       <body className="min-h-full flex flex-col">
-        <LanguageProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <WhatsAppButton />
-        </LanguageProvider>
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   )

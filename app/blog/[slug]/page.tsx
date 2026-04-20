@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -107,8 +108,16 @@ export default async function BlogPostPage({ params }: Props) {
               const items = para.split('\n').filter(l => l.startsWith('- '))
               return (
                 <ul key={i} className="list-disc list-inside text-navy/80 text-base leading-relaxed space-y-1.5 mb-5">
-                  {items.map((item, j) => <li key={j}>{item.replace('- ', '')}</li>)}
+                  {items.map((item, j) => <li key={j}>{item.replace(/^-\s*/, '')}</li>)}
                 </ul>
+              )
+            }
+            // standalone image: ![alt](url)
+            const imgMatch = para.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+            if (imgMatch) {
+              return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="w-full rounded-2xl my-6 object-cover" />
               )
             }
             if (para.trim()) {
@@ -118,7 +127,14 @@ export default async function BlogPostPage({ params }: Props) {
           })}
         </div>
 
-        <div className="border-t border-border mt-16 pt-10">
+        {/* Video Embed */}
+        {post.videoUrl && (
+          <div className="mt-16 mb-10">
+            <VideoEmbed url={post.videoUrl} />
+          </div>
+        )}
+
+        <div className="border-t border-border mt-10 pt-10">
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"

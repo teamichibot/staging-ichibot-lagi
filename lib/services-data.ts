@@ -378,3 +378,23 @@ export const servicesData: ServiceData[] = [
 export function getServiceBySlug(slug: string): ServiceData | undefined {
   return servicesData.find((s) => s.slug === slug)
 }
+
+export function getAllServices(): ServiceData[] {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const fs = require('fs') as typeof import('fs')
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const path = require('path') as typeof import('path')
+    const file = path.join(process.cwd(), 'data', 'services.json')
+    if (fs.existsSync(file)) {
+      return JSON.parse(fs.readFileSync(file, 'utf8')) as ServiceData[]
+    }
+  } catch {
+    // fall through to static data
+  }
+  return servicesData
+}
+
+export function getServiceBySlugLive(slug: string): ServiceData | undefined {
+  return getAllServices().find((s) => s.slug === slug)
+}
