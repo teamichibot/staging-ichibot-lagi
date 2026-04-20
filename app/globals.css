@@ -77,3 +77,13 @@ html {
     0 30px 50px -10px rgba(37, 99, 235, 0.2); /* Subtle hover float */
 }
 
+/* CTA Button slide progress "charging" animation */
+@keyframes btn-charge {
+  0%   { transform: scaleX(0); opacity: 0.7; }
+  90%  { transform: scaleX(1); opacity: 0.5; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+.animate-btn-charge {
+  animation: btn-charge 6s linear forwards;
+  transform-origin: left center;
+}

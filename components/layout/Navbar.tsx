@@ -72,12 +72,12 @@ export function Navbar() {
         onClick={() => { setMobileOpen(false); setActiveDropdown(null); }}
       />
 
-      <header className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none flex justify-center">
+      <header className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none flex flex-col items-center gap-2">
       {/* Floating pill */}
       <nav 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`pointer-events-auto mx-auto flex items-center h-14 rounded-2xl bg-navy/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[max-width] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible w-full px-5 ${isCollapsed ? 'max-w-[136px]' : 'max-w-[896px]'}`}
+        className={`pointer-events-auto flex items-center h-14 rounded-2xl bg-navy/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[width,max-width] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible w-full px-5 ${isCollapsed ? 'max-w-[136px]' : 'max-w-[860px]'}`}
       >
 
         {/* Logo */}
@@ -223,7 +223,7 @@ export function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-white p-1"
+          className="md:hidden text-white p-1 ml-auto"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
         >
@@ -240,35 +240,50 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu — outside pill, full width */}
-      {mobileOpen && (
-        <div className="pointer-events-auto mt-2 max-w-4xl mx-auto bg-navy/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-5 py-5 flex flex-col gap-4">
-          {[
-            { label: tx(t.nav.services), href: '/#layanan' },
-            { label: tx(t.nav.products), href: '/#produk' },
-            { label: tx(t.nav.caseStudies), href: '/#studi-kasus' },
-            { label: tx(t.nav.about), href: '/about' },
-            { label: tx(t.nav.blog), href: '/blog' },
-          ].map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={() => setMobileOpen(false)}
-              className="text-white/80 text-base font-medium"
+      {/* Mobile menu drawer */}
+      <div className={`pointer-events-auto mt-2 w-full max-w-[860px] mx-auto overflow-hidden transition-all duration-300 ease-in-out ${mobileOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="bg-navy/98 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+          {/* Nav Links */}
+          <div className="px-2 py-3">
+            {[
+              { label: tx(t.nav.services), href: '/#layanan' },
+              { label: tx(t.nav.products), href: '/#produk' },
+              { label: tx(t.nav.caseStudies), href: '/#studi-kasus' },
+              { label: lang === 'id' ? 'Tentang Kami' : 'About Us', href: '/about' },
+              { label: 'Blog', href: '/blog' },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
+              >
+                <span>{l.label}</span>
+                <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            ))}
+          </div>
+
+          {/* Bottom bar */}
+          <div className="px-4 py-4 border-t border-white/8 flex items-center gap-3">
+            <button
+              onClick={toggle}
+              className="text-white/60 hover:text-white text-xs font-semibold border border-white/15 hover:border-white/30 rounded-lg px-3 py-2 transition-colors"
             >
-              {l.label}
-            </Link>
-          ))}
-          <div className="flex items-center gap-3 pt-1 border-t border-white/10">
-            <button onClick={toggle} className="text-white/60 text-sm border border-white/20 rounded-lg px-3 py-1.5">
               {lang === 'id' ? 'EN' : 'ID'}
             </button>
-            <Link href="/contact" onClick={() => setMobileOpen(false)} className="bg-teal text-white text-sm font-semibold px-5 py-2 rounded-xl">
+            <Link
+              href="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="flex-1 text-center bg-teal hover:bg-teal-light text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+            >
               {tx(t.nav.cta)}
             </Link>
           </div>
         </div>
-      )}
+      </div>
     </header>
     </>
   )

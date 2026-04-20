@@ -25,9 +25,18 @@ export function Footer() {
                 className="brightness-0 invert"
               />
             </Link>
-            <h3 className="text-white font-bold tracking-wider text-sm mb-2">
-              PT. GASGAS ANAGATA SEMESTA
-            </h3>
+            <div className="flex items-center gap-3 mb-3">
+              <Image 
+                src="/logos/logo_gas.svg" 
+                alt="Logo GAS" 
+                width={28} 
+                height={20} 
+                className="brightness-0 invert opacity-90 object-contain"
+              />
+              <h3 className="text-white font-bold tracking-wider text-sm">
+                PT. GASGAS ANAGATA SEMESTA
+              </h3>
+            </div>
             <p className="text-white/60 text-sm leading-relaxed max-w-xs">
               {tx(t.footer.tagline)}
             </p>

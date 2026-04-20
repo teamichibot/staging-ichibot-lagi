@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLang } from '@/contexts/LanguageContext'
 import { t } from '@/lib/translations'
-import { productsData } from '@/lib/products-data'
+import type { ProductData } from '@/lib/products-data'
 
-export function Products() {
+export function Products({ productItems }: { productItems: ProductData[] }) {
   const { lang } = useLang()
   const tx = (obj: { id: string; en: string }) => obj[lang]
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -51,7 +51,8 @@ export function Products() {
           className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
         >
           {t.products.items.map((item, i) => {
-            const productData = productsData[i]
+            const productData = productItems[i]
+            if (!productData) return null
             return (
               <div
                 key={i}

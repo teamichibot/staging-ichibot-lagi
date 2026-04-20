@@ -4,9 +4,9 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useLang } from '@/contexts/LanguageContext'
 import { t } from '@/lib/translations'
-import { servicesData } from '@/lib/services-data'
+import type { ServiceData } from '@/lib/services-data'
 
-export function Services() {
+export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
   const { lang } = useLang()
   const tx = (obj: { id: string; en: string }) => obj[lang]
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -39,7 +39,8 @@ export function Services() {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {t.services.items.map((item, i) => {
-            const serviceData = servicesData[i]
+            const serviceData = serviceItems[i]
+            if (!serviceData) return null
             return (
               <div
                 key={i}

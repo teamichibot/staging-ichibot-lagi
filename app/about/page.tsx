@@ -98,9 +98,11 @@ export default function AboutPage() {
         <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] bg-teal/8 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative max-w-5xl mx-auto px-6">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white/80 text-xs font-semibold uppercase tracking-widest mb-8">
+          <span className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/80 text-xs font-semibold uppercase tracking-widest mb-8">
             <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-            PT Gasgas Anagata Semesta
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logos/logo_gas.svg" alt="Logo GAS" className="h-4 w-auto brightness-0 invert opacity-90" />
+            PT GASGAS ANAGATA SEMESTA
           </span>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 max-w-4xl">
             AI-IoT Enablement Platform{' '}
