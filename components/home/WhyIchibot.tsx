@@ -50,21 +50,21 @@ export function WhyIchibot() {
   }, [])
 
   return (
-    <section className="py-24 md:py-32 bg-navy relative overflow-hidden" ref={sectionRef}>
+    <section className="py-24 md:py-32 bg-navy-light relative overflow-hidden" ref={sectionRef}>
       {/* Decorative Blur Backgrounds */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
-        <div className="reveal max-w-2xl mb-20">
-          <span className="inline-block px-3 py-1 rounded-full bg-teal/10 border border-teal/20 text-teal text-xs font-bold uppercase tracking-widest mb-6">
+        <div className="reveal max-w-2xl mb-20 text-center mx-auto sm:text-left sm:mx-0">
+          <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest block mb-4">
             {tx(t.whyIchibot.sectionLabel)}
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
             {tx(t.whyIchibot.heading)}
           </h2>
-          <p className="text-white/60 text-lg md:text-xl leading-relaxed font-light">{tx(t.whyIchibot.subheading)}</p>
+          <p className="text-slate-400 text-lg md:text-xl leading-relaxed font-light">{tx(t.whyIchibot.subheading)}</p>
         </div>
 
         {/* Grid */}
@@ -74,10 +74,10 @@ export function WhyIchibot() {
             return (
               <div
                 key={i}
-                className={`reveal group p-8 md:p-10 rounded-3xl border transition-all duration-500 backdrop-blur-xl ${
+                className={`reveal group p-8 md:p-10 transition-all duration-500 ${
                   isNetZero
-                    ? 'lg:col-span-2 border-green-500/20 bg-gradient-to-br from-green-500/10 to-transparent hover:bg-green-500/20 hover:border-green-500/40 shadow-[0_0_40px_rgba(34,197,94,0.05)]'
-                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-teal/30 hover:shadow-[0_0_40px_rgba(45,212,191,0.05)]'
+                    ? 'lg:col-span-2 rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/10 to-transparent hover:bg-green-500/20 hover:border-green-500/40 shadow-[0_0_40px_rgba(34,197,94,0.05)] backdrop-blur-xl'
+                    : 'rounded-2xl glass-edge hover:shadow-[0_0_40px_rgba(45,212,191,0.05)] hover:border-teal/30'
                 }`}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
@@ -96,7 +96,7 @@ export function WhyIchibot() {
                 <h3 className="font-display text-2xl font-bold text-white mb-4 tracking-tight">
                   {tx(item.title)}
                 </h3>
-                <p className="text-white/60 text-base leading-relaxed">{tx(item.desc)}</p>
+                <p className="text-slate-400 text-sm md:text-base leading-relaxed">{tx(item.desc)}</p>
               </div>
             )
           })}

@@ -11,7 +11,7 @@ export function Footer() {
   const waMessage = encodeURIComponent(t.whatsapp.message[lang])
 
   return (
-    <footer className="bg-navy text-white">
+    <footer className="bg-navy-light text-white border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}

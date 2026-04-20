@@ -21,17 +21,19 @@ export function Services() {
   }, [])
 
   return (
-    <section id="layanan" className="py-24 md:py-32 bg-off-white" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="layanan" className="pt-4 md:pt-8 pb-24 md:pb-32 bg-navy-light relative overflow-hidden" ref={sectionRef}>
+      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-teal/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal max-w-2xl mb-16 mx-auto text-center">
-          <span className="text-teal text-sm font-semibold uppercase tracking-widest">
+          <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest">
             {tx(t.services.sectionLabel)}
           </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mt-3 mb-6">
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
             {tx(t.services.heading)}
           </h2>
-          <p className="text-muted text-lg leading-relaxed mx-auto">{tx(t.services.subheading)}</p>
+          <p className="text-slate-300 text-lg leading-relaxed mx-auto">{tx(t.services.subheading)}</p>
         </div>
 
         {/* Cards */}
@@ -41,7 +43,7 @@ export function Services() {
             return (
               <div
                 key={i}
-                className="reveal group flex flex-col rounded-2xl bg-white border border-border overflow-hidden hover:border-teal/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="reveal group flex flex-col rounded-2xl glass-edge overflow-hidden"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
                 <div className="relative w-full h-56 overflow-hidden bg-navy/5">
@@ -56,17 +58,19 @@ export function Services() {
                 </div>
 
                 <div className="p-8 flex flex-col flex-grow">
-                  <h3 className="font-display text-xl font-bold text-navy mb-3 group-hover:text-teal transition-colors">
+                  <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-sky-300 transition-colors">
                     {tx(item.title)}
                   </h3>
-                  <p className="text-muted text-sm leading-relaxed mb-6 flex-grow">{tx(item.desc)}</p>
+                  <div className="flex-grow flex flex-col justify-between">
+                    <p className="text-slate-400 text-sm leading-relaxed mb-6">{tx(item.desc)}</p>
+                  </div>
                   <div className="mt-auto pt-4 border-t border-border/60">
-                    <p className="text-teal text-xs font-medium italic border-l-2 border-teal/40 pl-3 py-1 bg-teal/5 rounded-r mb-5">
+                    <p className="text-sky-300 text-xs font-medium italic border-l-2 border-sky-400/40 pl-3 py-1 bg-sky-400/10 rounded-r mb-5">
                       {tx(item.example)}
                     </p>
                     <Link
                       href={`/layanan/${serviceData.slug}`}
-                      className="inline-flex items-center text-sm font-bold text-navy hover:text-teal transition-colors group/btn"
+                      className="inline-flex items-center text-sm font-bold text-white hover:text-sky-400 transition-colors group/btn"
                     >
                       {/* @ts-ignore */}
                       {tx(t.services.ctaLearn)}

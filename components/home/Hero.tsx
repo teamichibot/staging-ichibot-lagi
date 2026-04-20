@@ -50,7 +50,7 @@ export function Hero({ caseStudies = [] }: HeroProps) {
   }, [slides.length])
 
   return (
-    <section className="bg-navy relative overflow-hidden pt-20 pb-24 md:pt-24 md:pb-36">
+    <section className="bg-navy relative overflow-hidden pt-20 pb-12 md:pt-24 md:pb-20">
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.035]"
@@ -67,7 +67,7 @@ export function Hero({ caseStudies = [] }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-16 min-h-[500px] lg:min-h-[550px]">
 
           {/* Left: copy (Slider Logic) */}
-          <div className="relative w-full h-full flex flex-col justify-center min-h-[350px]">
+          <div className="relative w-full h-full flex flex-col justify-center min-h-[460px] md:min-h-[500px]">
             {slides.map((slide, index) => {
               const isActive = index === activeSlide
               return (

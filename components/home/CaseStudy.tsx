@@ -29,25 +29,26 @@ export function CaseStudy({ posts }: Props) {
     new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
 
   return (
-    <section id="studi-kasus" className="py-24 md:py-32 bg-off-white" ref={sectionRef}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="studi-kasus" className="py-24 md:py-32 bg-navy relative overflow-hidden" ref={sectionRef}>
+      <div className="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-teal/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
           <div>
-            <span className="text-teal text-sm font-semibold uppercase tracking-widest">
-              {tx(t.caseStudies.sectionLabel)}
+            <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest">
+              Studi Kasus
             </span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mt-2">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-white mt-2">
               {tx(t.caseStudies.heading)}
             </h2>
-            <p className="text-muted text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
+            <p className="text-slate-400 text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
           </div>
           <Link
-            href="/blog?category=Case+Study"
-            className="text-teal font-semibold text-sm hover:underline flex items-center gap-1.5 flex-shrink-0"
+            href="/blog"
+            className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-navy font-semibold py-2.5 px-6 rounded-full transition-all text-sm shadow-md group"
           >
             {lang === 'id' ? 'Lihat Semua' : 'View All'}
-            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="transform transition-transform group-hover:translate-x-1">
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </Link>
@@ -55,14 +56,14 @@ export function CaseStudy({ posts }: Props) {
 
         {/* Cards */}
         {posts.length === 0 ? (
-          <p className="text-muted">{lang === 'id' ? 'Belum ada studi kasus.' : 'No case studies yet.'}</p>
+          <p className="text-slate-400">{lang === 'id' ? 'Belum ada studi kasus.' : 'No case studies yet.'}</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {posts.map((post, i) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="reveal group flex flex-col bg-white rounded-2xl border border-border hover:border-teal/30 hover:shadow-xl transition-all duration-300 overflow-hidden"
+                className="reveal group flex flex-col rounded-2xl glass-edge overflow-hidden"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
                 {/* Image Cover */}
@@ -79,20 +80,20 @@ export function CaseStudy({ posts }: Props) {
                 
                 <div className="p-7 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300">
                       Case Study
                     </span>
-                    <span className="text-muted text-xs">{formatDate(post.date)}</span>
+                    <span className="text-slate-400 text-xs">{formatDate(post.date)}</span>
                   </div>
-                  <h3 className="font-display text-base font-bold text-navy mb-3 leading-snug group-hover:text-teal transition-colors flex-1">
+                  <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-sky-300 transition-colors flex-1">
                     {post.title}
                   </h3>
-                  <p className="text-muted text-sm leading-relaxed line-clamp-3 mb-5">
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">
                     {post.excerpt}
                   </p>
-                  <span className="text-teal text-sm font-semibold flex items-center gap-1.5">
+                  <span className="text-sky-400 group-hover:text-sky-300 transition-colors text-sm font-semibold flex items-center gap-1.5 mt-auto">
                     {lang === 'id' ? 'Baca Selengkapnya' : 'Read More'}
-                    <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+                    <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="transform transition-transform group-hover:translate-x-1">
                       <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </span>

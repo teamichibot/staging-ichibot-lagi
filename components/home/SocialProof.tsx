@@ -22,7 +22,11 @@ export function SocialProof() {
   const track = clients.length > 0 ? [...clients, ...clients] : []
 
   return (
-    <section id="client-logos" className="relative z-20 -mt-16 md:-mt-24 pb-16 md:pb-24 px-4 sm:px-6">
+    <section 
+      id="client-logos" 
+      className="relative z-20 -mt-16 md:-mt-24 pt-16 md:pt-24 pb-16 md:pb-24 px-4 sm:px-6"
+      style={{ background: 'linear-gradient(to bottom, var(--color-navy) 50%, var(--color-navy-light) 50%)' }}
+    >
       <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] border border-gray-100 rounded-[2rem] pt-8 pb-10 px-6 sm:px-10 overflow-hidden">
         <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted mb-8">
           {tx(t.socialProof.industryLabel)}

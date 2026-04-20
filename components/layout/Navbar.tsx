@@ -6,14 +6,17 @@ import Link from 'next/link'
 import { useLang } from '@/contexts/LanguageContext'
 import { t } from '@/lib/translations'
 
+import { servicesData } from '@/lib/services-data'
+import { productsData } from '@/lib/products-data'
+
 const serviceLinks = t.services.items.map((item, i) => ({
   label: item.title,
-  href: `/#layanan`,
+  href: `/layanan/${servicesData[i].slug}`,
 }))
 
-const productLinks = t.products.items.map((item) => ({
+const productLinks = t.products.items.map((item, i) => ({
   label: item.title,
-  href: `/#produk`,
+  href: `/produk/${productsData[i].slug}`,
 }))
 
 function NavLogo() {
@@ -93,12 +96,12 @@ export function Navbar() {
             onMouseEnter={() => open('layanan')}
             onMouseLeave={close}
           >
-            <button className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+            <Link href="/#layanan" className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
               {tx(t.nav.services)}
-              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 ${activeDropdown === 'layanan' ? 'rotate-180' : ''}`}>
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'layanan' ? 'rotate-180' : ''}`}>
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
               </svg>
-            </button>
+            </Link>
             {activeDropdown === 'layanan' && (
               <div
                 className="absolute top-full left-0 mt-2 w-64 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2 overflow-hidden"
@@ -125,12 +128,12 @@ export function Navbar() {
             onMouseEnter={() => open('produk')}
             onMouseLeave={close}
           >
-            <button className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+            <Link href="/#produk" className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
               {tx(t.nav.products)}
-              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 ${activeDropdown === 'produk' ? 'rotate-180' : ''}`}>
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'produk' ? 'rotate-180' : ''}`}>
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
               </svg>
-            </button>
+            </Link>
             {activeDropdown === 'produk' && (
               <div
                 className="absolute top-full left-0 mt-2 w-56 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
