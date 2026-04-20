@@ -205,22 +205,3 @@ export function getProductBySlug(slug: string): ProductData | undefined {
   return productsData.find((p) => p.slug === slug)
 }
 
-export function getAllProducts(): ProductData[] {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs') as typeof import('fs')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const path = require('path') as typeof import('path')
-    const file = path.join(process.cwd(), 'data', 'products.json')
-    if (fs.existsSync(file)) {
-      return JSON.parse(fs.readFileSync(file, 'utf8')) as ProductData[]
-    }
-  } catch {
-    // fall through to static data
-  }
-  return productsData
-}
-
-export function getProductBySlugLive(slug: string): ProductData | undefined {
-  return getAllProducts().find((p) => p.slug === slug)
-}

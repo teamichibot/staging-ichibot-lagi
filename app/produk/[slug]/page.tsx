@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getAllProducts, getProductBySlugLive } from '@/lib/products-data'
+import { getAllProducts, getProductBySlugLive } from '@/lib/server-data'
 import { ProductDetail } from '@/components/produk/ProductDetail'
 
 interface Props {

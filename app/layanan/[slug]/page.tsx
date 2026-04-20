@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getAllServices, getServiceBySlugLive } from '@/lib/services-data'
+import { getAllServices, getServiceBySlugLive } from '@/lib/server-data'
 import { ServiceDetail } from '@/components/layanan/ServiceDetail'
 
 interface Props {
