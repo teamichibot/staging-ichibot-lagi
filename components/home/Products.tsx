@@ -50,41 +50,31 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
           onScroll={handleScroll}
           className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
         >
-          {t.products.items.map((item, i) => {
-            const productData = productItems[i]
-            if (!productData) return null
-            return (
+          {productItems.map((product, i) => (
               <div
-                key={i}
+                key={product.slug}
                 className="reveal flex-none w-[85vw] md:w-[400px] snap-center group relative h-[500px] flex flex-col rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 cursor-pointer"
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
-                {/* Background Image */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={productData.image}
-                  alt={tx(item.title)}
+                  src={product.image}
+                  alt={product.title[lang]}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   loading="lazy"
                 />
-
-                {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/60 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
-
-                {/* Content block positioned at the bottom */}
                 <div className="relative flex flex-col flex-1 justify-end p-8 pb-10 w-full h-full z-10 text-white text-left">
                   <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                     <h3 className="font-display text-2xl font-bold mb-3 text-white">
-                      {tx(item.title)}
+                      {product.title[lang]}
                     </h3>
                     <p className="text-white/80 text-sm leading-relaxed mb-8">
-                      {tx(item.desc)}
+                      {product.desc[lang]}
                     </p>
-
-                    {/* CTA Buttons */}
                     <div className="flex gap-3 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
                       <Link
-                        href={`/produk/${productData.slug}`}
+                        href={`/produk/${product.slug}`}
                         className="inline-flex items-center justify-center text-sm font-semibold text-white bg-teal/90 backdrop-blur-md hover:bg-teal py-2.5 px-6 rounded-full transition-all duration-300 group/btn"
                       >
                         {tx(t.products.ctaLearn)}
@@ -94,8 +84,7 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
                   </div>
                 </div>
               </div>
-            )
-          })}
+            ))}
 
           {/* View All Products Card */}
           <Link

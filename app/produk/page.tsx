@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { productsData } from '@/lib/products-data'
+import { getAllProducts } from '@/lib/server-data'
 
 export const metadata: Metadata = {
   title: 'Produk — Ichibot',
@@ -16,7 +18,8 @@ const categoryColors: Record<string, string> = {
 
 const productCategories = ['Energy', 'Monitoring', 'AI', 'Platform']
 
-export default function ProdukPage() {
+export default async function ProdukPage() {
+  const productsData = await getAllProducts()
   return (
     <div className="pt-24 pb-24 md:pt-32 bg-off-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
