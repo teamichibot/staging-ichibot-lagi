@@ -27,7 +27,13 @@ function NavLogo() {
   )
 }
 
-export function Navbar() {
+export function Navbar({ 
+  liveServices = servicesData, 
+  liveProducts = productsData 
+}: { 
+  liveServices?: any[], 
+  liveProducts?: any[] 
+}) {
   const { lang, toggle } = useLang()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
@@ -35,20 +41,14 @@ export function Navbar() {
   const [isHovered, setIsHovered] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const [serviceLinks, setServiceLinks] = useState(
-    servicesData.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` }))
-  )
-  const [productLinks, setProductLinks] = useState(
-    productsData.map((p) => ({ label: p.title, href: `/produk/${p.slug}` }))
-  )
+  const serviceLinks = liveServices.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` }))
+  const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}` }))
 
   useEffect(() => {
-    fetch('/api/services').then(r => r.json()).then(data => {
-      if (Array.isArray(data)) setServiceLinks(data.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` })))
-    }).catch(() => {})
-    fetch('/api/products').then(r => r.json()).then(data => {
-      if (Array.isArray(data)) setProductLinks(data.map((p) => ({ label: p.title, href: `/produk/${p.slug}` })))
-    }).catch(() => {})
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
@@ -110,15 +110,15 @@ export function Navbar() {
             </Link>
             {activeDropdown === 'layanan' && (
               <div
-                className="absolute top-full left-0 mt-2 w-64 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
+                className="absolute top-full left-0 mt-2 w-72 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
                 onMouseEnter={() => open('layanan')}
                 onMouseLeave={close}
               >
                 {serviceLinks.map((item) => (
                   <Link
-                    key={item.href + item.label.id}
+                    key={item.href + (item.label.id || item.label)}
                     href={item.href}
-                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
+                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm whitespace-normal leading-snug"
                     onClick={() => setActiveDropdown(null)}
                   >
                     <span>{tx(item.label)}</span>
@@ -142,15 +142,15 @@ export function Navbar() {
             </Link>
             {activeDropdown === 'produk' && (
               <div
-                className="absolute top-full left-0 mt-2 w-56 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
+                className="absolute top-full left-0 mt-2 w-80 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
                 onMouseEnter={() => open('produk')}
                 onMouseLeave={close}
               >
                 {productLinks.map((item) => (
                   <Link
-                    key={item.label.id}
+                    key={item.label.id || item.label}
                     href={item.href}
-                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
+                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm whitespace-normal leading-snug"
                     onClick={() => setActiveDropdown(null)}
                   >
                     {tx(item.label)}
@@ -206,6 +206,34 @@ export function Navbar() {
                   </span>
                   {tx(t.nav.blog)}
                 </Link>
+                <a
+                  href="https://www.store.ichibot.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
+                  onClick={() => setActiveDropdown(null)}
+                >
+                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </span>
+                  Ichibot Store
+                </a>
+                <a
+                  href="https://internship.ichibot.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
+                  onClick={() => setActiveDropdown(null)}
+                >
+                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                    </svg>
+                  </span>
+                  Internship
+                </a>
               </div>
             )}
           </div>
@@ -257,19 +285,37 @@ export function Navbar() {
               { label: tx(t.nav.caseStudies), href: '/#studi-kasus' },
               { label: lang === 'id' ? 'Tentang Kami' : 'About Us', href: '/about' },
               { label: 'Blog', href: '/blog' },
-            ].map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
-              >
-                <span>{l.label}</span>
-                <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            ))}
+              { label: 'Ichibot Store', href: 'https://www.store.ichibot.id' },
+              { label: 'Internship', href: 'https://internship.ichibot.id' },
+            ].map((l) => {
+              const isExternal = l.href.startsWith('http')
+              return isExternal ? (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
+                >
+                  <span>{l.label}</span>
+                  <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2-2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              ) : (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
+                >
+                  <span>{l.label}</span>
+                  <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              )
+            })}
           </div>
 
           {/* Bottom bar */}

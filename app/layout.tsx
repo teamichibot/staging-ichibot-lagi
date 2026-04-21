@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { SiteShell } from '@/components/layout/SiteShell'
+import { getAllServices, getAllProducts } from '@/lib/server-data'
 
 export const metadata: Metadata = {
   title: 'Ichibot — IoT & AI untuk Industri Indonesia',
@@ -21,11 +22,18 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [liveServices, liveProducts] = await Promise.all([
+    getAllServices(),
+    getAllProducts()
+  ])
+
   return (
     <html lang="id" className="h-full antialiased scroll-smooth">
       <body className="min-h-full flex flex-col">
-        <SiteShell>{children}</SiteShell>
+        <SiteShell liveServices={liveServices} liveProducts={liveProducts}>
+          {children}
+        </SiteShell>
       </body>
     </html>
   )

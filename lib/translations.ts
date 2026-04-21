@@ -279,9 +279,14 @@ export const t = {
     tagline: { id: 'IoT & AI untuk Industri Indonesia.', en: 'IoT & AI for Indonesian Industry.' },
     navGroups: [
       {
-        label: { id: 'Solusi', en: 'Solutions' },
+        label: { id: 'Layanan', en: 'Services' },
         links: [
           { label: { id: 'Layanan', en: 'Services' }, href: '/#layanan' },
+        ],
+      },
+      {
+        label: { id: 'Produk', en: 'Products' },
+        links: [
           { label: { id: 'Produk', en: 'Products' }, href: '/#produk' },
         ],
       },
@@ -290,6 +295,8 @@ export const t = {
         links: [
           { label: { id: 'Blog', en: 'Blog' }, href: '/blog' },
           { label: { id: 'Tentang Kami', en: 'About Us' }, href: '/about' },
+          { label: { id: 'Ichibot Store', en: 'Ichibot Store' }, href: 'https://www.store.ichibot.id' },
+          { label: { id: 'Internship', en: 'Internship' }, href: 'https://internship.ichibot.id' },
         ],
       },
     ],

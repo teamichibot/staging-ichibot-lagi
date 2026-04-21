@@ -1,6 +1,10 @@
 import { Metadata } from 'next'
 import { CTASection } from '@/components/home/CTASection'
 import { Timeline } from '@/components/about/Timeline'
+import { getAllTeamMembers } from '@/lib/server-data'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: 'Tentang Kami — Ichibot',
@@ -53,34 +57,8 @@ const whyItems = [
   },
 ]
 
-const team = [
-  {
-    name: 'Angga Priyatmoko',
-    role: 'Founder & CEO',
-    bio: 'Memimpin Ichibot sejak 2016. Engineer dengan latar belakang robotika kompetitif yang kini berfokus pada transformasi industri melalui AI dan IoT.',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400',
-  },
-  {
-    name: 'Andi Pratama',
-    role: 'Chief Technology Officer',
-    bio: 'Memimpin pengembangan platform AI-IoT Ichibot. Spesialis sistem embedded, edge computing, dan integrasi protokol industri.',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400',
-  },
-  {
-    name: 'Citra Dewi',
-    role: 'Chief Operating Officer',
-    bio: 'Memastikan setiap proyek dieksekusi tepat waktu dan sesuai standar. Berpengalaman dalam manajemen proyek industri skala besar.',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400',
-  },
-  {
-    name: 'Rizky Fauzan',
-    role: 'Head of AI Research',
-    bio: 'Memimpin riset dan pengembangan model AI untuk aplikasi industri. Fokus pada computer vision dan predictive analytics untuk manufaktur.',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
-  },
-]
-
-export default function AboutPage() {
+export default async function AboutPage() {
+  const team = await getAllTeamMembers()
   return (
     <main className="min-h-screen">
 
@@ -241,11 +219,11 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="flex flex-wrap justify-center gap-8">
             {team.map((person, i) => (
               <div
                 key={i}
-                className="group flex flex-col rounded-2xl border border-border overflow-hidden hover:border-teal/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] min-w-[280px] max-w-[320px] group flex flex-col rounded-2xl border border-border overflow-hidden hover:border-teal/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
                 {/* Photo */}
                 <div className="relative w-full h-64 overflow-hidden bg-navy/5">

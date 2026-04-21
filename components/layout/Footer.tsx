@@ -5,17 +5,40 @@ import Image from 'next/image'
 import { useLang } from '@/contexts/LanguageContext'
 import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 
-export function Footer() {
+export function Footer({ 
+  liveServices, 
+  liveProducts 
+}: { 
+  liveServices?: any[], 
+  liveProducts?: any[] 
+}) {
   const { lang } = useLang()
   const tx = (obj: { id: string; en: string }) => obj[lang]
   const waMessage = encodeURIComponent(t.whatsapp.message[lang])
 
+  // Process live data for the groups
+  const navGroups = t.footer.navGroups.map(group => {
+    if (group.label.id === 'Layanan' && liveServices && liveServices.length > 0) {
+      return { 
+        ...group, 
+        links: liveServices.map(s => ({ label: s.title, href: `/layanan/${s.slug}` })) 
+      }
+    }
+    if (group.label.id === 'Produk' && liveProducts && liveProducts.length > 0) {
+      return { 
+        ...group, 
+        links: liveProducts.map(p => ({ label: p.title, href: `/produk/${p.slug}` })) 
+      }
+    }
+    return group
+  })
+
   return (
     <footer className="bg-navy-light text-white border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="col-span-2 md:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <Image
                 src="/logos/logo.svg"
@@ -45,7 +68,7 @@ export function Footer() {
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-white transition-colors"
+                className="text-white/60 hover:text-teal transition-colors"
                 aria-label="WhatsApp"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -54,8 +77,43 @@ export function Footer() {
                 </svg>
               </a>
               <a
+                href="https://www.instagram.com/ichibot.id/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-teal transition-colors"
+                aria-label="Instagram"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a
+                href="https://www.tiktok.com/@ichibot.id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-teal transition-colors"
+                aria-label="TikTok"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.01.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.09-1.41-.01 2.31 0 4.62-.01 6.93-.11 2.37-1.22 4.71-3.23 6.02-2.02 1.31-4.72 1.54-6.9 1.14-2.18-.4-4.22-1.78-5.32-3.76-1.1-1.98-1.2-4.43-.6-6.6.61-2.18 2.21-4.06 4.33-4.8 1.34-.47 2.82-.5 4.2-.21V12a4.42 4.42 0 00-2.29.61c-.81.47-1.41 1.24-1.68 2.15-.27.91-.18 1.93.3 2.73.48.81 1.3 1.38 2.22 1.55.92.17 1.91-.08 2.65-.63.74-.55 1.19-1.4 1.25-2.33.06-.51.05-4.84.05-12.28z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.youtube.com/@ichibot_id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-teal transition-colors"
+                aria-label="YouTube"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </a>
+              <a
                 href={`mailto:${t.footer.email}`}
-                className="text-white/60 hover:text-white transition-colors"
+                className="text-white/60 hover:text-teal transition-colors"
                 aria-label="Email"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -67,14 +125,14 @@ export function Footer() {
           </div>
 
           {/* Nav groups */}
-          {t.footer.navGroups.map((group) => (
+          {navGroups.map((group) => (
             <div key={group.label.id}>
               <h4 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
                 {tx(group.label)}
               </h4>
               <ul className="space-y-3">
-                {group.links.map((link) => (
-                  <li key={link.href}>
+                {group.links.map((link, idx) => (
+                  <li key={link.href + idx}>
                     <Link
                       href={link.href}
                       className="text-white/70 hover:text-white text-sm transition-colors"

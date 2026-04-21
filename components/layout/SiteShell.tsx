@@ -6,7 +6,15 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 
-export function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteShell({ 
+  children,
+  liveServices,
+  liveProducts
+}: { 
+  children: React.ReactNode,
+  liveServices?: any[],
+  liveProducts?: any[]
+}) {
   const pathname = usePathname()
   const isAdmin = pathname.startsWith('/admin')
 
@@ -16,9 +24,9 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <LanguageProvider>
-      <Navbar />
+      <Navbar liveServices={liveServices} liveProducts={liveProducts} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer liveServices={liveServices} liveProducts={liveProducts} />
       <WhatsAppButton />
     </LanguageProvider>
   )
