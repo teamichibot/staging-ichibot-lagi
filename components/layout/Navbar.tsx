@@ -92,9 +92,9 @@ export function Navbar() {
         </Link>
 
         {/* Expanding Inner Container */}
-        <div className={`flex items-center justify-between flex-1 transition-all duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-nowrap ${isCollapsed ? 'opacity-0 max-w-0 overflow-hidden pointer-events-none ml-0' : 'opacity-100 max-w-[1000px] overflow-visible pointer-events-auto ml-4'}`}>
+        <div className={`flex items-center justify-between flex-1 transition-all duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-nowrap overflow-visible ${isCollapsed ? 'opacity-0 max-w-0 pointer-events-none ml-0' : 'opacity-100 max-w-[1000px] pointer-events-auto ml-4'}`}>
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 overflow-visible">
 
           {/* Layanan dropdown */}
           <div
