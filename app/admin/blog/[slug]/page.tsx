@@ -73,16 +73,62 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     }
   }
 
+  const exportJSON = () => {
+    const data = { ...form, _ichibot_type: 'blog' }
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2))
+    alert('Data berhasil disalin ke clipboard! Silakan berikan ke AI.')
+  }
+
+  const importJSON = () => {
+    const input = window.prompt('Tempelkan JSON dari AI ke sini:')
+    if (!input) return
+    try {
+      const data = JSON.parse(input)
+      if (data._ichibot_type !== 'blog') {
+        alert('Data JSON tidak valid untuk halaman Blog.')
+        return
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _ichibot_type, ...rest } = data
+      setForm(prev => ({ ...prev, ...rest }))
+      alert('Data berhasil diimpor!')
+    } catch (e) {
+      alert('Format JSON tidak valid.')
+    }
+  }
+
   if (loading) return <AdminShell><div className="p-8 text-gray-500 text-sm">Memuat data...</div></AdminShell>
 
   return (
     <AdminShell>
       <div className="p-6 md:p-8 max-w-3xl">
-        <div className="flex items-center gap-3 mb-8">
-          <button onClick={() => router.push('/admin/blog')} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">{isNew ? 'Tambah Artikel' : 'Edit Artikel'}</h1>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <button onClick={() => router.push('/admin/blog')} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">{isNew ? 'Tambah Artikel' : 'Edit Artikel'}</h1>
+          </div>
+          <div className="flex gap-2">
+            <button 
+              type="button" 
+              onClick={exportJSON}
+              title="Salin data ke clipboard untuk AI"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-teal border border-teal/20 bg-teal/5 hover:bg-teal/10 rounded-lg transition-all"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+              Export
+            </button>
+            <button 
+              type="button" 
+              onClick={importJSON}
+              title="Impor data dari AI"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              Import
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -123,7 +169,20 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul</label>
               <input
                 value={form.title}
-                onChange={(e) => set('title', e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setForm(f => {
+                    const next = { ...f, title: val }
+                    if (isNew) {
+                      next.slug = val.toLowerCase()
+                        .replace(/[^a-z0-9\s-]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                    }
+                    return next
+                  })
+                }}
                 required
                 className="input-field w-full"
               />

@@ -37,6 +37,7 @@ export function Navbar({
   const { lang, toggle } = useLang()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [activeSection, setActiveSection] = useState<string>('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -48,14 +49,29 @@ export function Navbar({
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50)
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    // ScrollSpy Logic
+    const sections = ['layanan', 'produk', 'studi-kasus']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.5, rootMargin: '-80px 0px -40% 0px' }
+    )
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      observer.disconnect()
+    }
   }, [])
 
   const isCollapsed = isScrolled && !isHovered && !mobileOpen && !activeDropdown
@@ -102,7 +118,14 @@ export function Navbar({
             onMouseEnter={() => open('layanan')}
             onMouseLeave={close}
           >
-            <Link href="/#layanan" className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+            <Link 
+              href="/#layanan" 
+              className={`flex items-center gap-1 text-sm font-medium px-3 py-2 rounded-xl transition-all ${
+                activeSection === 'layanan' 
+                ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
+                : 'text-white/75 hover:text-white hover:bg-white/8'
+              }`}
+            >
               {tx(t.nav.services)}
               <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'layanan' ? 'rotate-180' : ''}`}>
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -134,7 +157,14 @@ export function Navbar({
             onMouseEnter={() => open('produk')}
             onMouseLeave={close}
           >
-            <Link href="/#produk" className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+            <Link 
+              href="/#produk" 
+              className={`flex items-center gap-1 text-sm font-medium px-3 py-2 rounded-xl transition-all ${
+                activeSection === 'produk' 
+                ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
+                : 'text-white/75 hover:text-white hover:bg-white/8'
+              }`}
+            >
               {tx(t.nav.products)}
               <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'produk' ? 'rotate-180' : ''}`}>
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
@@ -160,7 +190,14 @@ export function Navbar({
             )}
           </div>
 
-          <Link href="/#studi-kasus" className="text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+          <Link 
+            href="/#studi-kasus" 
+            className={`text-sm font-medium px-3 py-2 rounded-xl transition-all ${
+              activeSection === 'studi-kasus' 
+              ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
+              : 'text-white/75 hover:text-white hover:bg-white/8'
+            }`}
+          >
             {tx(t.nav.caseStudies)}
           </Link>
 

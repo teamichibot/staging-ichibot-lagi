@@ -18,15 +18,17 @@ export default async function HomePage() {
     getAllProducts(),
   ])
 
-  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 2)
+  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 3)
   const previewPosts = allPosts.slice(0, 3)
+
+  const sortedProducts = [...productItems].reverse()
 
   return (
     <>
-      <Hero caseStudies={caseStudyPosts} products={productItems.slice(0, 2)} />
+      <Hero caseStudies={caseStudyPosts} products={sortedProducts.slice(0, 2)} />
       <SocialProof />
       <Services serviceItems={serviceItems} />
-      <Products productItems={productItems} />
+      <Products productItems={sortedProducts} />
       <CaseStudy posts={caseStudyPosts} />
       <WhyIchibot />
       <CTASection />

@@ -36,7 +36,7 @@ export function CaseStudy({ posts }: Props) {
         <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
           <div>
             <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest">
-              Studi Kasus
+              {tx(t.caseStudies.sectionLabel)}
             </span>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white mt-2">
               {tx(t.caseStudies.heading)}
@@ -81,7 +81,7 @@ export function CaseStudy({ posts }: Props) {
                 <div className="p-7 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300">
-                      Case Study
+                      {lang === 'id' ? 'Studi Kasus' : 'Case Study'}
                     </span>
                     <span className="text-slate-400 text-xs">{formatDate(post.date)}</span>
                   </div>
