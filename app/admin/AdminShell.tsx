@@ -152,11 +152,31 @@ export function AdminShell({ children }: { children: ReactNode }) {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 md:ml-64 pt-16 md:pt-0 min-h-screen">
+      <main className="flex-1 md:ml-64 pt-16 md:pt-0 min-h-screen text-slate-900">
         <div className="h-full bg-slate-50 overflow-auto">
           {children}
         </div>
       </main>
+      <style>{`
+        /* Reset scrollbar for admin pages with light background */
+        ::-webkit-scrollbar-track {
+          background: #f8fafc; /* slate-50 */
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #cbd5e1; /* slate-300 */
+          border: 2px solid #f8fafc;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8; /* slate-400 */
+        }
+        /* Force dark text for form elements on white background */
+        input, textarea, select {
+          color: #1a202c;
+        }
+        .input-field {
+          color: #1a202c !important;
+        }
+      `}</style>
     </div>
   )
 }
