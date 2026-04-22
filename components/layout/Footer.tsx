@@ -34,8 +34,11 @@ export function Footer({
   })
 
   return (
-    <footer className="bg-navy-light text-white border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
+    <footer className="bg-[#050A14] text-white relative overflow-hidden">
+      {/* Bottom Glow */}
+      <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-teal/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-2">

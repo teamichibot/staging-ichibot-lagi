@@ -286,7 +286,7 @@ export function Navbar({
           </button>
           <Link
             href="/contact"
-            className="bg-teal hover:bg-teal-light text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+            className="bg-teal hover:bg-teal-light text-navy text-sm font-bold px-4 py-2 rounded-xl transition-colors"
           >
             {tx(t.nav.cta)}
           </Link>
@@ -366,7 +366,7 @@ export function Navbar({
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center bg-teal hover:bg-teal-light text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+              className="flex-1 text-center bg-teal hover:bg-teal-light text-navy text-sm font-bold px-4 py-2.5 rounded-xl transition-colors"
             >
               {tx(t.nav.cta)}
             </Link>

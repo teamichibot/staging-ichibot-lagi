@@ -91,7 +91,7 @@ export default function AdminTeamPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 bg-teal hover:bg-teal/90 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 bg-teal hover:bg-teal/90 text-navy font-bold px-6 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
             >
               {saving ? 'Menyimpan...' : 'Simpan Semua'}
             </button>
@@ -149,7 +149,7 @@ export default function AdminTeamPage() {
                       </div>
                       <div className="flex justify-end gap-2">
                         <button onClick={() => setEditingIndex(null)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 rounded-lg transition-colors">Batal</button>
-                        <button onClick={saveEdit} className="px-4 py-2 text-sm font-medium bg-teal text-white rounded-lg hover:bg-teal/90 transition-colors">Terapkan</button>
+                        <button onClick={saveEdit} className="px-4 py-2 text-sm font-bold bg-teal text-navy rounded-lg hover:bg-teal/90 transition-colors">Terapkan</button>
                       </div>
                     </div>
                   ) : (

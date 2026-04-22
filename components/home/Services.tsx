@@ -21,19 +21,19 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
   }, [])
 
   return (
-    <section id="layanan" className="pt-4 md:pt-8 pb-24 md:pb-32 bg-navy-light relative overflow-hidden" ref={sectionRef}>
-      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-teal/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+    <section id="layanan" className="pt-4 md:pt-8 pb-24 md:pb-32 bg-[#050A14] relative overflow-hidden" ref={sectionRef}>
+      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] bg-sky-500/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal max-w-2xl mb-16 mx-auto text-center">
-          <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest">
+          <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
             {tx(t.services.sectionLabel)}
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
             {tx(t.services.heading)}
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed mx-auto">{tx(t.services.subheading)}</p>
+          <p className="text-muted text-lg leading-relaxed mx-auto max-w-xl">{tx(t.services.subheading)}</p>
         </div>
 
         {/* Cards */}
@@ -41,7 +41,7 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
           {serviceItems.map((service, i) => (
             <div
               key={service.slug}
-              className="reveal group flex flex-col rounded-2xl glass-edge overflow-hidden"
+              className="reveal group flex flex-col glass-3d-premium overflow-hidden"
               style={{ transitionDelay: `${i * 80}ms` }}
             >
               <div className="relative w-full h-56 overflow-hidden bg-navy/5">

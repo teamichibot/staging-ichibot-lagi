@@ -54,7 +54,7 @@ export function ServiceDetail({ service }: { service: ServiceData }) {
           <div className="flex flex-wrap gap-4 mt-10">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+              className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-7 py-3.5 rounded-full transition-colors text-sm shadow-lg shadow-teal/20"
             >
               {tx(t.nav.cta)}
               <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
@@ -163,7 +163,7 @@ export function ServiceDetail({ service }: { service: ServiceData }) {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+              className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-7 py-3.5 rounded-full transition-colors text-sm shadow-lg shadow-teal/20"
             >
               {tx(t.nav.cta)}
               <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">

@@ -29,23 +29,25 @@ export function CaseStudy({ posts }: Props) {
     new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
 
   return (
-    <section id="studi-kasus" className="py-24 md:py-32 bg-navy relative overflow-hidden" ref={sectionRef}>
-      <div className="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-teal/20 rounded-full blur-[100px] pointer-events-none" />
+    <section id="studi-kasus" className="py-24 md:py-32 bg-[#050A14] relative overflow-hidden" ref={sectionRef}>
+      <div className="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-teal/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-sky-500/5 rounded-full blur-[120px] pointer-events-none" />
+      
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
           <div>
-            <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest">
+            <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
               {tx(t.caseStudies.sectionLabel)}
             </span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-white mt-2">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-white tracking-tight mt-2">
               {tx(t.caseStudies.heading)}
             </h2>
-            <p className="text-slate-400 text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
+            <p className="text-muted text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
           </div>
           <Link
             href="/blog"
-            className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-navy font-semibold py-2.5 px-6 rounded-full transition-all text-sm shadow-md group"
+            className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold py-2.5 px-6 rounded-full transition-all text-sm border border-white/10 backdrop-blur-md group"
           >
             {lang === 'id' ? 'Lihat Semua' : 'View All'}
             <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="transform transition-transform group-hover:translate-x-1">
@@ -56,14 +58,14 @@ export function CaseStudy({ posts }: Props) {
 
         {/* Cards */}
         {posts.length === 0 ? (
-          <p className="text-slate-400">{lang === 'id' ? 'Belum ada studi kasus.' : 'No case studies yet.'}</p>
+          <p className="text-muted">{lang === 'id' ? 'Belum ada studi kasus.' : 'No case studies yet.'}</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {posts.map((post, i) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="reveal group flex flex-col rounded-2xl glass-edge overflow-hidden"
+                className="reveal group flex flex-col glass-3d-premium overflow-hidden"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
                 {/* Image Cover */}

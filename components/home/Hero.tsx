@@ -65,7 +65,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
   }, [slides.length])
 
   return (
-    <section className="bg-navy relative overflow-hidden pt-20 pb-12 md:pt-24 md:pb-20">
+    <section className="bg-[#050A14] relative overflow-hidden pt-20 pb-12 md:pt-24 md:pb-20">
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.035]"
@@ -117,7 +117,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
                           href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="relative inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm overflow-hidden"
+                          className="relative inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-7 py-3.5 rounded-full transition-colors text-sm overflow-hidden"
                         >
                           {/* Charging progress bar */}
                           {slides.length > 1 && (
@@ -141,7 +141,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
                     ) : (
                       <Link
                         href={slide.href}
-                        className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+                          className="relative inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-7 py-3.5 rounded-full transition-colors text-sm overflow-hidden"
                       >
                         {(slide as { type?: string }).type === 'product'
                           ? (lang === 'id' ? 'Lihat Produk' : 'View Product')

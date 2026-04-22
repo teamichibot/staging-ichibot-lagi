@@ -87,7 +87,7 @@ export function Timeline() {
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 ${
                   i <= active
-                    ? 'bg-teal border-teal text-white shadow-lg shadow-teal/30'
+                    ? 'bg-teal border-teal text-navy shadow-lg shadow-teal/30'
                     : 'bg-white border-border text-muted group-hover:border-teal/50 group-hover:text-teal'
                 }`}
               >
@@ -134,7 +134,7 @@ export function Timeline() {
             <div className="flex items-center gap-4 p-5">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                  i === active ? 'bg-teal text-white' : 'bg-navy/5 text-muted'
+                  i === active ? 'bg-teal text-navy' : 'bg-navy/5 text-muted'
                 }`}
               >
                 {m.icon}

@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-8 py-4 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1 text-sm whitespace-nowrap"
+                className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-8 py-4 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1 text-sm whitespace-nowrap"
               >
                 Mulai Konsultasi Gratis
                 <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">

@@ -101,7 +101,7 @@ export default async function ProdukPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors text-sm"
+            className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold px-7 py-3.5 rounded-full transition-colors text-sm shadow-lg shadow-teal/20"
           >
             Konsultasi Gratis
             <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">

@@ -118,7 +118,7 @@ export default function AdminClientsPage() {
           <button
             onClick={handleSave}
             disabled={saving || loading}
-            className="flex items-center gap-2 bg-teal hover:bg-teal/90 disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors"
+            className="flex items-center gap-2 bg-teal hover:bg-teal/90 disabled:opacity-50 text-navy font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             {saving ? 'Menyimpan...' : saved ? '✓ Tersimpan' : 'Simpan Perubahan'}
           </button>

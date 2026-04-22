@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-teal hover:bg-teal/90 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+            className="w-full bg-teal hover:bg-teal/90 disabled:opacity-50 text-navy font-bold py-2.5 rounded-xl text-sm transition-colors"
           >
             {loading ? 'Memverifikasi...' : 'Masuk'}
           </button>

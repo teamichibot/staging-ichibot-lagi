@@ -68,9 +68,8 @@ export function SocialProof() {
       id="client-logos" 
       className="relative z-20 -mt-16 md:-mt-24 pt-16 md:pt-24 pb-16 md:pb-24 px-4 sm:px-6"
     >
-      {/* Background shape */}
-      <div className="absolute inset-0 bg-navy h-1/2" />
-      <div className="absolute inset-0 top-1/2 bg-navy-light h-1/2" />
+      {/* Background shape - Unified with Deep Dark theme */}
+      <div className="absolute inset-0 bg-[#050A14]" />
       
       <div className="relative max-w-6xl mx-auto bg-white/90 backdrop-blur-2xl shadow-[0_32px_64px_rgba(0,0,0,0.12)] border border-white/20 rounded-[2.5rem] p-8 md:p-12 overflow-hidden">
         {loading ? (

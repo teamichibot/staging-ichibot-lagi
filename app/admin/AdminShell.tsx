@@ -76,7 +76,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       <aside className="hidden md:flex flex-col w-64 bg-navy border-r border-white/5 fixed inset-y-0 left-0 z-40">
         <div className="p-6 border-b border-white/5">
           <Link href="/admin" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-teal flex items-center justify-center font-bold text-white shadow-lg shadow-teal/20 group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-teal flex items-center justify-center font-bold text-navy shadow-lg shadow-teal/20 group-hover:scale-105 transition-transform">
               i
             </div>
             <div>
@@ -93,13 +93,13 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${
                   active
-                    ? 'bg-teal text-white shadow-lg shadow-teal/20 border border-white/10'
+                    ? 'bg-teal text-navy shadow-lg shadow-teal/20 border border-white/10'
                     : 'text-white/50 hover:text-white hover:bg-white/5 hover:translate-x-1'
                 }`}
               >
-                <span className={`transition-colors ${active ? 'text-white' : 'text-teal'}`}>
+                <span className={`transition-colors ${active ? 'text-navy' : 'text-teal'}`}>
                   {item.icon}
                 </span>
                 {item.label}
@@ -134,7 +134,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-navy border-b border-white/5 flex items-center justify-between px-4 h-16">
         <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-lg bg-teal flex items-center justify-center font-bold text-white text-xs">i</div>
+          <div className="w-7 h-7 rounded-lg bg-teal flex items-center justify-center font-bold text-navy text-xs">i</div>
           <p className="text-white font-display font-bold text-sm">Ichibot Admin</p>
         </div>
         <div className="flex items-center gap-3">

@@ -3,13 +3,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-navy:        #0A1628;
-  --color-navy-light:  #122040;
-  --color-teal:        #2563EB;
-  --color-teal-light:  #3B82F6;
+  --color-navy:        #050A14;
+  --color-navy-light:  #0B1221;
+  --color-teal:        #00D1FF;
+  --color-teal-light:  #70EBFF;
   --color-off-white:   #F8F9FC;
-  --color-muted:       #64748B;
-  --color-border:      #E2E8F0;
+  --color-muted:       #94A3B8;
+  --color-border:      #1E293B;
 
   --font-display: 'Manrope', system-ui, sans-serif;
   --font-sans:    'Manrope', system-ui, sans-serif;
@@ -17,8 +17,8 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: #ffffff;
-  color: #1e293b;
+  background-color: #050A14; /* Deep Dark Background by default */
+  color: #F1F5F9;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -63,29 +63,30 @@ html {
   transform: translateY(0);
 }
 
-/* --- UI Identity Utils --- */
+/* --- Neo-Glass Premium UI --- */
 
-.glass-edge {
-  background-color: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+.glass-3d-premium {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  /* Top-left intense highlight, bottom-right subtle reflection */
+  border-radius: 24px;
+  /* Top-left crisp inner highlight, deep outer shadow */
   box-shadow: 
-    inset 1px 1px 1px 0 rgba(255, 255, 255, 0.4), 
-    inset -1px -1px 2px 0 rgba(255, 255, 255, 0.05), 
-    0 24px 40px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    inset 1px 1px 0px 0px rgba(255, 255, 255, 0.15),
+    inset -1px -1px 1px 0px rgba(0, 0, 0, 0.2),
+    0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.glass-edge:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.2); 
-  background-color: rgba(255, 255, 255, 0.05); /* slightly brighter on hover */
+.glass-3d-premium:hover {
+  transform: translateY(-8px) scale(1.01);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 209, 255, 0.3); /* Electric highlight on border */
   box-shadow: 
-    inset 1.5px 1.5px 2px 0 rgba(255, 255, 255, 0.6), 
-    inset -1px -1px 2px 0 rgba(255, 255, 255, 0.1), 
-    0 30px 50px -10px rgba(37, 99, 235, 0.2); /* Subtle hover float */
+    inset 1.5px 1.5px 0px 0px rgba(255, 255, 255, 0.3),
+    0 35px 60px -15px rgba(0, 0, 0, 0.8),
+    0 0 30px -5px rgba(0, 209, 255, 0.15); /* Subtle electric glow */
 }
 
 /* CTA Button slide progress "charging" animation */
@@ -97,4 +98,36 @@ html {
 .animate-btn-charge {
   animation: btn-charge 6s linear forwards;
   transform-origin: left center;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #050A14;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 5px;
+  border: 2px solid #050A14;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}
+
+/* Glass Input Utility */
+.glass-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 209, 255, 0.4);
+  box-shadow: 0 0 15px -5px rgba(0, 209, 255, 0.2);
 }

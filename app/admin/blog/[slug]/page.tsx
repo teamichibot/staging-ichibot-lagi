@@ -257,7 +257,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <div className="flex gap-3">
-            <button type="submit" disabled={saving} className="bg-teal hover:bg-teal/90 disabled:opacity-50 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors">
+            <button type="submit" disabled={saving} className="bg-teal hover:bg-teal/90 disabled:opacity-50 text-navy font-bold px-6 py-2.5 rounded-xl text-sm transition-colors">
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
             <button type="button" onClick={() => router.push('/admin/blog')} className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
