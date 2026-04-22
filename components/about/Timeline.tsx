@@ -68,12 +68,12 @@ export function Timeline() {
       {/* Desktop: horizontal nodes */}
       <div className="hidden md:block">
         {/* Track */}
-        <div className="relative flex items-start justify-between mb-16">
+        <div className="relative flex items-start justify-between mb-20 px-8">
           {/* Line */}
-          <div className="absolute top-5 left-0 right-0 h-px bg-border" />
+          <div className="absolute top-6 left-8 right-8 h-px bg-white/10" />
           <div
-            className="absolute top-5 left-0 h-px bg-teal transition-all duration-500 ease-out"
-            style={{ width: `${(active / (milestones.length - 1)) * 100}%` }}
+            className="absolute top-6 left-8 h-px bg-teal transition-all duration-700 ease-out shadow-[0_0_10px_rgba(0,209,255,0.5)]"
+            style={{ width: `calc(${(active / (milestones.length - 1)) * 100}% - 16px)` }}
           />
 
           {milestones.map((m, i) => (
@@ -85,10 +85,10 @@ export function Timeline() {
             >
               {/* Node */}
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 ${
+                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${
                   i <= active
-                    ? 'bg-teal border-teal text-navy shadow-lg shadow-teal/30'
-                    : 'bg-white border-border text-muted group-hover:border-teal/50 group-hover:text-teal'
+                    ? 'bg-teal border-teal text-navy shadow-[0_0_20px_rgba(0,209,255,0.4)] scale-110'
+                    : 'bg-white/5 border-white/10 text-slate-500 group-hover:border-teal/50 group-hover:text-teal group-hover:bg-teal/5'
                 }`}
               >
                 {m.icon}
@@ -96,8 +96,8 @@ export function Timeline() {
 
               {/* Year label */}
               <span
-                className={`mt-3 text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${
-                  i === active ? 'text-teal' : 'text-muted group-hover:text-navy'
+                className={`mt-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 ${
+                  i <= active ? 'text-teal opacity-100' : 'text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-teal'
                 }`}
               >
                 {m.year}
@@ -107,52 +107,61 @@ export function Timeline() {
         </div>
 
         {/* Content card */}
-        <div className="relative overflow-hidden rounded-2xl bg-navy p-10 text-white min-h-[200px]">
-          <div className="absolute top-0 right-[-5%] w-[300px] h-[300px] bg-teal/10 rounded-full blur-[80px] pointer-events-none" />
-          <div key={active} className="relative">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-teal text-xs font-bold uppercase tracking-widest">{milestones[active].year}</span>
-              <span className="w-px h-4 bg-white/20" />
-              <span className="text-white/60 text-xs">{milestones[active].subtitle}</span>
+        <div className="relative overflow-hidden glass-3d-premium p-12 min-h-[240px]">
+          <div className="absolute top-0 right-[-5%] w-[400px] h-[400px] bg-teal/5 rounded-full blur-[100px] pointer-events-none" />
+          <div key={active} className="relative animate-reveal" style={{ animationFillMode: 'forwards' }}>
+            <div className="flex items-center gap-4 mb-6">
+              <span className="text-teal text-xs font-bold uppercase tracking-[0.2em]">{milestones[active].year}</span>
+              <span className="w-8 h-px bg-white/20" />
+              <span className="text-slate-400 text-xs font-semibold tracking-wide uppercase">{milestones[active].subtitle}</span>
             </div>
-            <h3 className="font-display text-2xl font-bold text-white mb-4">{milestones[active].title}</h3>
-            <p className="text-white/75 text-base leading-relaxed max-w-2xl">{milestones[active].desc}</p>
+            <h3 className="font-display text-3xl font-bold text-white mb-6 tracking-tight">{milestones[active].title}</h3>
+            <p className="text-slate-300 text-lg leading-relaxed max-w-3xl opacity-90">{milestones[active].desc}</p>
           </div>
         </div>
       </div>
 
       {/* Mobile: vertical accordion */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-4">
         {milestones.map((m, i) => (
           <button
             key={i}
             onClick={() => setActive(i === active ? -1 : i)}
-            className={`w-full text-left rounded-2xl border transition-all duration-300 overflow-hidden ${
-              i === active ? 'border-teal/40 bg-navy' : 'border-border bg-white hover:border-teal/30'
+            className={`w-full text-left rounded-3xl border transition-all duration-500 overflow-hidden ${
+              i === active 
+                ? 'border-teal/40 bg-teal/10 shadow-[0_0_30px_rgba(0,209,255,0.1)]' 
+                : 'border-white/10 bg-white/5 hover:border-white/20'
             }`}
           >
-            <div className="flex items-center gap-4 p-5">
+            <div className="flex items-center gap-5 p-6">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                  i === active ? 'bg-teal text-navy' : 'bg-navy/5 text-muted'
+                className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
+                  i === active 
+                    ? 'bg-teal text-navy shadow-[0_0_20px_rgba(0,209,255,0.3)]' 
+                    : 'bg-white/5 text-slate-500'
                 }`}
               >
                 {m.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <span className={`text-xs font-bold uppercase tracking-wider ${i === active ? 'text-teal' : 'text-muted'}`}>{m.year}</span>
-                <p className={`font-display font-bold text-base leading-tight ${i === active ? 'text-white' : 'text-navy'}`}>{m.title}</p>
+                <span className={`text-[10px] font-bold uppercase tracking-widest ${i === active ? 'text-teal' : 'text-slate-500'}`}>
+                  {m.year}
+                </span>
+                <p className={`font-display font-bold text-lg leading-tight mt-1 ${i === active ? 'text-white' : 'text-slate-400'}`}>
+                  {m.title}
+                </p>
               </div>
               <svg
-                className={`w-4 h-4 shrink-0 transition-transform duration-300 ${i === active ? 'rotate-180 text-teal' : 'text-muted'}`}
+                className={`w-5 h-5 shrink-0 transition-transform duration-500 ${i === active ? 'rotate-180 text-teal' : 'text-slate-600'}`}
                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
             {i === active && (
-              <div className="px-5 pb-6">
-                <p className="text-white/70 text-sm leading-relaxed">{m.desc}</p>
+              <div className="px-6 pb-8 animate-reveal" style={{ animationFillMode: 'forwards' }}>
+                <p className="text-slate-100/60 text-xs font-bold uppercase tracking-wider mb-3">{m.subtitle}</p>
+                <p className="text-slate-300 text-sm leading-relaxed">{m.desc}</p>
               </div>
             )}
           </button>

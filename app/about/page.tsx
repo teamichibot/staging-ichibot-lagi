@@ -49,7 +49,7 @@ const whyItems = [
   {
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
       </svg>
     ),
     title: 'Terbukti di Skala Enterprise',
@@ -60,42 +60,42 @@ const whyItems = [
 export default async function AboutPage() {
   const team = await getAllTeamMembers()
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#050A14] relative overflow-hidden">
+      {/* Background ambient light */}
+      <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[20%] left-[-5%] w-[400px] h-[400px] bg-navy/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-[20%] w-[500px] h-[500px] bg-teal/5 rounded-full blur-[110px] pointer-events-none" />
 
       {/* ── Hero ── */}
-      <section className="bg-navy relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
+      <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32 border-b border-white/5">
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage: `linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)`,
             backgroundSize: '60px 60px',
           }}
         />
-        <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-teal/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] bg-teal/8 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="relative max-w-5xl mx-auto px-6">
-          <span className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/80 text-xs font-semibold uppercase tracking-widest mb-8">
+        
+        <div className="relative max-w-6xl mx-auto px-6 animate-reveal opacity-0" style={{ animationFillMode: 'forwards' }}>
+          <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-white/80 text-[10px] font-bold uppercase tracking-[0.25em] mb-10 backdrop-blur-sm shadow-xl">
             <span className="w-2 h-2 rounded-full bg-teal animate-pulse" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logos/logo_gas.svg" alt="Logo GAS" className="h-4 w-auto brightness-0 invert opacity-90" />
-            PT GASGAS ANAGATA SEMESTA
+            <span className="opacity-60">PT GASGAS ANAGATA SEMESTA</span>
           </span>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 max-w-4xl">
+          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-8 max-w-5xl tracking-tight">
             AI-IoT Enablement Platform{' '}
-            <span className="text-teal-light">untuk Industri Indonesia</span>
+            <span className="text-teal transition-all hover:text-teal-light">untuk Industri Indonesia</span>
           </h1>
-          <p className="text-white/65 text-lg md:text-xl leading-relaxed max-w-3xl">
-            Membantu perusahaan manufaktur, energi, transportasi, dan institusi pemerintahan mengubah data operasional menjadi keputusan strategis — melalui arsitektur teknologi yang modular, terintegrasi, dan siap produksi.
+          <p className="text-slate-400 text-lg md:text-2xl leading-relaxed max-w-3xl opacity-90">
+            Membantu perusahaan manufaktur, energi, transportasi, dan institusi pemerintahan mengubah data operasional menjadi keputusan strategis melalui arsitektur teknologi yang modular dan siap produksi.
           </p>
 
           {/* Stats row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mt-20 pt-16 border-t border-white/10">
             {stats.map((s, i) => (
-              <div key={i}>
-                <p className="font-display text-3xl md:text-4xl font-bold text-white">{s.value}</p>
-                <p className="text-white/50 text-sm mt-1">{s.label}</p>
+              <div key={i} className="group cursor-default">
+                <p className="font-display text-3xl md:text-5xl font-bold text-white group-hover:text-teal transition-colors duration-500">{s.value}</p>
+                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-3 opacity-60 group-hover:opacity-100 transition-opacity">{s.label}</p>
               </div>
             ))}
           </div>
@@ -103,52 +103,52 @@ export default async function AboutPage() {
       </section>
 
       {/* ── Tentang Kami ── */}
-      <section className="py-24 md:py-32 bg-white">
+      <section className="py-24 md:py-40 relative">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
             {/* Text */}
-            <div>
-              <span className="text-teal text-sm font-semibold uppercase tracking-widest">Tentang Kami</span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mt-3 mb-8 leading-tight">
+            <div className="animate-reveal opacity-0" style={{ animationFillMode: 'forwards', animationDelay: '200ms' }}>
+              <span className="text-teal text-xs font-bold uppercase tracking-[0.3em] mb-6 block">Tentang Kami</span>
+              <h2 className="font-display text-3xl md:text-5xl font-bold text-white mt-3 mb-10 leading-tight tracking-tight">
                 Transformasi Bermakna,<br />Bukan Solusi Generik
               </h2>
-              <div className="space-y-5 text-navy/70 text-base leading-relaxed">
+              <div className="space-y-8 text-slate-400 text-lg leading-relaxed">
                 <p>
-                  Ichibot hadir karena satu keyakinan: akselerasi Industri 4.0 tidak lahir dari solusi generik yang dibeli lepas dari rak. Transformasi yang bermakna hanya mungkin melalui <span className="font-semibold text-navy">pendampingan teknis yang mendalam</span>, adaptasi pada konteks operasional klien, dan transfer pengetahuan yang menyeluruh.
+                  Ichibot hadir karena satu keyakinan: akselerasi Industri 4.0 tidak lahir dari solusi generik yang dibeli lepas dari rak. Transformasi yang bermakna hanya mungkin melalui <span className="font-bold text-teal/80">pendampingan teknis yang mendalam</span>, adaptasi pada konteks operasional klien, dan transfer pengetahuan yang menyeluruh.
                 </p>
                 <p>
-                  Karena itu, setiap <em>engagement</em> kami selalu mencakup tiga hal: <span className="font-semibold text-navy">solusi AI-IoT industri yang end-to-end</span>, <span className="font-semibold text-navy">enablement bagi tim internal klien</span> untuk memelihara dan mengembangkan sistemnya sendiri, dan <span className="font-semibold text-navy">akses ke ekosistem engineer dan komponen</span> yang telah kami rawat selama hampir satu dekade.
+                  Karena itu, setiap <em>engagement</em> kami selalu mencakup tiga hal: <span className="font-bold text-white">solusi AI-IoT industri yang end-to-end</span>, <span className="font-bold text-white">enablement bagi tim internal klien</span> untuk memelihara dan mengembangkan sistemnya sendiri, dan akses ke ekosistem engineer yang telah kami rawat selama hampir satu dekade.
                 </p>
               </div>
             </div>
 
             {/* Visual card */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden h-[420px] shadow-2xl">
+            <div className="relative animate-reveal opacity-0" style={{ animationFillMode: 'forwards', animationDelay: '400ms' }}>
+              <div className="relative rounded-[2.5rem] overflow-hidden h-[500px] glass-3d-premium group shadow-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
                   alt="Ichibot Lab"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="font-display text-xl font-bold text-white italic leading-snug">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050A14]/90 via-[#050A14]/30 to-transparent" />
+                <div className="absolute bottom-10 left-10 right-10">
+                  <p className="font-display text-2xl font-bold text-white italic leading-snug tracking-tight">
                     "Teknologi tinggi baru berguna jika memecahkan masalah bumi manusia."
                   </p>
                 </div>
               </div>
 
               {/* Floating badge */}
-              <div className="absolute -bottom-6 -right-4 bg-white rounded-2xl shadow-xl border border-border p-5 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-teal/10 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="absolute -bottom-8 -right-4 glass-3d-premium p-6 flex items-center gap-5 backdrop-blur-xl border-teal/20 animate-bounce-slow">
+                <div className="w-14 h-14 rounded-2xl bg-teal/20 flex items-center justify-center shadow-[0_0_20px_rgba(45,212,191,0.2)]">
+                  <svg className="w-7 h-7 text-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
                 <div>
-                  <p className="font-bold text-navy text-sm">Dipercaya sejak 2016</p>
-                  <p className="text-muted text-xs">Toyota · Pertamina · BCA</p>
+                  <p className="font-bold text-white text-sm tracking-tight">Dipercaya sejak 2016</p>
+                  <p className="text-slate-400 text-xs font-medium mt-0.5">Toyota · Pertamina · BCA</p>
                 </div>
               </div>
             </div>
@@ -157,14 +157,14 @@ export default async function AboutPage() {
       </section>
 
       {/* ── Perjalanan Kami ── */}
-      <section className="py-24 md:py-32 bg-off-white">
+      <section className="py-24 md:py-40 relative z-10 border-y border-white/5 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-teal text-sm font-semibold uppercase tracking-widest">Perjalanan Kami</span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mt-3 mb-4">
+          <div className="text-center mb-24 animate-reveal opacity-0" style={{ animationFillMode: 'forwards' }}>
+            <span className="text-teal text-[10px] font-bold uppercase tracking-[0.4em] mb-6 block">Perjalanan Kami</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-white mt-1 mb-6 tracking-tight">
               Hampir Satu Dekade Inovasi
             </h2>
-            <p className="text-muted text-lg max-w-xl mx-auto">
+            <p className="text-slate-400 text-lg max-w-xl mx-auto opacity-80">
               Dari arena robotika hingga platform AI-IoT industri berskala nasional.
             </p>
           </div>
@@ -173,32 +173,32 @@ export default async function AboutPage() {
       </section>
 
       {/* ── Mengapa Ichibot ── */}
-      <section className="py-24 md:py-32 bg-navy relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-teal/8 rounded-full blur-[100px] pointer-events-none" />
+      <section className="py-24 md:py-40 relative overflow-hidden bg-[#050A14]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal/5 rounded-full blur-[150px] pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-teal text-sm font-semibold uppercase tracking-widest">Mengapa Ichibot</span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mt-3 mb-4">
-              Membangun Fondasi, Bukan Sekadar Sistem
+          <div className="text-center mb-24 animate-reveal opacity-0" style={{ animationFillMode: 'forwards' }}>
+            <span className="text-teal text-[10px] font-bold uppercase tracking-[0.4em] mb-6 block">Solusi Kami</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-white mt-1 mb-6 tracking-tight">
+              Membangun Fondasi Industri
             </h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">
-              Kami tidak sekadar membangun sistem — kami membangun fondasi teknologi yang dapat diandalkan untuk generasi industri Indonesia berikutnya.
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto opacity-80 leading-relaxed">
+              Kami tidak sekadar membangun sistem — kami membangun fondasi teknologi yang dapat diandalkan untuk kedaulatan industri Indonesia.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {whyItems.map((item, i) => (
               <div
                 key={i}
-                className="flex gap-5 p-7 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/8 hover:border-teal/30 transition-all duration-300"
+                className="flex gap-8 p-10 rounded-[2.5rem] glass-3d-premium group hover:border-teal/30 hover:-translate-y-2 transition-all duration-500 animate-reveal opacity-0"
+                style={{ animationFillMode: 'forwards', animationDelay: `${i * 100}ms` }}
               >
-                <div className="flex-none w-12 h-12 rounded-xl bg-teal/15 flex items-center justify-center text-teal">
+                <div className="flex-none w-16 h-16 rounded-2xl bg-teal/10 flex items-center justify-center text-teal group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] transition-all">
                   {item.icon}
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+                  <h3 className="font-display text-xl font-bold text-white mb-4 tracking-tight group-hover:text-teal transition-colors">{item.title}</h3>
+                  <p className="text-slate-400 text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -207,40 +207,41 @@ export default async function AboutPage() {
       </section>
 
       {/* ── Tim Ichibot ── */}
-      <section className="py-24 md:py-32 bg-white">
+      <section className="py-24 md:py-40 bg-white/[0.01] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-teal text-sm font-semibold uppercase tracking-widest">Tim Kami</span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-navy mt-3 mb-4">
+          <div className="text-center mb-24 animate-reveal opacity-0" style={{ animationFillMode: 'forwards' }}>
+            <span className="text-teal text-[10px] font-bold uppercase tracking-[0.4em] mb-6 block">Tim Kami</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-white mt-1 mb-6 tracking-tight">
               Orang-Orang di Balik Ichibot
             </h2>
-            <p className="text-muted text-lg max-w-xl mx-auto">
+            <p className="text-slate-400 text-lg max-w-xl mx-auto opacity-80">
               Engineer dan inovator yang mendedikasikan diri untuk mendorong batas kemungkinan teknologi industri Indonesia.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="flex flex-wrap justify-center gap-10">
             {team.map((person, i) => (
               <div
                 key={i}
-                className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] min-w-[280px] max-w-[320px] group flex flex-col rounded-2xl border border-border overflow-hidden hover:border-teal/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(25%-1.5rem)] min-w-[300px] max-w-[340px] group flex flex-col glass-3d-premium overflow-hidden animate-reveal opacity-0"
+                style={{ animationFillMode: 'forwards', animationDelay: `${i * 100}ms` }}
               >
                 {/* Photo */}
-                <div className="relative w-full h-64 overflow-hidden bg-navy/5">
+                <div className="relative w-full h-80 overflow-hidden bg-white/5">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={person.image}
                     alt={person.name}
-                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050A14] via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                 </div>
 
                 {/* Info */}
-                <div className="p-6 flex flex-col flex-grow bg-white">
-                  <h3 className="font-display text-lg font-bold text-navy mb-0.5">{person.name}</h3>
-                  <p className="text-teal text-xs font-semibold uppercase tracking-wide mb-3">{person.role}</p>
-                  <p className="text-muted text-sm leading-relaxed flex-grow">{person.bio}</p>
+                <div className="p-8 flex flex-col flex-grow relative z-10">
+                  <h3 className="font-display text-xl font-bold text-white mb-1 tracking-tight group-hover:text-teal transition-colors">{person.name}</h3>
+                  <p className="text-teal text-xs font-bold uppercase tracking-[0.1em] mb-4 opacity-80">{person.role}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed flex-grow opacity-90 group-hover:opacity-100 transition-opacity">{person.bio}</p>
                 </div>
               </div>
             ))}
@@ -250,6 +251,16 @@ export default async function AboutPage() {
 
       {/* ── CTA ── */}
       <CTASection />
+
+      <style jsx>{`
+        .animate-bounce-slow {
+          animation: bounce 6s ease-in-out infinite;
+        }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
     </main>
   )
 }
