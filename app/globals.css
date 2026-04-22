@@ -78,6 +78,15 @@ html {
   animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Bounce animation for glass badges */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 6s ease-in-out infinite;
+}
+
 /* --- Neo-Glass Premium UI --- */
 
 .glass-3d-premium {

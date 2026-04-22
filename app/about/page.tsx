@@ -16,7 +16,7 @@ const stats = [
   { value: '1.500+', label: 'Komponen di Ichibot Store' },
   { value: '~10', label: 'Tahun Pengalaman' },
   { value: '50+', label: 'Klien Enterprise' },
-]
+ ]
 
 const whyItems = [
   {
@@ -251,16 +251,6 @@ export default async function AboutPage() {
 
       {/* ── CTA ── */}
       <CTASection />
-
-      <style jsx>{`
-        .animate-bounce-slow {
-          animation: bounce 6s ease-in-out infinite;
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </main>
   )
 }
