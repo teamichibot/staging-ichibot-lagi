@@ -23,8 +23,10 @@ export default async function ProdukPage() {
   return (
     <div className="pt-24 pb-24 md:pt-32 bg-[#050A14] min-h-screen relative overflow-hidden">
       {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-navy/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-teal/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-sky-500/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[800px] h-[800px] bg-navy/50 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[10%] w-[600px] h-[600px] bg-teal/15 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}

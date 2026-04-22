@@ -48,9 +48,8 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
   }, [])
 
   return (
-    <section id="produk" className="py-24 md:py-32 bg-[#050A14] relative overflow-hidden group/section" ref={sectionRef}>
-      {/* Ambient background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-teal/5 blur-[160px] pointer-events-none" />
+    <section id="produk" className="py-24 md:py-32 bg-transparent relative group/section" ref={sectionRef}>
+      {/* Background shape - Delegated to global wrapper */}
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header - Centered */}

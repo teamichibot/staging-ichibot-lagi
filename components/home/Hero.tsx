@@ -65,7 +65,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
   }, [slides.length])
 
   return (
-    <section className="bg-[#050A14] relative overflow-hidden pt-20 pb-12 md:pt-24 md:pb-20">
+    <section className="bg-transparent relative overflow-hidden pt-20 pb-8 md:pt-24 md:pb-12">
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.035]"
@@ -79,16 +79,16 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
       <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-teal/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-16 min-h-[500px] lg:min-h-[550px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-16">
 
           {/* Left: copy */}
-          <div className="relative w-full h-full flex flex-col justify-center min-h-[460px] md:min-h-[500px]">
+          <div className="relative w-full h-full grid">
             {slides.map((slide, index) => {
               const isActive = index === activeSlide
               return (
                 <div
                   key={index}
-                  className={`absolute inset-x-0 transition-all duration-1000 ease-in-out flex flex-col justify-center ${
+                  className={`col-start-1 row-start-1 transition-all duration-1000 ease-in-out flex flex-col justify-center py-4 ${
                     isActive ? 'opacity-100 translate-y-0 z-10 pointer-events-auto' : 'opacity-0 translate-y-8 -z-10 pointer-events-none'
                   }`}
                 >

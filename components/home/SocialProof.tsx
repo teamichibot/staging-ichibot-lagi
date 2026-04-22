@@ -30,7 +30,7 @@ export function SocialProof() {
     
     return (
       <div className="mb-8 last:mb-0">
-        <p className="text-center text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mb-8">
+        <p className="text-center text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-8">
           {label}
         </p>
         <div
@@ -48,10 +48,10 @@ export function SocialProof() {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="h-8 md:h-12 w-auto max-w-[160px] object-contain grayscale invert brightness-0 opacity-40 group-hover:grayscale-0 group-hover:invert-0 group-hover:brightness-100 group-hover:opacity-100 transition-all duration-500"
+                    className="h-8 md:h-12 w-auto max-w-[160px] object-contain opacity-80 group-hover:opacity-100 transition-all duration-500"
                   />
                 ) : (
-                  <span className="text-white/30 font-display font-bold text-base tracking-tight whitespace-nowrap select-none group-hover:text-teal transition-colors">
+                  <span className="text-slate-400 font-display font-bold text-base tracking-tight whitespace-nowrap select-none group-hover:text-teal transition-colors">
                     {client.name}
                   </span>
                 )}
@@ -66,19 +66,19 @@ export function SocialProof() {
   return (
     <section 
       id="client-logos" 
-      className="relative z-20 -mt-20 md:-mt-32 pt-20 md:pt-32 pb-20 md:pb-32 px-4 sm:px-6 overflow-hidden"
+      className="relative z-20 -mt-24 md:-mt-40 pt-16 md:pt-24 pb-8 md:pb-12 px-4 sm:px-6 overflow-hidden"
     >
-      {/* Background shape - Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#050A14] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Local Ambient Glow - Specifically for the glass island */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-gradient-to-r from-teal/20 via-sky-500/15 to-teal/20 rounded-full blur-[100px] pointer-events-none opacity-50" />
       
-      <div className="relative max-w-6xl mx-auto glass-3d-premium p-10 md:p-16 overflow-hidden border-teal/10">
+      {/* Light Frosted Glass Container */}
+      <div className="relative max-w-6xl mx-auto bg-white/90 backdrop-blur-3xl p-10 md:p-16 overflow-hidden border border-white/40 rounded-[3rem] shadow-[0_32px_64px_rgba(0,0,0,0.2)]">
         {loading ? (
           <div className="space-y-12">
             <div>
-              <Skeleton className="h-3 w-40 mx-auto mb-8 bg-white/5" />
+              <Skeleton className="h-3 w-40 mx-auto mb-8 bg-slate-200" />
               <div className="flex gap-12 justify-center overflow-hidden">
-                {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-12 w-32 shrink-0 bg-white/5" />)}
+                {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-12 w-32 shrink-0 bg-slate-200" />)}
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function SocialProof() {
           <>
             {renderTrack(data.industry, tx(t.socialProof.industryLabel))}
             {data.academic.length > 0 && (
-              <div className="mt-12 pt-12 border-t border-white/5">
+              <div className="mt-12 pt-12 border-t border-slate-200">
                 {renderTrack(data.academic, lang === 'id' ? 'MITRA AKADEMIK' : 'ACADEMIC PARTNERS', 'animate-marquee-reverse')}
               </div>
             )}

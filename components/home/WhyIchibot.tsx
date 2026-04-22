@@ -50,10 +50,8 @@ export function WhyIchibot() {
   }, [])
 
   return (
-    <section className="py-24 md:py-32 bg-navy-light relative overflow-hidden" ref={sectionRef}>
-      {/* Decorative Blur Backgrounds */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
+    <section className="py-24 md:py-32 bg-transparent relative" ref={sectionRef}>
+      {/* Decorative Blur Backgrounds - Delegated to global wrapper */}
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}

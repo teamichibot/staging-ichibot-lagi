@@ -21,9 +21,7 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
   }, [])
 
   return (
-    <section id="layanan" className="pt-4 md:pt-8 pb-24 md:pb-32 bg-[#050A14] relative overflow-hidden" ref={sectionRef}>
-      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] bg-sky-500/5 rounded-full blur-[140px] pointer-events-none" />
+    <section id="layanan" className="pt-24 md:pt-32 pb-24 md:pb-32 bg-transparent relative" ref={sectionRef}>
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal max-w-2xl mb-16 mx-auto text-center">
