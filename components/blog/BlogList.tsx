@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Post } from '@/lib/blog'
+import { PostMeta } from '@/lib/blog'
 
 const categoryColors: Record<string, string> = {
   IoT: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -13,29 +13,18 @@ const categoryColors: Record<string, string> = {
 }
 
 interface BlogListProps {
-  initialPosts: Post[]
+  initialPosts: PostMeta[]
 }
 
 export function BlogList({ initialPosts }: BlogListProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const categoryParam = searchParams.get('category')
+  const categoryParam = searchParams.get('category') || 'All'
 
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All')
 
-  // Sync category state with URL parameter
-  useEffect(() => {
-    if (categoryParam) {
-      setSelectedCategory(categoryParam)
-    } else {
-      setSelectedCategory('All')
-    }
-  }, [categoryParam])
-
-  // Update URL when category changes (optional, but good for UX)
+  // Update URL when category changes
   const handleCategoryChange = (cat: string) => {
-    setSelectedCategory(cat)
     const params = new URLSearchParams(searchParams.toString())
     if (cat === 'All') {
       params.delete('category')
@@ -58,11 +47,11 @@ export function BlogList({ initialPosts }: BlogListProps) {
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
       
-      const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory
+      const matchesCategory = categoryParam === 'All' || post.category === categoryParam
       
       return matchesSearch && matchesCategory
     })
-  }, [initialPosts, searchQuery, selectedCategory])
+  }, [initialPosts, searchQuery, categoryParam])
 
   return (
     <div className="space-y-12">
@@ -91,7 +80,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
               key={cat}
               onClick={() => handleCategoryChange(cat)}
               className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all border ${
-                selectedCategory === cat
+                categoryParam === cat
                   ? 'bg-teal text-navy border-teal shadow-[0_0_20px_rgba(45,212,191,0.2)]'
                   : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20 hover:bg-white/10'
               }`}
@@ -103,23 +92,23 @@ export function BlogList({ initialPosts }: BlogListProps) {
       </div>
 
       {/* Results Count & Clear Filter */}
-      {(searchQuery || selectedCategory !== 'All') && (
+      {(searchQuery || categoryParam !== 'All') && (
         <div className="flex items-center justify-between text-sm animate-fade-in">
           <p className="text-slate-400">
             Menampilkan <span className="text-white font-bold">{filteredPosts.length}</span> artikel
-            {selectedCategory !== 'All' && <span> di kategori <span className="text-teal">{selectedCategory}</span></span>}
-            {searchQuery && <span> untuk kata kunci "<span className="text-teal">{searchQuery}</span>"</span>}
+            {categoryParam !== 'All' && <span> di kategori <span className="text-teal">{categoryParam}</span></span>}
+            {searchQuery && <span> untuk kata kunci &quot;<span className="text-teal">{searchQuery}</span>&quot;</span>}
           </p>
           <button 
             onClick={() => { setSearchQuery(''); handleCategoryChange('All'); }}
             className="text-teal hover:text-teal-light font-bold flex items-center gap-1 transition-colors"
           >
-
             Hapus Filter
             <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
           </button>
         </div>
       )}
+
 
       {/* Grid */}
       {filteredPosts.length === 0 ? (
