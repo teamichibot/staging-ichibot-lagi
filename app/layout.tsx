@@ -3,6 +3,8 @@ import './globals.css'
 import { SiteShell } from '@/components/layout/SiteShell'
 import { getAllServices, getAllProducts } from '@/lib/server-data'
 import { getOrganizationSchema } from '@/lib/seo'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ichibot.id'),
@@ -70,6 +72,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SiteShell liveServices={liveServices} liveProducts={liveProducts}>
           {children}
         </SiteShell>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
