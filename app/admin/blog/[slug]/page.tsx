@@ -31,7 +31,7 @@ const empty: PostForm = {
   content: '',
 }
 
-const CATEGORIES = ['Case Study', 'Insight', 'Tutorial', 'News']
+const CATEGORIES = ['IoT', 'AI', 'Case Study', 'Insight', 'Tutorial', 'News']
 
 export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)

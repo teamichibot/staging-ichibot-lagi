@@ -73,23 +73,32 @@ export function BlogList({ initialPosts }: BlogListProps) {
           />
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap items-center gap-2 justify-center md:justify-end">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all border ${
-                categoryParam === cat
-                  ? 'bg-teal text-navy border-teal shadow-[0_0_20px_rgba(45,212,191,0.2)]'
-                  : 'bg-white/5 text-slate-400 border-white/10 hover:border-white/20 hover:bg-white/10'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Category Filter Dropdown */}
+        <div className="relative w-full md:w-auto min-w-[200px] group">
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-teal">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
+              <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <select
+            value={categoryParam}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-10 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-teal/20 focus:border-teal/50 transition-all glass-3d-premium cursor-pointer font-bold text-sm"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat} className="bg-navy text-white">
+                {cat === 'All' ? 'Semua Kategori' : cat}
+              </option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
+              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </div>
         </div>
       </div>
+
 
       {/* Results Count & Clear Filter */}
       {(searchQuery || categoryParam !== 'All') && (
