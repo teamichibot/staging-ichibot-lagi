@@ -11,18 +11,33 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
   const tx = (obj: { id: string; en: string }) => obj[lang]
   const sectionRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [scrollProgress, setScrollProgress] = useState(0)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-      const progress = (scrollLeft / (scrollWidth - clientWidth)) * 100
-      setScrollProgress(progress || 0)
-      
       setCanScrollLeft(scrollLeft > 20)
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 20)
+      
+      // Calculate active index
+      const items = scrollContainerRef.current.children
+      if (items.length > 0) {
+        const itemWidth = (items[0] as HTMLElement).offsetWidth + 32 // card width + gap (gap-8 is 32px)
+        const index = Math.round(scrollLeft / itemWidth)
+        setActiveIndex(index)
+      }
+    }
+  }
+
+  const scrollTo = (index: number) => {
+    if (scrollContainerRef.current) {
+      const items = scrollContainerRef.current.children
+      if (items[index]) {
+        items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+      }
     }
   }
 
@@ -47,29 +62,35 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
     return () => observer.disconnect()
   }, [])
 
+  const totalItems = productItems.slice(0, 5).length + 1 // +1 for View All
+
   return (
     <section id="produk" className="py-12 md:py-16 bg-transparent relative group/section" ref={sectionRef}>
       {/* Background shape - Delegated to global wrapper */}
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header - Centered */}
-        <div className="reveal max-w-2xl mb-16 mx-auto text-center">
-          <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
-            {tx(t.products.sectionLabel)}
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-            {tx(t.products.heading)}
-          </h2>
-          <p className="text-slate-400 text-lg leading-relaxed mx-auto max-w-xl">{tx(t.products.subheading)}</p>
+        {/* Header */}
+        <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="max-w-2xl text-left">
+            <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
+              {tx(t.products.sectionLabel)}
+            </span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+              {tx(t.products.heading)}
+            </h2>
+            <p className="text-slate-400 text-lg mt-6 max-w-xl leading-relaxed">
+              {tx(t.products.subheading)}
+            </p>
+          </div>
         </div>
 
-        {/* Product cards with Horizontal Scroll & Floating Nav */}
+        {/* Scrollable Container */}
         <div className="relative">
-          {/* Navigation Buttons (Desktop Only) */}
+          {/* Navigation Buttons */}
           <button
             onClick={() => scroll('left')}
-            className={`absolute left-[-20px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-teal hover:text-navy hover:scale-110 hidden md:flex ${
-              canScrollLeft ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none -translate-x-4'
+            className={`absolute left-[-20px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-teal hover:text-navy hidden md:flex ${
+              canScrollLeft ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
             }`}
             aria-label="Previous"
           >
@@ -78,8 +99,8 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
 
           <button
             onClick={() => scroll('right')}
-            className={`absolute right-[-20px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-teal hover:text-navy hover:scale-110 hidden md:flex ${
-              canScrollRight ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none translate-x-4'
+            className={`absolute right-[-20px] top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white transition-all duration-300 hover:bg-teal hover:text-navy hidden md:flex ${
+              canScrollRight ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
             }`}
             aria-label="Next"
           >
@@ -110,16 +131,16 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
                     <h3 className="font-display text-2xl font-bold mb-3 text-white">
                       {product.title[lang]}
                     </h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-8 line-clamp-2">
+                    <p className="text-slate-300 text-sm leading-relaxed mb-8 opacity-80 line-clamp-3">
                       {product.desc[lang]}
                     </p>
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-4">
                       <Link
                         href={`/produk/${product.slug}`}
-                        className="inline-flex items-center justify-center text-sm font-bold text-navy bg-teal/90 backdrop-blur-md hover:bg-teal py-3 px-7 rounded-full transition-all duration-300 group/btn"
+                        className="inline-flex items-center gap-2 bg-teal hover:bg-teal-light text-navy font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-teal/20 text-sm"
                       >
                         {tx(t.products.ctaLearn)}
-                        <svg className="w-4 h-4 ml-2 transform transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                       </Link>
                     </div>
                   </div>
@@ -133,7 +154,6 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
               className="reveal flex-none w-[75vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col justify-center items-center rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white/5 border border-white/10 backdrop-blur-xl"
               style={{ transitionDelay: `${Math.min(productItems.length, 5) * 100}ms` }}
             >
-
               <div className="absolute inset-0 bg-gradient-to-br from-teal/20 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
               <div className="relative z-10 flex flex-col items-center justify-center p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-teal/20 border border-teal/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal group-hover:text-navy transition-all duration-300 backdrop-blur-sm text-teal">
@@ -149,6 +169,19 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
           </div>
         </div>
 
+        {/* Pagination Dots */}
+        <div className="reveal mt-4 flex justify-center gap-2">
+          {Array.from({ length: totalItems }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeIndex === i ? 'w-8 bg-teal' : 'w-1.5 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

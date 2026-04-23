@@ -18,11 +18,30 @@ export function CaseStudy({ posts }: Props) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
+  const [activeIndex, setActiveIndex] = useState(0)
+
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
       setCanScrollLeft(scrollLeft > 20)
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 20)
+
+      // Calculate active index
+      const items = scrollContainerRef.current.children
+      if (items.length > 0) {
+        const itemWidth = (items[0] as HTMLElement).offsetWidth + 24 // card width + gap (gap-6 is 24px)
+        const index = Math.round(scrollLeft / itemWidth)
+        setActiveIndex(index)
+      }
+    }
+  }
+
+  const scrollTo = (index: number) => {
+    if (scrollContainerRef.current) {
+      const items = scrollContainerRef.current.children
+      if (items[index]) {
+        items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
     }
   }
 
@@ -50,6 +69,8 @@ export function CaseStudy({ posts }: Props) {
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
 
+  const totalItems = posts.slice(0, 5).length + 1 // +1 for View All
+
   return (
     <section id="studi-kasus" className="py-12 md:py-16 bg-[#050A14] relative overflow-hidden group/section" ref={sectionRef}>
       {/* Intense Ambient Glows */}
@@ -67,7 +88,7 @@ export function CaseStudy({ posts }: Props) {
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white tracking-tight mt-2">
               {tx(t.caseStudies.heading)}
             </h2>
-            <p className="text-muted text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
+            <p className="text-slate-400 text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
           </div>
           <Link
             href="/blog?category=Case Study"
@@ -164,6 +185,20 @@ export function CaseStudy({ posts }: Props) {
               </div>
             </Link>
           </div>
+        </div>
+
+        {/* Pagination Dots */}
+        <div className="reveal mt-4 flex justify-center gap-2">
+          {Array.from({ length: totalItems }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeIndex === i ? 'w-8 bg-teal' : 'w-1.5 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>

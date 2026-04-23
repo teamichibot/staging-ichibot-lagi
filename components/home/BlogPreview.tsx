@@ -21,11 +21,30 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
+  const [activeIndex, setActiveIndex] = useState(0)
+
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
       setCanScrollLeft(scrollLeft > 20)
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 20)
+
+      // Calculate active index
+      const items = scrollContainerRef.current.children
+      if (items.length > 0) {
+        const itemWidth = (items[0] as HTMLElement).offsetWidth + 20 // card width + gap (gap-5 is 20px)
+        const index = Math.round(scrollLeft / itemWidth)
+        setActiveIndex(index)
+      }
+    }
+  }
+
+  const scrollTo = (index: number) => {
+    if (scrollContainerRef.current) {
+      const items = scrollContainerRef.current.children
+      if (items[index]) {
+        items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+      }
     }
   }
 
@@ -55,6 +74,8 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
       year: 'numeric', month: 'long', day: 'numeric',
     })
   }
+
+  const totalItems = posts.slice(0, 5).length + 1 // +1 for View All
 
   return (
     <section className="py-12 md:py-16 bg-[#050A14] relative overflow-hidden group/section" ref={sectionRef}>
@@ -168,6 +189,19 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
               </div>
             </Link>
           </div>
+        </div>
+        {/* Pagination Dots */}
+        <div className="reveal mt-4 flex justify-center gap-2">
+          {Array.from({ length: totalItems }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeIndex === i ? 'w-8 bg-teal' : 'w-1.5 bg-white/20 hover:bg-white/40'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
