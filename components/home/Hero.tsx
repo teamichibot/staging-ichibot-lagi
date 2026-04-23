@@ -97,14 +97,25 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
                       {slide.tag}
                     </span>
                   )}
-                  <h1 className="font-display text-4xl md:text-5xl lg:text-[2.75rem] xl:text-5xl font-bold text-white leading-tight mb-6 tracking-tight">
-                    {slide.headline.map((line, i) => (
-                      <span key={i}>
-                        {line}
-                        {i < slide.headline.length - 1 && <br />}
-                      </span>
-                    ))}
-                  </h1>
+                  {isActive ? (
+                    <h1 className="font-display text-4xl md:text-5xl lg:text-[2.75rem] xl:text-5xl font-bold text-white leading-tight mb-6 tracking-tight">
+                      {slide.headline.map((line, i) => (
+                        <span key={i}>
+                          {line}
+                          {i < slide.headline.length - 1 && <br />}
+                        </span>
+                      ))}
+                    </h1>
+                  ) : (
+                    <div className="font-display text-4xl md:text-5xl lg:text-[2.75rem] xl:text-5xl font-bold text-white leading-tight mb-6 tracking-tight">
+                      {slide.headline.map((line, i) => (
+                        <span key={i}>
+                          {line}
+                          {i < slide.headline.length - 1 && <br />}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <p className="text-white/65 text-lg leading-relaxed mb-8 text-balance line-clamp-3">
                     {slide.subheadline}
                   </p>

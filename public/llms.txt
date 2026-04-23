@@ -1,0 +1,27 @@
+# Ichibot - IoT & AI untuk Industri Indonesia
+
+Ichibot membantu perusahaan manufaktur mengadopsi IoT dan AI secara praktis dan terjangkau. Kami mendigitalisasi pabrik tanpa perlu mengganti infrastruktur lama.
+
+## Core Services
+- **IoT System Implementation**: Pemasangan sensor di mesin lama, koneksi ke internet, dan monitoring real-time.
+- **AI Computer Vision**: Deteksi cacat produk otomatis, counting objek, dan early warning berbasis kamera.
+- **AI Decision Support**: Chatbot pintar per use case industri, predictive analytics, dan otomasi keputusan.
+- **Dashboard & Monitoring**: Real-time monitoring equipment, visualisasi data operasional, dan alert system.
+- **Training & Consulting**: Transfer knowledge ke tim klien, project-based training, dan mentoring teknis.
+
+## Key Products
+- **Energy Usage Monitoring**: Sistem monitoring konsumsi energi real-time untuk efisiensi biaya listrik.
+- **Equipment Monitoring**: Pemantauan kondisi mesin real-time untuk deteksi anomali.
+- **Maintenance AI Chatbot**: Chatbot AI yang menjawab pertanyaan maintenance dan troubleshooting.
+- **Klenik IoT Dashboard**: Platform monitoring terintegrasi untuk visualisasi data sensor.
+
+## Why Ichibot
+- **Cost-effective**: Sistem independen tanpa keterikatan pada ekosistem brand tertentu.
+- **Praktis**: Dipasang di mesin existing tanpa menghentikan produksi.
+- **Terbukti**: Dipercaya oleh Toyota, Pertamina, BCA, dan perusahaan enterprise lainnya.
+- **Net Zero Friendly**: Mendukung keberlanjutan dengan mengoptimalkan infrastruktur yang sudah ada.
+
+## Contact
+- Website: https://www.ichibot.id
+- Email: hello@ichibot.id
+- Lokasi: Indonesia

@@ -7,7 +7,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ichibot.id'),
+  metadataBase: new URL('https://www.ichibot.id'),
   title: {
     default: 'Ichibot — IoT & AI untuk Industri Indonesia',
     template: '%s | Ichibot'
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Ichibot — IoT & AI untuk Industri Indonesia',
     description:
       'Digitalisasi pabrik tanpa ganti infrastruktur. IoT monitoring, AI computer vision, dan dashboard real-time untuk industri Indonesia.',
-    url: 'https://ichibot.id',
+    url: 'https://www.ichibot.id',
     siteName: 'Ichibot',
     images: [
       {
@@ -49,6 +49,9 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  alternates: {
+    canonical: 'https://www.ichibot.id',
   },
 }
 
