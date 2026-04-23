@@ -44,7 +44,7 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
     handleScroll()
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')),
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     )
     sectionRef.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
     return () => observer.disconnect()
@@ -106,13 +106,13 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto gap-6 pt-10 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
+            className="flex overflow-x-auto gap-5 md:gap-6 pt-10 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
           >
             {posts.slice(0, 5).map((post, i) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="reveal flex-none w-[82vw] md:w-[380px] snap-center group flex flex-col glass-3d-premium overflow-hidden"
+                className="reveal flex-none w-[75vw] md:w-[380px] snap-center group flex flex-col glass-3d-premium overflow-hidden"
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
                 <div className="relative w-full h-44 overflow-hidden bg-navy/5">
@@ -154,7 +154,7 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
             {/* View All Blog Card */}
             <Link
               href="/blog"
-              className="reveal flex-none w-[82vw] md:w-[380px] snap-center group relative min-h-[300px] flex flex-col justify-center items-center glass-3d-premium overflow-hidden cursor-pointer bg-white/5 border border-white/10"
+              className="reveal flex-none w-[75vw] md:w-[380px] snap-center group relative min-h-[300px] flex flex-col justify-center items-center glass-3d-premium overflow-hidden cursor-pointer bg-white/5 border border-white/10"
               style={{ transitionDelay: `${Math.min(posts.length, 5) * 100}ms` }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-teal/20 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />

@@ -41,7 +41,7 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
     handleScroll() // Initial check
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')),
-      { threshold: 0.1 }
+      { threshold: 0.01 }
     )
     sectionRef.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
     return () => observer.disconnect()
@@ -89,12 +89,12 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto gap-8 pt-10 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
+            className="flex overflow-x-auto gap-5 md:gap-8 pt-10 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
           >
             {productItems.slice(0, 5).map((product, i) => (
               <div
                 key={product.slug}
-                className="reveal flex-none w-[82vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col glass-3d-premium overflow-hidden cursor-pointer"
+                className="reveal flex-none w-[75vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col glass-3d-premium overflow-hidden cursor-pointer"
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -130,7 +130,7 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
             {/* View All Products Card */}
             <Link
               href="/produk"
-              className="reveal flex-none w-[82vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col justify-center items-center rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white/5 border border-white/10 backdrop-blur-xl"
+              className="reveal flex-none w-[75vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col justify-center items-center rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white/5 border border-white/10 backdrop-blur-xl"
               style={{ transitionDelay: `${Math.min(productItems.length, 5) * 100}ms` }}
             >
 
