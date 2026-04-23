@@ -48,7 +48,7 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
   }, [])
 
   return (
-    <section id="produk" className="py-24 md:py-32 bg-transparent relative group/section" ref={sectionRef}>
+    <section id="produk" className="py-12 md:py-16 bg-transparent relative group/section" ref={sectionRef}>
       {/* Background shape - Delegated to global wrapper */}
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -89,9 +89,9 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto gap-8 pt-4 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
+            className="flex overflow-x-auto gap-8 pt-10 pb-12 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden -mx-6 px-6 md:mx-0 md:px-0"
           >
-            {productItems.map((product, i) => (
+            {productItems.slice(0, 5).map((product, i) => (
               <div
                 key={product.slug}
                 className="reveal flex-none w-[82vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col glass-3d-premium overflow-hidden cursor-pointer"
@@ -131,8 +131,9 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
             <Link
               href="/produk"
               className="reveal flex-none w-[82vw] md:w-[420px] snap-center group relative h-[520px] flex flex-col justify-center items-center rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white/5 border border-white/10 backdrop-blur-xl"
-              style={{ transitionDelay: `${productItems.length * 100}ms` }}
+              style={{ transitionDelay: `${Math.min(productItems.length, 5) * 100}ms` }}
             >
+
               <div className="absolute inset-0 bg-gradient-to-br from-teal/20 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
               <div className="relative z-10 flex flex-col items-center justify-center p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-teal/20 border border-teal/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal group-hover:text-navy transition-all duration-300 backdrop-blur-sm text-teal">
@@ -148,15 +149,6 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
           </div>
         </div>
 
-        {/* Improved Scroll Progress Indicator */}
-        <div className="mt-8 flex flex-col items-center gap-4 text-center reveal">
-          <div className="w-48 h-1.5 bg-white/5 rounded-full overflow-hidden relative border border-white/5">
-            <div
-              className="absolute top-0 bottom-0 left-0 w-1/4 bg-teal rounded-full transition-transform duration-300 ease-out"
-              style={{ transform: `translateX(${scrollProgress * 3}%)` }}
-            />
-          </div>
-        </div>
       </div>
     </section>
   )

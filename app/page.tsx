@@ -18,8 +18,8 @@ export default async function HomePage() {
     getAllProducts(),
   ])
 
-  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 3)
-  const previewPosts = allPosts.slice(0, 3)
+  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 5)
+  const previewPosts = allPosts.slice(0, 5)
 
   const sortedProducts = [...productItems].reverse()
 
