@@ -46,9 +46,10 @@ export function CaseStudy({ posts }: Props) {
             <p className="text-muted text-lg mt-3 max-w-xl">{tx(t.caseStudies.subheading)}</p>
           </div>
           <Link
-            href="/blog"
+            href="/blog?category=Case Study"
             className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-semibold py-2.5 px-6 rounded-full transition-all text-sm border border-white/10 backdrop-blur-md group"
           >
+
             {lang === 'id' ? 'Lihat Semua' : 'View All'}
             <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="transform transition-transform group-hover:translate-x-1">
               <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />

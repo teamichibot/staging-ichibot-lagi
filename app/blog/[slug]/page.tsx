@@ -7,6 +7,7 @@ import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import type { Metadata } from 'next'
+import { getBlogPostingSchema } from '@/lib/seo'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -20,18 +21,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const post = await getPostBySlugMerged(slug)
   if (!post) return {}
+
+  const title = `${post.title} | Blog Ichibot`
+  const description = post.excerpt
+
   return {
-    title: `${post.title} — Ichibot Blog`,
-    description: post.excerpt,
+    title,
+    description,
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title,
+      description,
       type: 'article',
+      url: `https://ichibot.id/blog/${slug}`,
       publishedTime: post.date,
-      ...(post.image ? { images: [post.image] } : {}),
+      authors: ['Ichibot Team'],
+      images: post.image ? [
+        {
+          url: post.image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: post.image ? [post.image] : [],
     },
   }
 }
+
 
 const categoryColors: Record<string, string> = {
   IoT: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -50,8 +71,16 @@ export default async function BlogPostPage({ params }: Props) {
     { label: post.title },
   ]
 
+  const blogSchema = getBlogPostingSchema(post)
+
   return (
-    <div className="pt-24 pb-24 md:pt-32 bg-[#050A14] min-h-screen relative overflow-hidden">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
+      <div className="pt-24 pb-24 md:pt-32 bg-[#050A14] min-h-screen relative overflow-hidden">
+
       {/* Background ambient light */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-navy/20 rounded-full blur-[100px] pointer-events-none" />
@@ -173,5 +202,10 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </div>
     </div>
-  )
+  </>
+)
 }
+
+
+
+
