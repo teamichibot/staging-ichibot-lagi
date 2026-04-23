@@ -52,8 +52,10 @@ export function CaseStudy({ posts }: Props) {
 
   return (
     <section id="studi-kasus" className="py-12 md:py-16 bg-[#050A14] relative overflow-hidden group/section" ref={sectionRef}>
-      <div className="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] bg-teal/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-sky-500/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Intense Ambient Glows */}
+      <div className="absolute top-[-10%] left-[-15%] w-[800px] h-[800px] bg-teal/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] bg-sky-500/15 rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-navy/40 rounded-full blur-[150px] pointer-events-none opacity-50" />
       
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}

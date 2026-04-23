@@ -58,7 +58,11 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
 
   return (
     <section className="py-12 md:py-16 bg-[#050A14] relative overflow-hidden group/section" ref={sectionRef}>
-      <div className="absolute top-[20%] right-[-5%] w-[400px] h-[400px] bg-teal/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* Intense Ambient Glows */}
+      <div className="absolute top-[-15%] right-[-10%] w-[700px] h-[700px] bg-teal/15 rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[40%] left-[20%] w-[500px] h-[500px] bg-navy/30 rounded-full blur-[140px] pointer-events-none opacity-40" />
+      
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">

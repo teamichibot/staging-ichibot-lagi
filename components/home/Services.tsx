@@ -45,6 +45,10 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
 
   return (
     <section id="layanan" className="pt-12 md:pt-16 pb-12 md:pb-16 bg-transparent relative group/section" ref={sectionRef}>
+      {/* Intense Ambient Glows */}
+      <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-teal/10 rounded-full blur-[120px] pointer-events-none opacity-50" />
+      <div className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none opacity-50" />
+      
       <div className="relative max-w-7xl mx-auto px-6 z-10">
         {/* Header */}
         <div className="reveal max-w-2xl mb-16 mx-auto text-center">
