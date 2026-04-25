@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { Hero } from '@/components/home/Hero'
 import { SocialProof } from '@/components/home/SocialProof'
+import { HowItWorks } from '@/components/home/HowItWorks'
 import { Services } from '@/components/home/Services'
 import { Products } from '@/components/home/Products'
 import { CaseStudy } from '@/components/home/CaseStudy'
@@ -41,6 +42,7 @@ export default async function HomePage() {
       <div className="relative z-10">
         <Hero caseStudies={caseStudyPosts} products={sortedProducts.slice(0, 2)} />
         <SocialProof />
+        <HowItWorks />
         <Services serviceItems={serviceItems} />
         <Products productItems={sortedProducts} />
         <CaseStudy posts={caseStudyPosts} />

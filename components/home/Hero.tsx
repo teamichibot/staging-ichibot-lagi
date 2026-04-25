@@ -92,7 +92,15 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
                     isActive ? 'opacity-100 translate-y-0 z-10 pointer-events-auto' : 'opacity-0 translate-y-8 -z-10 pointer-events-none'
                   }`}
                 >
-                  {!slide.isDefault && (
+                  {slide.isDefault ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-semibold mb-6 w-max">
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M11 20A7 7 0 0118 7c0-3.866-3.582-7-8-7S2 3.134 2 7a7 7 0 007 7h2" />
+                        <path d="M11 20a7 7 0 007-7" />
+                      </svg>
+                      {lang === 'id' ? 'Mendukung Net Zero' : 'Net Zero Friendly'}
+                    </span>
+                  ) : (
                     <span className="inline-block px-3 py-1 rounded-full bg-teal/10 border border-teal/20 text-teal text-xs font-bold uppercase tracking-widest mb-6 w-max">
                       {slide.tag}
                     </span>

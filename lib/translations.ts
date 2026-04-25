@@ -24,6 +24,49 @@ export const t = {
     ctaSecondary: { id: 'Lihat Layanan', en: 'See Services' },
   },
 
+  howItWorks: {
+    sectionLabel: { id: 'Cara Kerja', en: 'How It Works' },
+    heading:      { id: 'Bagaimana Kami Membantu Bisnismu', en: 'How We Help Your Business' },
+    subheading:   {
+      id: 'Dari sensor sampai laporan AI — semua berjalan otomatis, tanpa mengganti mesin lama Anda.',
+      en: 'From sensors to AI reports — everything runs automatically, without replacing your existing machines.',
+    },
+    steps: [
+      {
+        step:  { id: 'Langkah 1', en: 'Step 1' },
+        title: { id: 'Pasang Sensor di Mesin', en: 'Install Sensors on Machines' },
+        desc:  {
+          id: 'Sensor non-invasif dipasang langsung di mesin existing — tanpa modifikasi, tanpa henti produksi.',
+          en: 'Non-invasive sensors installed directly on existing machines — no modifications, no production downtime.',
+        },
+      },
+      {
+        step:  { id: 'Langkah 2', en: 'Step 2' },
+        title: { id: 'Ambil Data via IoT', en: 'Collect Data via IoT' },
+        desc:  {
+          id: 'Data dari semua sensor dikumpulkan secara real-time oleh sistem IoT ke satu platform terpusat.',
+          en: 'Data from all sensors collected in real-time by our IoT system into a single centralized platform.',
+        },
+      },
+      {
+        step:  { id: 'Langkah 3', en: 'Step 3' },
+        title: { id: 'AI Analisa Data Otomatis', en: 'AI Analyzes Data Automatically' },
+        desc:  {
+          id: 'Algoritma AI mendeteksi anomali, pola efisiensi, dan potensi kerusakan sebelum terjadi.',
+          en: 'AI algorithms detect anomalies, efficiency patterns, and potential failures before they happen.',
+        },
+      },
+      {
+        step:  { id: 'Langkah 4', en: 'Step 4' },
+        title: { id: 'Bisnis Berjalan Tenang', en: 'Business Runs Smoothly' },
+        desc:  {
+          id: 'Pantau kondisi pabrik kapan saja dan di mana saja. Laporan AI terkirim otomatis langsung ke HP Anda.',
+          en: 'Monitor factory conditions anytime, anywhere. AI reports sent automatically straight to your phone.',
+        },
+      },
+    ],
+  },
+
   services: {
     sectionLabel: { id: 'Layanan', en: 'Services' },
     heading: { id: 'Apa yang Kami Lakukan', en: 'What We Do' },

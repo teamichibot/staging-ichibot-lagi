@@ -70,18 +70,16 @@ export function Products({ productItems }: { productItems: ProductData[] }) {
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
-        <div className="reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div className="max-w-2xl text-left">
-            <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
-              {tx(t.products.sectionLabel)}
-            </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-              {tx(t.products.heading)}
-            </h2>
-            <p className="text-slate-400 text-lg mt-6 max-w-xl leading-relaxed">
-              {tx(t.products.subheading)}
-            </p>
-          </div>
+        <div className="reveal text-center max-w-2xl mx-auto mb-12">
+          <span className="text-teal text-xs font-bold uppercase tracking-[0.2em] mb-4 block opacity-80">
+            {tx(t.products.sectionLabel)}
+          </span>
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+            {tx(t.products.heading)}
+          </h2>
+          <p className="text-slate-400 text-lg mt-6 leading-relaxed">
+            {tx(t.products.subheading)}
+          </p>
         </div>
 
         {/* Scrollable Container */}
