@@ -14,363 +14,201 @@ export type ServiceData = {
 
 export const servicesData: ServiceData[] = [
   {
-    slug: 'iot-system-implementation',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'IoT System Implementation', en: 'IoT System Implementation' },
+    slug: 'iot-real-time-monitoring',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1600',
+    title: { id: 'IoT Real-time Monitoring', en: 'IoT Real-time Monitoring' },
     desc: {
-      id: 'Pemasangan sensor di mesin lama, koneksi ke internet, dan monitoring real-time.',
-      en: 'Install sensors on legacy machines, connect to the internet, and enable real-time monitoring.',
+      id: 'Pantau parameter penting mesin secara real-time, dari mana pun.',
+      en: 'Monitor critical machine parameters in real time, from anywhere.',
     },
     example: {
-      id: 'Tarik data suhu & getaran mesin produksi ke dashboard online.',
-      en: 'Stream temperature & vibration data from production machines to an online dashboard.',
+      id: 'Tarik data suhu, getaran, dan konsumsi listrik mesin produksi ke dashboard online.',
+      en: 'Stream temperature, vibration, and power consumption data from production machines to an online dashboard.',
     },
     longDesc: {
-      id: 'Kami pasang sensor pada mesin lama Anda — tanpa mengganti infrastruktur — lalu menghubungkannya ke internet untuk monitoring real-time. Dari suhu, getaran, tekanan, hingga kecepatan produksi, semua data terekam dan dapat diakses kapan saja dari perangkat apa pun.',
-      en: 'We install sensors on your legacy machines — without replacing infrastructure — then connect them to the internet for real-time monitoring. From temperature, vibration, pressure, to production speed, all data is recorded and accessible anytime from any device.',
+      id: 'Pasang sensor non-invasif pada mesin existing Anda dan dapatkan visibilitas penuh atas operasi pabrik. Dari suhu, getaran, tekanan, hingga konsumsi energi — semua data terekam real-time dan dapat diakses kapan saja dari perangkat apa pun.',
+      en: 'Install non-invasive sensors on your existing machines and gain full visibility into factory operations. From temperature, vibration, and pressure to energy consumption — every parameter is recorded in real time and accessible from any device, anywhere.',
     },
     benefits: [
-      { id: 'Mesin lama bisa langsung dimonitor tanpa penggantian unit', en: 'Legacy machines monitored immediately without unit replacement' },
-      { id: 'Data real-time dari seluruh lantai produksi dalam satu platform', en: 'Real-time data from the entire production floor in one platform' },
-      { id: 'Alert otomatis saat ada anomali atau nilai di luar batas normal', en: 'Automatic alerts when anomalies or out-of-range values occur' },
-      { id: 'Biaya implementasi jauh lebih rendah dibanding solusi baru', en: 'Implementation cost far lower compared to new solutions' },
-      { id: 'Instalasi non-invasif tanpa menghentikan produksi', en: 'Non-invasive installation without stopping production' },
+      { id: 'Visibilitas real-time atas seluruh lantai produksi', en: 'Real-time visibility across the entire production floor' },
+      { id: 'Alert otomatis saat parameter di luar batas normal', en: 'Automatic alerts when parameters fall outside normal range' },
+      { id: 'Tanpa modifikasi mesin atau gangguan produksi', en: 'No machine modifications or production downtime' },
+      { id: 'Data tersimpan untuk analitik dan audit', en: 'Data archived for analytics and audit' },
     ],
     process: [
-      {
-        title: { id: 'Assessment Mesin', en: 'Machine Assessment' },
-        desc: { id: 'Evaluasi mesin dan infrastruktur existing untuk menentukan jenis sensor yang paling tepat.', en: 'Evaluate existing machines and infrastructure to determine the most suitable sensor types.' },
-      },
-      {
-        title: { id: 'Instalasi Sensor', en: 'Sensor Installation' },
-        desc: { id: 'Pemasangan sensor non-invasif pada titik-titik kritis mesin produksi.', en: 'Non-invasive sensor installation on critical points of production machines.' },
-      },
-      {
-        title: { id: 'Koneksi & Gateway IoT', en: 'IoT Connectivity & Gateway' },
-        desc: { id: 'Setup gateway IoT untuk mengirim data ke cloud secara aman dan handal.', en: 'IoT gateway setup to send data to the cloud securely and reliably.' },
-      },
-      {
-        title: { id: 'Dashboard & Alert System', en: 'Dashboard & Alert System' },
-        desc: { id: 'Konfigurasi dashboard monitoring dan sistem alert berdasarkan threshold yang ditentukan bersama.', en: 'Configure monitoring dashboard and alert system based on jointly defined thresholds.' },
-      },
-      {
-        title: { id: 'Training & Serah Terima', en: 'Training & Handover' },
-        desc: { id: 'Pelatihan tim operator dan maintenance untuk mengelola sistem secara mandiri.', en: 'Training for operator and maintenance teams to manage the system independently.' },
-      },
+      { title: { id: 'Assessment Lapangan', en: 'On-site Assessment' }, desc: { id: 'Identifikasi mesin dan parameter kritis yang perlu dipantau.', en: 'Identify machines and critical parameters to monitor.' } },
+      { title: { id: 'Instalasi Sensor', en: 'Sensor Installation' }, desc: { id: 'Pasang sensor IoT non-invasif tanpa menghentikan operasi.', en: 'Install non-invasive IoT sensors without halting operations.' } },
+      { title: { id: 'Konfigurasi Dashboard', en: 'Dashboard Configuration' }, desc: { id: 'Atur visualisasi, threshold alert, dan akses pengguna.', en: 'Configure visualizations, alert thresholds, and user access.' } },
+      { title: { id: 'Go-Live & Training', en: 'Go-Live & Training' }, desc: { id: 'Sistem aktif disertai pelatihan tim operator dan maintenance.', en: 'System goes live with training for operator and maintenance teams.' } },
     ],
     useCases: [
-      {
-        title: { id: 'Monitoring Suhu & Getaran Mesin', en: 'Machine Temperature & Vibration Monitoring' },
-        desc: { id: 'Deteksi dini potensi kerusakan mesin produksi berdasarkan anomali suhu dan getaran.', en: 'Early detection of potential machine failures based on temperature and vibration anomalies.' },
-      },
-      {
-        title: { id: 'Tracking Konsumsi Energi', en: 'Energy Consumption Tracking' },
-        desc: { id: 'Monitor konsumsi daya listrik setiap mesin untuk mengidentifikasi pemborosan dan peluang efisiensi.', en: 'Monitor power consumption per machine to identify waste and efficiency opportunities.' },
-      },
-      {
-        title: { id: 'Monitoring Kualitas Lingkungan', en: 'Environmental Quality Monitoring' },
-        desc: { id: 'Pantau suhu, kelembaban, dan kualitas udara di area produksi untuk menjaga standar kualitas produk.', en: 'Monitor temperature, humidity, and air quality in production areas to maintain product quality standards.' },
-      },
+      { title: { id: 'Monitoring Mesin Produksi', en: 'Production Machine Monitoring' }, desc: { id: 'Deteksi dini anomali suhu dan getaran sebelum terjadi kerusakan.', en: 'Early detection of temperature and vibration anomalies before failures occur.' } },
+      { title: { id: 'Tracking Konsumsi Energi', en: 'Energy Consumption Tracking' }, desc: { id: 'Pantau penggunaan daya per mesin untuk identifikasi pemborosan.', en: 'Track per-machine power usage to identify waste.' } },
     ],
   },
   {
-    slug: 'ai-computer-vision',
-    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'AI Computer Vision', en: 'AI Computer Vision' },
+    slug: 'custom-llm-development',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1600',
+    title: { id: 'Custom LLM Development', en: 'Custom LLM Development' },
     desc: {
-      id: 'Deteksi cacat produk otomatis, counting objek, dan early warning berbasis kamera.',
-      en: 'Automatic product defect detection, object counting, and camera-based early warning.',
+      id: 'Model bahasa khusus untuk operasi pabrik, dilatih dari data Anda sendiri.',
+      en: 'Custom language models for factory operations, trained on your own data.',
     },
     example: {
-      id: 'Kamera di conveyor yang otomatis tandai produk cacat.',
-      en: 'Camera on conveyor automatically flags defective products.',
+      id: 'Asisten AI yang menjawab pertanyaan teknisi berdasarkan SOP, manual mesin, dan riwayat maintenance perusahaan Anda.',
+      en: 'An AI assistant that answers technician questions using your company SOPs, machine manuals, and maintenance history.',
     },
     longDesc: {
-      id: 'Sistem AI berbasis kamera yang bekerja 24/7 untuk mendeteksi cacat produk, menghitung objek, dan memberikan peringatan dini tanpa kelelahan manusia. Model AI kami dilatih khusus berdasarkan data visual dari proses produksi Anda sehingga akurasi deteksi sangat tinggi.',
-      en: 'An AI-based camera system that works 24/7 to detect product defects, count objects, and provide early warnings without human fatigue. Our AI model is trained specifically on visual data from your production process for very high detection accuracy.',
+      id: 'Kami bangun Large Language Model yang disesuaikan dengan domain dan data internal Anda. Cocok untuk asisten teknisi, knowledge base operasional, atau otomatisasi tugas berbasis dokumen yang sebelumnya butuh waktu manual berjam-jam.',
+      en: "We build Large Language Models tailored to your domain and internal data. Ideal for technician assistants, operational knowledge bases, or document-driven task automation that previously took hours of manual effort.",
     },
     benefits: [
-      { id: 'Akurasi deteksi cacat >97% tanpa kelelahan manusia', en: '>97% defect detection accuracy without human fatigue' },
-      { id: 'Inspeksi berjalan 24/7 tanpa biaya lembur', en: 'Inspection runs 24/7 without overtime costs' },
-      { id: 'Konsistensi kualitas inspeksi antar shift terjaga', en: 'Consistent inspection quality maintained across shifts' },
-      { id: 'Waktu deteksi lebih cepat dari inspeksi manual', en: 'Detection time faster than manual inspection' },
-      { id: 'Model AI dilatih khusus sesuai produk dan defect type Anda', en: 'AI model trained specifically to your product and defect types' },
+      { id: 'Privasi data terjaga — model di-host di infrastruktur Anda', en: 'Data privacy preserved — model hosted on your infrastructure' },
+      { id: 'Akurasi tinggi karena dilatih dari data domain spesifik', en: 'High accuracy from domain-specific training data' },
+      { id: 'Mengurangi beban pencarian manual di dokumen', en: 'Reduces manual document-search workload' },
+      { id: 'Bisa diintegrasikan ke chatbot, app, atau API internal', en: 'Integrable with internal chatbots, apps, or APIs' },
     ],
     process: [
-      {
-        title: { id: 'Pengumpulan Data Visual', en: 'Visual Data Collection' },
-        desc: { id: 'Pengumpulan sampel gambar produk bagus dan cacat sebagai data training model AI.', en: 'Collecting sample images of good and defective products as AI model training data.' },
-      },
-      {
-        title: { id: 'Training Model AI', en: 'AI Model Training' },
-        desc: { id: 'Pelatihan model computer vision khusus berdasarkan data visual dari proses produksi Anda.', en: 'Training a specialized computer vision model based on visual data from your production process.' },
-      },
-      {
-        title: { id: 'Instalasi Kamera & Hardware', en: 'Camera & Hardware Installation' },
-        desc: { id: 'Pemasangan kamera industri dan hardware edge computing di titik inspeksi produksi.', en: 'Installation of industrial cameras and edge computing hardware at production inspection points.' },
-      },
-      {
-        title: { id: 'Integrasi & Kalibrasi', en: 'Integration & Calibration' },
-        desc: { id: 'Integrasi sistem dengan lini produksi dan kalibrasi model untuk akurasi optimal.', en: 'System integration with the production line and model calibration for optimal accuracy.' },
-      },
-      {
-        title: { id: 'Validasi & Go-Live', en: 'Validation & Go-Live' },
-        desc: { id: 'Pengujian sistem bersama tim QC Anda sebelum beroperasi penuh di lini produksi.', en: 'System testing with your QC team before full operation on the production line.' },
-      },
+      { title: { id: 'Discovery & Use Case', en: 'Discovery & Use Case' }, desc: { id: 'Petakan kebutuhan, jenis pertanyaan, dan sumber data internal.', en: 'Map needs, query patterns, and internal data sources.' } },
+      { title: { id: 'Persiapan Dataset', en: 'Dataset Preparation' }, desc: { id: 'Kumpulkan dan bersihkan dokumen, transkrip, dan data percakapan.', en: 'Gather and clean documents, transcripts, and conversation data.' } },
+      { title: { id: 'Fine-tuning Model', en: 'Model Fine-tuning' }, desc: { id: 'Latih dan validasi model pada data Anda dengan iterasi yang terukur.', en: 'Train and validate the model on your data with measurable iterations.' } },
+      { title: { id: 'Deploy & Integrasi', en: 'Deploy & Integration' }, desc: { id: 'Sambungkan model ke aplikasi, chatbot, atau workflow internal.', en: 'Connect the model into apps, chatbots, or internal workflows.' } },
     ],
     useCases: [
-      {
-        title: { id: 'Inspeksi Cacat Produk di Conveyor', en: 'Product Defect Inspection on Conveyor' },
-        desc: { id: 'Kamera yang mendeteksi retak, goresan, warna tidak sesuai, atau bentuk produk yang cacat secara real-time.', en: 'Camera detecting cracks, scratches, wrong colors, or defective product shapes in real-time.' },
-      },
-      {
-        title: { id: 'Counting & Tracking Produk', en: 'Product Counting & Tracking' },
-        desc: { id: 'Hitung jumlah produk yang melewati conveyor secara otomatis dan akurat untuk laporan produksi.', en: 'Automatically and accurately count products passing through the conveyor for production reports.' },
-      },
-      {
-        title: { id: 'Safety Monitoring Area Kerja', en: 'Work Area Safety Monitoring' },
-        desc: { id: 'Deteksi APD (Alat Pelindung Diri) yang tidak dipakai atau pelanggaran zona berbahaya di area produksi.', en: 'Detect missing PPE (Personal Protective Equipment) or dangerous zone violations in production areas.' },
-      },
+      { title: { id: 'Asisten Teknisi Maintenance', en: 'Maintenance Technician Assistant' }, desc: { id: 'Pertanyaan teknis dijawab instan berdasarkan SOP dan manual.', en: 'Technical questions answered instantly from SOPs and manuals.' } },
+      { title: { id: 'Knowledge Base Internal', en: 'Internal Knowledge Base' }, desc: { id: 'Tim non-teknis dapat menemukan jawaban tanpa harus baca dokumen panjang.', en: 'Non-technical teams find answers without reading long documents.' } },
     ],
   },
   {
-    slug: 'ai-decision-support',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'AI Decision Support', en: 'AI Decision Support' },
+    slug: 'aiot-system-integration',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1600',
+    title: { id: 'AIoT System Integration', en: 'AIoT System Integration' },
     desc: {
-      id: 'Chatbot pintar per use case industri, predictive analytics, dan otomasi keputusan.',
-      en: 'Industry-specific smart chatbots, predictive analytics, and decision automation.',
+      id: 'Integrasi AI + IoT untuk keputusan otomatis berbasis data lapangan.',
+      en: 'AI + IoT integration that delivers automated decisions from field data.',
     },
     example: {
-      id: 'Chatbot yang menjawab SOP mesin berdasarkan data historis.',
-      en: 'Chatbot that answers machine SOPs based on historical data.',
+      id: 'Sistem yang otomatis mematikan mesin saat sensor mendeteksi getaran abnormal, lalu mengirim laporan diagnosa ke teknisi.',
+      en: 'A system that automatically shuts down a machine when sensors detect abnormal vibration, then sends a diagnostic report to technicians.',
     },
     longDesc: {
-      id: 'Kami bangun sistem AI yang membantu tim Anda mengambil keputusan lebih cepat dan akurat berdasarkan data. Dari chatbot yang menjawab pertanyaan teknis hingga predictive analytics yang meramalkan kerusakan mesin sebelum terjadi — semua dirancang khusus untuk industri Anda.',
-      en: 'We build AI systems that help your team make faster and more accurate decisions based on data. From chatbots answering technical questions to predictive analytics forecasting machine failures before they happen — all designed specifically for your industry.',
+      id: 'Kami satukan ekosistem sensor IoT dengan algoritma AI sehingga sistem Anda bukan hanya mengumpulkan data, tetapi juga membuat keputusan. Cocok untuk predictive maintenance, kontrol proses adaptif, dan otomatisasi shopfloor.',
+      en: 'We unify your IoT sensor ecosystem with AI algorithms so the system not only collects data but also makes decisions. Ideal for predictive maintenance, adaptive process control, and shopfloor automation.',
     },
     benefits: [
-      { id: 'Keputusan operasional lebih cepat berbasis data, bukan asumsi', en: 'Faster operational decisions based on data, not assumptions' },
-      { id: 'Prediksi kerusakan mesin sebelum terjadi (predictive maintenance)', en: 'Predict machine failures before they occur (predictive maintenance)' },
-      { id: 'Akses pengetahuan teknis kapan saja melalui chatbot', en: 'Access technical knowledge anytime through chatbot' },
-      { id: 'Otomasi laporan dan analisis rutin', en: 'Automated routine reports and analysis' },
-      { id: 'Sistem AI yang terus belajar dari data historis Anda', en: 'AI system that continuously learns from your historical data' },
+      { id: 'Keputusan otomatis tanpa intervensi manual', en: 'Automated decisions without manual intervention' },
+      { id: 'Predictive maintenance — perbaikan sebelum mesin rusak', en: 'Predictive maintenance — repairs before failure' },
+      { id: 'Mengurangi unplanned downtime hingga 80%', en: 'Reduces unplanned downtime by up to 80%' },
+      { id: 'Sistem belajar terus dari data baru', en: 'System continuously learns from new data' },
     ],
     process: [
-      {
-        title: { id: 'Audit Data & Use Case', en: 'Data Audit & Use Case' },
-        desc: { id: 'Inventarisasi data yang tersedia dan identifikasi use case AI yang paling bernilai untuk operasional Anda.', en: 'Inventory available data and identify the most valuable AI use cases for your operations.' },
-      },
-      {
-        title: { id: 'Pengembangan Model AI', en: 'AI Model Development' },
-        desc: { id: 'Pembangunan model AI (chatbot, predictive, klasifikasi) sesuai dengan use case yang telah ditentukan.', en: 'Building AI models (chatbot, predictive, classification) according to defined use cases.' },
-      },
-      {
-        title: { id: 'Integrasi ke Sistem Existing', en: 'Integration to Existing Systems' },
-        desc: { id: 'Integrasi AI ke sistem yang sudah berjalan — ERP, dashboard, atau platform internal perusahaan.', en: 'Integrating AI into running systems — ERP, dashboard, or internal company platforms.' },
-      },
-      {
-        title: { id: 'Testing & Validasi', en: 'Testing & Validation' },
-        desc: { id: 'Pengujian akurasi dan relevansi output AI bersama tim domain expert Anda.', en: 'Testing accuracy and relevance of AI outputs together with your domain expert team.' },
-      },
-      {
-        title: { id: 'Training & Monitoring', en: 'Training & Monitoring' },
-        desc: { id: 'Pelatihan pengguna dan setup monitoring performa model AI jangka panjang.', en: 'User training and long-term AI model performance monitoring setup.' },
-      },
+      { title: { id: 'Audit Infrastruktur', en: 'Infrastructure Audit' }, desc: { id: 'Petakan sistem IoT existing dan titik integrasi AI yang paling tinggi nilainya.', en: 'Map existing IoT systems and the highest-value AI integration points.' } },
+      { title: { id: 'Desain Arsitektur', en: 'Architecture Design' }, desc: { id: 'Rancang pipeline data, model AI, dan logic decision yang sesuai.', en: 'Design the data pipeline, AI model, and decision logic.' } },
+      { title: { id: 'Implementasi & Tuning', en: 'Implementation & Tuning' }, desc: { id: 'Bangun, deploy, dan tuning model sampai performa stabil.', en: 'Build, deploy, and tune the model until performance is stable.' } },
+      { title: { id: 'Monitoring Berkelanjutan', en: 'Continuous Monitoring' }, desc: { id: 'Awasi performa model dan retraining sesuai data baru.', en: 'Monitor model performance and retrain with new data.' } },
     ],
     useCases: [
-      {
-        title: { id: 'Chatbot SOP & Maintenance', en: 'SOP & Maintenance Chatbot' },
-        desc: { id: 'Chatbot yang menjawab pertanyaan prosedur operasional dan troubleshooting mesin berdasarkan dokumen teknis internal.', en: 'Chatbot answering operational procedure and machine troubleshooting questions based on internal technical documents.' },
-      },
-      {
-        title: { id: 'Predictive Maintenance', en: 'Predictive Maintenance' },
-        desc: { id: 'Model AI yang memprediksi kapan mesin perlu servis berdasarkan pola data historis sensor.', en: 'AI model predicting when machines need servicing based on historical sensor data patterns.' },
-      },
-      {
-        title: { id: 'Analisis Akar Masalah Otomatis', en: 'Automated Root Cause Analysis' },
-        desc: { id: 'AI yang menganalisis pola kejadian dan merekomendasikan penyebab masalah produksi secara otomatis.', en: 'AI analyzing event patterns and automatically recommending production problem root causes.' },
-      },
+      { title: { id: 'Predictive Maintenance', en: 'Predictive Maintenance' }, desc: { id: 'AI memprediksi kerusakan mesin sebelum terjadi.', en: 'AI predicts machine failures before they happen.' } },
+      { title: { id: 'Adaptive Process Control', en: 'Adaptive Process Control' }, desc: { id: 'Parameter mesin otomatis menyesuaikan dengan kondisi lapangan.', en: 'Machine parameters adapt automatically to field conditions.' } },
     ],
   },
   {
-    slug: 'dashboard-monitoring',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'Dashboard & Monitoring', en: 'Dashboard & Monitoring' },
+    slug: 'computer-vision-solutions',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1600',
+    title: { id: 'Computer Vision Solutions', en: 'Computer Vision Solutions' },
     desc: {
-      id: 'Real-time monitoring equipment, visualisasi data operasional, dan alert system.',
-      en: 'Real-time equipment monitoring, operational data visualization, and alert systems.',
+      id: 'Inspeksi visual otomatis dengan kamera + AI untuk QC dan monitoring area.',
+      en: 'Automated visual inspection with cameras + AI for QC and area monitoring.',
     },
     example: {
-      id: 'Dashboard pabrik yang bisa diakses dari HP kapan saja.',
-      en: 'Factory dashboard accessible from your phone anytime.',
+      id: 'Kamera di conveyor mendeteksi cacat produk secara real-time dan otomatis menandai unit yang gagal QC.',
+      en: 'Cameras on a conveyor detect product defects in real time and automatically flag units that fail QC.',
     },
     longDesc: {
-      id: 'Kami bangun dashboard monitoring yang menyajikan data operasional pabrik secara real-time — dapat diakses dari komputer maupun smartphone. Seluruh data sensor, status mesin, KPI produksi, dan riwayat kejadian tersaji dalam tampilan yang mudah dipahami oleh operator hingga manajemen.',
-      en: 'We build monitoring dashboards that present factory operational data in real-time — accessible from computers and smartphones. All sensor data, machine status, production KPIs, and event history presented in a format easy to understand by operators and management alike.',
+      id: 'Kombinasi kamera industrial-grade dan model computer vision yang dilatih untuk kebutuhan Anda — dari deteksi cacat produk, perhitungan output, sampai monitoring keselamatan area kerja.',
+      en: 'A combination of industrial-grade cameras and computer vision models trained to your needs — from defect detection and output counting to workplace safety monitoring.',
     },
     benefits: [
-      { id: 'Visibilitas penuh ke seluruh operasional pabrik dari satu layar', en: 'Full visibility into all factory operations from one screen' },
-      { id: 'Akses dari mana saja melalui web atau aplikasi mobile', en: 'Access from anywhere via web or mobile app' },
-      { id: 'Alert real-time via notifikasi, email, atau WhatsApp', en: 'Real-time alerts via notifications, email, or WhatsApp' },
-      { id: 'Laporan otomatis harian, mingguan, dan bulanan', en: 'Automatic daily, weekly, and monthly reports' },
-      { id: 'Tampilan yang dapat dikustomisasi per role pengguna', en: 'Customizable display per user role' },
+      { id: 'Akurasi inspeksi visual lebih konsisten dari manual', en: 'Visual inspection more consistent than manual' },
+      { id: 'Mengurangi kebutuhan operator inspeksi 24/7', en: 'Reduces need for round-the-clock inspection operators' },
+      { id: 'Data visual tersimpan untuk traceability', en: 'Visual data archived for traceability' },
+      { id: 'Model dapat dilatih ulang untuk SKU baru', en: 'Models retrainable for new SKUs' },
     ],
     process: [
-      {
-        title: { id: 'Requirement & Desain UI', en: 'Requirements & UI Design' },
-        desc: { id: 'Diskusi kebutuhan KPI dan tampilan dashboard bersama tim operasional dan manajemen.', en: 'Discussing KPI needs and dashboard layout with operations and management teams.' },
-      },
-      {
-        title: { id: 'Koneksi Sumber Data', en: 'Data Source Connection' },
-        desc: { id: 'Integrasi dengan sumber data existing — sensor IoT, database, ERP, atau API eksternal.', en: 'Integration with existing data sources — IoT sensors, databases, ERP, or external APIs.' },
-      },
-      {
-        title: { id: 'Pengembangan Dashboard', en: 'Dashboard Development' },
-        desc: { id: 'Pembangunan dashboard web responsif dengan visualisasi data, chart, dan alert system.', en: 'Building a responsive web dashboard with data visualization, charts, and alert system.' },
-      },
-      {
-        title: { id: 'Setup Alert & Laporan', en: 'Alert & Report Setup' },
-        desc: { id: 'Konfigurasi threshold alert dan jadwal pengiriman laporan otomatis sesuai kebutuhan.', en: 'Configuring alert thresholds and automatic report delivery schedules as needed.' },
-      },
-      {
-        title: { id: 'Deployment & Training', en: 'Deployment & Training' },
-        desc: { id: 'Peluncuran dashboard ke seluruh pengguna dan pelatihan cara membaca serta memanfaatkan data.', en: 'Dashboard rollout to all users and training on how to read and use the data.' },
-      },
+      { title: { id: 'Penentuan Use Case', en: 'Use Case Definition' }, desc: { id: 'Tentukan target inspeksi, akurasi yang dibutuhkan, dan throughput.', en: 'Define inspection targets, required accuracy, and throughput.' } },
+      { title: { id: 'Pengumpulan Data Visual', en: 'Visual Data Collection' }, desc: { id: 'Ambil sample image untuk training dan validasi model.', en: 'Capture sample images for model training and validation.' } },
+      { title: { id: 'Training Model AI', en: 'AI Model Training' }, desc: { id: 'Latih dan validasi model sampai mencapai akurasi target.', en: 'Train and validate the model to target accuracy.' } },
+      { title: { id: 'Instalasi & Go-Live', en: 'Installation & Go-Live' }, desc: { id: 'Pasang kamera, integrasi sistem, dan handover.', en: 'Install cameras, integrate systems, and hand over.' } },
     ],
     useCases: [
-      {
-        title: { id: 'OEE & KPI Produksi Real-time', en: 'Real-time OEE & Production KPIs' },
-        desc: { id: 'Pantau Overall Equipment Effectiveness, throughput, dan downtime secara real-time dari seluruh lini produksi.', en: 'Monitor Overall Equipment Effectiveness, throughput, and downtime in real-time from all production lines.' },
-      },
-      {
-        title: { id: 'Monitoring Multi-site', en: 'Multi-site Monitoring' },
-        desc: { id: 'Satu dashboard terpusat untuk memantau performa operasional dari beberapa lokasi pabrik sekaligus.', en: 'One centralized dashboard to monitor operational performance from multiple factory locations simultaneously.' },
-      },
-      {
-        title: { id: 'Executive Summary & Laporan', en: 'Executive Summary & Reports' },
-        desc: { id: 'Dashboard ringkasan eksekutif dan laporan otomatis yang dikirim ke manajemen secara terjadwal.', en: 'Executive summary dashboard and automated reports delivered to management on schedule.' },
-      },
+      { title: { id: 'Quality Control Otomatis', en: 'Automated Quality Control' }, desc: { id: 'Deteksi cacat produk di lini produksi secara real-time.', en: 'Real-time defect detection on the production line.' } },
+      { title: { id: 'Safety & Area Monitoring', en: 'Safety & Area Monitoring' }, desc: { id: 'Pantau penggunaan APD dan zona terlarang area pabrik.', en: 'Monitor PPE compliance and restricted-zone access on the factory floor.' } },
     ],
   },
   {
-    slug: 'training-consulting',
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'Training & Consulting', en: 'Training & Consulting' },
+    slug: 'consultation-enablement',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1600',
+    title: { id: 'Consultation & Enablement', en: 'Consultation & Enablement' },
     desc: {
-      id: 'Transfer knowledge ke tim klien, project-based training, dan mentoring teknis.',
-      en: 'Knowledge transfer to client teams, project-based training, and technical mentoring.',
+      id: 'Pendampingan strategis dan pelatihan agar tim internal mandiri.',
+      en: 'Strategic advisory and training so your internal team becomes self-sufficient.',
     },
     example: {
-      id: 'Workshop 2 minggu, setelahnya tim klien bisa maintain sistem sendiri.',
-      en: '2-week workshop, after which the client team can maintain the system independently.',
+      id: 'Kami susun roadmap digitalisasi 12 bulan dan latih tim engineering Anda mengoperasikan sistem AI-IoT secara mandiri.',
+      en: 'We build a 12-month digitalization roadmap and train your engineering team to run the AI-IoT system independently.',
     },
     longDesc: {
-      id: 'Kami tidak hanya membangun sistem — kami memastikan tim Anda mampu mengoperasikan dan mengembangkannya secara mandiri. Program training kami dirancang berbasis proyek nyata di lingkungan kerja Anda, sehingga ilmu yang diserap langsung relevan dan dapat diterapkan.',
-      en: "We don't just build systems — we ensure your team can operate and develop them independently. Our training programs are project-based in your real work environment, so the knowledge absorbed is immediately relevant and applicable.",
+      id: 'Kami bantu pemetaan kebutuhan, prioritisasi inisiatif, dan transfer knowledge agar Industri 4.0 bukan sekadar proyek pihak ketiga — melainkan kapabilitas internal Anda.',
+      en: 'We help map needs, prioritize initiatives, and transfer knowledge so Industry 4.0 is not just a third-party project — but a real internal capability.',
     },
     benefits: [
-      { id: 'Tim internal dapat mandiri mengelola sistem IoT & AI', en: 'Internal team can independently manage IoT & AI systems' },
-      { id: 'Training berbasis proyek nyata, bukan teori belaka', en: 'Project-based training on real scenarios, not just theory' },
-      { id: 'Mengurangi ketergantungan pada vendor jangka panjang', en: 'Reduces long-term vendor dependency' },
-      { id: 'Kurikulum disesuaikan dengan level dan kebutuhan tim', en: 'Curriculum tailored to team level and needs' },
-      { id: 'Mentoring teknis berkelanjutan pasca training', en: 'Ongoing technical mentoring post-training' },
+      { id: 'Roadmap digitalisasi yang realistis dan terukur', en: 'Realistic, measurable digitalization roadmap' },
+      { id: 'Tim internal naik kelas — tidak bergantung vendor terus-menerus', en: 'Internal team levels up — no constant vendor dependency' },
+      { id: 'Materi training disesuaikan dengan konteks pabrik Anda', en: 'Training material tailored to your factory context' },
+      { id: 'Sertifikasi internal opsional', en: 'Optional internal certification' },
     ],
     process: [
-      {
-        title: { id: 'Assessment Kemampuan Tim', en: 'Team Capability Assessment' },
-        desc: { id: 'Evaluasi skill dan pengetahuan tim untuk menentukan starting point dan kurikulum yang tepat.', en: 'Evaluate team skills and knowledge to determine the right starting point and curriculum.' },
-      },
-      {
-        title: { id: 'Desain Kurikulum', en: 'Curriculum Design' },
-        desc: { id: 'Penyusunan kurikulum training berbasis studi kasus nyata dari industri dan operasional Anda.', en: 'Developing training curriculum based on real case studies from your industry and operations.' },
-      },
-      {
-        title: { id: 'Workshop & Hands-on', en: 'Workshop & Hands-on' },
-        desc: { id: 'Pelaksanaan workshop intensif dengan sesi teori dan praktik langsung di environment Anda.', en: 'Intensive workshop execution with theory and hands-on practice sessions in your environment.' },
-      },
-      {
-        title: { id: 'Proyek Capstone', en: 'Capstone Project' },
-        desc: { id: 'Tim Anda menyelesaikan proyek mini yang relevan sebagai bukti kompetensi.', en: 'Your team completes a relevant mini-project as proof of competency.' },
-      },
-      {
-        title: { id: 'Mentoring Pasca Training', en: 'Post-training Mentoring' },
-        desc: { id: 'Sesi mentoring berkala untuk memastikan implementasi berjalan dan menjawab pertanyaan teknis.', en: 'Regular mentoring sessions to ensure implementation progresses and answer technical questions.' },
-      },
+      { title: { id: 'Diskusi Awal', en: 'Initial Discussion' }, desc: { id: 'Pahami kondisi, target bisnis, dan readiness organisasi.', en: 'Understand conditions, business targets, and organizational readiness.' } },
+      { title: { id: 'Roadmap & Prioritisasi', en: 'Roadmap & Prioritization' }, desc: { id: 'Susun rencana berbasis dampak dan kemudahan implementasi.', en: 'Build a plan grounded in impact and feasibility.' } },
+      { title: { id: 'Workshop & Training', en: 'Workshop & Training' }, desc: { id: 'Latih tim teknis dan non-teknis sesuai peran masing-masing.', en: 'Train technical and non-technical teams per their roles.' } },
+      { title: { id: 'Review Berkala', en: 'Periodic Review' }, desc: { id: 'Evaluasi progress dan koreksi arah jika diperlukan.', en: 'Evaluate progress and adjust direction as needed.' } },
     ],
     useCases: [
-      {
-        title: { id: 'Training IoT untuk Teknisi Pabrik', en: 'IoT Training for Factory Technicians' },
-        desc: { id: 'Program intensif untuk teknisi agar bisa memasang, mengkonfigurasi, dan troubleshoot sistem IoT secara mandiri.', en: 'Intensive program for technicians to independently install, configure, and troubleshoot IoT systems.' },
-      },
-      {
-        title: { id: 'Consulting Roadmap Digitalisasi', en: 'Digitalization Roadmap Consulting' },
-        desc: { id: 'Pendampingan strategic untuk memetakan prioritas dan rencana implementasi digitalisasi pabrik secara bertahap.', en: 'Strategic consulting to map out priorities and phased factory digitalization implementation plans.' },
-      },
-      {
-        title: { id: 'Akademik & Penelitian', en: 'Academic & Research' },
-        desc: { id: 'Program kolaborasi dengan perguruan tinggi untuk proyek penelitian IoT dan AI industri berbasis kasus nyata.', en: 'Collaboration program with universities for real-case-based industrial IoT and AI research projects.' },
-      },
+      { title: { id: 'Penyusunan Roadmap Industri 4.0', en: 'Industry 4.0 Roadmap Development' }, desc: { id: 'Cetak biru transformasi digital yang spesifik untuk pabrik Anda.', en: 'A digital-transformation blueprint specific to your factory.' } },
+      { title: { id: 'Training Tim Internal', en: 'Internal Team Training' }, desc: { id: 'Membuat operator dan engineer mampu mengelola sistem AI-IoT mandiri.', en: 'Empowers operators and engineers to manage AI-IoT systems independently.' } },
     ],
   },
   {
-    slug: 'layanan-kustom',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200&h=600',
-    title: { id: 'Layanan Kustom', en: 'Custom Services' },
+    slug: 'hardware-software-provisioning',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1800',
+    title: { id: 'Hardware & Software Provisioning', en: 'Hardware & Software Provisioning' },
     desc: {
-      id: 'Pengembangan IoT & AI khusus sesuai dengan masalah operasional spesifik di pabrik Anda.',
-      en: 'Custom IoT & AI development tailored to specific operational problems in your factory.',
+      id: 'Pasokan perangkat industrial-grade dan software siap pakai untuk implementasi penuh.',
+      en: 'Industrial-grade hardware and ready-to-deploy software for full-stack implementation.',
     },
     example: {
-      id: 'Solusi end-to-end yang dirancang eksklusif berdasarkan kebutuhan unik.',
-      en: 'End-to-end solution designed exclusively based on unique requirements.',
+      id: 'Paket lengkap: gateway IoT, sensor, server lokal, dan software dashboard — semua sudah dikonfigurasi dan siap pasang.',
+      en: 'A complete package: IoT gateway, sensors, on-prem server, and dashboard software — pre-configured and ready to install.',
     },
     longDesc: {
-      id: 'Setiap pabrik memiliki tantangan uniknya sendiri. Layanan kustom kami dirancang untuk masalah operasional spesifik yang tidak bisa diselesaikan dengan solusi generik — mulai dari integrasi sistem lama, protokol komunikasi tidak standar, hingga pengembangan hardware khusus.',
-      en: "Every factory has its own unique challenges. Our custom services are designed for specific operational problems that cannot be solved with generic solutions — from legacy system integration, non-standard communication protocols, to custom hardware development.",
+      id: 'Kami sediakan kombinasi hardware industrial-grade (sensor, gateway, server, kamera) dan software platform yang sudah dikonfigurasi sesuai kebutuhan Anda. Pengadaan, integrasi, dan support — satu pintu.',
+      en: 'We supply a combination of industrial-grade hardware (sensors, gateways, servers, cameras) and platform software pre-configured to your needs. Procurement, integration, and support — all in one.',
     },
     benefits: [
-      { id: 'Solusi dirancang 100% sesuai kebutuhan dan constraint spesifik Anda', en: 'Solution designed 100% to your specific needs and constraints' },
-      { id: 'Tim engineering berpengalaman di berbagai protokol industri', en: 'Engineering team experienced in various industrial protocols' },
-      { id: 'Pendekatan iteratif dengan feedback loop yang cepat', en: 'Iterative approach with fast feedback loops' },
-      { id: 'Ownership penuh atas solusi dan kode yang dikembangkan', en: 'Full ownership of the developed solution and code' },
-      { id: 'Dukungan jangka panjang dan pengembangan berkelanjutan', en: 'Long-term support and continuous development' },
+      { id: 'Single source untuk hardware + software + integrasi', en: 'Single source for hardware + software + integration' },
+      { id: 'Garansi dan support purna jual jangka panjang', en: 'Long-term warranty and after-sales support' },
+      { id: 'Stack yang sudah teruji bersama, mengurangi risiko kompatibilitas', en: 'Stack tested together, reducing compatibility risk' },
+      { id: 'Lead time lebih singkat dibanding pengadaan terpisah', en: 'Shorter lead time vs separate procurement' },
     ],
     process: [
-      {
-        title: { id: 'Discovery & Problem Framing', en: 'Discovery & Problem Framing' },
-        desc: { id: 'Sesi mendalam untuk memahami masalah, constraint teknis, dan tujuan bisnis yang ingin dicapai.', en: 'Deep-dive session to understand the problem, technical constraints, and business goals to achieve.' },
-      },
-      {
-        title: { id: 'Desain Arsitektur Solusi', en: 'Solution Architecture Design' },
-        desc: { id: 'Perancangan arsitektur teknis yang optimal berdasarkan kebutuhan dan constraint yang telah dipetakan.', en: 'Designing the optimal technical architecture based on mapped needs and constraints.' },
-      },
-      {
-        title: { id: 'Proof of Concept (PoC)', en: 'Proof of Concept (PoC)' },
-        desc: { id: 'Pengembangan prototype cepat untuk memvalidasi pendekatan sebelum implementasi penuh.', en: 'Rapid prototype development to validate the approach before full implementation.' },
-      },
-      {
-        title: { id: 'Pengembangan & Iterasi', en: 'Development & Iteration' },
-        desc: { id: 'Pengembangan solusi penuh dengan siklus review berkala bersama tim Anda.', en: 'Full solution development with regular review cycles with your team.' },
-      },
-      {
-        title: { id: 'Deployment & Dukungan', en: 'Deployment & Support' },
-        desc: { id: 'Implementasi di environment produksi dan setup dukungan teknis jangka panjang.', en: 'Implementation in production environment and long-term technical support setup.' },
-      },
+      { title: { id: 'Spesifikasi Kebutuhan', en: 'Requirements Specification' }, desc: { id: 'Petakan kebutuhan hardware, software, dan kapasitas sistem.', en: 'Map hardware, software, and system-capacity requirements.' } },
+      { title: { id: 'Pengadaan & Konfigurasi', en: 'Procurement & Configuration' }, desc: { id: 'Pilih hardware, instal software, dan konfigurasi default.', en: 'Source hardware, install software, and configure defaults.' } },
+      { title: { id: 'Instalasi On-site', en: 'On-site Installation' }, desc: { id: 'Pasang dan integrasi langsung di lokasi.', en: 'Install and integrate directly on-site.' } },
+      { title: { id: 'Support & Maintenance', en: 'Support & Maintenance' }, desc: { id: 'SLA support, update software, dan penggantian hardware bila perlu.', en: 'SLA support, software updates, and hardware replacement when needed.' } },
     ],
     useCases: [
-      {
-        title: { id: 'Integrasi Mesin Legacy ke Sistem Modern', en: 'Legacy Machine Integration to Modern Systems' },
-        desc: { id: 'Jembatan komunikasi antara mesin lama (RS-232, Modbus, PLC) dengan platform cloud modern.', en: 'Communication bridge between legacy machines (RS-232, Modbus, PLC) and modern cloud platforms.' },
-      },
-      {
-        title: { id: 'Pengembangan Hardware Kustom', en: 'Custom Hardware Development' },
-        desc: { id: 'Desain dan fabrikasi perangkat IoT khusus untuk kondisi lingkungan industri yang ekstrem.', en: 'Design and fabrication of specialized IoT devices for extreme industrial environmental conditions.' },
-      },
-      {
-        title: { id: 'Platform SaaS Industri', en: 'Industrial SaaS Platform' },
-        desc: { id: 'Pengembangan platform perangkat lunak industri berbasis web yang dapat digunakan oleh banyak pengguna secara bersamaan.', en: 'Development of web-based industrial software platform usable by multiple users simultaneously.' },
-      },
+      { title: { id: 'Paket Turnkey Pabrik', en: 'Turnkey Factory Package' }, desc: { id: 'Hardware, software, dan instalasi dalam satu kontrak.', en: 'Hardware, software, and installation in one contract.' } },
+      { title: { id: 'Refresh Infrastruktur IoT', en: 'IoT Infrastructure Refresh' }, desc: { id: 'Upgrade gateway dan platform tanpa membongkar sensor existing.', en: 'Upgrade gateways and platform without ripping out existing sensors.' } },
     ],
   },
 ]
@@ -378,4 +216,3 @@ export const servicesData: ServiceData[] = [
 export function getServiceBySlug(slug: string): ServiceData | undefined {
   return servicesData.find((s) => s.slug === slug)
 }
-

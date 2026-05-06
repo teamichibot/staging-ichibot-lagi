@@ -3,8 +3,8 @@ export const dynamic = 'force-dynamic'
 import { Hero } from '@/components/home/Hero'
 import { SocialProof } from '@/components/home/SocialProof'
 import { HowItWorks } from '@/components/home/HowItWorks'
+import { Solutions } from '@/components/home/Solutions'
 import { Services } from '@/components/home/Services'
-import { Products } from '@/components/home/Products'
 import { CaseStudy } from '@/components/home/CaseStudy'
 import { WhyIchibot } from '@/components/home/WhyIchibot'
 import { CTASection } from '@/components/home/CTASection'
@@ -25,31 +25,16 @@ export default async function HomePage() {
   const sortedProducts = [...productItems].reverse()
 
   return (
-    <main className="bg-[#050A14] relative overflow-hidden">
-      {/* Global Ambient Glows (Seamless Background) */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[2%] left-[-10%] w-[600px] h-[600px] bg-teal/25 rounded-full blur-[140px]" />
-        <div className="absolute top-[12%] right-[-5%] w-[500px] h-[500px] bg-sky-500/15 rounded-full blur-[120px]" />
-        <div className="absolute top-[25%] left-[5%] w-[700px] h-[700px] bg-navy/50 rounded-full blur-[160px]" />
-        <div className="absolute top-[38%] right-[5%] w-[600px] h-[600px] bg-teal/20 rounded-full blur-[140px]" />
-        <div className="absolute top-[50%] left-[-5%] w-[800px] h-[800px] bg-sky-500/15 rounded-full blur-[150px]" />
-        <div className="absolute top-[65%] right-[0%] w-[700px] h-[700px] bg-teal/15 rounded-full blur-[140px]" />
-        <div className="absolute top-[78%] left-[5%] w-[600px] h-[600px] bg-navy/40 rounded-full blur-[130px]" />
-        <div className="absolute top-[88%] right-[-5%] w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[2%] left-[-10%] w-[600px] h-[600px] bg-teal/20 rounded-full blur-[140px]" />
-      </div>
-
-      <div className="relative z-10">
-        <Hero caseStudies={caseStudyPosts} products={sortedProducts.slice(0, 2)} />
-        <SocialProof />
-        <HowItWorks />
-        <Services serviceItems={serviceItems} />
-        <Products productItems={sortedProducts} />
-        <CaseStudy posts={caseStudyPosts} />
-        <WhyIchibot />
-        <CTASection />
-        <BlogPreview posts={previewPosts} />
-      </div>
+    <main className="bg-white">
+      <Hero caseStudies={caseStudyPosts} products={sortedProducts.slice(0, 2)} />
+      <SocialProof />
+      <CaseStudy posts={caseStudyPosts} />
+      <WhyIchibot />
+      <Solutions productItems={sortedProducts} />
+      <Services serviceItems={serviceItems} />
+      <HowItWorks />
+      <CTASection />
+      <BlogPreview posts={previewPosts} />
     </main>
   )
 }
