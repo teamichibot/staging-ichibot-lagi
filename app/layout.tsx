@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { SiteShell } from '@/components/layout/SiteShell'
 import { getAllServices, getAllProducts } from '@/lib/server-data'
+import { getAllPostsMerged } from '@/lib/blog'
 import { getOrganizationSchema } from '@/lib/seo'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -56,10 +57,12 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [liveServices, liveProducts] = await Promise.all([
+  const [liveServices, liveProducts, allPosts] = await Promise.all([
     getAllServices(),
-    getAllProducts()
+    getAllProducts(),
+    getAllPostsMerged()
   ])
+  const liveCaseStudies = allPosts.filter((p) => p.category === 'Case Study').slice(0, 4)
 
   const organizationSchema = getOrganizationSchema()
 
@@ -72,7 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <SiteShell liveServices={liveServices} liveProducts={liveProducts}>
+        <SiteShell liveServices={liveServices} liveProducts={liveProducts} liveCaseStudies={liveCaseStudies}>
           {children}
         </SiteShell>
         <Analytics />

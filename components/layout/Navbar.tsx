@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLang } from '@/contexts/LanguageContext'
-import { t } from '@/lib/translations'
+import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 
 import { servicesData } from '@/lib/services-data'
 import { productsData } from '@/lib/products-data'
@@ -12,69 +12,113 @@ import { productsData } from '@/lib/products-data'
 function NavLogo() {
   const [imgError, setImgError] = useState(false)
   if (imgError) {
-    return <span className="font-display text-xl font-bold text-white tracking-tight">Ichibot</span>
+    return <span className="font-display text-lg font-bold tracking-tight text-ink">Ichibot</span>
   }
   return (
     <Image
       src="/logos/logo.svg"
       alt="Ichibot"
-      width={96}
-      height={28}
-      className="brightness-0 invert"
+      width={88}
+      height={26}
+      className="brightness-0"
       priority
       onError={() => setImgError(true)}
     />
   )
 }
 
-export function Navbar({ 
-  liveServices = servicesData, 
-  liveProducts = productsData 
-}: { 
-  liveServices?: any[], 
-  liveProducts?: any[] 
+export function Navbar({
+  liveServices = servicesData,
+  liveProducts = productsData,
+  liveCaseStudies = [],
+}: {
+  liveServices?: any[]
+  liveProducts?: any[]
+  liveCaseStudies?: any[]
 }) {
   const { lang, toggle } = useLang()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [activeSection, setActiveSection] = useState<string>('')
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const serviceLinks = liveServices.map((s) => ({ label: s.title, href: `/layanan/${s.slug}` }))
-  const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}` }))
+  const serviceLinks = liveServices.map((s) => ({ label: s.title, href: `/layanan/${s.slug}`, image: s.image }))
+  const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}`, image: p.image }))
+  const caseStudyLinks = liveCaseStudies.map((cs: any) => ({
+    title: cs.title as string,
+    href: `/blog/${cs.slug}`,
+    image: cs.image as string,
+  }))
+
+  const companyLinks = [
+    {
+      label: { id: 'Tentang Kami', en: 'About Us' },
+      href: '/about',
+      external: false,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M4 21V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v16" />
+          <path d="M17 8h2a2 2 0 0 1 2 2v11" />
+          <path d="M3 21h18" />
+          <path d="M8 7h2M8 11h2M8 15h2" />
+        </svg>
+      ),
+    },
+    {
+      label: { id: 'Blog', en: 'Blog' },
+      href: '/blog',
+      external: false,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H4z" />
+          <path d="M19 8h2a1 1 0 0 1 1 1v9a3 3 0 0 1-3 3" />
+          <path d="M8 8h7M8 12h7M8 16h4" />
+        </svg>
+      ),
+    },
+    {
+      label: { id: 'Ichibot Store', en: 'Ichibot Store' },
+      href: 'https://www.store.ichibot.id',
+      external: true,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z" />
+          <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+        </svg>
+      ),
+    },
+    {
+      label: { id: 'Internship', en: 'Internship' },
+      href: 'https://internship.ichibot.id',
+      external: true,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v4c0 1.5 2.7 3 6 3s6-1.5 6-3v-4" />
+          <path d="M22 10v5" />
+        </svg>
+      ),
+    },
+  ]
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50)
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    // ScrollSpy Logic
-    const sections = ['layanan', 'produk', 'studi-kasus']
+    const sections = ['produk', 'layanan', 'studi-kasus']
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
-        })
-      },
-      { threshold: 0.5, rootMargin: '-80px 0px -40% 0px' }
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id)
+        } else {
+          setActiveSection((current) => (current === entry.target.id ? '' : current))
+        }
+      }),
+      { threshold: 0.3, rootMargin: '-64px 0px -50% 0px' }
     )
-
     sections.forEach((id) => {
       const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   }, [])
-
-  const isCollapsed = isScrolled && !isHovered && !mobileOpen && !activeDropdown
 
   const tx = (obj: { id: string; en: string }) => obj[lang]
 
@@ -86,239 +130,253 @@ export function Navbar({
     closeTimer.current = setTimeout(() => setActiveDropdown(null), 120)
   }
 
+  const navLinkClass = (section?: string) =>
+    `text-sm font-medium text-ink rounded-md px-3 py-1.5 transition-colors duration-150 hover:bg-black/5 ${
+      section && activeSection === section ? 'bg-black/5' : ''
+    }`
+
+  const megaItemWithImage = "flex items-center gap-3 group"
+  const megaItemText = "text-[15px] font-semibold text-ink group-hover:text-ink/70 transition-colors leading-snug"
+  const megaThumb = "w-10 h-10 rounded-md object-cover bg-black/5 shrink-0"
+
   return (
     <>
-      {/* Blur Overlay Backdrop */}
-      <div 
-        className={`fixed inset-0 z-40 transition-all duration-500 ease-in-out ${activeDropdown || mobileOpen ? 'opacity-100 backdrop-blur-md bg-navy/30 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => { setMobileOpen(false); setActiveDropdown(null); }}
+      {/* Dropdown backdrop */}
+      <div
+        className={`fixed inset-0 z-40 transition-opacity duration-300 ${activeDropdown || mobileOpen ? 'opacity-100 pointer-events-auto bg-black/20' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => { setMobileOpen(false); setActiveDropdown(null) }}
       />
 
-      <header className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none flex flex-col items-center gap-2">
-      {/* Floating pill */}
-      <nav 
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`pointer-events-auto flex items-center h-14 rounded-2xl bg-navy/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[width,max-width] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible w-full px-5 ${isCollapsed ? 'max-w-[136px]' : 'max-w-[860px]'}`}
+      <header
+        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl"
+        onMouseLeave={close}
       >
+        <div className="max-w-[1400px] mx-auto h-[64px] flex items-center px-6 md:px-10">
 
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0 flex items-center z-10 w-[96px]">
-          <NavLogo />
-        </Link>
-
-        {/* Expanding Inner Container */}
-        <div className={`flex items-center justify-between flex-1 transition-all duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] whitespace-nowrap overflow-visible ${isCollapsed ? 'opacity-0 max-w-0 pointer-events-none ml-0' : 'opacity-100 max-w-[1000px] pointer-events-auto ml-4'}`}>
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1 overflow-visible">
-
-          {/* Layanan dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => open('layanan')}
-            onMouseLeave={close}
-          >
-            <Link 
-              href="/#layanan" 
-              className={`flex items-center gap-1 text-sm font-medium px-3 py-2 rounded-xl transition-all ${
-                activeSection === 'layanan' 
-                ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
-                : 'text-white/75 hover:text-white hover:bg-white/8'
-              }`}
-            >
-              {tx(t.nav.services)}
-              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'layanan' ? 'rotate-180' : ''}`}>
-                <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              </svg>
+          {/* Left: Logo */}
+          <div className="flex items-center shrink-0 pr-8">
+            <Link href="/" className="flex items-center">
+              <NavLogo />
             </Link>
-            {activeDropdown === 'layanan' && (
-              <div
-                className="absolute top-full left-0 mt-2 w-72 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
-                onMouseEnter={() => open('layanan')}
-                onMouseLeave={close}
-              >
-                {serviceLinks.map((item) => (
-                  <Link
-                    key={item.href + (item.label.id || item.label)}
-                    href={item.href}
-                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm whitespace-normal leading-snug"
-                    onClick={() => setActiveDropdown(null)}
-                  >
-                    <span>{tx(item.label)}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Produk dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => open('produk')}
-            onMouseLeave={close}
-          >
-            <Link 
-              href="/#produk" 
-              className={`flex items-center gap-1 text-sm font-medium px-3 py-2 rounded-xl transition-all ${
-                activeSection === 'produk' 
-                ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
-                : 'text-white/75 hover:text-white hover:bg-white/8'
-              }`}
+          {/* Center: Nav links */}
+          <nav className="hidden md:flex flex-1 items-center justify-center gap-2">
+
+            {/* Solusi */}
+            <Link
+              href="/#produk"
+              onMouseEnter={() => open('solusi')}
+              className={`${navLinkClass('produk')} flex items-center gap-1`}
             >
-              {tx(t.nav.products)}
-              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 pointer-events-none ${activeDropdown === 'produk' ? 'rotate-180' : ''}`}>
-                <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              {lang === 'id' ? 'Solusi' : 'Solutions'}
+              <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={`transition-transform duration-200 ${activeDropdown === 'solusi' ? 'rotate-180' : ''}`}>
+                <path d="M4 6l4 4 4-4" />
               </svg>
             </Link>
-            {activeDropdown === 'produk' && (
-              <div
-                className="absolute top-full left-0 mt-2 w-80 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
-                onMouseEnter={() => open('produk')}
-                onMouseLeave={close}
-              >
-                {productLinks.map((item) => (
-                  <Link
-                    key={item.label.id || item.label}
-                    href={item.href}
-                    className="flex items-center px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm whitespace-normal leading-snug"
-                    onClick={() => setActiveDropdown(null)}
-                  >
-                    {tx(item.label)}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
 
-          <Link 
-            href="/#studi-kasus" 
-            className={`text-sm font-medium px-3 py-2 rounded-xl transition-all ${
-              activeSection === 'studi-kasus' 
-              ? 'text-white bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]' 
-              : 'text-white/75 hover:text-white hover:bg-white/8'
-            }`}
-          >
-            {tx(t.nav.caseStudies)}
-          </Link>
+            {/* Studi Kasus */}
+            <Link
+              href="/#studi-kasus"
+              onMouseEnter={() => caseStudyLinks.length > 0 ? open('studi-kasus') : setActiveDropdown(null)}
+              className={`${navLinkClass('studi-kasus')} flex items-center gap-1`}
+            >
+              {tx(t.nav.caseStudies)}
+              {caseStudyLinks.length > 0 && (
+                <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={`transition-transform duration-200 ${activeDropdown === 'studi-kasus' ? 'rotate-180' : ''}`}>
+                  <path d="M4 6l4 4 4-4" />
+                </svg>
+              )}
+            </Link>
 
-          {/* Perusahaan dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => open('perusahaan')}
-            onMouseLeave={close}
-          >
-            <button className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-white/8 transition-colors">
+            {/* Perusahaan */}
+            <button
+              onMouseEnter={() => open('perusahaan')}
+              className={`${navLinkClass()} flex items-center gap-1`}
+            >
               {lang === 'id' ? 'Perusahaan' : 'Company'}
-              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" className={`transition-transform duration-200 ${activeDropdown === 'perusahaan' ? 'rotate-180' : ''}`}>
-                <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={`transition-transform duration-200 ${activeDropdown === 'perusahaan' ? 'rotate-180' : ''}`}>
+                <path d="M4 6l4 4 4-4" />
               </svg>
             </button>
-            {activeDropdown === 'perusahaan' && (
-              <div
-                className="absolute top-full left-0 mt-2 w-52 bg-navy/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2"
-                onMouseEnter={() => open('perusahaan')}
-                onMouseLeave={close}
-              >
-                <Link
-                  href="/about"
-                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
-                  onClick={() => setActiveDropdown(null)}
-                >
-                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                  </span>
-                  {tx(t.nav.about)}
-                </Link>
-                <Link
-                  href="/blog"
-                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
-                  onClick={() => setActiveDropdown(null)}
-                >
-                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                  </span>
-                  {tx(t.nav.blog)}
-                </Link>
-                <a
-                  href="https://www.store.ichibot.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
-                  onClick={() => setActiveDropdown(null)}
-                >
-                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                  </span>
-                  Ichibot Store
-                </a>
-                <a
-                  href="https://internship.ichibot.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-4 py-2.5 text-white/70 hover:text-white hover:bg-white/8 transition-colors text-sm"
-                  onClick={() => setActiveDropdown(null)}
-                >
-                  <span className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                    </svg>
-                  </span>
-                  Internship
-                </a>
+
+          </nav>
+
+          {/* Right: Actions */}
+          <div className="hidden md:flex items-center justify-end gap-2 shrink-0 pl-8">
+            <button
+              onClick={toggle}
+              onMouseEnter={() => setActiveDropdown(null)}
+              className="text-ink hover:bg-black/5 rounded-md p-2 transition-colors"
+              aria-label={`Switch to ${lang === 'id' ? 'English' : 'Bahasa Indonesia'}`}
+              title={lang === 'id' ? 'EN' : 'ID'}
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <ellipse cx="12" cy="12" rx="4" ry="9" />
+                <path d="M3 12h18" />
+              </svg>
+            </button>
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t.whatsapp.message[lang])}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={() => setActiveDropdown(null)}
+              className="text-brand hover:bg-black/5 rounded-md p-2 transition-colors flex items-center justify-center"
+              aria-label={tx(t.nav.cta)}
+              title={tx(t.nav.cta)}
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.121 1.531 5.85L.057 23.667a.5.5 0 00.613.608l5.913-1.55A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.955 9.955 0 01-5.127-1.41l-.368-.217-3.812 1 .964-3.723-.239-.384A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+              </svg>
+            </a>
+          </div>
+
+          {/* Mobile: hamburger */}
+          <button
+            className="md:hidden text-ink p-1 ml-auto"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" />
+              </svg>
+            )}
+          </button>
+
+        </div>
+
+        {/* Megamenu — full-width panel that extends from navbar */}
+        <div
+          className={`hidden md:block overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+            activeDropdown ? 'max-h-[720px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+          onMouseEnter={() => activeDropdown && open(activeDropdown)}
+          onMouseLeave={close}
+        >
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-10 pb-14 flex justify-center">
+
+            {activeDropdown === 'solusi' && (
+              <div className="grid grid-cols-2 gap-x-12 items-start min-w-[560px]">
+                <div>
+                  <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
+                    {tx(t.nav.services)}
+                  </h4>
+                  <div className="flex flex-col gap-y-4">
+                    {serviceLinks.map((item) => (
+                      <Link
+                        key={item.href + (item.label.id || item.label)}
+                        href={item.href}
+                        className={megaItemWithImage}
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={item.image} alt="" className={megaThumb} />
+                        <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
+                    {tx(t.nav.products)}
+                  </h4>
+                  <div className="flex flex-col gap-y-4">
+                    {productLinks.map((item) => (
+                      <Link
+                        key={item.label.id || item.label}
+                        href={item.href}
+                        className={megaItemWithImage}
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={item.image} alt="" className={megaThumb} />
+                        <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
+
+            {activeDropdown === 'studi-kasus' && caseStudyLinks.length > 0 && (
+              <div className="min-w-[640px]">
+                <div className="grid grid-cols-2 gap-x-12 gap-y-5 items-start">
+                  {caseStudyLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={megaItemWithImage}
+                      onClick={() => setActiveDropdown(null)}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={item.image} alt="" className={megaThumb} />
+                      <span className={`${megaItemText} line-clamp-3 max-w-[14rem]`}>{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+                <Link
+                  href="/blog?category=Case Study"
+                  className="inline-block mt-6 text-sm font-semibold text-brand hover:text-brand-dark transition-colors"
+                  onClick={() => setActiveDropdown(null)}
+                >
+                  {lang === 'id' ? 'Lihat semua studi kasus →' : 'View all case studies →'}
+                </Link>
+              </div>
+            )}
+
+            {activeDropdown === 'perusahaan' && (
+              <div className="min-w-[480px]">
+                <div className="grid grid-cols-2 gap-x-12 gap-y-4 items-start">
+                  {companyLinks.map((item) => {
+                    const inner = (
+                      <>
+                        <span className="w-10 h-10 rounded-lg bg-black/5 text-ink/70 flex items-center justify-center shrink-0">
+                          {item.icon}
+                        </span>
+                        <span className={megaItemText}>{tx(item.label)}</span>
+                      </>
+                    )
+                    return item.external ? (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={megaItemWithImage}
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={megaItemWithImage}
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {inner}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
 
-        {/* Right side */}
-        <div className="hidden md:flex items-center gap-2">
-          <button
-            onClick={toggle}
-            className="text-white/50 hover:text-white text-xs font-semibold transition-colors px-2.5 py-1.5 border border-white/15 rounded-lg hover:border-white/30"
-          >
-            {lang === 'id' ? 'EN' : 'ID'}
-          </button>
-          <Link
-            href="/contact"
-            className="bg-teal hover:bg-teal-light text-navy text-sm font-bold px-4 py-2 rounded-xl transition-colors"
-          >
-            {tx(t.nav.cta)}
-          </Link>
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden text-white p-1 ml-auto"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <line x1="3" y1="8" x2="21" y2="8" /><line x1="3" y1="16" x2="21" y2="16" />
-            </svg>
-          )}
-        </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu drawer */}
-      <div className={`pointer-events-auto mt-2 w-full max-w-[860px] mx-auto overflow-hidden transition-all duration-300 ease-in-out ${mobileOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="bg-navy/98 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
-          {/* Nav Links */}
-          <div className="px-2 py-3">
+        {/* Mobile drawer — drops below the bar */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-black/6 bg-white ${mobileOpen ? 'max-h-[480px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="px-4 py-3 space-y-0.5">
             {[
-              { label: tx(t.nav.services), href: '/#layanan' },
-              { label: tx(t.nav.products), href: '/#produk' },
+              { label: lang === 'id' ? 'Solusi' : 'Solutions', href: '/#produk' },
               { label: tx(t.nav.caseStudies), href: '/#studi-kasus' },
               { label: lang === 'id' ? 'Tentang Kami' : 'About Us', href: '/about' },
               { label: 'Blog', href: '/blog' },
@@ -332,10 +390,10 @@ export function Navbar({
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
+                  className="flex items-center justify-between px-2 py-3 text-sm text-ink/65 hover:text-ink border-b border-black/5 last:border-0 transition-colors"
                 >
                   <span>{l.label}</span>
-                  <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-3.5 h-3.5 text-ink/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2-2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
@@ -344,36 +402,33 @@ export function Navbar({
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between px-4 py-3.5 text-white/80 hover:text-white hover:bg-white/6 rounded-xl transition-colors text-sm font-medium border-b border-white/5 last:border-0"
+                  className="flex items-center justify-between px-2 py-3 text-sm text-ink/65 hover:text-ink border-b border-black/5 last:border-0 transition-colors"
                 >
                   <span>{l.label}</span>
-                  <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-3.5 h-3.5 text-ink/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
               )
             })}
           </div>
-
-          {/* Bottom bar */}
-          <div className="px-4 py-4 border-t border-white/8 flex items-center gap-3">
+          <div className="px-4 py-4 border-t border-black/6 flex items-center gap-3">
             <button
               onClick={toggle}
-              className="text-white/60 hover:text-white text-xs font-semibold border border-white/15 hover:border-white/30 rounded-lg px-3 py-2 transition-colors"
+              className="text-ink/40 hover:text-ink text-xs font-semibold transition-colors"
             >
               {lang === 'id' ? 'EN' : 'ID'}
             </button>
             <Link
               href="/contact"
               onClick={() => setMobileOpen(false)}
-              className="flex-1 text-center bg-teal hover:bg-teal-light text-navy text-sm font-bold px-4 py-2.5 rounded-xl transition-colors"
+              className="flex-1 text-center bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-4 py-2.5 rounded-full transition-colors"
             >
               {tx(t.nav.cta)}
             </Link>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
     </>
   )
 }

@@ -5,44 +5,46 @@ import Image from 'next/image'
 import { useLang } from '@/contexts/LanguageContext'
 import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 
-export function Footer({ 
-  liveServices, 
-  liveProducts 
-}: { 
-  liveServices?: any[], 
-  liveProducts?: any[] 
+export function Footer({
+  liveServices,
+  liveProducts,
+}: {
+  liveServices?: any[]
+  liveProducts?: any[]
 }) {
   const { lang } = useLang()
   const tx = (obj: { id: string; en: string }) => obj[lang]
   const waMessage = encodeURIComponent(t.whatsapp.message[lang])
 
-  // Process live data for the groups
   const navGroups = t.footer.navGroups.map(group => {
     if (group.label.id === 'Layanan' && liveServices && liveServices.length > 0) {
-      return { 
-        ...group, 
-        links: liveServices.map(s => ({ label: s.title, href: `/layanan/${s.slug}` })) 
+      return {
+        ...group,
+        links: liveServices.map(s => ({ label: s.title, href: `/layanan/${s.slug}` })),
       }
     }
     if (group.label.id === 'Produk' && liveProducts && liveProducts.length > 0) {
-      return { 
-        ...group, 
-        links: liveProducts.map(p => ({ label: p.title, href: `/produk/${p.slug}` })) 
+      return {
+        ...group,
+        links: liveProducts.map(p => ({ label: p.title, href: `/produk/${p.slug}` })),
       }
     }
     return group
   })
 
-  return (
-    <footer className="bg-[#050A14] text-white relative overflow-hidden">
-      {/* Bottom Glow */}
-      <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-teal/5 rounded-full blur-[100px] pointer-events-none" />
+  const socialLinkClass =
+    'text-white/55 hover:text-white transition-colors'
 
-      <div className="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-2">
-            <Link href="/" className="inline-block mb-4">
+  return (
+    <footer className="bg-brand text-white">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 pt-20 md:pt-24 pb-10">
+
+        {/* Top grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-14 md:mb-16">
+
+          {/* Brand block */}
+          <div className="col-span-2 md:col-span-2 max-w-sm">
+            <Link href="/" className="inline-block mb-5">
               <Image
                 src="/logos/logo.svg"
                 alt="Ichibot"
@@ -52,26 +54,28 @@ export function Footer({
               />
             </Link>
             <div className="flex items-center gap-3 mb-3">
-              <Image 
-                src="/logos/logo_gas.svg" 
-                alt="Logo GAS" 
-                width={28} 
-                height={20} 
+              <Image
+                src="/logos/logo_gas.svg"
+                alt="Logo GAS"
+                width={28}
+                height={20}
                 className="brightness-0 invert opacity-90 object-contain"
               />
-              <h3 className="text-white font-bold tracking-wider text-sm">
+              <h3 className="text-white font-bold text-sm">
                 PT. GASGAS ANAGATA SEMESTA
               </h3>
             </div>
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs">
+            <p className="text-white/65 text-sm leading-relaxed">
               {tx(t.footer.tagline)}
             </p>
-            <div className="flex items-center gap-4 mt-6">
+
+            {/* Socials */}
+            <div className="flex items-center gap-4 mt-7">
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-teal transition-colors"
+                className={socialLinkClass}
                 aria-label="WhatsApp"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -83,20 +87,20 @@ export function Footer({
                 href="https://www.instagram.com/ichibot.id/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-teal transition-colors"
+                className={socialLinkClass}
                 aria-label="Instagram"
               >
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                 </svg>
               </a>
               <a
                 href="https://www.tiktok.com/@ichibot.id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-teal transition-colors"
+                className={socialLinkClass}
                 aria-label="TikTok"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -107,7 +111,7 @@ export function Footer({
                 href="https://www.youtube.com/@ichibot_id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-teal transition-colors"
+                className={socialLinkClass}
                 aria-label="YouTube"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -116,10 +120,10 @@ export function Footer({
               </a>
               <a
                 href={`mailto:${t.footer.email}`}
-                className="text-white/60 hover:text-teal transition-colors"
+                className={socialLinkClass}
                 aria-label="Email"
               >
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="4" width="20" height="16" rx="2" />
                   <polyline points="2,4 12,13 22,4" />
                 </svg>
@@ -130,7 +134,7 @@ export function Footer({
           {/* Nav groups */}
           {navGroups.map((group) => (
             <div key={group.label.id}>
-              <h4 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
+              <h4 className="text-[11px] font-bold uppercase text-white/45 mb-5">
                 {tx(group.label)}
               </h4>
               <ul className="space-y-3">
@@ -138,7 +142,7 @@ export function Footer({
                   <li key={link.href + idx}>
                     <Link
                       href={link.href}
-                      className="text-white/70 hover:text-white text-sm transition-colors"
+                      className="text-white/80 hover:text-white text-sm leading-relaxed transition-colors"
                     >
                       {tx(link.label)}
                     </Link>
@@ -149,9 +153,15 @@ export function Footer({
           ))}
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-white/40 text-sm">{tx(t.footer.copyright)}</p>
-          <p className="text-white/40 text-sm">{t.footer.email}</p>
+        {/* Bottom row */}
+        <div className="border-t border-white/15 pt-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <p className="text-white/55 text-sm">{tx(t.footer.copyright)}</p>
+          <a
+            href={`mailto:${t.footer.email}`}
+            className="text-white/55 hover:text-white text-sm transition-colors"
+          >
+            {t.footer.email}
+          </a>
         </div>
       </div>
     </footer>

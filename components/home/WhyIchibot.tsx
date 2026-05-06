@@ -1,104 +1,166 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import { useLang } from '@/contexts/LanguageContext'
-import { t } from '@/lib/translations'
 
-const icons = [
-  // Affordable - wallet
-  <svg key="1" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <rect x="2" y="7" width="20" height="14" rx="2" />
-    <path d="M16 11a2 2 0 100 4 2 2 0 000-4z" fill="currentColor" stroke="none" />
-    <path d="M2 10V7a2 2 0 012-2h16a2 2 0 012 2v3" />
-  </svg>,
-  // Practical - wrench
-  <svg key="2" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
-  </svg>,
-  // Flexible - arrows
-  <svg key="3" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <polyline points="17 1 21 5 17 9" />
-    <path d="M3 11V9a4 4 0 014-4h14" />
-    <polyline points="7 23 3 19 7 15" />
-    <path d="M21 13v2a4 4 0 01-4 4H3" />
-  </svg>,
-  // Proven - shield check
-  <svg key="4" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    <polyline points="9 12 11 14 15 10" />
-  </svg>,
-  // Net Zero - leaf
-  <svg key="5" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M11 20A7 7 0 0118 7c0-3.866-3.582-7-8-7S2 3.134 2 7a7 7 0 007 7h2" />
-    <path d="M11 20a7 7 0 007-7" />
-    <line x1="11" y1="20" x2="11" y2="22" />
-  </svg>,
-]
+const Icon = {
+  Check: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  X: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  ),
+  Recycle: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
+      <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12" />
+      <path d="m14 16-3 3 3 3" />
+      <path d="M8.293 13.596 7.196 9.5 3.1 10.598" />
+      <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843" />
+      <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
+    </svg>
+  ),
+  Layers: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+  ),
+  Zap: () => (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  ),
+}
 
 export function WhyIchibot() {
   const { lang } = useLang()
-  const tx = (obj: { id: string; en: string }) => obj[lang]
-  const sectionRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')),
-      { threshold: 0.1 }
-    )
-    sectionRef.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  const traditionalPoints = lang === 'id'
+    ? ['Investasi besar di awal', 'Lead time pengadaan berbulan-bulan', 'Hardware baru menambah e-waste']
+    : ['Massive upfront investment', 'Months of procurement lead time', 'New hardware adds to e-waste']
+
+  const ichibotPoints = lang === 'id'
+    ? ['Investasi minimal, ROI cepat', 'Deploy dalam hitungan minggu', 'Tetap pakai hardware terpercaya']
+    : ['Minimal investment, faster ROI', 'Deploy in a matter of weeks', 'Keep using the hardware you trust']
+
+  const benefits = [
+    {
+      icon: <Icon.Recycle />,
+      title: { id: 'Tanpa Penggantian', en: 'Zero Replacement' },
+      desc: {
+        id: 'Pertahankan hardware yang Anda percaya. Hilangkan limbah peralatan.',
+        en: 'Keep the hardware you trust. Eliminate equipment waste.',
+      },
+    },
+    {
+      icon: <Icon.Layers />,
+      title: { id: 'Integrasi Mulus', en: 'Seamless Integration' },
+      desc: {
+        id: 'Instalasi non-disruptif. Produksi Anda tetap berjalan.',
+        en: 'Non-disruptive installation. Your production stays live.',
+      },
+    },
+    {
+      icon: <Icon.Zap />,
+      title: { id: 'Koneksi Instan', en: 'Instant Connectivity' },
+      desc: {
+        id: 'Dari offline ke online. Data real-time dari mesin mana pun.',
+        en: 'From offline to online. Get real-time data from any machine.',
+      },
+    },
+  ]
 
   return (
-    <section className="py-24 md:py-32 bg-transparent relative" ref={sectionRef}>
-      {/* Decorative Blur Backgrounds - Delegated to global wrapper */}
+    <section className="bg-off-white py-20 md:py-28">
+      <div className="max-w-7xl mx-auto px-6 md:px-10">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="reveal max-w-2xl mb-20 text-center mx-auto sm:text-left sm:mx-0">
-          <span className="text-sky-400 text-sm font-semibold uppercase tracking-widest block mb-4">
-            {tx(t.whyIchibot.sectionLabel)}
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
-            {tx(t.whyIchibot.heading)}
-          </h2>
-          <p className="text-slate-400 text-lg md:text-xl leading-relaxed font-light">{tx(t.whyIchibot.subheading)}</p>
+        {/* Hero image with overlaid heading */}
+        <div className="relative w-full rounded-2xl overflow-hidden bg-black mb-12 md:mb-16" style={{ height: 'min(58vh, 560px)', minHeight: '420px' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1581092583537-20d51b4b4f1b?auto=format&fit=crop&q=80&w=2400"
+            alt="Industrial machinery with retrofit smart layer"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/15 pointer-events-none" />
+          <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-14 text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.05] mb-4 md:whitespace-nowrap">
+              {lang === 'id' ? 'Otak Modern. Otot Terbukti.' : 'Modern Brains. Proven Muscles.'}
+            </h2>
+            <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-2xl line-clamp-2">
+              {lang === 'id'
+                ? 'Industri 4.0 tidak harus mengganti perangkat lama — kami pasang AI dan IoT pada mesin yang sudah Anda miliki.'
+                : "Industry 4.0 shouldn't replace your hardware — we retrofit AI and IoT into your existing machinery."}
+            </p>
+          </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {t.whyIchibot.items.map((item, i) => {
-            const isNetZero = i === t.whyIchibot.items.length - 1
-            return (
-              <div
-                key={i}
-                className={`reveal group p-8 md:p-10 transition-all duration-500 ${
-                  isNetZero
-                    ? 'lg:col-span-2 rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/10 to-transparent hover:bg-green-500/20 hover:border-green-500/40 shadow-[0_0_40px_rgba(34,197,94,0.05)] backdrop-blur-xl'
-                    : 'rounded-2xl glass-edge hover:shadow-[0_0_40px_rgba(45,212,191,0.05)] hover:border-teal/30'
-                }`}
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-110 ${
-                  isNetZero
-                    ? 'bg-green-500/20 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
-                    : 'bg-teal/20 text-teal-light shadow-[0_0_20px_rgba(45,212,191,0.2)]'
-                }`}>
-                  {icons[i]}
-                </div>
-                {isNetZero && (
-                  <span className="inline-block text-xs font-bold uppercase tracking-widest text-green-400 mb-3 bg-green-500/10 px-3 py-1 rounded-full">
-                    {lang === 'id' ? 'Komitmen Lingkungan' : 'Environmental Commitment'}
+        {/* Comparison — side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-12 md:mb-16">
+          {/* Traditional */}
+          <div className="bg-white rounded-2xl p-8 md:p-10">
+            <h3 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">
+              {lang === 'id' ? 'Beli Mesin Smart Baru' : 'Buy New Smart Machines'}
+            </h3>
+            <p className="text-ink/55 mb-7 leading-relaxed">
+              {lang === 'id' ? 'CAPEX tinggi & lead time lama' : 'High CAPEX & long lead times'}
+            </p>
+            <ul className="space-y-3.5">
+              {traditionalPoints.map((point, i) => (
+                <li key={i} className="flex items-start gap-3 text-[15px] text-ink/65">
+                  <span className="mt-0.5 w-5 h-5 rounded-full bg-black/5 text-ink/40 flex items-center justify-center shrink-0">
+                    <Icon.X />
                   </span>
-                )}
-                <h3 className="font-display text-2xl font-bold text-white mb-4 tracking-tight">
-                  {tx(item.title)}
-                </h3>
-                <p className="text-slate-400 text-sm md:text-base leading-relaxed">{tx(item.desc)}</p>
-              </div>
-            )
-          })}
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Ichibot — brand-navy dominant */}
+          <div className="relative bg-brand rounded-2xl p-8 md:p-10 text-white">
+            <h3 className="font-display text-2xl md:text-3xl font-bold tracking-tight mb-2">
+              {lang === 'id' ? 'Retrofit Aset Existing' : 'Retrofit Existing Assets'}
+            </h3>
+            <p className="text-white/75 mb-7 leading-relaxed">
+              {lang === 'id' ? 'CAPEX rendah & deploy cepat' : 'Low CAPEX & rapid deployment'}
+            </p>
+            <ul className="space-y-3.5">
+              {ichibotPoints.map((point, i) => (
+                <li key={i} className="flex items-start gap-3 text-[15px] text-white/90">
+                  <span className="mt-0.5 w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center shrink-0">
+                    <Icon.Check />
+                  </span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
+
+        {/* Key benefits */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+          {benefits.map((b, i) => (
+            <div key={i} className="border-t border-ink/90 pt-7">
+              <div className="w-11 h-11 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5">
+                {b.icon}
+              </div>
+              <h3 className="font-display text-lg font-bold text-ink tracking-tight mb-2">
+                {b.title[lang]}
+              </h3>
+              <p className="text-ink/55 text-[15px] leading-relaxed">
+                {b.desc[lang]}
+              </p>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   )

@@ -4,16 +4,17 @@ import { usePathname } from 'next/navigation'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 
-export function SiteShell({ 
+export function SiteShell({
   children,
   liveServices,
-  liveProducts
-}: { 
+  liveProducts,
+  liveCaseStudies
+}: {
   children: React.ReactNode,
   liveServices?: any[],
-  liveProducts?: any[]
+  liveProducts?: any[],
+  liveCaseStudies?: any[]
 }) {
   const pathname = usePathname()
   const isAdmin = pathname.startsWith('/admin')
@@ -24,10 +25,9 @@ export function SiteShell({
 
   return (
     <LanguageProvider>
-      <Navbar liveServices={liveServices} liveProducts={liveProducts} />
+      <Navbar liveServices={liveServices} liveProducts={liveProducts} liveCaseStudies={liveCaseStudies} />
       <main className="flex-1">{children}</main>
       <Footer liveServices={liveServices} liveProducts={liveProducts} />
-      <WhatsAppButton />
     </LanguageProvider>
   )
 }

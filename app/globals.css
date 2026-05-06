@@ -1,24 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
-
 @import "tailwindcss";
 
 @theme inline {
-  --color-navy:        #050A14;
-  --color-navy-light:  #0B1221;
-  --color-teal:        #00D1FF;
-  --color-teal-light:  #70EBFF;
-  --color-off-white:   #F8F9FC;
-  --color-muted:       #94A3B8;
-  --color-border:      #1E293B;
+  --color-brand:       #003459;
+  --color-brand-dark:  #002440;
+  --color-off-white:   #F5F5F7;
+  --color-surface:     #FFFFFF;
+  --color-ink:         #1D1D1F;
+  --color-ink-2:       #424245;
+  --color-ink-3:       #6E6E73;
+  --color-border:      rgba(0,0,0,0.08);
 
-  --font-display: 'Manrope', system-ui, sans-serif;
-  --font-sans:    'Manrope', system-ui, sans-serif;
+  /* keep legacy aliases so existing usages don't break */
+  --color-navy:        #1D1D1F;
+  --color-navy-light:  #424245;
+  --color-teal:        #003459;
+  --color-teal-light:  #004e80;
+  --color-muted:       #6E6E73;
+
+  --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans:    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #050A14; /* Deep Dark Background by default */
-  color: #F1F5F9;
+  background-color: #FFFFFF;
+  color: #1D1D1F;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -40,11 +46,11 @@ html {
   to   { transform: translateX(0); }
 }
 .animate-marquee {
-  animation: marquee 32s linear infinite;
+  animation: marquee 60s linear infinite;
   will-change: transform;
 }
 .animate-marquee-reverse {
-  animation: marquee-reverse 32s linear infinite;
+  animation: marquee-reverse 60s linear infinite;
   will-change: transform;
 }
 .hover-pause:hover {
@@ -85,7 +91,7 @@ html {
   animation: fade-in 0.4s ease-out forwards;
 }
 
-/* Bounce animation for glass badges */
+/* Bounce animation */
 @keyframes bounce-slow {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -94,33 +100,33 @@ html {
   animation: bounce-slow 6s ease-in-out infinite;
 }
 
-/* --- Neo-Glass Premium UI --- */
+/* Apple-style card — replaces dark glass-3d-premium */
+.apple-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.apple-card:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
+  transform: translateY(-4px);
+}
 
+/* Legacy alias — existing components using glass-3d-premium get the new card style */
 .glass-3d-premium {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  /* Top-left crisp inner highlight, deep outer shadow */
-  box-shadow: 
-    inset 1px 1px 0px 0px rgba(255, 255, 255, 0.15),
-    inset -1px -1px 1px 0px rgba(0, 0, 0, 0.2),
-    0 25px 50px -12px rgba(0, 0, 0, 0.7);
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-
 .glass-3d-premium:hover {
-  transform: translateY(-8px) scale(1.01);
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 209, 255, 0.3); /* Electric highlight on border */
-  box-shadow: 
-    inset 1.5px 1.5px 0px 0px rgba(255, 255, 255, 0.3),
-    0 35px 60px -15px rgba(0, 0, 0, 0.8),
-    0 0 30px -5px rgba(0, 209, 255, 0.15); /* Subtle electric glow */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
+  transform: translateY(-4px);
 }
 
-/* CTA Button slide progress "charging" animation */
+/* CTA Button charge animation */
 @keyframes btn-charge {
   0%   { transform: scaleX(0); opacity: 0.7; }
   90%  { transform: scaleX(1); opacity: 0.5; }
@@ -133,32 +139,40 @@ html {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #050A14;
+  background: #F5F5F7;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 5px;
-  border: 2px solid #050A14;
+  background: #D1D1D6;
+  border-radius: 4px;
+  border: 2px solid #F5F5F7;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2dd4bf;
+  background: #003459;
 }
 
-/* Glass Input Utility */
+/* Form Input */
 .glass-input {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   padding: 12px 16px;
-  color: white;
+  color: #1D1D1F;
   outline: none;
   transition: all 0.3s ease;
 }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 209, 255, 0.4);
-  box-shadow: 0 0 15px -5px rgba(0, 209, 255, 0.2);
+  background: #FFFFFF;
+  border-color: #00D1FF;
+  box-shadow: 0 0 0 3px rgba(0, 209, 255, 0.12);
+}
+
+/* glass-edge used in WhyIchibot */
+.glass-edge {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
 }

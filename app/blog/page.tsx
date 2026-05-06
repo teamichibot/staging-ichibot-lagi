@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { getAllPostsMerged } from '@/lib/blog'
 import { BlogList } from '@/components/blog/BlogList'
 import type { Metadata } from 'next'
@@ -12,35 +13,46 @@ export default async function BlogPage() {
   const posts = await getAllPostsMerged()
 
   return (
-    <div className="pt-24 pb-24 md:pt-32 bg-[#050A14] min-h-screen relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-teal/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-navy/20 rounded-full blur-[140px] pointer-events-none" />
+    <main className="bg-white">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="max-w-2xl mb-14 animate-reveal opacity-0" style={{ animationFillMode: 'forwards' }}>
-          <span className="text-teal text-sm font-bold uppercase tracking-[0.2em]">Blog</span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mt-4 mb-6 tracking-tight">
-            Insight & Update
-          </h1>
-          <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
-            Artikel seputar IoT, AI, dan digitalisasi industri dari tim ahli Ichibot.
-          </p>
-        </div>
+      {/* Hero header */}
+      <section className="bg-white pt-24 md:pt-32 pb-12 md:pb-16">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-ink/55 hover:text-ink text-sm font-semibold transition-colors group"
+          >
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" className="transform group-hover:-translate-x-1 transition-transform">
+              <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            Beranda
+          </Link>
 
-        {posts.length === 0 ? (
-          <div className="py-20 text-center glass-3d-premium rounded-3xl animate-reveal opacity-0" style={{ animationFillMode: 'forwards', animationDelay: '200ms' }}>
-            <p className="text-slate-500 font-medium">Belum ada artikel yang diterbitkan.</p>
+          <div className="mt-10 max-w-3xl">
+            <h1 className="font-display text-4xl md:text-6xl font-bold text-ink tracking-tight leading-[1.05]">
+              Insight & Update
+            </h1>
+            <p className="text-ink/55 text-lg md:text-xl leading-relaxed mt-6">
+              Artikel seputar IoT, AI, dan digitalisasi industri dari tim ahli Ichibot.
+            </p>
           </div>
-        ) : (
-          <Suspense fallback={<div className="h-96 animate-pulse bg-white/5 rounded-3xl" />}>
-            <BlogList initialPosts={posts} />
-          </Suspense>
-        )}
-      </div>
-    </div>
+        </div>
+      </section>
+
+      <section className="bg-off-white py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          {posts.length === 0 ? (
+            <div className="py-24 text-center bg-white rounded-2xl">
+              <p className="text-ink/55 font-medium">Belum ada artikel yang diterbitkan.</p>
+            </div>
+          ) : (
+            <Suspense fallback={<div className="h-96 animate-pulse bg-white rounded-2xl" />}>
+              <BlogList initialPosts={posts} />
+            </Suspense>
+          )}
+        </div>
+      </section>
+
+    </main>
   )
 }
-
-
