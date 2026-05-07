@@ -122,7 +122,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
               </p>
 
               {/* Buttons */}
-              <div className="flex items-center gap-4 flex-wrap justify-center">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto justify-center">
                 {slide.isDefault ? (
                   <>
                     <a

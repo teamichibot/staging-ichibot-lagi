@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
@@ -114,8 +115,10 @@ export default async function BlogPostPage({ params }: Props) {
               prose-strong:text-ink prose-strong:font-bold
               prose-img:rounded-2xl prose-img:my-10
               prose-code:text-brand prose-code:bg-off-white prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-              prose-blockquote:border-l-brand prose-blockquote:text-ink/75 prose-blockquote:not-italic">
+              prose-blockquote:border-l-brand prose-blockquote:text-ink/75 prose-blockquote:not-italic
+              prose-hr:border-black/10 prose-hr:my-10">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                   // eslint-disable-next-line @next/next/no-img-element
                   img: ({ src, alt }) => (
@@ -123,6 +126,20 @@ export default async function BlogPostPage({ params }: Props) {
                   ),
                   h2: ({ children }) => <h2 className="text-3xl font-bold pt-10 mb-6 tracking-tight text-ink">{children}</h2>,
                   h3: ({ children }) => <h3 className="text-2xl font-bold pt-8 mb-4 tracking-tight text-ink">{children}</h3>,
+                  table: ({ children }) => (
+                    <div className="my-8 overflow-x-auto rounded-2xl border border-black/8">
+                      <table className="w-full text-sm border-collapse">{children}</table>
+                    </div>
+                  ),
+                  thead: ({ children }) => <thead className="bg-off-white">{children}</thead>,
+                  tbody: ({ children }) => <tbody className="divide-y divide-black/8">{children}</tbody>,
+                  tr: ({ children }) => <tr>{children}</tr>,
+                  th: ({ children }) => (
+                    <th className="text-left px-5 py-3 font-semibold text-ink text-[13px] uppercase">{children}</th>
+                  ),
+                  td: ({ children }) => (
+                    <td className="px-5 py-3 text-ink/75 align-top">{children}</td>
+                  ),
                 }}
               >
                 {post.content}
