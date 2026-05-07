@@ -63,7 +63,7 @@ export function ProductDetail({ product }: { product: ProductData }) {
           <div className="rounded-2xl overflow-hidden bg-black">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={product.image}
+              src={product.image || 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1800'}
               alt={tx(product.title)}
               className="w-full h-64 md:h-[480px] object-cover"
             />

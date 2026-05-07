@@ -48,7 +48,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
       type: 'product' as const,
       headline: [p.title.id],
       subheadline: p.desc.id,
-      image: p.image,
+      image: p.image || FALLBACK_IMAGE,
       tag: lang === 'id' ? 'Produk' : 'Product',
       href: `/produk/${p.slug}`
     }))

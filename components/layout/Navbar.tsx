@@ -277,7 +277,9 @@ export function Navbar({
                         onClick={() => setActiveDropdown(null)}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.image} alt="" className={megaThumb} />
+                        {item.image
+                          ? <img src={item.image} alt="" className={megaThumb} />
+                          : <span className={`${megaThumb} block`} />}
                         <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
                       </Link>
                     ))}
@@ -296,7 +298,9 @@ export function Navbar({
                         onClick={() => setActiveDropdown(null)}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.image} alt="" className={megaThumb} />
+                        {item.image
+                          ? <img src={item.image} alt="" className={megaThumb} />
+                          : <span className={`${megaThumb} block`} />}
                         <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
                       </Link>
                     ))}
@@ -316,7 +320,9 @@ export function Navbar({
                       onClick={() => setActiveDropdown(null)}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.image} alt="" className={megaThumb} />
+                      {item.image
+                        ? <img src={item.image} alt="" className={megaThumb} />
+                        : <span className={`${megaThumb} block`} />}
                       <span className={`${megaItemText} line-clamp-3 max-w-[14rem]`}>{item.title}</span>
                     </Link>
                   ))}

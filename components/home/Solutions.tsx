@@ -108,7 +108,7 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={item.image}
+                src={item.image || 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1800'}
                 alt={item.title[lang]}
                 className="absolute inset-0 w-full h-full object-cover"
                 loading="lazy"
