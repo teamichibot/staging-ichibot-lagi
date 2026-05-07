@@ -29,12 +29,12 @@ function ClientList({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">{title}</h2>
+    <div className="bg-white rounded-2xl border border-black/8 overflow-hidden">
+      <div className="px-6 py-4 border-b border-black/8 flex items-center justify-between">
+        <h2 className="font-semibold text-ink">{title}</h2>
         <button
           onClick={add}
-          className="flex items-center gap-1.5 text-sm font-medium text-teal hover:text-teal/80 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-medium text-brand hover:text-brand/80 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -43,7 +43,7 @@ function ClientList({
         </button>
       </div>
 
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-black/8">
         {clients.map((client, i) => (
           <div key={client.id} className="px-6 py-4 flex items-center gap-3">
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -62,11 +62,11 @@ function ClientList({
             </div>
             {client.logo && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={client.logo} alt={client.name} className="w-10 h-10 object-contain rounded border border-gray-200 bg-gray-50 shrink-0" />
+              <img src={client.logo} alt={client.name} className="w-10 h-10 object-contain rounded border border-black/8 bg-off-white shrink-0" />
             )}
             <button
               onClick={() => remove(i)}
-              className="text-gray-400 hover:text-red-500 transition-colors shrink-0"
+              className="text-ink/40 hover:text-red-500 transition-colors shrink-0"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -75,7 +75,7 @@ function ClientList({
           </div>
         ))}
         {clients.length === 0 && (
-          <p className="px-6 py-8 text-center text-gray-400 text-sm">Belum ada klien. Klik Tambah.</p>
+          <p className="px-6 py-8 text-center text-ink/40 text-sm">Belum ada klien. Klik Tambah.</p>
         )}
       </div>
     </div>
@@ -112,20 +112,20 @@ export default function AdminClientsPage() {
       <div className="p-6 md:p-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Logo Klien</h1>
-            <p className="text-gray-500 text-sm mt-1">Kelola daftar klien dan mitra yang ditampilkan di landing page.</p>
+            <h1 className="text-2xl font-bold text-ink">Logo Klien</h1>
+            <p className="text-ink/55 text-sm mt-1">Kelola daftar klien dan mitra yang ditampilkan di landing page.</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving || loading}
-            className="flex items-center gap-2 bg-teal hover:bg-teal/90 disabled:opacity-50 text-navy font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+            className="flex items-center gap-2 bg-brand hover:bg-brand-dark disabled:opacity-50 text-white font-semibold px-5 py-2.5 rounded-sm text-sm transition-colors"
           >
             {saving ? 'Menyimpan...' : saved ? '✓ Tersimpan' : 'Simpan Perubahan'}
           </button>
         </div>
 
         {loading ? (
-          <p className="text-gray-500 text-sm">Memuat data...</p>
+          <p className="text-ink/55 text-sm">Memuat data...</p>
         ) : (
           <div className="space-y-6">
             <ClientList

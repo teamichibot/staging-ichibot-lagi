@@ -30,12 +30,12 @@ export default function AdminLayananPage() {
       <div className="p-6 md:p-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Layanan</h1>
-            <p className="text-gray-500 text-sm mt-1">{services.length} layanan tersimpan.</p>
+            <h1 className="text-2xl font-bold text-ink">Layanan</h1>
+            <p className="text-ink/55 text-sm mt-1">{services.length} layanan tersimpan.</p>
           </div>
           <Link
             href="/admin/layanan/new"
-            className="flex items-center gap-2 bg-teal hover:bg-teal/90 text-navy font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+            className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -45,10 +45,10 @@ export default function AdminLayananPage() {
         </div>
 
         {loading ? (
-          <p className="text-gray-500 text-sm">Memuat data...</p>
+          <p className="text-ink/55 text-sm">Memuat data...</p>
         ) : (
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="divide-y divide-gray-100">
+          <div className="bg-white rounded-2xl border border-black/8 overflow-hidden">
+            <div className="divide-y divide-black/8">
               {services.map((s) => (
                 <div key={s.slug} className="flex items-center gap-4 px-6 py-4">
                   {s.image && (
@@ -56,20 +56,20 @@ export default function AdminLayananPage() {
                     <img src={s.image} alt={s.title.id} className="w-14 h-10 object-cover rounded-lg shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{s.title.id}</p>
-                    <p className="text-gray-500 text-xs truncate mt-0.5">{s.desc.id}</p>
+                    <p className="font-medium text-ink truncate">{s.title.id}</p>
+                    <p className="text-ink/55 text-xs truncate mt-0.5">{s.desc.id}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Link
                       href={`/admin/layanan/${s.slug}`}
-                      className="text-sm font-medium text-gray-600 hover:text-teal transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100"
+                      className="text-sm font-medium text-ink/65 hover:text-brand transition-colors px-3 py-1.5 rounded-lg hover:bg-black/5"
                     >
                       Edit
                     </Link>
                     <button
                       onClick={() => handleDelete(s.slug)}
                       disabled={deleting === s.slug}
-                      className="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50 disabled:opacity-40"
+                      className="text-sm font-medium text-ink/40 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50 disabled:opacity-40"
                     >
                       Hapus
                     </button>

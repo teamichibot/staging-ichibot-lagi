@@ -97,24 +97,24 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     }
   }
 
-  if (loading) return <AdminShell><div className="p-8 text-gray-500 text-sm">Memuat data...</div></AdminShell>
+  if (loading) return <AdminShell><div className="p-8 text-ink/55 text-sm">Memuat data...</div></AdminShell>
 
   return (
     <AdminShell>
       <div className="p-6 md:p-8 max-w-3xl">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <button onClick={() => router.push('/admin/blog')} className="text-gray-400 hover:text-gray-600 transition-colors">
+            <button onClick={() => router.push('/admin/blog')} className="text-ink/40 hover:text-ink/65 transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">{isNew ? 'Tambah Artikel' : 'Edit Artikel'}</h1>
+            <h1 className="text-2xl font-bold text-ink">{isNew ? 'Tambah Artikel' : 'Edit Artikel'}</h1>
           </div>
           <div className="flex gap-2">
             <button 
               type="button" 
               onClick={exportJSON}
               title="Salin data ke clipboard untuk AI"
-              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-teal border border-teal/20 bg-teal/5 hover:bg-teal/10 rounded-lg transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-brand border border-brand/20 bg-brand/5 hover:bg-brand/10 rounded-lg transition-all"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
               Export
@@ -123,7 +123,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               type="button" 
               onClick={importJSON}
               title="Impor data dari AI"
-              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-ink/65 border border-black/10 bg-off-white hover:bg-black/5 rounded-lg transition-all"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
               Import
@@ -132,12 +132,12 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
-            <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">Metadata</h2>
+          <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-5">
+            <h2 className="font-semibold text-ink text-sm uppercase">Metadata</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Slug <span className="text-gray-400 font-normal">(auto URL-safe)</span></label>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Slug <span className="text-ink/40 font-normal">(auto URL-safe)</span></label>
                 <input
                   value={form.slug}
                   onChange={(e) => {
@@ -151,11 +151,11 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                   placeholder="judul-artikel-saya"
                   required
                   disabled={!isNew}
-                  className="input-field w-full disabled:bg-gray-50 disabled:text-gray-400"
+                  className="input-field w-full disabled:bg-off-white disabled:text-ink/40"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Tanggal</label>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Tanggal</label>
                 <input
                   type="date"
                   value={form.date}
@@ -166,7 +166,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul</label>
+              <label className="block text-sm font-medium text-ink/85 mb-1.5">Judul</label>
               <input
                 value={form.title}
                 onChange={(e) => {
@@ -190,7 +190,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Kategori</label>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Kategori</label>
                 <select
                   value={form.category}
                   onChange={(e) => set('category', e.target.value)}
@@ -201,7 +201,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">URL Gambar Cover</label>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">URL Gambar Cover</label>
                 <input
                   value={form.image}
                   onChange={(e) => set('image', e.target.value)}
@@ -217,18 +217,18 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">URL Video (YouTube / YouTube Shorts / TikTok / Instagram Reels)</label>
+              <label className="block text-sm font-medium text-ink/85 mb-1.5">URL Video (YouTube / YouTube Shorts / TikTok / Instagram Reels)</label>
               <input
                 value={form.videoUrl}
                 onChange={(e) => set('videoUrl', e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=... atau https://www.tiktok.com/@.../video/..."
                 className="input-field w-full"
               />
-              <p className="text-xs text-gray-400 mt-1">Paste link langsung — otomatis terdeteksi platformnya.</p>
+              <p className="text-xs text-ink/40 mt-1">Paste link langsung — otomatis terdeteksi platformnya.</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Ringkasan (Excerpt)</label>
+              <label className="block text-sm font-medium text-ink/85 mb-1.5">Ringkasan (Excerpt)</label>
               <textarea
                 rows={3}
                 value={form.excerpt}
@@ -238,9 +238,9 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-3">
-            <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">Konten Artikel</h2>
-            <p className="text-xs text-gray-400">
+          <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-3">
+            <h2 className="font-semibold text-ink text-sm uppercase">Konten Artikel</h2>
+            <p className="text-xs text-ink/40">
               Toolbar untuk styling — atau klik ikon <code>&lt;/&gt;</code> untuk edit raw markdown langsung.
               Sisipkan gambar dengan <code>![alt](url)</code>.
             </p>
@@ -257,10 +257,10 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <div className="flex gap-3">
-            <button type="submit" disabled={saving} className="bg-teal hover:bg-teal/90 disabled:opacity-50 text-navy font-bold px-6 py-2.5 rounded-xl text-sm transition-colors">
+            <button type="submit" disabled={saving} className="bg-brand hover:bg-brand-dark disabled:opacity-50 text-white font-semibold px-6 py-2.5 rounded-sm text-sm transition-colors">
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
-            <button type="button" onClick={() => router.push('/admin/blog')} className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
+            <button type="button" onClick={() => router.push('/admin/blog')} className="px-6 py-2.5 rounded-xl text-sm font-medium text-ink/65 hover:bg-black/5 transition-colors">
               Batal
             </button>
           </div>
