@@ -289,22 +289,66 @@ export function Navbar({
                   <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
                     {tx(t.nav.products)}
                   </h4>
-                  <div className={`grid ${productLinks.length > 6 ? 'grid-cols-2 gap-x-8' : 'grid-cols-1'} gap-y-4`}>
-                    {productLinks.map((item) => (
-                      <Link
-                        key={item.label.id || item.label}
-                        href={item.href}
-                        className={megaItemWithImage}
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {item.image
-                          ? <img src={item.image} alt="" className={megaThumb} />
-                          : <span className={`${megaThumb} block`} />}
-                        <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
-                      </Link>
-                    ))}
-                  </div>
+                  {productLinks.length > 6 ? (
+                    <div className="grid grid-cols-2 gap-x-8 items-start">
+                      <div className="flex flex-col gap-y-4">
+                        {productLinks.slice(0, 6).map((item) => (
+                          <Link
+                            key={item.label.id || item.label}
+                            href={item.href}
+                            className={megaItemWithImage}
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            {item.image
+                              ? <img src={item.image} alt="" className={megaThumb} />
+                              : <span className={`${megaThumb} block`} />}
+                            <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="flex flex-col gap-y-4">
+                        {productLinks.slice(6, 11).map((item) => (
+                          <Link
+                            key={item.label.id || item.label}
+                            href={item.href}
+                            className={megaItemWithImage}
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            {item.image
+                              ? <img src={item.image} alt="" className={megaThumb} />
+                              : <span className={`${megaThumb} block`} />}
+                            <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
+                          </Link>
+                        ))}
+                        <Link
+                          href="/produk"
+                          className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-dark transition-colors mt-1"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          {lang === 'id' ? 'Lihat semua produk →' : 'View all products →'}
+                        </Link>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-y-4">
+                      {productLinks.map((item) => (
+                        <Link
+                          key={item.label.id || item.label}
+                          href={item.href}
+                          className={megaItemWithImage}
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          {item.image
+                            ? <img src={item.image} alt="" className={megaThumb} />
+                            : <span className={`${megaThumb} block`} />}
+                          <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
