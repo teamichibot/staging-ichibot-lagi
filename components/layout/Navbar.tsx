@@ -263,7 +263,7 @@ export function Navbar({
           <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-10 pb-14 flex justify-center">
 
             {activeDropdown === 'solusi' && (
-              <div className="grid grid-cols-2 gap-x-12 items-start min-w-[560px]">
+              <div className={`grid grid-cols-[auto_auto] gap-x-12 items-start ${productLinks.length > 6 ? 'min-w-[920px]' : 'min-w-[560px]'}`}>
                 <div>
                   <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
                     {tx(t.nav.services)}
@@ -289,7 +289,7 @@ export function Navbar({
                   <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
                     {tx(t.nav.products)}
                   </h4>
-                  <div className="flex flex-col gap-y-4">
+                  <div className={`grid ${productLinks.length > 6 ? 'grid-cols-2 gap-x-8' : 'grid-cols-1'} gap-y-4`}>
                     {productLinks.map((item) => (
                       <Link
                         key={item.label.id || item.label}
