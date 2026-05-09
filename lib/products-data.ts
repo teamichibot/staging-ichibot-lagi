@@ -3,6 +3,7 @@ export type BilingualText = { id: string; en: string }
 export type ProductData = {
   slug: string
   image: string
+  category?: string
   title: BilingualText
   desc: BilingualText
   longDesc: BilingualText

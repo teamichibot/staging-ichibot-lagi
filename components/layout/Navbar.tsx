@@ -43,7 +43,21 @@ export function Navbar({
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const serviceLinks = liveServices.map((s) => ({ label: s.title, href: `/layanan/${s.slug}`, image: s.image }))
-  const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}`, image: p.image }))
+  const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}`, image: p.image, category: p.category as string | undefined }))
+
+  // Group products by category, preserving the order of first appearance
+  const productGroups: { category: string; items: typeof productLinks }[] = []
+  const categoryIndexMap = new Map<string, number>()
+  for (const item of productLinks) {
+    const cat = (item.category && item.category.trim()) || 'Lainnya'
+    if (categoryIndexMap.has(cat)) {
+      productGroups[categoryIndexMap.get(cat)!].items.push(item)
+    } else {
+      categoryIndexMap.set(cat, productGroups.length)
+      productGroups.push({ category: cat, items: [item] })
+    }
+  }
+  const hasCategorizedProducts = productGroups.some((g) => g.category !== 'Lainnya')
   const caseStudyLinks = liveCaseStudies.map((cs: any) => ({
     title: cs.title as string,
     href: `/blog/${cs.slug}`,
@@ -77,7 +91,19 @@ export function Navbar({
       ),
     },
     {
-      label: { id: 'Ichibot Store', en: 'Ichibot Store' },
+      label: { id: 'Internship', en: 'Internship' },
+      href: 'https://internship.ichibot.id',
+      external: true,
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v4c0 1.5 2.7 3 6 3s6-1.5 6-3v-4" />
+          <path d="M22 10v5" />
+        </svg>
+      ),
+    },
+    {
+      label: { id: 'ICHIBOT Store', en: 'ICHIBOT Store' },
       href: 'https://www.store.ichibot.id',
       external: true,
       icon: (
@@ -88,14 +114,18 @@ export function Navbar({
       ),
     },
     {
-      label: { id: 'Internship', en: 'Internship' },
-      href: 'https://internship.ichibot.id',
+      label: { id: 'ICHIBOT Robotics', en: 'ICHIBOT Robotics' },
+      href: 'https://robotics.ichibot.id',
       external: true,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M2 10l10-5 10 5-10 5z" />
-          <path d="M6 12v4c0 1.5 2.7 3 6 3s6-1.5 6-3v-4" />
-          <path d="M22 10v5" />
+          <rect x="6" y="9" width="12" height="11" rx="2" />
+          <circle cx="9.5" cy="13.5" r="1" fill="currentColor" />
+          <circle cx="14.5" cy="13.5" r="1" fill="currentColor" />
+          <path d="M9 17h6" />
+          <path d="M12 9V5" />
+          <circle cx="12" cy="3.5" r="1.2" fill="currentColor" />
+          <path d="M4 13v3M20 13v3" />
         </svg>
       ),
     },
@@ -135,9 +165,6 @@ export function Navbar({
       section && activeSection === section ? 'bg-black/5' : ''
     }`
 
-  const megaItemWithImage = "flex items-center gap-3 group"
-  const megaItemText = "text-[15px] font-semibold text-ink group-hover:text-ink/70 transition-colors leading-snug"
-  const megaThumb = "w-10 h-10 rounded-md object-cover bg-black/5 shrink-0"
 
   return (
     <>
@@ -263,113 +290,91 @@ export function Navbar({
           <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-10 pb-14 flex justify-center">
 
             {activeDropdown === 'solusi' && (
-              <div className={`grid grid-cols-[auto_auto] gap-x-12 items-start ${productLinks.length > 6 ? 'min-w-[920px]' : 'min-w-[560px]'}`}>
+              <div className={`grid grid-cols-[auto_auto] gap-x-12 items-start ${productLinks.length > 6 ? 'min-w-[720px]' : 'min-w-[460px]'}`}>
                 <div>
                   <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
                     {tx(t.nav.services)}
                   </h4>
-                  <div className="flex flex-col gap-y-4">
+                  <ul className="space-y-1.5">
                     {serviceLinks.map((item) => (
-                      <Link
-                        key={item.href + (item.label.id || item.label)}
-                        href={item.href}
-                        className={megaItemWithImage}
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {item.image
-                          ? <img src={item.image} alt="" className={megaThumb} />
-                          : <span className={`${megaThumb} block`} />}
-                        <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
-                      </Link>
+                      <li key={item.href + (item.label.id || item.label)}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setActiveDropdown(null)}
+                          className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                        >
+                          {tx(item.label)}
+                        </Link>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
                 <div>
                   <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
                     {tx(t.nav.products)}
                   </h4>
-                  {productLinks.length > 5 ? (
-                    <div className="grid grid-cols-2 gap-x-8 items-start">
-                      <div className="flex flex-col gap-y-4">
-                        {productLinks.slice(0, 5).map((item) => (
-                          <Link
-                            key={item.label.id || item.label}
-                            href={item.href}
-                            className={megaItemWithImage}
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            {item.image
-                              ? <img src={item.image} alt="" className={megaThumb} />
-                              : <span className={`${megaThumb} block`} />}
-                            <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
-                          </Link>
-                        ))}
-                        {productLinks.length > 10 && (
-                          <Link
-                            href="/produk"
-                            className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-dark transition-colors mt-1"
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            {lang === 'id' ? 'Lihat semua produk →' : 'View all products →'}
-                          </Link>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-y-4">
-                        {productLinks.slice(5, 10).map((item) => (
-                          <Link
-                            key={item.label.id || item.label}
-                            href={item.href}
-                            className={megaItemWithImage}
-                            onClick={() => setActiveDropdown(null)}
-                          >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            {item.image
-                              ? <img src={item.image} alt="" className={megaThumb} />
-                              : <span className={`${megaThumb} block`} />}
-                            <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
-                          </Link>
+                  {hasCategorizedProducts && productGroups.length > 1 ? (
+                    <>
+                      <div className="grid grid-cols-[auto_auto] gap-x-12 gap-y-7 items-start">
+                        {productGroups.map((group) => (
+                          <div key={group.category}>
+                            <p className="text-[13px] font-bold text-ink mb-2.5 leading-tight">
+                              {group.category}
+                            </p>
+                            <ul className="space-y-1.5">
+                              {group.items.map((item) => (
+                                <li key={item.label.id || item.label}>
+                                  <Link
+                                    href={item.href}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                                  >
+                                    {tx(item.label)}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         ))}
                       </div>
-                    </div>
+                      <Link
+                        href="/produk"
+                        className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-dark transition-colors mt-7"
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {lang === 'id' ? 'Lihat semua produk →' : 'View all products →'}
+                      </Link>
+                    </>
                   ) : (
-                    <div className="flex flex-col gap-y-4">
+                    <ul className="space-y-1.5">
                       {productLinks.map((item) => (
-                        <Link
-                          key={item.label.id || item.label}
-                          href={item.href}
-                          className={megaItemWithImage}
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          {item.image
-                            ? <img src={item.image} alt="" className={megaThumb} />
-                            : <span className={`${megaThumb} block`} />}
-                          <span className={`${megaItemText} max-w-[14rem]`}>{tx(item.label)}</span>
-                        </Link>
+                        <li key={item.label.id || item.label}>
+                          <Link
+                            href={item.href}
+                            onClick={() => setActiveDropdown(null)}
+                            className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                          >
+                            {tx(item.label)}
+                          </Link>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   )}
                 </div>
               </div>
             )}
 
             {activeDropdown === 'studi-kasus' && caseStudyLinks.length > 0 && (
-              <div className="min-w-[640px]">
-                <div className="grid grid-cols-2 gap-x-12 gap-y-5 items-start">
-                  {caseStudyLinks.map((item) => (
+              <div className="w-[680px]">
+                <div className="grid grid-cols-2 gap-x-12 gap-y-2.5 items-start">
+                  {caseStudyLinks.slice(0, 10).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={megaItemWithImage}
                       onClick={() => setActiveDropdown(null)}
+                      className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug line-clamp-2"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      {item.image
-                        ? <img src={item.image} alt="" className={megaThumb} />
-                        : <span className={`${megaThumb} block`} />}
-                      <span className={`${megaItemText} line-clamp-3 max-w-[14rem]`}>{item.title}</span>
+                      {item.title}
                     </Link>
                   ))}
                 </div>
@@ -384,40 +389,35 @@ export function Navbar({
             )}
 
             {activeDropdown === 'perusahaan' && (
-              <div className="min-w-[480px]">
-                <div className="grid grid-cols-2 gap-x-12 gap-y-4 items-start">
+              <div className="min-w-[360px]">
+                <ul className="grid grid-cols-2 gap-x-12 gap-y-2 items-start">
                   {companyLinks.map((item) => {
-                    const inner = (
-                      <>
-                        <span className="w-10 h-10 rounded-lg bg-black/5 text-ink/70 flex items-center justify-center shrink-0">
-                          {item.icon}
-                        </span>
-                        <span className={megaItemText}>{tx(item.label)}</span>
-                      </>
-                    )
-                    return item.external ? (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={megaItemWithImage}
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {inner}
-                      </a>
-                    ) : (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={megaItemWithImage}
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {inner}
-                      </Link>
+                    const linkClass = "text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug"
+                    return (
+                      <li key={item.href}>
+                        {item.external ? (
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={linkClass}
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {tx(item.label)}
+                          </a>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            className={linkClass}
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {tx(item.label)}
+                          </Link>
+                        )}
+                      </li>
                     )
                   })}
-                </div>
+                </ul>
               </div>
             )}
 
@@ -432,8 +432,9 @@ export function Navbar({
               { label: tx(t.nav.caseStudies), href: '/#studi-kasus' },
               { label: lang === 'id' ? 'Tentang Kami' : 'About Us', href: '/about' },
               { label: 'Blog', href: '/blog' },
-              { label: 'Ichibot Store', href: 'https://www.store.ichibot.id' },
               { label: 'Internship', href: 'https://internship.ichibot.id' },
+              { label: 'ICHIBOT Store', href: 'https://www.store.ichibot.id' },
+              { label: 'ICHIBOT Robotics', href: 'https://robotics.ichibot.id' },
             ].map((l) => {
               const isExternal = l.href.startsWith('http')
               return isExternal ? (

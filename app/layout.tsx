@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     getAllProducts(),
     getAllPostsMerged()
   ])
-  const liveCaseStudies = allPosts.filter((p) => p.category === 'Case Study').slice(0, 4)
+  const liveCaseStudies = allPosts.filter((p) => p.category === 'Case Study').slice(0, 10)
 
   const organizationSchema = getOrganizationSchema()
 

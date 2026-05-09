@@ -336,10 +336,11 @@ export const t = {
       {
         label: { id: 'Perusahaan', en: 'Company' },
         links: [
-          { label: { id: 'Blog', en: 'Blog' }, href: '/blog' },
           { label: { id: 'Tentang Kami', en: 'About Us' }, href: '/about' },
-          { label: { id: 'Ichibot Store', en: 'Ichibot Store' }, href: 'https://www.store.ichibot.id' },
+          { label: { id: 'Blog', en: 'Blog' }, href: '/blog' },
           { label: { id: 'Internship', en: 'Internship' }, href: 'https://internship.ichibot.id' },
+          { label: { id: 'ICHIBOT Store', en: 'ICHIBOT Store' }, href: 'https://www.store.ichibot.id' },
+          { label: { id: 'ICHIBOT Robotics', en: 'ICHIBOT Robotics' }, href: 'https://robotics.ichibot.id' },
         ],
       },
     ],

@@ -24,9 +24,22 @@ export function Footer({
       }
     }
     if (group.label.id === 'Produk' && liveProducts && liveProducts.length > 0) {
+      // Group products by category, preserving order of first appearance
+      const seen = new Set<string>()
+      const orderedCategories: string[] = []
+      for (const p of liveProducts) {
+        const cat = (p.category && p.category.trim()) || 'Lainnya'
+        if (!seen.has(cat)) {
+          seen.add(cat)
+          orderedCategories.push(cat)
+        }
+      }
       return {
         ...group,
-        links: liveProducts.map(p => ({ label: p.title, href: `/produk/${p.slug}` })),
+        links: orderedCategories.map((cat) => ({
+          label: { id: cat, en: cat },
+          href: `/produk?category=${encodeURIComponent(cat)}`,
+        })),
       }
     }
     return group
@@ -62,7 +75,7 @@ export function Footer({
                 className="brightness-0 invert opacity-90 object-contain"
               />
               <h3 className="text-white font-bold text-sm">
-                PT. GASGAS ANAGATA SEMESTA
+                PT. GAGAS ANAGATA SEMESTA
               </h3>
             </div>
             <p className="text-white/65 text-sm leading-relaxed">

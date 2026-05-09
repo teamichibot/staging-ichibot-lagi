@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllProducts } from '@/lib/server-data'
+import { ProductGrid } from '@/components/produk/ProductGrid'
 
 export const metadata: Metadata = {
   title: 'Produk — Ichibot',
@@ -38,47 +39,10 @@ export default async function ProdukPage() {
         </div>
       </section>
 
-      {/* Product grid */}
+      {/* Product grid + category filter */}
       <section className="bg-off-white py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-            {productsData.map((product) => (
-              <Link
-                key={product.slug}
-                href={`/produk/${product.slug}`}
-                className="group relative overflow-hidden rounded-2xl bg-black"
-                style={{ height: 'min(50vh, 480px)', minHeight: '380px' }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={product.image || 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1800'}
-                  alt={product.title.id}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 pointer-events-none" />
-
-                <div className="absolute top-8 left-8 md:top-10 md:left-12">
-                  <span className="text-white/85 text-sm font-medium">Produk</span>
-                </div>
-
-                <div className="absolute bottom-10 left-8 right-8 md:bottom-12 md:left-12 md:right-12 text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
-                  <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight mb-2 leading-tight truncate">
-                    {product.title.id}
-                  </h2>
-                  <p className="text-white/85 text-sm md:text-base leading-relaxed max-w-md line-clamp-2 mb-5">
-                    {product.desc.id}
-                  </p>
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold">
-                    Pelajari lebih lanjut
-                    <svg className="w-4 h-4 transform transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ProductGrid products={productsData} />
         </div>
       </section>
 

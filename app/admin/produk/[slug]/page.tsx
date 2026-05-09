@@ -11,6 +11,7 @@ type SpecItem = { label: Bilingual; value: Bilingual }
 type ProductForm = {
   slug: string
   image: string
+  category: string
   title: Bilingual
   desc: Bilingual
   longDesc: Bilingual
@@ -20,7 +21,7 @@ type ProductForm = {
 }
 
 const empty: ProductForm = {
-  slug: '', image: '',
+  slug: '', image: '', category: '',
   title: { id: '', en: '' },
   desc: { id: '', en: '' },
   longDesc: { id: '', en: '' },
@@ -300,8 +301,25 @@ export default function AdminProdukEditPage({ params }: { params: Promise<{ slug
                 <input value={form.image} onChange={(e) => set('image', e.target.value)} className="input-field w-full" />
               </div>
             </div>
-            
-            <BiInput 
+
+            <div>
+              <label className="block text-sm font-medium text-ink/85 mb-1.5">Kategori</label>
+              <input
+                value={form.category}
+                onChange={(e) => set('category', e.target.value)}
+                placeholder="Misal: Dashboard & Monitoring, AI Computer Vision"
+                list="product-category-suggestions"
+                className="input-field w-full"
+              />
+              <datalist id="product-category-suggestions">
+                <option value="Dashboard & Monitoring" />
+                <option value="AI Computer Vision" />
+                <option value="AI Decision & Automation" />
+                <option value="Hardware & Device" />
+              </datalist>
+            </div>
+
+            <BiInput
               label="Judul" 
               value={form.title} 
               onChange={(v) => {
