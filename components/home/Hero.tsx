@@ -28,7 +28,7 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
     headline: tx(t.hero.headline).split('\n'),
     subheadline: tx(t.hero.subheadline),
     image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=1800',
-    tag: lang === 'id' ? 'Sistem Utama' : 'Main System',
+    tag: lang === 'id' ? 'Solusi Unggulan' : 'Featured Solution',
     href: ''
   }
 

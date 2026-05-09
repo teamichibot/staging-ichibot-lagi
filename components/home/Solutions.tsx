@@ -139,7 +139,7 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
                     rel="noopener noreferrer"
                     className="bg-brand hover:bg-brand-dark text-white font-semibold px-7 py-2.5 rounded-sm transition-colors text-sm min-w-[150px] text-center"
                   >
-                    {lang === 'id' ? 'Pesan Sekarang' : 'Order Now'}
+                    {lang === 'id' ? 'Tanya Demo' : 'Request Demo'}
                   </a>
                   <Link
                     href={`/produk/${item.slug}`}

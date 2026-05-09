@@ -17,16 +17,16 @@ export const t = {
       en: 'Digitize Your Factory\nWithout Replacing Infrastructure',
     },
     subheadline: {
-      id: 'Kami bantu perusahaan manufaktur tarik data dari mesin lama, deteksi cacat produk, dan ambil keputusan lebih cepat dengan AI.',
+      id: 'Kami bantu perusahaan manufaktur ambil data dari mesin lama, deteksi cacat produk, dan ambil keputusan lebih cepat dengan AI.',
       en: 'We help manufacturers pull data from legacy machines, detect product defects, and make faster decisions with AI.',
     },
-    ctaPrimary: { id: 'Konsultasi Gratis', en: 'Free Consultation' },
+    ctaPrimary: { id: 'Mulai Audit Gratis', en: 'Start Free Audit' },
     ctaSecondary: { id: 'Lihat Layanan', en: 'See Services' },
   },
 
   howItWorks: {
     sectionLabel: { id: 'Cara Kerja', en: 'How It Works' },
-    heading:      { id: 'Bagaimana Kami Membantu Bisnismu', en: 'How We Help Your Business' },
+    heading:      { id: 'Cara Kami Mengeksekusi Proyek', en: 'How We Execute Projects' },
     subheading:   {
       id: 'Dari sensor sampai laporan AI — semua berjalan otomatis, tanpa mengganti mesin lama Anda.',
       en: 'From sensors to AI reports — everything runs automatically, without replacing your existing machines.',
@@ -71,8 +71,8 @@ export const t = {
     sectionLabel: { id: 'Layanan', en: 'Services' },
     heading: { id: 'Apa yang Kami Lakukan', en: 'What We Do' },
     subheading: {
-      id: 'Berbagai layanan yang membantu industri Anda bertransformasi secara praktis.',
-      en: 'Various services that help your industry transform practically.',
+      id: 'Layanan yang langsung bisa diterapkan di pabrik Anda.',
+      en: 'Services that can be deployed directly at your factory.',
     },
     ctaLearn: { id: 'Pelajari Selengkapnya', en: 'Learn More' },
     items: [
@@ -272,7 +272,7 @@ export const t = {
 
   blogPreview: {
     sectionLabel: { id: 'Blog', en: 'Blog' },
-    heading: { id: 'Insight & Update', en: 'Insight & Update' },
+    heading: { id: 'Catatan dari Tim Engineer Kami', en: 'Notes from Our Engineering Team' },
     viewAll: { id: 'Lihat Semua Artikel', en: 'View All Articles' },
     readMore: { id: 'Baca Selengkapnya', en: 'Read More' },
     posts: [

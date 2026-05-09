@@ -80,7 +80,7 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
             rel="noopener noreferrer"
             className="text-sm font-semibold text-brand hover:text-brand-dark transition-colors whitespace-nowrap shrink-0"
           >
-            {lang === 'id' ? 'Konsultasi gratis →' : 'Free consultation →'}
+            {lang === 'id' ? 'Diskusi solusi →' : 'Discuss your needs →'}
           </a>
         </div>
 

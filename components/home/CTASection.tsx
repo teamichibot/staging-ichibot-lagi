@@ -47,10 +47,6 @@ export function CTASection() {
                 {tx(t.cta.whatsapp)}
               </a>
             </div>
-
-            <p className="text-white/55 text-sm mt-8">
-              {lang === 'id' ? 'Tanpa biaya, tanpa komitmen jangka panjang.' : 'No cost, no long-term commitment.'}
-            </p>
           </div>
         </div>
       </div>
