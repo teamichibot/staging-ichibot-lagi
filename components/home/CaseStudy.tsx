@@ -20,6 +20,10 @@ export function CaseStudy({ posts }: Props) {
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [activeIndex, setActiveIndex] = useState(0)
 
+  const visiblePosts = posts.slice(0, 5)
+  const hasOverflow = posts.length > 5
+  const totalSlides = visiblePosts.length + (hasOverflow ? 1 : 0)
+
   const handleScroll = () => {
     if (!scrollContainerRef.current) return
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
@@ -106,7 +110,7 @@ export function CaseStudy({ posts }: Props) {
           onScroll={handleScroll}
           className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory pl-[max(24px,calc((100vw-1280px)/2+24px))] md:pl-[max(40px,calc((100vw-1280px)/2+40px))] pr-[max(24px,calc((100vw-1280px)/2+24px))] md:pr-[max(40px,calc((100vw-1280px)/2+40px))] scroll-pl-[max(24px,calc((100vw-1280px)/2+24px))] md:scroll-pl-[max(40px,calc((100vw-1280px)/2+40px))] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {posts.map((post, i) => {
+          {visiblePosts.map((post, i) => {
             const tag = lang === 'id' ? 'Studi Kasus' : 'Case Study'
             return (
               <div
@@ -158,12 +162,36 @@ export function CaseStudy({ posts }: Props) {
               </div>
             )
           })}
+
+          {hasOverflow && (
+            <Link
+              href="/blog?category=Case Study"
+              className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-off-white border border-black/8 group"
+              style={{ height: 'min(60vh, 600px)', minHeight: '440px' }}
+            >
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
+                <div className="w-14 h-14 rounded-full bg-brand/10 text-brand flex items-center justify-center mb-6 group-hover:bg-brand group-hover:text-white transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </div>
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight leading-tight mb-3">
+                  {lang === 'id' ? 'Lihat Semua Studi Kasus' : 'View All Case Studies'}
+                </h3>
+                <p className="text-ink/55 text-sm md:text-base leading-relaxed max-w-sm">
+                  {lang === 'id'
+                    ? `Jelajahi ${posts.length} studi kasus dari klien Ichibot.`
+                    : `Browse all ${posts.length} case studies from Ichibot clients.`}
+                </p>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
 
       {/* Pagination */}
       <div className="flex justify-center gap-2 pt-2 pb-20 md:pb-28">
-        {posts.map((_, i) => (
+        {Array.from({ length: totalSlides }).map((_, i) => (
           <button
             key={i}
             onClick={() => scrollTo(i)}
