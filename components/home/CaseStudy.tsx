@@ -21,8 +21,8 @@ export function CaseStudy({ posts }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const visiblePosts = posts.slice(0, 5)
-  const hasOverflow = posts.length > 5
-  const totalSlides = visiblePosts.length + (hasOverflow ? 1 : 0)
+  const showSeeAll = posts.length > 0
+  const totalSlides = visiblePosts.length + (showSeeAll ? 1 : 0)
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return
@@ -163,7 +163,7 @@ export function CaseStudy({ posts }: Props) {
             )
           })}
 
-          {hasOverflow && (
+          {showSeeAll && (
             <Link
               href="/blog?category=Case Study"
               className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-off-white border border-black/8 group"
