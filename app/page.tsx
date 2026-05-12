@@ -19,12 +19,12 @@ export default async function HomePage() {
     getAllProducts(),
   ])
 
-  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study').slice(0, 5)
+  const caseStudyPosts = allPosts.filter((p) => p.category === 'Case Study')
   const previewPosts = allPosts.slice(0, 5)
 
   return (
     <main className="bg-white">
-      <Hero caseStudies={caseStudyPosts} products={productItems.slice(0, 2)} />
+      <Hero caseStudies={caseStudyPosts.slice(0, 5)} products={productItems.slice(0, 2)} />
       <SocialProof />
       <CaseStudy posts={caseStudyPosts} />
       <WhyIchibot />
