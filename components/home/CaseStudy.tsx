@@ -180,8 +180,8 @@ export function CaseStudy({ posts }: Props) {
                 </h3>
                 <p className="text-ink/55 text-sm md:text-base leading-relaxed max-w-sm">
                   {lang === 'id'
-                    ? `Jelajahi ${posts.length} studi kasus dari klien Ichibot.`
-                    : `Browse all ${posts.length} case studies from Ichibot clients.`}
+                    ? 'Jelajahi semua studi kasus dari klien Ichibot.'
+                    : 'Browse all case studies from Ichibot clients.'}
                 </p>
               </div>
             </Link>
