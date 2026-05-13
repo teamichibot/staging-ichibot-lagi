@@ -27,7 +27,7 @@ export function CTASection() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <a
-                href="https://ichibot.fillout.com/projectcustom"
+                href="https://ichibot.fillout.com/proyekindustri"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white hover:bg-white/95 text-brand font-semibold px-7 py-3 rounded-sm transition-colors text-sm min-w-[180px] text-center"
