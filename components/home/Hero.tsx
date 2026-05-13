@@ -197,12 +197,21 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
             <button
               key={i}
               onClick={() => goTo(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === activeSlide ? 'w-6 bg-white' : 'w-1.5 bg-white/45 hover:bg-white/70'
+              className={`h-1.5 rounded-full overflow-hidden transition-all duration-300 ${
+                i === activeSlide ? 'w-12 bg-white/25' : 'w-1.5 bg-white/45 hover:bg-white/70'
               }`}
               aria-label={`Go to slide ${i + 1}`}
-            />
+            >
+              {i === activeSlide && (
+                <span
+                  key={timerKey}
+                  className="block h-full bg-white rounded-full"
+                  style={{ animation: `hero-progress ${SLIDE_DURATION}ms linear forwards` }}
+                />
+              )}
+            </button>
           ))}
+          <style>{`@keyframes hero-progress { from { width: 0% } to { width: 100% } }`}</style>
         </div>
       )}
 
