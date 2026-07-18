@@ -126,6 +126,15 @@ export default async function BlogPostPage({ params }: Props) {
                   ),
                   h2: ({ children }) => <h2 className="text-3xl font-bold pt-10 mb-6 tracking-tight text-ink">{children}</h2>,
                   h3: ({ children }) => <h3 className="text-2xl font-bold pt-8 mb-4 tracking-tight text-ink">{children}</h3>,
+                  ol: ({ children }) => (
+                    <ol className="list-decimal pl-6 my-6 space-y-2 text-ink/75">{children}</ol>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="list-disc pl-6 my-6 space-y-2 text-ink/75">{children}</ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="leading-relaxed">{children}</li>
+                  ),
                   table: ({ children }) => (
                     <div className="my-8 overflow-x-auto rounded-2xl border border-black/8">
                       <table className="w-full text-sm border-collapse">{children}</table>
