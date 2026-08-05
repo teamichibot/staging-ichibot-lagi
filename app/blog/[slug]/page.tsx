@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
-import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
+import { getAllPosts, getAllPostsMerged, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
 import { getBlogPostingSchema } from '@/lib/seo'
@@ -58,6 +58,12 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound()
 
   const blogSchema = getBlogPostingSchema(post)
+
+  const allPosts = await getAllPostsMerged()
+  const otherPosts = allPosts.filter((p) => p.slug !== post.slug)
+  const sameCategory = otherPosts.filter((p) => p.category === post.category)
+  const otherCategory = otherPosts.filter((p) => p.category !== post.category)
+  const relatedPosts = [...sameCategory, ...otherCategory].slice(0, 2)
 
   return (
     <>
@@ -197,6 +203,51 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           </div>
         </section>
+
+        {/* Artikel lainnya */}
+        {relatedPosts.length > 0 && (
+          <section className="bg-off-white pb-20 md:pb-28">
+            <div className="max-w-4xl mx-auto px-6 md:px-10">
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mb-8">
+                Pilihan Artikel Lainnya
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {relatedPosts.map((related) => (
+                  <Link
+                    key={related.slug}
+                    href={`/blog/${related.slug}`}
+                    className="group bg-white rounded-2xl border border-black/10 overflow-hidden hover:border-brand/30 transition-colors flex flex-col"
+                  >
+                    <div className="aspect-video bg-black overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={related.image || 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1200'}
+                        alt={related.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="p-5 flex flex-col flex-1">
+                      <div className="flex items-center gap-2 mb-3 text-xs">
+                        <span className="font-semibold text-brand uppercase">{related.category}</span>
+                        <span className="w-1 h-1 rounded-full bg-ink/20" />
+                        <span className="text-ink/45 font-medium">
+                          {new Date(related.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </span>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-ink tracking-tight leading-snug mb-2 group-hover:text-brand transition-colors">
+                        {related.title}
+                      </h3>
+                      <p className="text-ink/65 text-sm leading-relaxed line-clamp-2">
+                        {related.excerpt}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
       </main>
     </>
