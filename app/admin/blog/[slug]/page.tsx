@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { AdminShell } from '../../AdminShell'
 import { buildPrompt } from '@/lib/articlePromptTemplate'
+import { sanitizeAiJson, parseJsonWithContext } from '@/lib/sanitizeAiJson'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
@@ -36,6 +37,19 @@ const empty: PostForm = {
 
 const CATEGORIES = ['IoT', 'AI', 'Case Study', 'Insight', 'Tutorial', 'News']
 
+type UnsplashPhoto = {
+  id: string
+  urls: { thumb: string; raw: string }
+  user: { name: string; links: { html: string } }
+  links: { download_location: string }
+}
+
+type AiBlogJson = PostForm & {
+  _ichibot_type?: string
+  keywords?: string[]
+  faq?: { q: string; a: string }[]
+}
+
 export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
   const isNew = slug === 'new'
@@ -56,6 +70,13 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [copied, setCopied] = useState(false)
   const [pastedJSON, setPastedJSON] = useState('')
+  const [validatedJSON, setValidatedJSON] = useState<AiBlogJson | null>(null)
+  const [showUnsplash, setShowUnsplash] = useState(false)
+  const [unsplashQuery, setUnsplashQuery] = useState('')
+  const [unsplashResults, setUnsplashResults] = useState<UnsplashPhoto[]>([])
+  const [unsplashLoading, setUnsplashLoading] = useState(false)
+  const [unsplashTarget, setUnsplashTarget] = useState<'cover' | string>('cover') // 'cover' or 'GAMBAR_1' etc.
+  const [unsplashAttribution, setUnsplashAttribution] = useState('')
 
   useEffect(() => {
     if (isNew) return
@@ -77,58 +98,139 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleValidateAndImport = (jsonStr: string) => {
+  // Count GAMBAR_N placeholders in content
+  const getPlaceholders = (content: string) => {
+    const matches = content.match(/GAMBAR_\d+/g)
+    return matches ? [...new Set(matches)] : []
+  }
+
+  const handleValidateOnly = (jsonStr: string) => {
     if (!jsonStr.trim()) {
       alert('Silakan masukkan JSON terlebih dahulu.')
       return
     }
-    try {
-      const data = JSON.parse(jsonStr)
-      if (data._ichibot_type !== 'blog') {
-        alert('Validasi Gagal: Data JSON tidak valid untuk halaman Blog (_ichibot_type harus "blog").')
-        return
-      }
-
-      const requiredKeys = [
-        'slug',
-        'title',
-        'date',
-        'category',
-        'excerpt',
-        'image',
-        'videoUrl',
-        'content',
-        'keywords',
-        'faq',
-        '_ichibot_type'
-      ]
-      const missingKeys = requiredKeys.filter(k => !(k in data))
-      if (missingKeys.length > 0) {
-        alert(`Validasi Gagal: Kunci wajib berikut tidak ditemukan: ${missingKeys.join(', ')}`)
-        return
-      }
-
-      if (data.excerpt && data.excerpt.includes('*')) {
-        alert('Validasi Gagal: excerpt tidak boleh mengandung simbol asteris (*).')
-        return
-      }
-
-      if (Array.isArray(data.faq)) {
-        const hasAsteris = data.faq.some((item: { q: string; a: string }) => item.a && item.a.includes('*'))
-        if (hasAsteris) {
-          alert('Validasi Gagal: jawaban pada FAQ tidak boleh mengandung simbol asteris (*).')
-          return
-        }
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { _ichibot_type, ...rest } = data
-      setForm(prev => ({ ...prev, ...rest }))
-      alert('JSON Valid! Data berhasil diimpor ke form editor.')
-      setPastedJSON('')
-    } catch {
-      alert('Validasi Gagal: Format JSON tidak valid (pastikan escape kutip benar, tidak ada trailing comma).')
+    const sanitized = sanitizeAiJson(jsonStr)
+    const result = parseJsonWithContext(sanitized)
+    if (!result.ok) {
+      alert(`Validasi Gagal:\n\n${result.error}`)
+      return
     }
+    const data = result.data as AiBlogJson
+
+    if (data._ichibot_type !== 'blog') {
+      alert('Validasi Gagal: Data JSON tidak valid untuk halaman Blog (_ichibot_type harus "blog").')
+      return
+    }
+
+    const requiredKeys = [
+      'slug', 'title', 'date', 'category', 'excerpt', 'image',
+      'videoUrl', 'content', 'keywords', 'faq', '_ichibot_type'
+    ]
+    const missingKeys = requiredKeys.filter(k => !(k in data))
+    if (missingKeys.length > 0) {
+      alert(`Validasi Gagal: Kunci wajib berikut tidak ditemukan: ${missingKeys.join(', ')}`)
+      return
+    }
+
+    if (data.excerpt && data.excerpt.includes('*')) {
+      alert('Validasi Gagal: excerpt tidak boleh mengandung simbol asteris (*).')
+      return
+    }
+
+    if (Array.isArray(data.faq)) {
+      const hasAsteris = data.faq.some((item: { q: string; a: string }) => item.a && item.a.includes('*'))
+      if (hasAsteris) {
+        alert('Validasi Gagal: jawaban pada FAQ tidak boleh mengandung simbol asteris (*).')
+        return
+      }
+    }
+
+    setValidatedJSON(data)
+    const placeholders = getPlaceholders(data.content || '')
+    const needsCover = !data.image
+    const msgs: string[] = ['\u2705 JSON Valid!']
+    if (needsCover) msgs.push('\u26a0\ufe0f Field image kosong \u2014 gunakan "Cari Gambar" untuk mengisi.')
+    if (placeholders.length > 0) msgs.push(`\u26a0\ufe0f Ditemukan ${placeholders.length} placeholder gambar in-body: ${placeholders.join(', ')}`)
+    if (!needsCover && placeholders.length === 0) msgs.push('Siap di-import.')
+    alert(msgs.join('\n'))
+  }
+
+  const handleImportValidated = () => {
+    if (!validatedJSON) {
+      alert('Validasi JSON terlebih dahulu.')
+      return
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _ichibot_type, keywords, faq, ...rest } = validatedJSON
+    setForm(prev => ({ ...prev, ...rest }))
+    alert('Data berhasil diimpor ke form editor.')
+    setPastedJSON('')
+    setValidatedJSON(null)
+  }
+
+  // Unsplash handlers
+  const openUnsplash = (target: 'cover' | string) => {
+    setUnsplashTarget(target)
+    // Default query from keywords or title
+    const kw = (validatedJSON?.keywords as string[] | undefined)
+    const defaultQuery = kw && kw.length > 0
+      ? kw.slice(0, 3).join(' ')
+      : (form.title || '')
+    setUnsplashQuery(defaultQuery)
+    setUnsplashResults([])
+    setShowUnsplash(true)
+    setUnsplashAttribution('')
+  }
+
+  const searchUnsplash = async () => {
+    if (!unsplashQuery.trim()) return
+    setUnsplashLoading(true)
+    try {
+      const res = await fetch(`/api/admin/unsplash?action=search&query=${encodeURIComponent(unsplashQuery)}`)
+      const data = await res.json()
+      if (data.results) {
+        setUnsplashResults(data.results)
+      } else {
+        alert(data.error || 'Gagal mengambil data dari Unsplash.')
+      }
+    } catch {
+      alert('Gagal terhubung ke server Unsplash.')
+    }
+    setUnsplashLoading(false)
+  }
+
+  const selectUnsplashPhoto = async (photo: UnsplashPhoto) => {
+    // 1. Trigger download event (Unsplash API Guidelines)
+    try {
+      await fetch(`/api/admin/unsplash?action=download&url=${encodeURIComponent(photo.links.download_location)}`)
+    } catch { /* best effort */ }
+
+    // 2. Build final URL
+    const widthParam = unsplashTarget === 'cover' ? 1200 : 1600
+    const finalUrl = `${photo.urls.raw}&w=${widthParam}&q=80&fm=jpg&fit=crop`
+
+    // 3. Attribution
+    const utmParams = '?utm_source=ichibot_editor&utm_medium=referral'
+    const attribution = `Photo by ${photo.user.name} on Unsplash`
+    setUnsplashAttribution(attribution)
+
+    if (unsplashTarget === 'cover') {
+      set('image', finalUrl)
+    } else {
+      // Replace placeholder in content (e.g. GAMBAR_1)
+      const altText = unsplashQuery || 'gambar artikel'
+      const markdownImg = `![${altText}](${finalUrl})`
+      const newContent = form.content.replace(unsplashTarget, markdownImg)
+      set('content', newContent)
+    }
+
+    // Append attribution as HTML comment in content if not already there
+    const attrComment = `<!-- ${attribution} | ${photo.user.links.html}${utmParams} | https://unsplash.com${utmParams} -->`
+    if (!form.content.includes(attrComment)) {
+      setForm(prev => ({ ...prev, content: prev.content + '\n\n' + attrComment }))
+    }
+
+    setShowUnsplash(false)
   }
 
   function set<K extends keyof PostForm>(key: K, val: PostForm[K]) {
@@ -286,12 +388,22 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               </div>
               <div>
                 <label className="block text-sm font-medium text-ink/85 mb-1.5">URL Gambar Cover</label>
-                <input
-                  value={form.image}
-                  onChange={(e) => set('image', e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="input-field w-full"
-                />
+                <div className="flex gap-2">
+                  <input
+                    value={form.image}
+                    onChange={(e) => set('image', e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className="input-field w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => openUnsplash('cover')}
+                    aria-label="Cari gambar cover dari Unsplash"
+                    className="shrink-0 px-3 py-1.5 text-xs font-semibold text-brand border border-brand/20 bg-brand/5 hover:bg-brand/10 rounded-lg transition-all whitespace-nowrap"
+                  >
+                    Cari Gambar
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -328,6 +440,26 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               Toolbar untuk styling — atau klik ikon <code>&lt;/&gt;</code> untuk edit raw markdown langsung.
               Sisipkan gambar dengan <code>![alt](url)</code>.
             </p>
+
+            {/* Placeholder detection */}
+            {getPlaceholders(form.content).length > 0 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-2">
+                <p className="text-xs font-semibold text-amber-800">⚠️ Placeholder gambar terdeteksi:</p>
+                <div className="flex flex-wrap gap-2">
+                  {getPlaceholders(form.content).map(ph => (
+                    <button
+                      key={ph}
+                      type="button"
+                      onClick={() => openUnsplash(ph)}
+                      className="text-xs font-mono font-bold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg hover:bg-amber-200 transition-colors border border-amber-300"
+                    >
+                      {ph} → Cari Gambar
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div data-color-mode="light">
               <MDEditor
                 value={form.content}
@@ -491,30 +623,162 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
         <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-5 shadow-sm">
           <div>
             <h2 className="font-semibold text-ink text-sm uppercase tracking-wider">JSON Validator & Import</h2>
-            <p className="text-xs text-ink/40 mt-1">Tempelkan hasil JSON dari chatbot AI untuk divalidasi dan diimpor langsung ke editor.</p>
+            <p className="text-xs text-ink/40 mt-1">Tempelkan hasil JSON dari chatbot AI. Alur: Validate → Cari Gambar → Import.</p>
           </div>
 
           <div className="space-y-4">
             <textarea
               rows={4}
               value={pastedJSON}
-              onChange={(e) => setPastedJSON(e.target.value)}
+              onChange={(e) => { setPastedJSON(e.target.value); setValidatedJSON(null) }}
               placeholder='Tempelkan JSON artikel di sini...'
               className="w-full text-xs font-mono bg-off-white border border-black/10 rounded-xl p-3.5 outline-none resize-y text-ink/85"
             />
 
             <button
               type="button"
-              onClick={() => handleValidateAndImport(pastedJSON)}
-              className="w-full bg-off-white hover:bg-black/5 border border-black/15 text-ink font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+              onClick={() => handleValidateOnly(pastedJSON)}
+              className="w-full bg-off-white hover:bg-black/5 border border-black/15 text-ink font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors"
             >
-              Validate & Import
+              1. Validate JSON
             </button>
+
+            {validatedJSON && (
+              <>
+                {/* Show placeholder info */}
+                {(!validatedJSON.image || getPlaceholders(validatedJSON.content || '').length > 0) && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-2">
+                    <p className="text-xs font-semibold text-amber-800">{'\u26a0\ufe0f'} Gambar perlu diisi:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {!validatedJSON.image && (
+                        <button
+                          type="button"
+                          onClick={() => openUnsplash('cover')}
+                          className="text-xs font-semibold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg hover:bg-amber-200 transition-colors border border-amber-300"
+                        >
+                          Cover Image {'\u2192'} Cari
+                        </button>
+                      )}
+                      {getPlaceholders(validatedJSON.content || '').map(ph => (
+                        <button
+                          key={ph}
+                          type="button"
+                          onClick={() => {
+                            // Also update validatedJSON content so UI stays in sync
+                            openUnsplash(ph)
+                          }}
+                          className="text-xs font-mono font-bold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg hover:bg-amber-200 transition-colors border border-amber-300"
+                        >
+                          {ph} {'\u2192'} Cari
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleImportValidated}
+                  className="w-full bg-brand hover:bg-brand-dark text-white font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors"
+                >
+                  3. Import ke Editor
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  {/* Unsplash Search Modal */}
+  {showUnsplash && (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-16 px-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 space-y-5 mb-16">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-bold text-ink text-lg">Cari Gambar Unsplash</h2>
+            <p className="text-xs text-ink/40 mt-0.5">
+              Target: <span className="font-semibold text-ink/70">{unsplashTarget === 'cover' ? 'Gambar Cover' : unsplashTarget}</span>
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowUnsplash(false)}
+            className="text-ink/40 hover:text-ink transition-colors p-1"
+            aria-label="Tutup pencarian gambar"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={unsplashQuery}
+            onChange={(e) => setUnsplashQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && searchUnsplash()}
+            placeholder="Kata kunci pencarian..."
+            className="input-field w-full text-sm"
+            aria-label="Kata kunci pencarian gambar Unsplash"
+          />
+          <button
+            type="button"
+            onClick={searchUnsplash}
+            disabled={unsplashLoading}
+            className="shrink-0 bg-brand hover:bg-brand-dark disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-xl text-sm transition-colors"
+          >
+            {unsplashLoading ? 'Mencari...' : 'Cari'}
+          </button>
+        </div>
+
+        {unsplashResults.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-1">
+            {unsplashResults.map(photo => (
+              <button
+                key={photo.id}
+                type="button"
+                onClick={() => selectUnsplashPhoto(photo)}
+                className="group relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-transparent hover:border-brand transition-all focus:outline-none focus:border-brand"
+                aria-label={`Pilih foto oleh ${photo.user.name}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo.urls.thumb}
+                  alt={`Foto oleh ${photo.user.name}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-[10px] text-white/90 truncate">
+                    Photo by <span className="font-semibold">{photo.user.name}</span> on Unsplash
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {unsplashResults.length === 0 && !unsplashLoading && (
+          <p className="text-center text-ink/40 text-sm py-8">Masukkan kata kunci dan klik &quot;Cari&quot; untuk memulai pencarian.</p>
+        )}
+
+        {unsplashAttribution && (
+          <div aria-live="polite" className="text-xs text-ink/55 bg-off-white rounded-lg p-3">
+            {'\u2705'} Gambar dipilih. {unsplashAttribution}.
+          </div>
+        )}
+
+        <p className="text-[10px] text-ink/30 text-center">
+          Foto dari{' '}
+          <a href="https://unsplash.com?utm_source=ichibot_editor&utm_medium=referral" target="_blank" rel="noopener noreferrer" className="underline">
+            Unsplash
+          </a>
+        </p>
+      </div>
+    </div>
+  )}
 
   {showPreview && (
         <div className="fixed inset-0 bg-white z-50 overflow-y-auto">

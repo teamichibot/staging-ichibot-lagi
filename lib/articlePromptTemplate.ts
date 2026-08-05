@@ -10,7 +10,7 @@ Kembalikan HANYA satu objek JSON mentah (tanpa code fence, tanpa teks lain), den
 - "date": string "YYYY-MM-DD", pakai tanggal hari ini kecuali diminta lain.
 - "category": string — "Layanan", "Insight", atau "Studi Kasus".
 - "excerpt": string, maksimal 2 kalimat. DILARANG memakai simbol asteris (*).
-- "image": string URL thumbnail. Jika tidak diberi URL, pakai "https://i.pinimg.com/1200x/50/f6/21/50f62183c6c9c9323029cbf3db4157ca.jpg".
+- "image": string URL thumbnail. Kosongkan dengan "" jika tidak diberi URL — gambar akan diisi lewat fitur pencari Unsplash di editor, JANGAN mengarang URL gambar sendiri.
 - "videoUrl": string kosong "".
 - "content": string Markdown long-form. Pakai heading "##", sub-poin terstruktur, istilah teknis akurat.
 - "keywords": array 5–8 string frasa pencarian nyata yang disasar.
@@ -45,6 +45,7 @@ Kembalikan HANYA satu objek JSON mentah (tanpa code fence, tanpa teks lain), den
 - No overclaiming / no fabricated numbers: JANGAN mengarang statistik, rupiah, persentase, atau durasi. Kalau butuh angka dan tidak diberi, pakai placeholder "[X]" atau bingkai kualitatif ("dapat menurunkan downtime secara signifikan"). Jangan mengarang angka tentang kompetitor/tools (ThingsBoard, Grafana, dll) — sebut fungsi/karakter saja.
 - Jangan menyajikan data simulasi/demo sebagai hasil deployment nyata.
 - Jangan newsjack tragedi atau isu politik.
+- URL harus string polos. JANGAN pernah membungkus URL dengan link markdown [teks](url) di field "image" atau field URL mana pun. Di dalam "content", gambar HANYA boleh sebagai ![alt](url); di luar itu URL ditulis telanjang. Untuk gambar in-body, jika kamu tidak diberi URL nyata, tulis ![alt deskriptif](GAMBAR_1), ![alt](GAMBAR_2), dst sebagai placeholder — JANGAN mengarang URL Unsplash atau URL apa pun.
 
 # Gambar di dalam artikel (hanya jika diminta)
 Bila diminta menyisipkan gambar dalam artikel, tempatkan 2–3 gambar markdown ![alt deskriptif](URL) di titik relevan dalam content (selang-seling dengan prosa, tidak menumpuk). Gunakan alt text deskriptif. Jika kamu tidak punya URL gambar nyata, sisipkan placeholder "[URL_GAMBAR]" untuk diisi manual — JANGAN mengarang URL.
@@ -54,6 +55,8 @@ Bila diminta menyisipkan gambar dalam artikel, tempatkan 2–3 gambar markdown !
 - excerpt dan semua jawaban faq tanpa asteris.
 - "_ichibot_type" = "blog", "videoUrl" = "".
 - Tidak ada angka yang dikarang.
+- Field "image" berisi URL polos atau "", bukan [teks](url).
+- Tidak ada URL gambar yang dikarang; gambar in-body memakai placeholder GAMBAR_1/GAMBAR_2 bila URL tak diberikan.
 - Output HANYA raw JSON, tanpa teks lain, tanpa code fence.`;
 
 export type PromptParams = {
