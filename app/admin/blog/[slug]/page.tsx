@@ -3,6 +3,8 @@
 import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { AdminShell } from '../../AdminShell'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
@@ -41,6 +43,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [showPreview, setShowPreview] = useState(false)
 
   useEffect(() => {
     if (isNew) return
@@ -260,12 +263,120 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
             <button type="submit" disabled={saving} className="bg-brand hover:bg-brand-dark disabled:opacity-50 text-white font-semibold px-6 py-2.5 rounded-sm text-sm transition-colors">
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
+            <button
+              type="button"
+              onClick={() => setShowPreview(true)}
+              className="bg-white hover:bg-black/5 border border-black/10 text-ink/85 font-semibold px-6 py-2.5 rounded-sm text-sm transition-colors"
+            >
+              Preview
+            </button>
             <button type="button" onClick={() => router.push('/admin/blog')} className="px-6 py-2.5 rounded-xl text-sm font-medium text-ink/65 hover:bg-black/5 transition-colors">
               Batal
             </button>
           </div>
         </form>
       </div>
+
+      {showPreview && (
+        <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+          {/* Preview Sticky Top Bar */}
+          <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-black/5 px-6 py-4 flex items-center justify-between z-10 max-w-4xl mx-auto rounded-b-xl shadow-sm">
+            <span className="font-bold text-ink text-sm uppercase tracking-wider">Pratinjau Artikel</span>
+            <button
+              type="button"
+              onClick={() => setShowPreview(false)}
+              className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2 rounded-lg text-xs transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Tutup Pratinjau
+            </button>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-6 py-12">
+            {/* Header */}
+            <div className="mt-4">
+              <div className="flex items-center gap-3 mb-6 text-xs">
+                {form.category && (
+                  <span className="font-semibold text-brand uppercase">{form.category}</span>
+                )}
+                {form.category && form.date && <span className="w-1 h-1 rounded-full bg-ink/20" />}
+                {form.date && (
+                  <span className="text-ink/55 font-medium">
+                    {new Date(form.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </span>
+                )}
+              </div>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-ink tracking-tight leading-[1.1] mb-6">
+                {form.title || 'Judul Artikel'}
+              </h1>
+              <p className="text-ink/65 text-lg leading-relaxed">{form.excerpt || 'Ringkasan artikel akan muncul di sini...'}</p>
+            </div>
+
+            {/* Hero Image */}
+            {form.image && (
+              <div className="mt-8 rounded-2xl overflow-hidden bg-black aspect-video max-w-3xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={form.image} alt={form.title} className="w-full h-full object-cover" />
+              </div>
+            )}
+
+            {/* Body Content */}
+            <div className="mt-12 max-w-3xl">
+              <article className="prose prose-lg max-w-none
+                prose-headings:font-display prose-headings:text-ink prose-headings:font-bold prose-headings:tracking-tight
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+                prose-p:text-ink/75 prose-p:leading-relaxed prose-p:mb-6
+                prose-li:text-ink/75 prose-li:mb-2
+                prose-a:text-brand prose-a:no-underline hover:prose-a:text-brand-dark hover:prose-a:underline
+                prose-strong:text-ink prose-strong:font-bold
+                prose-img:rounded-2xl prose-img:my-8
+                prose-code:text-brand prose-code:bg-off-white prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                prose-blockquote:border-l-brand prose-blockquote:text-ink/75 prose-blockquote:not-italic
+                prose-hr:border-black/10 prose-hr:my-8">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    img: ({ src, alt }) => (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt={alt} className="w-full rounded-2xl my-8 object-cover" />
+                    ),
+                    h2: ({ children }) => <h2 className="text-2xl font-bold pt-8 mb-4 tracking-tight text-ink">{children}</h2>,
+                    h3: ({ children }) => <h3 className="text-xl font-bold pt-6 mb-3 tracking-tight text-ink">{children}</h3>,
+                    ol: ({ children }) => (
+                      <ol className="list-decimal pl-6 my-6 space-y-2 text-ink/75">{children}</ol>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc pl-6 my-6 space-y-2 text-ink/75">{children}</ul>
+                    ),
+                    li: ({ children }) => (
+                      <li className="leading-relaxed">{children}</li>
+                    ),
+                    table: ({ children }) => (
+                      <div className="my-8 overflow-x-auto rounded-2xl border border-black/8">
+                        <table className="w-full text-sm border-collapse">{children}</table>
+                      </div>
+                    ),
+                    thead: ({ children }) => <thead className="bg-off-white">{children}</thead>,
+                    tbody: ({ children }) => <tbody className="divide-y divide-black/8">{children}</tbody>,
+                    tr: ({ children }) => <tr>{children}</tr>,
+                    th: ({ children }) => (
+                      <th className="text-left px-5 py-3 font-semibold text-ink text-[13px] uppercase">{children}</th>
+                    ),
+                    td: ({ children }) => (
+                      <td className="px-5 py-3 text-ink/75 align-top">{children}</td>
+                    ),
+                  }}
+                >
+                  {form.content || '*Belum ada konten.*'}
+                </ReactMarkdown>
+              </article>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`.input-field { border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 14px; outline: none; color: #1a202c; } .input-field:focus { border-color: #2dd4bf; box-shadow: 0 0 0 2px rgba(45,212,191,0.1); }`}</style>
     </AdminShell>
