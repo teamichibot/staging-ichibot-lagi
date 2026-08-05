@@ -3,19 +3,27 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AdminShell } from '../AdminShell'
+import { Pagination } from '@/components/Pagination'
 
 type PostMeta = { slug: string; title: string; date: string; category: string; excerpt: string; image: string }
+
+const PAGE_SIZE = 30
 
 export default function AdminBlogPage() {
   const [posts, setPosts] = useState<PostMeta[]>([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     fetch('/api/admin/blog')
       .then((r) => r.json())
       .then((d) => { setPosts(d); setLoading(false) })
   }, [])
+
+  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const paginatedPosts = posts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   async function handleDelete(slug: string) {
     if (!confirm(`Hapus post "${slug}"?`)) return
@@ -52,7 +60,7 @@ export default function AdminBlogPage() {
               {posts.length === 0 && (
                 <p className="px-6 py-10 text-center text-ink/40 text-sm">Belum ada artikel.</p>
               )}
-              {posts.map((p) => (
+              {paginatedPosts.map((p) => (
                 <div key={p.slug} className="flex items-center gap-4 px-6 py-4">
                   {p.image && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -108,6 +116,10 @@ export default function AdminBlogPage() {
             </div>
           </div>
         )}
+
+        <div className="mt-6">
+          <Pagination page={currentPage} totalPages={totalPages} onPageChange={setPage} />
+        </div>
       </div>
     </AdminShell>
   )

@@ -4,6 +4,9 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { PostMeta } from '@/lib/blog'
+import { Pagination } from '@/components/Pagination'
+
+const PAGE_SIZE = 30
 
 interface BlogListProps {
   initialPosts: PostMeta[]
@@ -15,6 +18,8 @@ export function BlogList({ initialPosts }: BlogListProps) {
   const categoryParam = searchParams.get('category') || 'All'
 
   const [searchQuery, setSearchQuery] = useState('')
+  const [page, setPage] = useState(1)
+  const [lastFilterKey, setLastFilterKey] = useState(`${searchQuery}|${categoryParam}`)
 
   const handleCategoryChange = (cat: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -40,6 +45,21 @@ export function BlogList({ initialPosts }: BlogListProps) {
       return matchesSearch && matchesCategory
     })
   }, [initialPosts, searchQuery, categoryParam])
+
+  const filterKey = `${searchQuery}|${categoryParam}`
+  if (filterKey !== lastFilterKey) {
+    setLastFilterKey(filterKey)
+    setPage(1)
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
+  const handlePageChange = (next: number) => {
+    setPage(next)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div className="space-y-10">
@@ -103,7 +123,7 @@ export function BlogList({ initialPosts }: BlogListProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {filteredPosts.map((post) => (
+          {paginatedPosts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
@@ -144,6 +164,8 @@ export function BlogList({ initialPosts }: BlogListProps) {
           ))}
         </div>
       )}
+
+      <Pagination page={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
     </div>
   )
