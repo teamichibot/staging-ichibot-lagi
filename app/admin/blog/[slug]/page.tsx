@@ -70,6 +70,9 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     keyword: '',
     insertImages: false,
     notes: '',
+    cta: '',
+    productLink: '',
+    useFaq: true,
   })
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [copied, setCopied] = useState(false)
@@ -550,6 +553,28 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               />
             </div>
 
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Call to Action</label>
+              <input
+                type="text"
+                value={promptForm.cta}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, cta: e.target.value }))}
+                placeholder="mis. Ajak konsultasi gratis / coba demo produk"
+                className="input-field w-full text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Link Produk</label>
+              <input
+                type="text"
+                value={promptForm.productLink}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, productLink: e.target.value }))}
+                placeholder="mis. /produk/equipment-monitoring"
+                className="input-field w-full text-sm"
+              />
+            </div>
+
             <div className="flex items-center gap-2.5 py-1">
               <input
                 type="checkbox"
@@ -560,6 +585,19 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
               />
               <label htmlFor="insertImages" className="text-sm font-medium text-ink/85 select-none">
                 Sisipkan 2–3 gambar di dalam artikel
+              </label>
+            </div>
+
+            <div className="flex items-center gap-2.5 py-1">
+              <input
+                type="checkbox"
+                id="useFaq"
+                checked={promptForm.useFaq}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, useFaq: e.target.checked }))}
+                className="w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand"
+              />
+              <label htmlFor="useFaq" className="text-sm font-medium text-ink/85 select-none">
+                Pakai section FAQ
               </label>
             </div>
 

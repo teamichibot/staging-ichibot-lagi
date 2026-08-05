@@ -66,6 +66,9 @@ export type PromptParams = {
   keyword?: string
   insertImages?: boolean
   notes?: string
+  cta?: string
+  productLink?: string
+  useFaq?: boolean
 }
 
 export function buildPrompt(params: PromptParams): string {
@@ -88,6 +91,15 @@ export function buildPrompt(params: PromptParams): string {
   }
   if (params.insertImages) {
     parts.push('- Sisipkan 2–3 gambar di dalam artikel (markdown ![]()): ya')
+  }
+  if (params.cta?.trim()) {
+    parts.push(`- Call to action penutup: tutup bagian "Kesimpulan + CTA" dengan ajakan spesifik ini: ${params.cta.trim()}`)
+  }
+  if (params.productLink?.trim()) {
+    parts.push(`- Link produk/layanan yang dituju: ${params.productLink.trim()} — sebutkan sebagai URL polos (tanpa dibungkus markdown [teks](url)) di bagian CTA/kesimpulan saat relevan.`)
+  }
+  if (params.useFaq === false) {
+    parts.push('- FAQ: JANGAN sertakan section FAQ. Kosongkan kunci "faq" sebagai array kosong [], dan hapus heading "## Pertanyaan yang Sering Diajukan (FAQ)" dari struktur content.')
   }
   if (params.notes?.trim()) {
     parts.push(`- Catatan tambahan: ${params.notes.trim()}`)
