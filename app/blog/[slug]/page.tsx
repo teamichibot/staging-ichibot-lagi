@@ -206,7 +206,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Artikel lainnya */}
         {relatedPosts.length > 0 && (
-          <section className="bg-off-white pb-20 md:pb-28">
+          <section className="bg-off-white pt-16 pb-20 md:pt-20 md:pb-28">
             <div className="max-w-4xl mx-auto px-6 md:px-10">
               <h2 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mb-8">
                 Pilihan Artikel Lainnya
