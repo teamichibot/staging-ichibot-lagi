@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { AdminShell } from '../../AdminShell'
+import { buildPrompt } from '@/lib/articlePromptTemplate'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
@@ -44,6 +45,17 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [showPreview, setShowPreview] = useState(false)
+  const [promptForm, setPromptForm] = useState({
+    topic: '',
+    category: '',
+    audience: '',
+    keyword: '',
+    insertImages: false,
+    notes: '',
+  })
+  const [generatedPrompt, setGeneratedPrompt] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [pastedJSON, setPastedJSON] = useState('')
 
   useEffect(() => {
     if (isNew) return
@@ -51,6 +63,73 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
       .then((r) => r.json())
       .then((d) => { setForm(d); setLoading(false) })
   }, [slug, isNew])
+
+  const handleGeneratePrompt = () => {
+    const text = buildPrompt(promptForm)
+    setGeneratedPrompt(text)
+    setCopied(false)
+  }
+
+  const handleCopyPrompt = async () => {
+    if (!generatedPrompt) return
+    await navigator.clipboard.writeText(generatedPrompt)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleValidateAndImport = (jsonStr: string) => {
+    if (!jsonStr.trim()) {
+      alert('Silakan masukkan JSON terlebih dahulu.')
+      return
+    }
+    try {
+      const data = JSON.parse(jsonStr)
+      if (data._ichibot_type !== 'blog') {
+        alert('Validasi Gagal: Data JSON tidak valid untuk halaman Blog (_ichibot_type harus "blog").')
+        return
+      }
+
+      const requiredKeys = [
+        'slug',
+        'title',
+        'date',
+        'category',
+        'excerpt',
+        'image',
+        'videoUrl',
+        'content',
+        'keywords',
+        'faq',
+        '_ichibot_type'
+      ]
+      const missingKeys = requiredKeys.filter(k => !(k in data))
+      if (missingKeys.length > 0) {
+        alert(`Validasi Gagal: Kunci wajib berikut tidak ditemukan: ${missingKeys.join(', ')}`)
+        return
+      }
+
+      if (data.excerpt && data.excerpt.includes('*')) {
+        alert('Validasi Gagal: excerpt tidak boleh mengandung simbol asteris (*).')
+        return
+      }
+
+      if (Array.isArray(data.faq)) {
+        const hasAsteris = data.faq.some((item: { q: string; a: string }) => item.a && item.a.includes('*'))
+        if (hasAsteris) {
+          alert('Validasi Gagal: jawaban pada FAQ tidak boleh mengandung simbol asteris (*).')
+          return
+        }
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _ichibot_type, ...rest } = data
+      setForm(prev => ({ ...prev, ...rest }))
+      alert('JSON Valid! Data berhasil diimpor ke form editor.')
+      setPastedJSON('')
+    } catch {
+      alert('Validasi Gagal: Format JSON tidak valid (pastikan escape kutip benar, tidak ada trailing comma).')
+    }
+  }
 
   function set<K extends keyof PostForm>(key: K, val: PostForm[K]) {
     setForm((f) => ({ ...f, [key]: val }))
@@ -104,7 +183,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
 
   return (
     <AdminShell>
-      <div className="p-6 md:p-8 max-w-3xl">
+      <div className="p-6 md:p-8 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <button onClick={() => router.push('/admin/blog')} className="text-ink/40 hover:text-ink/65 transition-colors">
@@ -134,7 +213,9 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-7">
+            <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-5">
             <h2 className="font-semibold text-ink text-sm uppercase">Metadata</h2>
 
@@ -277,7 +358,165 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
         </form>
       </div>
 
-      {showPreview && (
+      {/* Kolom Kanan: Generate Prompt & Validator */}
+      <div className="lg:col-span-5 space-y-6">
+        <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-5 shadow-sm">
+          <div>
+            <h2 className="font-semibold text-ink text-sm uppercase tracking-wider">Generate AI Prompt</h2>
+            <p className="text-xs text-ink/40 mt-1">Buat prompt terstruktur untuk di-input ke Chatbot AI (ChatGPT, Claude, Gemini, dll).</p>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Topik Artikel</label>
+              <input
+                type="text"
+                value={promptForm.topic}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, topic: e.target.value }))}
+                placeholder="mis. Jasa CCTV AI untuk deteksi APD"
+                className="input-field w-full text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Kategori</label>
+              <select
+                value={promptForm.category}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, category: e.target.value }))}
+                className="input-field w-full bg-white text-ink/85 font-normal text-sm"
+              >
+                <option value="">— Pilih Kategori (Biarkan AI Pilih) —</option>
+                <option value="Layanan">Layanan</option>
+                <option value="Insight">Insight</option>
+                <option value="Studi Kasus">Studi Kasus</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Target Audiens</label>
+              <input
+                type="text"
+                value={promptForm.audience}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, audience: e.target.value }))}
+                placeholder="mis. Plant Manager pabrik manufaktur"
+                className="input-field w-full text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Keyword Utama</label>
+              <input
+                type="text"
+                value={promptForm.keyword}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, keyword: e.target.value }))}
+                placeholder="mis. cctv ai k3"
+                className="input-field w-full text-sm"
+              />
+            </div>
+
+            <div className="flex items-center gap-2.5 py-1">
+              <input
+                type="checkbox"
+                id="insertImages"
+                checked={promptForm.insertImages}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, insertImages: e.target.checked }))}
+                className="w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand"
+              />
+              <label htmlFor="insertImages" className="text-sm font-medium text-ink/85 select-none">
+                Sisipkan 2–3 gambar di dalam artikel
+              </label>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-ink/85 mb-1.5 uppercase">Catatan Tambahan</label>
+              <textarea
+                rows={3}
+                value={promptForm.notes}
+                onChange={(e) => setPromptForm(prev => ({ ...prev, notes: e.target.value }))}
+                placeholder="mis. Tambahkan studi kasus di Indonesia..."
+                className="input-field w-full resize-none text-sm"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGeneratePrompt}
+              className="w-full bg-brand hover:bg-brand-dark text-white font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+            >
+              Generate Prompt
+            </button>
+          </div>
+
+          {generatedPrompt && (
+            <div className="space-y-3 pt-4 border-t border-black/5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-ink uppercase tracking-wider">Hasil Prompt</span>
+                <button
+                  type="button"
+                  onClick={handleCopyPrompt}
+                  className="text-xs font-semibold text-brand hover:underline flex items-center gap-1.5"
+                  aria-label={copied ? "Prompt tersalin" : "Salin prompt ke clipboard"}
+                >
+                  {copied ? (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Tersalin
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      Copy Prompt
+                    </>
+                  )}
+                </button>
+              </div>
+              <div aria-live="polite" className="sr-only">
+                {copied ? "Prompt telah berhasil disalin ke clipboard." : ""}
+              </div>
+              <textarea
+                readOnly
+                rows={8}
+                value={generatedPrompt}
+                className="w-full text-xs font-mono bg-off-white border border-black/10 rounded-xl p-3.5 outline-none resize-y text-ink/85"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Panel Validator & Import */}
+        <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-5 shadow-sm">
+          <div>
+            <h2 className="font-semibold text-ink text-sm uppercase tracking-wider">JSON Validator & Import</h2>
+            <p className="text-xs text-ink/40 mt-1">Tempelkan hasil JSON dari chatbot AI untuk divalidasi dan diimpor langsung ke editor.</p>
+          </div>
+
+          <div className="space-y-4">
+            <textarea
+              rows={4}
+              value={pastedJSON}
+              onChange={(e) => setPastedJSON(e.target.value)}
+              placeholder='Tempelkan JSON artikel di sini...'
+              className="w-full text-xs font-mono bg-off-white border border-black/10 rounded-xl p-3.5 outline-none resize-y text-ink/85"
+            />
+
+            <button
+              type="button"
+              onClick={() => handleValidateAndImport(pastedJSON)}
+              className="w-full bg-off-white hover:bg-black/5 border border-black/15 text-ink font-semibold py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+            >
+              Validate & Import
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {showPreview && (
         <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
           {/* Preview Sticky Top Bar */}
           <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-black/5 px-6 py-4 flex items-center justify-between z-10 max-w-4xl mx-auto rounded-b-xl shadow-sm">
