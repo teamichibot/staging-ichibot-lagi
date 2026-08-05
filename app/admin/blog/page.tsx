@@ -69,6 +69,14 @@ export default function AdminBlogPage() {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Link
+                      href={`/blog/${p.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium text-ink/65 hover:text-brand transition-colors px-3 py-1.5 rounded-lg hover:bg-black/5"
+                    >
+                      Lihat
+                    </Link>
+                    <Link
                       href={`/admin/blog/${p.slug}`}
                       className="text-sm font-medium text-ink/65 hover:text-brand transition-colors px-3 py-1.5 rounded-lg hover:bg-black/5"
                     >
