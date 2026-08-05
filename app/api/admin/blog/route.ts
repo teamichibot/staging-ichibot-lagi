@@ -10,7 +10,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { slug, title, date, category, excerpt, image, videoUrl, content } = await request.json()
+  const { slug, title, date, category, excerpt, image, videoUrl, content, ctaText, productLink, useFaq, faq } = await request.json()
 
   if (!slug || !title) {
     return NextResponse.json({ error: 'slug dan title wajib diisi' }, { status: 400 })
@@ -38,6 +38,10 @@ export async function POST(request: Request) {
     image: image ?? '',
     video_url: videoUrl ?? '',
     content: content ?? '',
+    cta_text: ctaText ?? '',
+    product_link: productLink ?? '',
+    use_faq: useFaq ?? false,
+    faq: Array.isArray(faq) ? faq : [],
   })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

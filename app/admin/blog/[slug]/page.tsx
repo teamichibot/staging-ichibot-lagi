@@ -15,6 +15,8 @@ import '@uiw/react-markdown-preview/markdown.css'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
+type FaqItem = { q: string; a: string }
+
 type PostForm = {
   slug: string
   title: string
@@ -24,6 +26,10 @@ type PostForm = {
   image: string
   videoUrl: string
   content: string
+  ctaText: string
+  productLink: string
+  useFaq: boolean
+  faq: FaqItem[]
 }
 
 const empty: PostForm = {
@@ -35,6 +41,10 @@ const empty: PostForm = {
   image: '',
   videoUrl: '',
   content: '',
+  ctaText: '',
+  productLink: '',
+  useFaq: false,
+  faq: [],
 }
 
 const CATEGORIES = ['IoT', 'AI', 'Case Study', 'Insight', 'Tutorial', 'News']
@@ -51,7 +61,6 @@ const sanitizeSchema = { ...defaultSchema, allowComments: true }
 type AiBlogJson = PostForm & {
   _ichibot_type?: string
   keywords?: string[]
-  faq?: { q: string; a: string }[]
 }
 
 export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -100,6 +109,21 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     await navigator.clipboard.writeText(generatedPrompt)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const addFaqItem = () => {
+    setForm(prev => ({ ...prev, faq: [...prev.faq, { q: '', a: '' }] }))
+  }
+
+  const updateFaqItem = (index: number, key: keyof FaqItem, value: string) => {
+    setForm(prev => ({
+      ...prev,
+      faq: prev.faq.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
+    }))
+  }
+
+  const removeFaqItem = (index: number) => {
+    setForm(prev => ({ ...prev, faq: prev.faq.filter((_, i) => i !== index) }))
   }
 
   // Count GAMBAR_N placeholders in content
@@ -166,7 +190,12 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _ichibot_type, keywords, faq, ...rest } = validatedJSON
-    setForm(prev => ({ ...prev, ...rest }))
+    setForm(prev => ({
+      ...prev,
+      ...rest,
+      faq: Array.isArray(faq) && faq.length > 0 ? faq : prev.faq,
+      useFaq: Array.isArray(faq) && faq.length > 0 ? true : prev.useFaq,
+    }))
     alert('Data berhasil diimpor ke form editor.')
     setPastedJSON('')
     setValidatedJSON(null)
@@ -436,6 +465,29 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                 className="input-field w-full resize-none"
               />
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Teks Call to Action <span className="text-ink/40 font-normal">(opsional)</span></label>
+                <input
+                  value={form.ctaText}
+                  onChange={(e) => set('ctaText', e.target.value)}
+                  placeholder="Mulai Konsultasi Gratis"
+                  className="input-field w-full"
+                />
+                <p className="text-xs text-ink/40 mt-1">Kosongkan untuk pakai teks default.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Link Produk <span className="text-ink/40 font-normal">(opsional)</span></label>
+                <input
+                  value={form.productLink}
+                  onChange={(e) => set('productLink', e.target.value)}
+                  placeholder="/produk/energy-usage-monitoring"
+                  className="input-field w-full"
+                />
+                <p className="text-xs text-ink/40 mt-1">Kosongkan untuk arahkan ke /contact.</p>
+              </div>
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-3">
@@ -472,6 +524,68 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                 preview="edit"
               />
             </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-black/10 p-6 space-y-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="font-semibold text-ink text-sm uppercase">FAQ</h2>
+                <p className="text-xs text-ink/40 mt-1">
+                  Tampilkan section FAQ + markup schema.org FAQPage (SEO) di halaman artikel publik.
+                </p>
+              </div>
+              <label className="flex items-center gap-2 shrink-0 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.useFaq}
+                  onChange={(e) => set('useFaq', e.target.checked)}
+                  className="w-4 h-4 accent-brand"
+                />
+                <span className="text-sm font-medium text-ink/85">Gunakan FAQ</span>
+              </label>
+            </div>
+
+            {form.useFaq && (
+              <div className="space-y-3">
+                {form.faq.length === 0 && (
+                  <p className="text-xs text-ink/40">Belum ada FAQ. Tambahkan minimal 1 pertanyaan, atau import lewat JSON Validator.</p>
+                )}
+                {form.faq.map((item, i) => (
+                  <div key={i} className="border border-black/10 rounded-xl p-3.5 space-y-2 bg-off-white">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-ink/55 uppercase">FAQ #{i + 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeFaqItem(i)}
+                        className="text-xs font-semibold text-red-500 hover:text-red-600 transition-colors"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                    <input
+                      value={item.q}
+                      onChange={(e) => updateFaqItem(i, 'q', e.target.value)}
+                      placeholder="Pertanyaan"
+                      className="input-field w-full text-sm"
+                    />
+                    <textarea
+                      rows={2}
+                      value={item.a}
+                      onChange={(e) => updateFaqItem(i, 'a', e.target.value)}
+                      placeholder="Jawaban"
+                      className="input-field w-full text-sm resize-none"
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={addFaqItem}
+                  className="w-full bg-white hover:bg-black/5 border border-black/15 text-ink font-semibold py-2 px-4 rounded-xl text-sm transition-colors"
+                >
+                  + Tambah FAQ
+                </button>
+              </div>
+            )}
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -881,6 +995,32 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                   {form.content || '*Belum ada konten.*'}
                 </ReactMarkdown>
               </article>
+
+              {form.useFaq && form.faq.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="font-display text-2xl font-bold text-ink tracking-tight mb-6">
+                    Pertanyaan yang Sering Diajukan
+                  </h2>
+                  <div className="space-y-3">
+                    {form.faq.map((item, i) => (
+                      <details key={i} className="bg-off-white rounded-2xl border border-black/10 p-5 open:pb-5">
+                        <summary className="font-semibold text-ink cursor-pointer">
+                          {item.q || `Pertanyaan #${i + 1}`}
+                        </summary>
+                        <p className="text-ink/75 leading-relaxed mt-3">{item.a}</p>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-12 bg-brand rounded-2xl px-8 py-10 text-center text-white">
+                <p className="font-display text-xl font-bold mb-4">Siap untuk inovasi?</p>
+                <span className="inline-block bg-white text-brand font-semibold px-6 py-2.5 rounded-sm text-sm">
+                  {form.ctaText || 'Mulai Konsultasi Gratis'}
+                </span>
+                <p className="text-white/60 text-xs mt-2">→ {form.productLink || '/contact'}</p>
+              </div>
             </div>
           </div>
         </div>

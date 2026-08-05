@@ -15,7 +15,7 @@ export async function GET(_req: Request, { params }: Params) {
 
 export async function PUT(request: Request, { params }: Params) {
   const { slug } = await params
-  const { title, date, category, excerpt, image, videoUrl, content } = await request.json()
+  const { title, date, category, excerpt, image, videoUrl, content, ctaText, productLink, useFaq, faq } = await request.json()
 
   const blocked = validatePostContent({ title: title ?? '', excerpt: excerpt ?? '', content: content ?? '' })
   if (blocked) return NextResponse.json({ error: blocked }, { status: 422 })
@@ -29,6 +29,10 @@ export async function PUT(request: Request, { params }: Params) {
     image: image ?? '',
     video_url: videoUrl ?? '',
     content: content ?? '',
+    cta_text: ctaText ?? '',
+    product_link: productLink ?? '',
+    use_faq: useFaq ?? false,
+    faq: Array.isArray(faq) ? faq : [],
     updated_at: new Date().toISOString(),
   })
 
