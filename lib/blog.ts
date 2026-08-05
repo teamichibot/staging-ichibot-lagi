@@ -4,11 +4,6 @@ import path from 'path'
 import matter from 'gray-matter'
 import { supabase } from './supabase'
 
-export interface FaqItem {
-  q: string
-  a: string
-}
-
 export interface PostMeta {
   slug: string
   title: string
@@ -21,10 +16,6 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   content: string
-  ctaText: string
-  productLink: string
-  useFaq: boolean
-  faq: FaqItem[]
 }
 
 const POSTS_DIR = path.join(process.cwd(), 'content', 'blog')
@@ -85,10 +76,6 @@ export async function getPostBySlugMerged(slug: string): Promise<Post | null> {
     image: data.image ?? '',
     videoUrl: data.video_url ?? '',
     content: data.content ?? '',
-    ctaText: data.cta_text ?? '',
-    productLink: data.product_link ?? '',
-    useFaq: data.use_faq ?? false,
-    faq: Array.isArray(data.faq) ? data.faq : [],
   }
 }
 
@@ -108,10 +95,6 @@ export function getPostBySlug(slug: string): Post | null {
         image: data.image ?? '',
         videoUrl: data.videoUrl ?? '',
         content,
-        ctaText: data.ctaText ?? '',
-        productLink: data.productLink ?? '',
-        useFaq: data.useFaq ?? false,
-        faq: Array.isArray(data.faq) ? data.faq : [],
       }
     }
   }

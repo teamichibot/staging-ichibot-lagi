@@ -1,6 +1,6 @@
 import { ProductData } from './products-data'
 import { ServiceData } from './services-data'
-import { Post, FaqItem } from './blog'
+import { Post } from './blog'
 
 const SITE_URL = 'https://ichibot.id' // Update with actual domain if known
 
@@ -87,21 +87,6 @@ export function getBlogPostingSchema(post: Post) {
       }
     },
     description: post.excerpt
-  }
-}
-
-export function getFaqSchema(faq: FaqItem[]) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faq.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.a,
-      },
-    })),
   }
 }
 

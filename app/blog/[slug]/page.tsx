@@ -9,7 +9,7 @@ import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
-import { getBlogPostingSchema, getFaqSchema } from '@/lib/seo'
+import { getBlogPostingSchema } from '@/lib/seo'
 
 // Keep HTML comments (e.g. Unsplash attribution) as invisible comments in
 // the rendered output instead of stripping or leaking them as text.
@@ -58,10 +58,6 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound()
 
   const blogSchema = getBlogPostingSchema(post)
-  const showFaq = post.useFaq && post.faq.length > 0
-  const faqSchema = showFaq ? getFaqSchema(post.faq) : null
-  const ctaText = post.ctaText || 'Mulai Konsultasi Gratis'
-  const ctaLink = post.productLink || '/contact'
 
   return (
     <>
@@ -69,12 +65,6 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
       />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
       <main className="bg-white">
 
         {/* Header */}
@@ -184,30 +174,6 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </section>
 
-        {/* FAQ */}
-        {showFaq && (
-          <section className="bg-off-white pb-20 md:pb-28 pt-4">
-            <div className="max-w-3xl mx-auto px-6 md:px-10">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mb-6">
-                Pertanyaan yang Sering Diajukan
-              </h2>
-              <div className="space-y-3">
-                {post.faq.map((item, i) => (
-                  <details key={i} className="group bg-white rounded-2xl border border-black/10 p-5 open:pb-5">
-                    <summary className="font-semibold text-ink cursor-pointer list-none flex items-center justify-between gap-4">
-                      {item.q}
-                      <svg className="w-4 h-4 shrink-0 text-ink/40 transition-transform group-open:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </summary>
-                    <p className="text-ink/75 leading-relaxed mt-3">{item.a}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* CTA */}
         <section className="bg-white pb-20 md:pb-28">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -222,10 +188,10 @@ export default async function BlogPostPage({ params }: Props) {
                   Konsultasikan tantangan teknologi industri Anda dengan tim ahli Ichibot hari ini.
                 </p>
                 <Link
-                  href={ctaLink}
+                  href="/contact"
                   className="inline-block bg-white hover:bg-white/95 text-brand font-semibold px-7 py-3 rounded-sm transition-colors text-sm min-w-[200px] text-center"
                 >
-                  {ctaText}
+                  Mulai Konsultasi Gratis
                 </Link>
               </div>
             </div>
