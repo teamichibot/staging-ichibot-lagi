@@ -8,6 +8,8 @@ import remarkGfm from 'remark-gfm'
 import { AdminShell } from '../../AdminShell'
 import { buildPrompt } from '@/lib/articlePromptTemplate'
 import { sanitizeAiJson, parseJsonWithContext } from '@/lib/sanitizeAiJson'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
@@ -43,6 +45,8 @@ type UnsplashPhoto = {
   user: { name: string; links: { html: string } }
   links: { download_location: string }
 }
+
+const sanitizeSchema = { ...defaultSchema, allowComments: true }
 
 type AiBlogJson = PostForm & {
   _ichibot_type?: string
@@ -841,6 +845,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                 prose-hr:border-black/10 prose-hr:my-8">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
                   components={{
                     img: ({ src, alt }) => (
                       // eslint-disable-next-line @next/next/no-img-element

@@ -4,10 +4,16 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import { getAllPosts, getPostBySlugMerged } from '@/lib/blog'
 import { VideoEmbed } from '@/components/blog/VideoEmbed'
 import type { Metadata } from 'next'
 import { getBlogPostingSchema } from '@/lib/seo'
+
+// Keep HTML comments (e.g. Unsplash attribution) as invisible comments in
+// the rendered output instead of stripping or leaking them as text.
+const sanitizeSchema = { ...defaultSchema, allowComments: true }
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -119,6 +125,7 @@ export default async function BlogPostPage({ params }: Props) {
               prose-hr:border-black/10 prose-hr:my-10">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
                 components={{
                   // eslint-disable-next-line @next/next/no-img-element
                   img: ({ src, alt }) => (
