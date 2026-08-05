@@ -481,7 +481,7 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
 
           <div className="flex gap-3">
             <button type="submit" disabled={saving} className="bg-brand hover:bg-brand-dark disabled:opacity-50 text-white font-semibold px-6 py-2.5 rounded-sm text-sm transition-colors">
-              {saving ? 'Menyimpan...' : 'Simpan'}
+              {saving ? 'Publishing...' : 'Publish'}
             </button>
             <button
               type="button"
