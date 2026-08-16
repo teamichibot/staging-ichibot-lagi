@@ -105,6 +105,11 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
                 isActive ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'
               }`}
             >
+              {/* Tag chip */}
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold mb-4">
+                {slide.tag}
+              </span>
+
               {/* Headline */}
               <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-3 max-w-2xl line-clamp-2 [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
                 {slide.headline.map((line, j) => (
