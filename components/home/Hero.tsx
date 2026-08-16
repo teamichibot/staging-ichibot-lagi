@@ -59,9 +59,6 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
     setTimerKey(k => k + 1)
   }, [])
 
-  const prev = () => goTo((activeSlide - 1 + slides.length) % slides.length)
-  const next = () => goTo((activeSlide + 1) % slides.length)
-
   useEffect(() => {
     if (slides.length <= 1) return
     const timer = setInterval(() => {
@@ -88,26 +85,28 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
         </div>
       ))}
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/55 pointer-events-none" />
+      {/* Top darkening — keeps the transparent navbar legible */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-transparent pointer-events-none" />
 
-      {/* Center text/button readability gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.35)_35%,rgba(0,0,0,0)_70%)] pointer-events-none" />
+      {/* Bottom darkening — anchors the bottom-left text/buttons */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+
+      {/* Vignette — darkens the edges/corners for cinematic depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.45)_100%)] pointer-events-none" />
 
       {/* Slide content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-start text-center px-4 pt-[18vh]">
+      <div className="absolute inset-0">
         {slides.map((slide, i) => {
           const isActive = i === activeSlide
           return (
             <div
               key={i}
-              className={`absolute flex flex-col items-center transition-all duration-700 ease-out px-4 w-full max-w-5xl mx-auto ${
+              className={`absolute left-6 right-16 md:left-[max(40px,calc((100vw-1400px)/2+40px))] md:right-24 bottom-24 md:bottom-28 flex flex-col items-start text-left transition-all duration-700 ease-out ${
                 isActive ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'
               }`}
-              style={{ top: '18vh' }}
             >
               {/* Headline */}
-              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-3 max-w-4xl line-clamp-2">
+              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-3 max-w-2xl line-clamp-2 [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
                 {slide.headline.map((line, j) => (
                   <span key={j}>
                     {line}
@@ -117,12 +116,12 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
               </h1>
 
               {/* Subheadline */}
-              <p className="text-white/85 text-sm md:text-base leading-relaxed mb-7 max-w-xl line-clamp-2">
+              <p className="text-white/85 text-sm md:text-base leading-relaxed mb-7 max-w-md line-clamp-2">
                 {slide.subheadline}
               </p>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto justify-center">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none">
                 {slide.isDefault ? (
                   <>
                     <a
@@ -164,35 +163,9 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
         })}
       </div>
 
-      {/* Left arrow */}
-      {slides.length > 1 && (
-        <button
-          onClick={prev}
-          className="absolute left-6 md:left-[max(40px,calc((100vw-1400px)/2+40px))] top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/30 backdrop-blur-sm border border-white/20 rounded-sm transition-all text-white"
-          aria-label="Previous"
-        >
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-      )}
-
-      {/* Right arrow */}
-      {slides.length > 1 && (
-        <button
-          onClick={next}
-          className="absolute right-6 md:right-[max(40px,calc((100vw-1400px)/2+40px))] top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/30 backdrop-blur-sm border border-white/20 rounded-sm transition-all text-white"
-          aria-label="Next"
-        >
-          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-      )}
-
       {/* Pagination dots */}
       {slides.length > 1 && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
+        <div className="absolute bottom-8 left-6 md:left-[max(40px,calc((100vw-1400px)/2+40px))] flex items-center gap-2">
           {slides.map((_, i) => (
             <button
               key={i}

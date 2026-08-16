@@ -6,7 +6,6 @@ import { HowItWorks } from '@/components/home/HowItWorks'
 import { Solutions } from '@/components/home/Solutions'
 import { Services } from '@/components/home/Services'
 import { CaseStudy } from '@/components/home/CaseStudy'
-import { WhyIchibot } from '@/components/home/WhyIchibot'
 import { CTASection } from '@/components/home/CTASection'
 import { BlogPreview } from '@/components/home/BlogPreview'
 import { getAllPostsMerged } from '@/lib/blog'
@@ -23,11 +22,10 @@ export default async function HomePage() {
   const previewPosts = allPosts.slice(0, 5)
 
   return (
-    <main className="bg-white">
+    <main className="bg-[#0B0E13]">
       <Hero caseStudies={caseStudyPosts.slice(0, 5)} products={productItems.slice(0, 2)} />
       <SocialProof />
       <CaseStudy posts={caseStudyPosts} />
-      <WhyIchibot />
       <Solutions productItems={productItems} />
       <Services serviceItems={serviceItems} />
       <HowItWorks />

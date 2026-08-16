@@ -40,10 +40,10 @@ export function SocialProof() {
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="h-6 md:h-8 w-auto max-w-[120px] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                  className="h-6 md:h-8 w-auto max-w-[120px] object-contain brightness-0 invert opacity-90 group-hover:filter-none group-hover:opacity-100 transition-all duration-500"
                 />
               ) : (
-                <span className="text-ink/40 font-display font-bold text-sm tracking-tight whitespace-nowrap select-none group-hover:text-ink transition-colors">
+                <span className="text-white/40 font-display font-bold text-sm tracking-tight whitespace-nowrap select-none group-hover:text-white transition-colors">
                   {client.name}
                 </span>
               )}
@@ -57,14 +57,14 @@ export function SocialProof() {
   return (
     <section
       id="client-logos"
-      className="relative z-20 py-4 md:py-6 overflow-hidden bg-off-white"
+      className="relative z-20 py-4 md:py-6 overflow-hidden bg-[#0B0E13]"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         {loading ? (
           <div>
-            <Skeleton className="h-3 w-40 mx-auto mb-8 bg-slate-200" />
+            <Skeleton className="h-3 w-40 mx-auto mb-8 bg-white/10" />
             <div className="flex gap-12 justify-center overflow-hidden">
-              {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-12 w-32 shrink-0 bg-slate-200" />)}
+              {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-12 w-32 shrink-0 bg-white/10" />)}
             </div>
           </div>
         ) : (

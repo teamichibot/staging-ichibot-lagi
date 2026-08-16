@@ -59,15 +59,15 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
   }, [])
 
   return (
-    <section id="produk" className="bg-white relative">
+    <section id="produk" className="bg-[#0B0E13] relative">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="pt-20 md:pt-28 pb-10 md:pb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8">
-          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+        <div className="pt-14 md:pt-16 pb-10 md:pb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8">
+          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-white tracking-tight">
             {lang === 'id' ? 'Produk Siap Pakai' : 'Ready-to-Deploy Products'}
           </h2>
           <Link
             href="/produk"
-            className="text-sm font-semibold text-brand hover:text-brand-dark transition-colors whitespace-nowrap shrink-0"
+            className="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors whitespace-nowrap shrink-0"
           >
             {lang === 'id' ? 'Lihat semua produk →' : 'View all products →'}
           </Link>
@@ -155,19 +155,19 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
           {hasOverflow && (
             <Link
               href="/produk"
-              className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-off-white border border-black/8 group"
+              className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-[#12161d] border border-white/10 group"
               style={{ height: 'min(60vh, 600px)', minHeight: '440px' }}
             >
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-                <div className="w-14 h-14 rounded-full bg-brand/10 text-brand flex items-center justify-center mb-6 group-hover:bg-brand group-hover:text-white transition-colors">
+                <div className="w-14 h-14 rounded-full bg-sky-400/10 text-sky-400 flex items-center justify-center mb-6 group-hover:bg-sky-400 group-hover:text-[#0B0E13] transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M13 5l7 7-7 7" />
                   </svg>
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight leading-tight mb-3">
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight mb-3">
                   {lang === 'id' ? 'Lihat Semua Produk' : 'View All Products'}
                 </h3>
-                <p className="text-ink/55 text-sm md:text-base leading-relaxed max-w-sm">
+                <p className="text-white/55 text-sm md:text-base leading-relaxed max-w-sm">
                   {lang === 'id'
                     ? `Jelajahi ${productItems.length} produk siap pakai untuk industri Anda.`
                     : `Browse all ${productItems.length} ready-to-deploy products for your industry.`}
@@ -178,13 +178,13 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
         </div>
       </div>
 
-      <div className="flex justify-center gap-2 pt-2 pb-20 md:pb-28">
+      <div className="flex justify-center gap-2 pt-2 pb-14 md:pb-16">
         {Array.from({ length: totalSlides }).map((_, i) => (
           <button
             key={i}
             onClick={() => scrollTo(i)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeIndex === i ? 'w-8 bg-ink' : 'w-1.5 bg-black/15 hover:bg-black/30'
+              activeIndex === i ? 'w-8 bg-white' : 'w-1.5 bg-white/15 hover:bg-white/30'
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />

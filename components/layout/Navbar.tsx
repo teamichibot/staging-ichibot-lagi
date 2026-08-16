@@ -3,16 +3,17 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useLang } from '@/contexts/LanguageContext'
 import { t, WHATSAPP_NUMBER } from '@/lib/translations'
 
 import { servicesData } from '@/lib/services-data'
 import { productsData } from '@/lib/products-data'
 
-function NavLogo() {
+function NavLogo({ isHome }: { isHome: boolean }) {
   const [imgError, setImgError] = useState(false)
   if (imgError) {
-    return <span className="font-display text-lg font-bold tracking-tight text-ink">Ichibot</span>
+    return <span className={`font-display text-lg font-bold tracking-tight ${isHome ? 'text-white' : 'text-ink'}`}>Ichibot</span>
   }
   return (
     <Image
@@ -20,7 +21,7 @@ function NavLogo() {
       alt="Ichibot"
       width={88}
       height={26}
-      className="brightness-0"
+      className={isHome ? 'brightness-0 invert' : 'brightness-0'}
       priority
       onError={() => setImgError(true)}
     />
@@ -37,10 +38,21 @@ export function Navbar({
   liveCaseStudies?: any[]
 }) {
   const { lang, toggle } = useLang()
+  const pathname = usePathname()
+  const isHome = pathname === '/'
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [activeSection, setActiveSection] = useState<string>('')
+  const [scrolled, setScrolled] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!isHome) return
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHome])
 
   const serviceLinks = liveServices.map((s) => ({ label: s.title, href: `/layanan/${s.slug}`, image: s.image }))
   const productLinks = liveProducts.map((p) => ({ label: p.title, href: `/produk/${p.slug}`, image: p.image, category: p.category as string | undefined }))
@@ -161,8 +173,8 @@ export function Navbar({
   }
 
   const navLinkClass = (section?: string) =>
-    `text-sm font-medium text-ink rounded-md px-3 py-1.5 transition-colors duration-150 hover:bg-black/5 ${
-      section && activeSection === section ? 'bg-black/5' : ''
+    `text-sm font-medium ${isHome ? 'text-white' : 'text-ink'} rounded-md px-3 py-1.5 transition-colors duration-150 ${isHome ? 'hover:bg-white/10' : 'hover:bg-black/5'} ${
+      section && activeSection === section ? (isHome ? 'bg-white/10' : 'bg-black/5') : ''
     }`
 
 
@@ -175,7 +187,11 @@ export function Navbar({
       />
 
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl"
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+          isHome
+            ? `[text-shadow:0_1px_4px_rgba(0,0,0,0.55)] ${scrolled || activeDropdown ? 'bg-[#0B0E13]/90 backdrop-blur-xl shadow-lg shadow-black/20' : 'bg-transparent'}`
+            : 'bg-white/95 backdrop-blur-xl'
+        }`}
         onMouseLeave={close}
       >
         <div className="max-w-[1400px] mx-auto h-[64px] flex items-center px-6 md:px-10">
@@ -183,12 +199,12 @@ export function Navbar({
           {/* Left: Logo */}
           <div className="flex items-center shrink-0 pr-8">
             <Link href="/" className="flex items-center">
-              <NavLogo />
+              <NavLogo isHome={isHome} />
             </Link>
           </div>
 
-          {/* Center: Nav links */}
-          <nav className="hidden md:flex flex-1 items-center justify-center gap-2">
+          {/* Nav links — left-aligned, next to the logo */}
+          <nav className="hidden md:flex items-center gap-2">
 
             {/* Solusi */}
             <Link
@@ -230,11 +246,11 @@ export function Navbar({
           </nav>
 
           {/* Right: Actions */}
-          <div className="hidden md:flex items-center justify-end gap-2 shrink-0 pl-8">
+          <div className="hidden md:flex items-center justify-end gap-2 shrink-0 pl-8 ml-auto">
             <button
               onClick={toggle}
               onMouseEnter={() => setActiveDropdown(null)}
-              className="text-ink hover:bg-black/5 rounded-md p-2 transition-colors"
+              className={`rounded-md p-2 transition-colors ${isHome ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-black/5'}`}
               aria-label={`Switch to ${lang === 'id' ? 'English' : 'Bahasa Indonesia'}`}
               title={lang === 'id' ? 'EN' : 'ID'}
             >
@@ -249,7 +265,7 @@ export function Navbar({
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={() => setActiveDropdown(null)}
-              className="text-brand hover:bg-black/5 rounded-md p-2 transition-colors flex items-center justify-center"
+              className={`rounded-md p-2 transition-colors flex items-center justify-center ${isHome ? 'text-sky-400 hover:bg-white/10' : 'text-brand hover:bg-black/5'}`}
               aria-label={tx(t.nav.cta)}
               title={tx(t.nav.cta)}
             >
@@ -262,7 +278,7 @@ export function Navbar({
 
           {/* Mobile: hamburger */}
           <button
-            className="md:hidden text-ink p-1 ml-auto"
+            className={`md:hidden p-1 ml-auto ${isHome ? 'text-white' : 'text-ink'}`}
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -281,7 +297,7 @@ export function Navbar({
 
         {/* Megamenu — full-width panel that extends from navbar */}
         <div
-          className={`hidden md:block overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+          className={`hidden md:block overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out [text-shadow:none] ${
             activeDropdown ? 'max-h-[720px] opacity-100' : 'max-h-0 opacity-0'
           }`}
           onMouseEnter={() => activeDropdown && open(activeDropdown)}
@@ -292,7 +308,7 @@ export function Navbar({
             {activeDropdown === 'solusi' && (
               <div className={`grid grid-cols-[auto_auto] gap-x-12 items-start ${productLinks.length > 6 ? 'min-w-[720px]' : 'min-w-[460px]'}`}>
                 <div>
-                  <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
+                  <h4 className={`text-[11px] font-semibold uppercase mb-5 ${isHome ? 'text-white/40' : 'text-ink/40'}`}>
                     {tx(t.nav.services)}
                   </h4>
                   <ul className="space-y-1.5">
@@ -301,7 +317,7 @@ export function Navbar({
                         <Link
                           href={item.href}
                           onClick={() => setActiveDropdown(null)}
-                          className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                          className={`text-[14px] transition-colors leading-snug block ${isHome ? 'text-white/65 hover:text-sky-400' : 'text-ink/65 hover:text-brand'}`}
                         >
                           {tx(item.label)}
                         </Link>
@@ -310,7 +326,7 @@ export function Navbar({
                   </ul>
                 </div>
                 <div>
-                  <h4 className="text-[11px] font-semibold uppercase text-ink/40 mb-5">
+                  <h4 className={`text-[11px] font-semibold uppercase mb-5 ${isHome ? 'text-white/40' : 'text-ink/40'}`}>
                     {tx(t.nav.products)}
                   </h4>
                   {hasCategorizedProducts && productGroups.length > 1 ? (
@@ -318,7 +334,7 @@ export function Navbar({
                       <div className="grid grid-cols-[auto_auto] gap-x-12 gap-y-7 items-start">
                         {productGroups.map((group) => (
                           <div key={group.category}>
-                            <p className="text-[13px] font-bold text-ink mb-2.5 leading-tight">
+                            <p className={`text-[13px] font-bold mb-2.5 leading-tight ${isHome ? 'text-white' : 'text-ink'}`}>
                               {group.category}
                             </p>
                             <ul className="space-y-1.5">
@@ -327,7 +343,7 @@ export function Navbar({
                                   <Link
                                     href={item.href}
                                     onClick={() => setActiveDropdown(null)}
-                                    className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                                    className={`text-[14px] transition-colors leading-snug block ${isHome ? 'text-white/65 hover:text-sky-400' : 'text-ink/65 hover:text-brand'}`}
                                   >
                                     {tx(item.label)}
                                   </Link>
@@ -339,7 +355,7 @@ export function Navbar({
                       </div>
                       <Link
                         href="/produk"
-                        className="inline-flex items-center text-sm font-semibold text-brand hover:text-brand-dark transition-colors mt-7"
+                        className={`inline-flex items-center text-sm font-semibold transition-colors mt-7 ${isHome ? 'text-sky-400 hover:text-sky-300' : 'text-brand hover:text-brand-dark'}`}
                         onClick={() => setActiveDropdown(null)}
                       >
                         {lang === 'id' ? 'Lihat semua produk →' : 'View all products →'}
@@ -352,7 +368,7 @@ export function Navbar({
                           <Link
                             href={item.href}
                             onClick={() => setActiveDropdown(null)}
-                            className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug block"
+                            className={`text-[14px] transition-colors leading-snug block ${isHome ? 'text-white/65 hover:text-sky-400' : 'text-ink/65 hover:text-brand'}`}
                           >
                             {tx(item.label)}
                           </Link>
@@ -372,7 +388,7 @@ export function Navbar({
                       key={item.href}
                       href={item.href}
                       onClick={() => setActiveDropdown(null)}
-                      className="text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug line-clamp-2"
+                      className={`text-[14px] transition-colors leading-snug line-clamp-2 ${isHome ? 'text-white/65 hover:text-sky-400' : 'text-ink/65 hover:text-brand'}`}
                     >
                       {item.title}
                     </Link>
@@ -380,7 +396,7 @@ export function Navbar({
                 </div>
                 <Link
                   href="/blog?category=Case Study"
-                  className="inline-block mt-6 text-sm font-semibold text-brand hover:text-brand-dark transition-colors"
+                  className={`inline-block mt-6 text-sm font-semibold transition-colors ${isHome ? 'text-sky-400 hover:text-sky-300' : 'text-brand hover:text-brand-dark'}`}
                   onClick={() => setActiveDropdown(null)}
                 >
                   {lang === 'id' ? 'Lihat semua studi kasus →' : 'View all case studies →'}
@@ -392,7 +408,7 @@ export function Navbar({
               <div className="min-w-[360px]">
                 <ul className="grid grid-cols-2 gap-x-12 gap-y-2 items-start">
                   {companyLinks.map((item) => {
-                    const linkClass = "text-[14px] text-ink/65 hover:text-brand transition-colors leading-snug"
+                    const linkClass = `text-[14px] transition-colors leading-snug ${isHome ? 'text-white/65 hover:text-sky-400' : 'text-ink/65 hover:text-brand'}`
                     return (
                       <li key={item.href}>
                         {item.external ? (
@@ -425,7 +441,7 @@ export function Navbar({
         </div>
 
         {/* Mobile drawer — drops below the bar */}
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-black/6 bg-white ${mobileOpen ? 'max-h-[480px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t ${isHome ? 'border-white/10 bg-[#0B0E13]' : 'border-black/6 bg-white'} ${mobileOpen ? 'max-h-[480px] opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="px-4 py-3 space-y-0.5">
             {[
               { label: lang === 'id' ? 'Solusi' : 'Solutions', href: '/#produk' },
@@ -443,10 +459,10 @@ export function Navbar({
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between px-2 py-3 text-sm text-ink/65 hover:text-ink border-b border-black/5 last:border-0 transition-colors"
+                  className={`flex items-center justify-between px-2 py-3 text-sm border-b last:border-0 transition-colors ${isHome ? 'text-white/65 hover:text-white border-white/10' : 'text-ink/65 hover:text-ink border-black/5'}`}
                 >
                   <span>{l.label}</span>
-                  <svg className="w-3.5 h-3.5 text-ink/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className={`w-3.5 h-3.5 ${isHome ? 'text-white/30' : 'text-ink/30'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2-2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
@@ -455,20 +471,20 @@ export function Navbar({
                   key={l.href}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between px-2 py-3 text-sm text-ink/65 hover:text-ink border-b border-black/5 last:border-0 transition-colors"
+                  className={`flex items-center justify-between px-2 py-3 text-sm border-b last:border-0 transition-colors ${isHome ? 'text-white/65 hover:text-white border-white/10' : 'text-ink/65 hover:text-ink border-black/5'}`}
                 >
                   <span>{l.label}</span>
-                  <svg className="w-3.5 h-3.5 text-ink/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className={`w-3.5 h-3.5 ${isHome ? 'text-white/30' : 'text-ink/30'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
               )
             })}
           </div>
-          <div className="px-4 py-4 border-t border-black/6 flex items-center gap-3">
+          <div className={`px-4 py-4 border-t flex items-center gap-3 ${isHome ? 'border-white/10' : 'border-black/6'}`}>
             <button
               onClick={toggle}
-              className="text-ink/40 hover:text-ink text-xs font-semibold transition-colors"
+              className={`text-xs font-semibold transition-colors ${isHome ? 'text-white/40 hover:text-white' : 'text-ink/40 hover:text-ink'}`}
             >
               {lang === 'id' ? 'EN' : 'ID'}
             </button>

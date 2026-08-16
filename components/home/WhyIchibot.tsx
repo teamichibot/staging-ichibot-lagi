@@ -77,7 +77,7 @@ export function WhyIchibot() {
   ]
 
   return (
-    <section className="bg-off-white py-20 md:py-28">
+    <section className="bg-[#0B0E13] py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
 
         {/* Hero image with overlaid heading */}
@@ -104,17 +104,17 @@ export function WhyIchibot() {
         {/* Comparison — side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-12 md:mb-16">
           {/* Traditional */}
-          <div className="bg-white rounded-2xl p-8 md:p-10">
-            <h3 className="font-display text-2xl md:text-3xl font-bold text-ink tracking-tight mb-2">
+          <div className="bg-[#171B23] rounded-2xl p-8 md:p-10">
+            <h3 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">
               {lang === 'id' ? 'Beli Mesin Smart Baru' : 'Buy New Smart Machines'}
             </h3>
-            <p className="text-ink/55 mb-7 leading-relaxed">
+            <p className="text-white/55 mb-7 leading-relaxed">
               {lang === 'id' ? 'CAPEX tinggi & lead time lama' : 'High CAPEX & long lead times'}
             </p>
             <ul className="space-y-3.5">
               {traditionalPoints.map((point, i) => (
-                <li key={i} className="flex items-start gap-3 text-[15px] text-ink/65">
-                  <span className="mt-0.5 w-5 h-5 rounded-full bg-black/5 text-ink/40 flex items-center justify-center shrink-0">
+                <li key={i} className="flex items-start gap-3 text-[15px] text-white/65">
+                  <span className="mt-0.5 w-5 h-5 rounded-full bg-white/8 text-white/40 flex items-center justify-center shrink-0">
                     <Icon.X />
                   </span>
                   <span>{point}</span>
@@ -147,14 +147,14 @@ export function WhyIchibot() {
         {/* Key benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
           {benefits.map((b, i) => (
-            <div key={i} className="border-t border-ink/90 pt-7">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5">
+            <div key={i} className="border-t border-white/15 pt-7">
+              <div className="w-11 h-11 rounded-xl bg-sky-400/10 text-sky-400 flex items-center justify-center mb-5">
                 {b.icon}
               </div>
-              <h3 className="font-display text-lg font-bold text-ink tracking-tight mb-2">
+              <h3 className="font-display text-lg font-bold text-white tracking-tight mb-2">
                 {b.title[lang]}
               </h3>
-              <p className="text-ink/55 text-[15px] leading-relaxed">
+              <p className="text-white/55 text-[15px] leading-relaxed">
                 {b.desc[lang]}
               </p>
             </div>

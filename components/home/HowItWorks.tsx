@@ -8,23 +8,23 @@ function StepVisual({ index }: { index: number }) {
   if (index === 0) {
     return (
       <div className="relative w-40 h-32">
-        <div className="absolute inset-x-0 top-2 bottom-2 rounded-2xl bg-white border border-black/8 p-4">
+        <div className="absolute inset-x-0 top-2 bottom-2 rounded-2xl bg-[#1B2028] border border-white/10 p-4">
           <div className="space-y-2.5">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-sm bg-brand flex items-center justify-center text-white">
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
               </span>
-              <div className="h-1.5 flex-1 rounded bg-black/12 max-w-[78px]" />
+              <div className="h-1.5 flex-1 rounded bg-white/15 max-w-[78px]" />
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-sm bg-brand flex items-center justify-center text-white">
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
               </span>
-              <div className="h-1.5 flex-1 rounded bg-black/12 max-w-[96px]" />
+              <div className="h-1.5 flex-1 rounded bg-white/15 max-w-[96px]" />
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-sm border border-black/20" />
-              <div className="h-1.5 flex-1 rounded bg-black/10 max-w-[60px]" />
+              <span className="w-3 h-3 rounded-sm border border-white/25" />
+              <div className="h-1.5 flex-1 rounded bg-white/12 max-w-[60px]" />
             </div>
           </div>
         </div>
@@ -42,8 +42,8 @@ function StepVisual({ index }: { index: number }) {
   if (index === 1) {
     return (
       <div className="relative w-40 h-32">
-        <div className="absolute inset-x-0 top-2 bottom-2 rounded-2xl bg-white border border-black/8 overflow-hidden flex items-center justify-center">
-          <svg className="absolute inset-0 w-full h-full text-black/[0.06]" aria-hidden>
+        <div className="absolute inset-x-0 top-2 bottom-2 rounded-2xl bg-[#1B2028] border border-white/10 overflow-hidden flex items-center justify-center">
+          <svg className="absolute inset-0 w-full h-full text-white/[0.06]" aria-hidden>
             <defs>
               <pattern id="grid-survey" width="14" height="14" patternUnits="userSpaceOnUse">
                 <path d="M 14 0 L 0 0 0 14" fill="none" stroke="currentColor" strokeWidth="1" />
@@ -52,8 +52,8 @@ function StepVisual({ index }: { index: number }) {
             <rect width="100%" height="100%" fill="url(#grid-survey)" />
           </svg>
           <div className="relative z-10 flex items-center justify-center">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="rgba(0,52,89,0.12)" />
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-400">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="rgba(56,189,248,0.15)" />
               <circle cx="12" cy="10" r="3" fill="currentColor" stroke="none" />
             </svg>
           </div>
@@ -103,18 +103,18 @@ function StepVisual({ index }: { index: number }) {
   // Step 4 — Hand-over & Training (handover doc + graduation)
   return (
     <div className="relative w-40 h-32 flex items-center justify-center">
-      <div className="relative w-24 h-28 rounded-xl bg-white border border-black/10 p-3">
+      <div className="relative w-24 h-28 rounded-xl bg-[#1B2028] border border-white/12 p-3">
         <div className="space-y-1.5 mb-3">
-          <div className="h-1.5 w-3/4 rounded bg-black/12" />
-          <div className="h-1.5 w-1/2 rounded bg-black/10" />
-          <div className="h-1.5 w-2/3 rounded bg-black/10" />
+          <div className="h-1.5 w-3/4 rounded bg-white/15" />
+          <div className="h-1.5 w-1/2 rounded bg-white/12" />
+          <div className="h-1.5 w-2/3 rounded bg-white/12" />
         </div>
-        <div className="h-1 w-full rounded bg-black/8 mb-2" />
+        <div className="h-1 w-full rounded bg-white/10 mb-2" />
         <div className="flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-full bg-brand text-white flex items-center justify-center">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
           </span>
-          <div className="h-1.5 flex-1 rounded bg-black/10" />
+          <div className="h-1.5 flex-1 rounded bg-white/12" />
         </div>
       </div>
       <div className="absolute -top-1 right-2 w-12 h-12 rounded-full bg-brand flex items-center justify-center shadow-[0_8px_24px_rgba(0,52,89,0.25)]">
@@ -148,13 +148,13 @@ export function HowItWorks() {
   const tx = (obj: { id: string; en: string }) => obj[lang]
 
   return (
-    <section className="bg-white py-20 md:py-28 overflow-hidden">
+    <section className="bg-[#0B0E13] py-14 md:py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="bg-off-white rounded-3xl px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
+        <div className="bg-[#12161d] rounded-3xl px-6 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
 
           {/* Header — centered */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-ink tracking-tight md:whitespace-nowrap">
+            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight md:whitespace-nowrap">
               {tx(t.howItWorks.heading)}
             </h2>
           </div>
@@ -164,7 +164,7 @@ export function HowItWorks() {
 
             {/* Curved dotted connector — desktop only */}
             <svg
-              className="hidden md:block absolute inset-x-0 top-[60px] w-full h-24 text-ink/25 pointer-events-none"
+              className="hidden md:block absolute inset-x-0 top-[60px] w-full h-24 text-white/25 pointer-events-none"
               viewBox="0 0 1200 100"
               preserveAspectRatio="none"
               aria-hidden
@@ -185,7 +185,7 @@ export function HowItWorks() {
                   <div className="mb-8">
                     <StepVisual index={i} />
                   </div>
-                  <h3 className="font-display text-xl md:text-2xl font-bold text-ink leading-tight tracking-tight">
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-white leading-tight tracking-tight">
                     {tx(step.title)}
                   </h3>
                 </div>

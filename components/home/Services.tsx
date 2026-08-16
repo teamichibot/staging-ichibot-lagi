@@ -67,18 +67,18 @@ export function Services({ serviceItems }: { serviceItems: ServiceData[] }) {
   if (!s1) return null
 
   return (
-    <section id="layanan" className="bg-off-white py-20 md:py-28">
+    <section id="layanan" className="bg-[#0B0E13] py-14 md:py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
 
         <div className="pb-10 md:pb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8">
-          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-white tracking-tight">
             {lang === 'id' ? 'Layanan Implementasi' : 'Implementation Services'}
           </h2>
           <a
             href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t.whatsapp.message[lang])}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold text-brand hover:text-brand-dark transition-colors whitespace-nowrap shrink-0"
+            className="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors whitespace-nowrap shrink-0"
           >
             {lang === 'id' ? 'Diskusi solusi →' : 'Discuss your needs →'}
           </a>

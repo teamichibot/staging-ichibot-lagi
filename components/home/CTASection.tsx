@@ -9,7 +9,7 @@ export function CTASection() {
   const waMessage = encodeURIComponent(t.whatsapp.message[lang])
 
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section className="bg-[#0B0E13] py-14 md:py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="relative bg-brand rounded-3xl px-8 py-16 md:px-16 md:py-24 lg:py-28 text-white text-center overflow-hidden">
 

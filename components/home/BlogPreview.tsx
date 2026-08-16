@@ -54,15 +54,15 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
   }, [])
 
   return (
-    <section className="bg-white relative">
+    <section className="bg-[#0B0E13] relative">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
-        <div className="pt-20 md:pt-28 pb-10 md:pb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8">
-          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-ink tracking-tight">
+        <div className="pt-14 md:pt-16 pb-10 md:pb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-8">
+          <h2 className="max-w-3xl font-display text-4xl md:text-5xl font-bold text-white tracking-tight">
             {tx(t.blogPreview.heading)}
           </h2>
           <Link
             href="/blog"
-            className="text-sm font-semibold text-brand hover:text-brand-dark transition-colors whitespace-nowrap shrink-0"
+            className="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors whitespace-nowrap shrink-0"
           >
             {lang === 'id' ? 'Lihat semua artikel →' : 'View all articles →'}
           </Link>
@@ -152,13 +152,13 @@ export function BlogPreview({ posts }: { posts: PostMeta[] }) {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center gap-2 pt-2 pb-20 md:pb-28">
+      <div className="flex justify-center gap-2 pt-2 pb-14 md:pb-16">
         {posts.map((_, i) => (
           <button
             key={i}
             onClick={() => scrollTo(i)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeIndex === i ? 'w-8 bg-ink' : 'w-1.5 bg-black/15 hover:bg-black/30'
+              activeIndex === i ? 'w-8 bg-white' : 'w-1.5 bg-white/15 hover:bg-white/30'
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />
