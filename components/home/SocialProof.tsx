@@ -40,7 +40,7 @@ export function SocialProof() {
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="h-6 md:h-8 w-auto max-w-[120px] object-contain brightness-0 invert opacity-90 group-hover:filter-none group-hover:opacity-100 transition-all duration-500"
+                  className="h-6 md:h-8 w-auto max-w-[120px] object-contain grayscale invert opacity-90 group-hover:filter-none group-hover:opacity-100 transition-all duration-500"
                 />
               ) : (
                 <span className="text-white/40 font-display font-bold text-sm tracking-tight whitespace-nowrap select-none group-hover:text-white transition-colors">

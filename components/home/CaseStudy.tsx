@@ -136,6 +136,14 @@ export function CaseStudy({ posts }: Props) {
 
                 {/* Bottom content */}
                 <div className="absolute bottom-10 left-8 right-8 md:bottom-12 md:left-12 md:right-12 text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
+                  {post.client?.logo && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={post.client.logo}
+                      alt={post.client.name}
+                      className="h-8 md:h-9 w-auto max-w-[150px] object-contain grayscale invert opacity-90 mb-3"
+                    />
+                  )}
                   <h3 className="font-display text-xl md:text-2xl font-bold tracking-tight mb-2 leading-tight line-clamp-2">
                     {post.title}
                   </h3>

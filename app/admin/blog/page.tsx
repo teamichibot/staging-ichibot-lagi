@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { AdminShell } from '../AdminShell'
 import { Pagination } from '@/components/Pagination'
@@ -14,6 +14,8 @@ export default function AdminBlogPage() {
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
   const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('')
 
   useEffect(() => {
     fetch('/api/admin/blog')
@@ -21,9 +23,33 @@ export default function AdminBlogPage() {
       .then((d) => { setPosts(d); setLoading(false) })
   }, [])
 
-  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE))
+  const categories = useMemo(
+    () => Array.from(new Set(posts.map((p) => p.category).filter(Boolean))).sort(),
+    [posts]
+  )
+
+  const filteredPosts = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return posts.filter((p) => {
+      if (categoryFilter && p.category !== categoryFilter) return false
+      if (q && !p.title.toLowerCase().includes(q)) return false
+      return true
+    })
+  }, [posts, search, categoryFilter])
+
+  function updateSearch(value: string) {
+    setSearch(value)
+    setPage(1)
+  }
+
+  function updateCategoryFilter(value: string) {
+    setCategoryFilter(value)
+    setPage(1)
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
-  const paginatedPosts = posts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   async function handleDelete(slug: string) {
     if (!confirm(`Hapus post "${slug}"?`)) return
@@ -39,7 +65,11 @@ export default function AdminBlogPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-ink">Blog</h1>
-            <p className="text-ink/55 text-sm mt-1">{posts.length} artikel tersimpan.</p>
+            <p className="text-ink/55 text-sm mt-1">
+              {search || categoryFilter
+                ? `${filteredPosts.length} dari ${posts.length} artikel.`
+                : `${posts.length} artikel tersimpan.`}
+            </p>
           </div>
           <Link
             href="/admin/blog/new"
@@ -52,13 +82,37 @@ export default function AdminBlogPage() {
           </Link>
         </div>
 
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <svg className="w-4 h-4 text-ink/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+            </svg>
+            <input
+              value={search}
+              onChange={(e) => updateSearch(e.target.value)}
+              placeholder="Cari judul artikel..."
+              className="input-field w-full pl-10"
+            />
+          </div>
+          <select
+            value={categoryFilter}
+            onChange={(e) => updateCategoryFilter(e.target.value)}
+            className="input-field sm:w-56 bg-white"
+          >
+            <option value="">Semua Kategori</option>
+            {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+
         {loading ? (
           <p className="text-ink/55 text-sm">Memuat data...</p>
         ) : (
           <div className="bg-white rounded-2xl border border-black/8 overflow-hidden">
             <div className="divide-y divide-black/8">
-              {posts.length === 0 && (
-                <p className="px-6 py-10 text-center text-ink/40 text-sm">Belum ada artikel.</p>
+              {filteredPosts.length === 0 && (
+                <p className="px-6 py-10 text-center text-ink/40 text-sm">
+                  {posts.length === 0 ? 'Belum ada artikel.' : 'Tidak ada artikel yang cocok.'}
+                </p>
               )}
               {paginatedPosts.map((p) => (
                 <div key={p.slug} className="flex items-center gap-4 px-6 py-4">

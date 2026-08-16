@@ -29,7 +29,8 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
     subheadline: tx(t.hero.subheadline),
     image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=1800',
     tag: lang === 'id' ? 'Solusi Unggulan' : 'Featured Solution',
-    href: ''
+    href: '',
+    client: null as { name: string; logo: string } | null,
   }
 
   const slides = [
@@ -41,7 +42,8 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
       subheadline: cs.excerpt,
       image: cs.image || FALLBACK_IMAGE,
       tag: 'Case Study',
-      href: `/blog/${cs.slug}`
+      href: `/blog/${cs.slug}`,
+      client: cs.client ?? null,
     })),
     ...products.map((p) => ({
       isDefault: false,
@@ -50,7 +52,8 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
       subheadline: p.desc.id,
       image: p.image || FALLBACK_IMAGE,
       tag: lang === 'id' ? 'Produk' : 'Product',
-      href: `/produk/${p.slug}`
+      href: `/produk/${p.slug}`,
+      client: null as { name: string; logo: string } | null,
     }))
   ]
 
@@ -109,6 +112,16 @@ export function Hero({ caseStudies = [], products = [] }: HeroProps) {
               <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold mb-4">
                 {slide.tag}
               </span>
+
+              {/* Client logo */}
+              {slide.client?.logo && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={slide.client.logo}
+                  alt={slide.client.name}
+                  className="h-9 md:h-11 w-auto max-w-[170px] object-contain grayscale invert opacity-90 mb-4"
+                />
+              )}
 
               {/* Headline */}
               <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight mb-3 max-w-2xl line-clamp-2 [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">

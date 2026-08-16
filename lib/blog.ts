@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { supabase } from './supabase'
+import { resolveClientsForSlugs, type ClientRef } from './blogClients'
 
 export interface PostMeta {
   slug: string
@@ -12,6 +13,7 @@ export interface PostMeta {
   excerpt: string
   image: string
   videoUrl: string
+  client?: ClientRef | null
 }
 
 export interface Post extends PostMeta {
@@ -59,7 +61,13 @@ export async function getAllPostsMerged(): Promise<PostMeta[]> {
   }))
   const dbSlugs = new Set(dbPosts.map((p) => p.slug))
   const uniqueMdx = mdxPosts.filter((p) => !dbSlugs.has(p.slug))
-  return [...dbPosts, ...uniqueMdx].sort((a, b) => (a.date < b.date ? 1 : -1))
+  const merged = [...dbPosts, ...uniqueMdx].sort((a, b) => (a.date < b.date ? 1 : -1))
+
+  const clientMap = await resolveClientsForSlugs(dbPosts.map((p) => p.slug))
+  for (const post of merged) {
+    if (post.slug in clientMap) post.client = clientMap[post.slug]
+  }
+  return merged
 }
 
 export async function getPostBySlugMerged(slug: string): Promise<Post | null> {
@@ -67,6 +75,7 @@ export async function getPostBySlugMerged(slug: string): Promise<Post | null> {
   if (mdx) return mdx
   const { data } = await supabase.from('blog_posts').select('*').eq('slug', slug).single()
   if (!data) return null
+  const clientMap = await resolveClientsForSlugs([data.slug])
   return {
     slug: data.slug,
     title: data.title,
@@ -76,6 +85,7 @@ export async function getPostBySlugMerged(slug: string): Promise<Post | null> {
     image: data.image ?? '',
     videoUrl: data.video_url ?? '',
     content: data.content ?? '',
+    client: clientMap[data.slug] ?? null,
   }
 }
 

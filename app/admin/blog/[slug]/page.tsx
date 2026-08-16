@@ -24,6 +24,7 @@ type PostForm = {
   image: string
   videoUrl: string
   content: string
+  client: string
 }
 
 const empty: PostForm = {
@@ -35,9 +36,12 @@ const empty: PostForm = {
   image: '',
   videoUrl: '',
   content: '',
+  client: '',
 }
 
 const CATEGORIES = ['IoT', 'AI', 'Case Study', 'Insight', 'Tutorial', 'News']
+
+type ClientOption = { id: string; name: string; logo: string }
 
 type UnsplashPhoto = {
   id: string
@@ -84,12 +88,20 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
   const [unsplashLoading, setUnsplashLoading] = useState(false)
   const [unsplashTarget, setUnsplashTarget] = useState<'cover' | string>('cover') // 'cover' or 'GAMBAR_1' etc.
   const [unsplashAttribution, setUnsplashAttribution] = useState('')
+  const [clients, setClients] = useState<{ industry: ClientOption[]; academic: ClientOption[] }>({ industry: [], academic: [] })
+
+  useEffect(() => {
+    fetch('/api/clients')
+      .then((r) => r.json())
+      .then((d) => setClients(d))
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     if (isNew) return
     fetch(`/api/admin/blog/${slug}`)
       .then((r) => r.json())
-      .then((d) => { setForm(d); setLoading(false) })
+      .then((d) => { setForm({ ...d, client: d.client?.name ?? '' }); setLoading(false) })
   }, [slug, isNew])
 
   const handleGeneratePrompt = () => {
@@ -394,23 +406,44 @@ export default function AdminBlogEditPage({ params }: { params: Promise<{ slug: 
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink/85 mb-1.5">URL Gambar Cover</label>
-                <div className="flex gap-2">
-                  <input
-                    value={form.image}
-                    onChange={(e) => set('image', e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
-                    className="input-field w-full"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => openUnsplash('cover')}
-                    aria-label="Cari gambar cover dari Unsplash"
-                    className="shrink-0 px-3 py-1.5 text-xs font-semibold text-brand border border-brand/20 bg-brand/5 hover:bg-brand/10 rounded-lg transition-all whitespace-nowrap"
-                  >
-                    Cari Gambar
-                  </button>
-                </div>
+                <label className="block text-sm font-medium text-ink/85 mb-1.5">Klien / Customer <span className="text-ink/40 font-normal">(opsional)</span></label>
+                <select
+                  value={form.client}
+                  onChange={(e) => set('client', e.target.value)}
+                  className="input-field w-full bg-white"
+                >
+                  <option value="">— Tidak ada —</option>
+                  {clients.industry.length > 0 && (
+                    <optgroup label="Industri">
+                      {clients.industry.map((c) => <option key={`i-${c.id}`} value={c.name}>{c.name}</option>)}
+                    </optgroup>
+                  )}
+                  {clients.academic.length > 0 && (
+                    <optgroup label="Akademik">
+                      {clients.academic.map((c) => <option key={`a-${c.id}`} value={c.name}>{c.name}</option>)}
+                    </optgroup>
+                  )}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-ink/85 mb-1.5">URL Gambar Cover</label>
+              <div className="flex gap-2">
+                <input
+                  value={form.image}
+                  onChange={(e) => set('image', e.target.value)}
+                  placeholder="https://images.unsplash.com/..."
+                  className="input-field w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => openUnsplash('cover')}
+                  aria-label="Cari gambar cover dari Unsplash"
+                  className="shrink-0 px-3 py-1.5 text-xs font-semibold text-brand border border-brand/20 bg-brand/5 hover:bg-brand/10 rounded-lg transition-all whitespace-nowrap"
+                >
+                  Cari Gambar
+                </button>
               </div>
             </div>
 

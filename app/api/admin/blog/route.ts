@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getAllPostsMerged } from '@/lib/blog'
+import { setBlogClientForSlug } from '@/lib/blogClients'
 import { validatePostContent } from '@/lib/content-guard'
 import { supabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
@@ -10,7 +11,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { slug, title, date, category, excerpt, image, videoUrl, content } = await request.json()
+  const { slug, title, date, category, excerpt, image, videoUrl, content, client } = await request.json()
 
   if (!slug || !title) {
     return NextResponse.json({ error: 'slug dan title wajib diisi' }, { status: 400 })
@@ -42,7 +43,10 @@ export async function POST(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
+  await setBlogClientForSlug(slug, client || null)
+
   revalidatePath('/blog')
   revalidatePath(`/blog/${slug}`)
+  revalidatePath('/')
   return NextResponse.json({ ok: true })
 }
