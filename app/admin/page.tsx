@@ -13,6 +13,18 @@ const sections = [
     ),
   },
   {
+    href: '/admin/industries',
+    label: 'Kategori Bisnis',
+    desc: 'Kelola sektor industri yang bisa dikerjakan Ichibot, tampil di halaman utama.',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+        <path d="M3 21V10l5 3V10l5 3V8l6 3v10z" />
+        <path d="M17 11V3h3v8" />
+        <path d="M3 21h18" />
+      </svg>
+    ),
+  },
+  {
     href: '/admin/layanan',
     label: 'Layanan',
     desc: 'Tambah, edit, dan hapus layanan yang ditampilkan di halaman utama dan halaman detail.',
@@ -56,6 +68,16 @@ const sections = [
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+  {
+    href: '/admin/testimonials',
+    label: 'Testimoni',
+    desc: 'Kelola kutipan testimoni klien yang ditampilkan di halaman utama.',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+        <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.7 9.7 0 0 1-2.9-.4L3 21l1.4-4.2A8.2 8.2 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z" />
       </svg>
     ),
   },

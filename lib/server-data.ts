@@ -2,6 +2,7 @@ import 'server-only'
 import { readData } from './admin-data'
 import { servicesData, type ServiceData } from './services-data'
 import { productsData, type ProductData } from './products-data'
+import { testimonialsData, industriesData, type TestimonialData, type IndustryData } from './homepage-data'
 
 export async function getAllServices(): Promise<ServiceData[]> {
   return readData('services', servicesData)
@@ -57,4 +58,12 @@ const defaultTeam: TeamMember[] = [
 
 export async function getAllTeamMembers(): Promise<TeamMember[]> {
   return readData('team', defaultTeam)
+}
+
+export async function getAllTestimonials(): Promise<TestimonialData[]> {
+  return readData('testimonials', testimonialsData)
+}
+
+export async function getAllIndustries(): Promise<IndustryData[]> {
+  return readData('industries', industriesData)
 }
