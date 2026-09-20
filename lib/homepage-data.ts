@@ -1,5 +1,8 @@
 export type BilingualText = { id: string; en: string }
 
+/** Warna kartu testimoni. Lihat testimonialTones di components/home/Testimonials.tsx */
+export type TestimonialTone = 'ice' | 'lime' | 'sky' | 'sand'
+
 /** Testimoni klien yang tampil di halaman utama. */
 export type TestimonialData = {
   id: string
@@ -9,6 +12,8 @@ export type TestimonialData = {
   company: string
   /** URL logo perusahaan. Kosongkan untuk memakai inisial nama perusahaan. */
   logo: string
+  /** Warna kartu. Kosongkan untuk memakai urutan warna bawaan. */
+  color?: TestimonialTone
   /** true selama teksnya masih contoh — memunculkan badge "Contoh" di kartu. */
   placeholder?: boolean
 }
@@ -33,6 +38,7 @@ export const testimonialsData: TestimonialData[] = [
     role: { id: 'Manajer Produksi', en: 'Production Manager' },
     company: 'Nama Perusahaan',
     logo: '',
+    color: 'ice',
     placeholder: true,
   },
   {
@@ -45,6 +51,7 @@ export const testimonialsData: TestimonialData[] = [
     role: { id: 'Kepala Maintenance', en: 'Head of Maintenance' },
     company: 'Nama Perusahaan',
     logo: '',
+    color: 'lime',
     placeholder: true,
   },
   {
@@ -57,6 +64,7 @@ export const testimonialsData: TestimonialData[] = [
     role: { id: 'Direktur Operasional', en: 'Operations Director' },
     company: 'Nama Perusahaan',
     logo: '',
+    color: 'sky',
     placeholder: true,
   },
 ]

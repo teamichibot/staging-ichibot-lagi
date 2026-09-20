@@ -2,11 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { AdminShell } from '../AdminShell'
-import type { TestimonialData } from '@/lib/homepage-data'
+import type { TestimonialData, TestimonialTone } from '@/lib/homepage-data'
 
 const inputClass =
   'w-full px-3 py-2 bg-white border border-black/8 rounded-lg text-sm focus:ring-2 focus:ring-teal/20 focus:border-brand outline-none'
 const labelClass = 'block text-[10px] font-bold text-ink/40 uppercase mb-1'
+
+/** Warna kartu di halaman utama — swatch-nya meniru warna asli kartunya. */
+const toneOptions: { value: TestimonialTone; label: string; swatch: string }[] = [
+  { value: 'ice', label: 'Ice', swatch: 'bg-gradient-to-br from-[#EEF3FB] to-[#D7E4F4]' },
+  { value: 'lime', label: 'Lime', swatch: 'bg-[#DCEF5E]' },
+  { value: 'sky', label: 'Sky', swatch: 'bg-gradient-to-br from-[#CFE8F7] to-[#A9D4EE]' },
+  { value: 'sand', label: 'Sand', swatch: 'bg-gradient-to-br from-[#F4EADA] to-[#EADCC4]' },
+]
 
 export default function AdminTestimonialsPage() {
   const [items, setItems] = useState<TestimonialData[]>([])
@@ -57,6 +65,7 @@ export default function AdminTestimonialsPage() {
       role: { id: 'Jabatan', en: 'Job Title' },
       company: 'Nama Perusahaan',
       logo: '',
+      color: 'ice',
       placeholder: true,
     }
     const next = [...items, newItem]
@@ -174,6 +183,30 @@ export default function AdminTestimonialsPage() {
                         value={editForm.logo}
                         onChange={(e) => setEditForm({ ...editForm, logo: e.target.value })}
                       />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Warna Kartu</label>
+                      <div className="flex flex-wrap gap-2">
+                        {toneOptions.map((tone) => {
+                          const active = (editForm.color ?? 'ice') === tone.value
+                          return (
+                            <button
+                              key={tone.value}
+                              type="button"
+                              onClick={() => setEditForm({ ...editForm, color: tone.value })}
+                              aria-pressed={active}
+                              className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg border text-sm transition-colors ${
+                                active
+                                  ? 'border-brand bg-white text-ink font-semibold'
+                                  : 'border-black/8 bg-white text-ink/65 hover:text-ink'
+                              }`}
+                            >
+                              <span className={`${tone.swatch} w-5 h-5 rounded-md border border-black/10`} />
+                              {tone.label}
+                            </button>
+                          )
+                        })}
+                      </div>
                     </div>
                     <label className="flex items-center gap-2.5 text-sm text-ink/75 cursor-pointer">
                       <input
