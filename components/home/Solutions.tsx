@@ -107,7 +107,7 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
           {visibleProducts.map((item, i) => (
             <div
               key={item.slug}
-              className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-black"
+              className="flex-none snap-start w-[344px] relative overflow-hidden rounded-2xl bg-black"
               style={{ transitionDelay: `${i * 60}ms`, height: 'min(60vh, 600px)', minHeight: '440px' }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -155,7 +155,7 @@ export function Solutions({ productItems }: { productItems: ProductData[] }) {
           {hasOverflow && (
             <Link
               href="/produk"
-              className="flex-none snap-start w-[88vw] md:w-[calc(50vw-12px)] relative overflow-hidden rounded-2xl bg-[#12161d] border border-white/10 group"
+              className="flex-none snap-start w-[344px] relative overflow-hidden rounded-2xl bg-[#12161d] border border-white/10 group"
               style={{ height: 'min(60vh, 600px)', minHeight: '440px' }}
             >
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
