@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ichibot — Intelligent Industrial Hub (Draft)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBFBFC; --bg2:#F2F3F5; --panel:#FFFFFF; --text:#121418; --muted:#5E6470; --faint:#8C919B;
+  --border:rgba(18,20,24,.10); --border2:rgba(18,20,24,.16);
+  --accent:#E89A0C; --accent-soft:rgba(232,154,12,.14); --on-accent:#1A1200;
+  --live:#0FA38C; --live-soft:rgba(15,163,140,.14); --draft:#C2571A;
+  --glow:rgba(232,154,12,.18); --shadow:0 1px 2px rgba(18,20,24,.06),0 12px 40px -12px rgba(18,20,24,.18);
+  --h1a:#121418; --h1b:#4A505B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
+    --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
+    --accent:#F7B32B; --accent-soft:rgba(247,179,43,.12); --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+    --glow:rgba(247,179,43,.16); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
+    --h1a:#FFFFFF; --h1b:#8A8F98;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
+  --accent:#F7B32B; --accent-soft:rgba(247,179,43,.12); --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+  --glow:rgba(247,179,43,.16); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
+  --h1a:#FFFFFF; --h1b:#8A8F98;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Geist",Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2rem)}
+section{padding:clamp(4.5rem,10vw,8rem) 0}
+h1,h2,h3{margin:0;letter-spacing:-.022em}
+h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:600;line-height:1.08;max-width:20ch}
+h3{font-size:1.05rem;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+.lede{color:var(--muted);font-size:1.12rem;max-width:56ch;margin-top:1.1rem}
+.center{text-align:center}.center h2,.center .lede{margin-left:auto;margin-right:auto}
+.note{display:block;margin-top:1.2rem;font-size:.82rem;color:var(--draft);font-style:italic}
+.btn{display:inline-flex;align-items:center;gap:.5rem;height:42px;padding:0 1.1rem;border-radius:999px;font:inherit;font-weight:550;font-size:.95rem;
+  text-decoration:none;border:1px solid var(--border2);background:var(--panel);color:var(--text);cursor:pointer;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--faint)}
+.btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn.primary:hover{opacity:.88}
+.btn.sm{height:34px;font-size:.88rem;padding:0 .9rem}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--border)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:1.05rem;text-decoration:none;letter-spacing:-.02em}
+.mark{width:22px;height:22px;border-radius:6px;background:var(--text);position:relative}
+.mark::after{content:"";position:absolute;inset:6px;border-radius:2px;background:var(--accent)}
+.nav ul{display:flex;gap:1.8rem;list-style:none;margin:0;padding:0;font-size:.9rem}
+.nav ul a{text-decoration:none;color:var(--muted);transition:color .15s}
+.nav ul a:hover{color:var(--text)}
+@media (max-width:880px){.nav ul{display:none}}
+
+/* hero */
+.hero{position:relative;padding-top:clamp(4rem,10vw,7.5rem);padding-bottom:3rem;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:radial-gradient(ellipse 70% 55% at 50% 30%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 30%,#000 30%,transparent 75%)}
+.hero .wrap{position:relative;text-align:center}
+.chip{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--muted);border:1px solid var(--border2);border-radius:999px;padding:.3rem .8rem;background:var(--panel)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 4px var(--live-soft)}
+.hero h1{font-size:clamp(2.8rem,8.5vw,6rem);font-weight:650;line-height:.98;letter-spacing:-.045em;margin:1.4rem auto 0;max-width:12ch;
+  background:linear-gradient(180deg,var(--h1a) 30%,var(--h1b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{margin:1.5rem auto 0;font-size:clamp(1.05rem,1.8vw,1.25rem);max-width:52ch}
+.hero .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:.7rem;margin-top:2.2rem}
+.stage{position:relative;margin-top:clamp(3rem,7vw,5rem)}
+.stage::before{content:"";position:absolute;left:50%;top:40%;width:80%;height:70%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--glow),transparent);filter:blur(30px);pointer-events:none}
+.window{position:relative;background:var(--panel);border:1px solid var(--border2);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;text-align:left}
+.window-bar{display:flex;align-items:center;gap:.4rem;height:38px;padding:0 .9rem;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--faint)}
+.window-bar b{width:10px;height:10px;border-radius:50%;background:var(--border2)}
+.window-bar span{margin-left:.6rem}
+.hub svg{display:block;width:100%;height:auto}
+.hub .node rect{fill:var(--bg2);stroke:var(--border2)}
+.hub .node text{fill:var(--text);font:500 13px "Geist",sans-serif}
+.hub .node .sub{fill:var(--faint);font-size:10.5px}
+.hub .wire{fill:none;stroke:var(--border2);stroke-width:1.5}
+.hub .core rect.bg{fill:var(--text)}
+.hub .core text{fill:var(--bg);font:650 15px "Geist",sans-serif}
+.hub .core .sub{fill:var(--bg);opacity:.6;font-size:10.5px;font-weight:400}
+.hub .ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.6}
+.hub .pulse{fill:var(--accent)}
+.hub .pulse.out{fill:var(--live)}
+.hub .col{fill:var(--faint);font:500 11px "Geist",sans-serif;letter-spacing:.02em}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero .chip,.hero h1,.hero .lede,.hero .actions,.stage{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.06s}.hero .lede{animation-delay:.14s}.hero .actions{animation-delay:.22s}.stage{animation-delay:.34s}
+@media (prefers-reduced-motion:reduce){.hero *,.stage{animation:none!important}html{scroll-behavior:auto}}
+
+/* logos */
+.logos{padding:3rem 0 1rem}
+.logos p{text-align:center;color:var(--faint);font-size:.9rem}
+.logo-row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(1.5rem,5vw,3.5rem);margin-top:1.6rem}
+.logo-row span{font-weight:650;font-size:1.15rem;color:var(--muted);letter-spacing:-.02em;opacity:.8}
+
+/* products tabs */
+.tabs{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;margin-top:3rem}
+.tablist{display:flex;flex-direction:column;gap:.25rem}
+.tab{display:flex;align-items:center;gap:.75rem;text-align:left;font:inherit;font-size:.95rem;font-weight:500;color:var(--muted);background:transparent;border:1px solid transparent;
+  border-radius:10px;padding:.8rem .9rem;cursor:pointer;transition:background .15s,color .15s}
+.tab:hover{color:var(--text);background:var(--bg2)}
+.tab[aria-selected="true"]{color:var(--text);background:var(--panel);border-color:var(--border2);box-shadow:var(--shadow)}
+.tab .ic{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:var(--bg2);border:1px solid var(--border);flex:none}
+.tab[aria-selected="true"] .ic{background:var(--accent-soft);border-color:transparent}
+.tab .ic svg{width:16px;height:16px}
+.tab .ic svg *{fill:none;stroke:currentColor;stroke-width:1.8}
+.tab .pill{margin-left:auto;font-size:.7rem;font-weight:600;color:var(--on-accent);background:var(--accent);border-radius:999px;padding:.05rem .45rem}
+.panel{background:var(--panel);border:1px solid var(--border2);border-radius:16px;box-shadow:var(--shadow);padding:clamp(1.3rem,3vw,2.2rem);display:grid;grid-template-columns:1fr 1fr;gap:2rem;min-height:420px}
+.panel.swap{animation:fadein .35s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.panel.swap{animation:none}}
+.panel h3{font-size:1.5rem;letter-spacing:-.025em}
+.panel .desc{color:var(--muted);margin-top:.7rem}
+.panel dl{margin:1.5rem 0 0;display:grid;gap:1rem}
+.panel dt{font-size:.8rem;color:var(--faint);margin-bottom:.25rem}
+.panel dd{margin:0;font-size:.93rem}
+.proof li{display:flex;gap:.5rem;align-items:baseline}
+.proof{list-style:none;margin:0;padding:0;display:grid;gap:.35rem}
+.proof li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--live);flex:none;transform:translateY(-2px)}
+.mock{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:.8rem}
+.mock-top{display:flex;justify-content:space-between;font-size:.8rem;color:var(--faint)}
+.mock-top em{font-style:normal;color:var(--live)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.metric{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.6rem .7rem}
+.metric b{display:block;font-size:1.15rem;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.metric small{color:var(--faint);font-size:.75rem}
+.spark{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:.6rem;flex:1;min-height:120px}
+.spark svg{width:100%;height:100%;display:block}
+@media (max-width:900px){
+  .tabs{grid-template-columns:1fr}
+  .tablist{flex-direction:row;overflow-x:auto;padding-bottom:.4rem;scrollbar-width:none}
+  .tab{white-space:nowrap}
+  .panel{grid-template-columns:1fr}
+}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:3rem}
+.tile{background:var(--panel);border:1px solid var(--border2);border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;gap:.6rem;overflow:hidden;position:relative}
+.tile p{color:var(--muted);font-size:.95rem}
+.t-dash{grid-column:span 4}.t-erp{grid-column:span 2}.t-dep{grid-column:span 3}.t-proto{grid-column:span 3}
+.tile .viz{margin-top:auto;padding-top:1rem}
+.dash-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.dash-mini .metric{background:var(--bg2)}
+.bars{display:flex;align-items:flex-end;gap:5px;height:90px;margin-top:.6rem}
+.bars span{flex:1;background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 30%,transparent));border-radius:3px 3px 0 0;opacity:.85}
+.flow{display:flex;align-items:center;gap:.4rem;font-size:.82rem;flex-wrap:wrap}
+.flow span{border:1px solid var(--border2);background:var(--bg2);border-radius:8px;padding:.35rem .6rem}
+.flow span.hl{border-color:var(--accent);background:var(--accent-soft)}
+.flow i{flex:1;min-width:14px;height:1px;background:var(--border2);position:relative}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px}
+.seg button{font:inherit;font-size:.85rem;border:0;background:transparent;color:var(--muted);padding:.35rem .9rem;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.dep-out{font-size:.9rem;color:var(--text);min-height:3.2em;margin-top:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chips span{font-size:.82rem;border:1px solid var(--border2);border-radius:6px;padding:.25rem .55rem;color:var(--muted);background:var(--bg2)}
+@media (max-width:900px){.t-dash,.t-erp,.t-dep,.t-proto{grid-column:span 6}.dash-mini{grid-template-columns:repeat(2,1fr)}}
+
+/* industries */
+.ind{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem}
+.ind a{text-decoration:none;border:1px solid var(--border2);background:var(--panel);border-radius:999px;padding:.55rem 1.05rem;font-size:.93rem;transition:border-color .15s}
+.ind a:hover{border-color:var(--accent)}
+
+/* why */
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;border-top:1px solid var(--border)}
+.why div{padding:1.6rem 1.4rem 0 0}
+.why div+div{padding-left:1.4rem;border-left:1px solid var(--border)}
+.why p{color:var(--muted);margin-top:.5rem;font-size:.95rem}
+@media (max-width:900px){.why{grid-template-columns:1fr 1fr}.why div:nth-child(3){padding-left:0;border-left:0}}
+@media (max-width:560px){.why{grid-template-columns:1fr}.why div,.why div+div{padding-left:0;border-left:0}}
+
+/* cases */
+.head-row{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3rem}
+.case{background:var(--panel);border:1px solid var(--border2);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.case:hover{border-color:var(--faint);transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){.case:hover{transform:none}}
+.case .img{aspect-ratio:16/10;background:linear-gradient(135deg,var(--bg2),var(--panel));border-bottom:1px solid var(--border);display:grid;place-items:center;color:var(--faint);font-size:.82rem}
+.case .body{padding:1.3rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.case .where{font-size:.82rem;color:var(--live);font-weight:550}
+.case p{color:var(--muted);font-size:.93rem}
+.case blockquote{margin:auto 0 0;padding-top:1rem;border-top:1px solid var(--border);font-size:.92rem}
+.case blockquote footer{color:var(--faint);font-size:.8rem;margin-top:.3rem}
+@media (max-width:900px){.cases{grid-template-columns:1fr}}
+
+/* services + steps */
+.svc{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:3rem}
+.svc div{background:var(--panel);border:1px solid var(--border2);border-radius:14px;padding:1.4rem}
+.svc p{color:var(--muted);margin-top:.4rem;font-size:.95rem}
+@media (max-width:700px){.svc{grid-template-columns:1fr}}
+.how{margin-top:4.5rem}
+.how h3.title{font-size:1.4rem;letter-spacing:-.02em}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;position:relative;counter-reset:s}
+.steps::before{content:"";position:absolute;top:15px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,var(--accent),var(--live))}
+.step{position:relative;counter-increment:s}
+.step::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--panel);border:1px solid var(--border2);font-weight:600;font-size:.9rem;margin-bottom:1rem;position:relative}
+.step p{color:var(--muted);margin-top:.4rem;font-size:.95rem}
+@media (max-width:760px){.steps{grid-template-columns:1fr}.steps::before{display:none}}
+
+/* blog */
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
+.post{text-decoration:none}
+.post .thumb{aspect-ratio:16/10;border-radius:12px;border:1px solid var(--border2);background:linear-gradient(135deg,var(--bg2),var(--panel))}
+.post small{display:block;color:var(--faint);margin-top:.9rem;font-size:.82rem}
+.post h3{margin-top:.3rem;line-height:1.35}
+@media (max-width:820px){.posts{grid-template-columns:1fr}}
+
+/* faq */
+.faq .wrap{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(2rem,5vw,4rem)}
+details{border-bottom:1px solid var(--border)}
+details:first-child{border-top:1px solid var(--border)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.15rem 0;font-weight:500}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg) translateY(-3px);transition:transform .2s;flex:none}
+details[open] summary::after{transform:rotate(225deg) translateY(-3px)}
+details p{color:var(--muted);padding-bottom:1.2rem;max-width:62ch}
+@media (max-width:820px){.faq .wrap{grid-template-columns:1fr}}
+
+/* cta */
+.cta{position:relative;overflow:hidden;text-align:center;border-top:1px solid var(--border)}
+.cta::before{content:"";position:absolute;left:50%;bottom:-40%;width:900px;height:600px;transform:translateX(-50%);background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
+.cta .wrap{position:relative}
+.cta h2{font-size:clamp(2.2rem,5.5vw,4rem);margin:0 auto;max-width:16ch;letter-spacing:-.04em}
+.cta .lede{margin:1.2rem auto 0}
+.cta .actions{display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;margin-top:2.2rem}
+
+/* footer */
+footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.9rem}
+.foot{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:2rem}
+.foot h4{margin:0 0 .8rem;font-size:.85rem;font-weight:550}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;color:var(--muted)}
+.foot a{text-decoration:none}.foot a:hover{color:var(--text)}
+.legal{margin-top:3rem;padding-top:1.3rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;color:var(--faint);font-size:.82rem}
+@media (max-width:760px){.foot{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><span class="mark"></span>Ichibot</a>
+    <ul>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#platform">Platform</a></li>
+      <li><a href="#industries">Industries</a></li>
+      <li><a href="#cases">Case studies</a></li>
+      <li><a href="#services">Services</a></li>
+    </ul>
+    <a class="btn primary sm" href="#contact">Book a site survey</a>
+  </div>
+</header>
+
+<main>
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="chip"><i></i>Running at Pertamina and Toyota Indonesia</span>
+    <h1>Intelligent industrial hub</h1>
+    <p class="lede">We help Indonesian industries connect every machine, see what's happening in real time, and act on it, from the shop floor to your ERP.</p>
+    <div class="actions">
+      <a class="btn primary" href="#contact">Book a site survey</a>
+      <a class="btn" href="#products">Explore products</a>
+    </div>
+
+    <div class="stage">
+      <div class="window hub" role="img" aria-label="Machines, sensors, cameras and meters send data to Ichibot Edge, which delivers it to dashboards, ERP, alerts and AI insights">
+        <div class="window-bar"><b></b><b></b><b></b><span>ichibot edge / data flow</span></div>
+        <svg id="hubsvg" viewBox="0 0 1000 440">
+          <defs>
+            <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+          </defs>
+          <text class="col" x="120" y="42" text-anchor="middle">Shop floor</text>
+          <text class="col" x="500" y="42" text-anchor="middle">Edge, on-prem or cloud</text>
+          <text class="col" x="880" y="42" text-anchor="middle">Decisions</text>
+          <g id="wires">
+            <path id="i1" class="wire" d="M215 95 C330 95 330 220 420 220"/>
+            <path id="i2" class="wire" d="M215 180 C330 180 330 220 420 220"/>
+            <path id="i3" class="wire" d="M215 265 C330 265 330 220 420 220"/>
+            <path id="i4" class="wire" d="M215 350 C330 350 330 220 420 220"/>
+            <path id="o1" class="wire" d="M580 220 C670 220 670 95 785 95"/>
+            <path id="o2" class="wire" d="M580 220 C670 220 670 180 785 180"/>
+            <path id="o3" class="wire" d="M580 220 C670 220 670 265 785 265"/>
+            <path id="o4" class="wire" d="M580 220 C670 220 670 350 785 350"/>
+          </g>
+          <g class="node"><rect x="25" y="70" width="190" height="50" rx="10"/><text x="45" y="92">PLC and VFD</text><text class="sub" x="45" y="108">Modbus RTU / TCP</text></g>
+          <g class="node"><rect x="25" y="155" width="190" height="50" rx="10"/><text x="45" y="177">Sensors</text><text class="sub" x="45" y="193">Temp, pressure, vibration</text></g>
+          <g class="node"><rect x="25" y="240" width="190" height="50" rx="10"/><text x="45" y="262">IP cameras</text><text class="sub" x="45" y="278">RTSP video</text></g>
+          <g class="node"><rect x="25" y="325" width="190" height="50" rx="10"/><text x="45" y="347">Energy meters</text><text class="sub" x="45" y="363">kWh, power quality</text></g>
+          <rect class="ring" x="412" y="142" width="176" height="156" rx="20"><animate attributeName="opacity" values=".6;.15;.6" dur="3s" repeatCount="indefinite"/></rect>
+          <g class="core"><rect class="bg" x="420" y="150" width="160" height="140" rx="16"/>
+            <rect x="436" y="166" width="14" height="14" rx="3" fill="var(--accent)"/>
+            <text x="500" y="222" text-anchor="middle">Ichibot Edge</text>
+            <text class="sub" x="500" y="244" text-anchor="middle">Collect, log, run AI</text></g>
+          <g class="node"><rect x="785" y="70" width="190" height="50" rx="10"/><text x="805" y="92">Dashboard</text><text class="sub" x="805" y="108">Live KPIs and trends</text></g>
+          <g class="node"><rect x="785" y="155" width="190" height="50" rx="10"/><text x="805" y="177">ERP / MES</text><text class="sub" x="805" y="193">Automatic data sync</text></g>
+          <g class="node"><rect x="785" y="240" width="190" height="50" rx="10"/><text x="805" y="262">Alerts</text><text class="sub" x="805" y="278">WhatsApp, email, siren</text></g>
+          <g class="node"><rect x="785" y="325" width="190" height="50" rx="10"/><text x="805" y="347">AI insights</text><text class="sub" x="805" y="363">Anomalies, detections</text></g>
+          <g id="pulses"></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LOGOS -->
+<section class="logos">
+  <div class="wrap">
+    <p>Trusted by state-owned enterprises and global manufacturers in Indonesia</p>
+    <div class="logo-row"><span>Pertamina</span><span>Toyota</span><span>Citra Borneo Utama</span><span>Erlangga</span><span>PT Garam</span></div>
+    <span class="note" style="text-align:center">Draft: ganti teks dengan file logo monokrom.</span>
+  </div>
+</section>
+
+<!-- 3. PRODUCTS -->
+<section id="products">
+  <div class="wrap">
+    <h2>Products proven in the field, ready to deploy</h2>
+    <p class="lede">Every Ichibot product started as a real project for a real client. We packaged what worked, so you get a tested system instead of an experiment.</p>
+    <div class="tabs">
+      <div class="tablist" role="tablist" aria-label="Products" id="tablist"></div>
+      <div class="panel" role="tabpanel" id="panel" tabindex="0"></div>
+    </div>
+    <span class="note">Draft: isi waktu deploy tiap produk. Angka di mockup hanya ilustrasi, ganti dengan screenshot dashboard asli.</span>
+  </div>
+</section>
+
+<!-- 4. PLATFORM -->
+<section id="platform" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <h2>One platform behind every product</h2>
+    <p class="lede">All Ichibot products run on the same edge and dashboard stack. Add a new line, a new site or a new product without starting over.</p>
+    <div class="bento">
+      <div class="tile t-dash">
+        <h3>Dashboard visualization</h3>
+        <p>Ready-made templates per industry, fully customizable, on desktop or phone.</p>
+        <div class="viz">
+          <div class="dash-mini">
+            <div class="metric"><b>86%</b><small>OEE</small></div>
+            <div class="metric"><b>412</b><small>kWh today</small></div>
+            <div class="metric"><b>7.2</b><small>bar pressure</small></div>
+            <div class="metric"><b>2</b><small>open alerts</small></div>
+          </div>
+          <div class="bars" aria-hidden="true"><span style="height:40%"></span><span style="height:55%"></span><span style="height:48%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:80%"></span><span style="height:74%"></span><span style="height:88%"></span><span style="height:66%"></span><span style="height:92%"></span><span style="height:78%"></span><span style="height:85%"></span></div>
+        </div>
+      </div>
+      <div class="tile t-erp">
+        <h3>Connects to your ERP</h3>
+        <p>Weighing, production, downtime and energy data go straight into your ERP or MES. Running at Citra Borneo Utama.</p>
+        <div class="viz flow"><span>Weighbridge</span><i></i><span class="hl">Edge</span><i></i><span>ERP</span></div>
+      </div>
+      <div class="tile t-dep">
+        <h3>On-premise or cloud, your choice</h3>
+        <p>Data is always logged on the edge, so nothing is lost when the internet drops.</p>
+        <div class="viz">
+          <div class="seg" role="group" aria-label="Deployment option">
+            <button type="button" aria-pressed="true" data-dep="onprem">On-prem</button>
+            <button type="button" aria-pressed="false" data-dep="cloud">Cloud</button>
+            <button type="button" aria-pressed="false" data-dep="hybrid">Hybrid</button>
+          </div>
+          <p class="dep-out" id="depout"></p>
+        </div>
+      </div>
+      <div class="tile t-proto">
+        <h3>Speaks industrial protocols</h3>
+        <p>One edge device reads the equipment you already have.</p>
+        <div class="viz chips"><span>Modbus RTU</span><span>Modbus TCP</span><span>MQTT</span><span>OPC UA</span><span>RS-485</span><span>Ethernet</span><span>RTSP</span><span>REST API</span></div>
+      </div>
+    </div>
+    <span class="note">Draft: cek ulang daftar protokol sesuai kemampuan edge computer saat launch.</span>
+  </div>
+</section>
+
+<!-- 5. INDUSTRIES -->
+<section id="industries">
+  <div class="wrap">
+    <h2>Industries we serve</h2>
+    <div class="ind">
+      <a href="#">Oil &amp; gas and energy</a><a href="#">Automotive manufacturing</a><a href="#">Agribusiness and plantation</a>
+      <a href="#">Printing and publishing</a><a href="#">Port and marine</a><a href="#">Salt and mining</a>
+    </div>
+  </div>
+</section>
+
+<!-- 6. WHY -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Why industries choose Ichibot</h2>
+    <div class="why">
+      <div><h3>Proven at scale</h3><p>Systems running at Pertamina, Toyota Indonesia and national agribusiness groups.</p></div>
+      <div><h3>Works with old machines</h3><p>We retrofit sensors and read existing PLCs, so you get data without replacing equipment.</p></div>
+      <div><h3>Global capability, local price</h3><p>Edge and dashboard features on par with global brands, at a cost that fits Indonesian plants.</p></div>
+      <div><h3>Engineers who show up</h3><p>Our own team surveys, installs, trains and supports, from Yogyakarta to your site.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. CASE STUDIES -->
+<section id="cases" style="padding-top:0">
+  <div class="wrap">
+    <div class="head-row"><h2>Case studies</h2><a class="btn sm" href="#">All projects</a></div>
+    <div class="cases">
+      <article class="case"><div class="img">Foto: APD detection</div><div class="body">
+        <span class="where">Pertamina, oil &amp; gas</span><h3>AI detection of PPE compliance</h3>
+        <p>Computer vision checks helmets, vests and other PPE from CCTV and flags violations for the HSE team in real time.</p>
+        <blockquote>"[Quote PIC klien, satu kalimat hasil konkret]"<footer>Nama, Jabatan</footer></blockquote></div></article>
+      <article class="case"><div class="img">Foto: weighbridge</div><div class="body">
+        <span class="where">Citra Borneo Utama, agribusiness</span><h3>Weighbridge automation integrated with ERP</h3>
+        <p>Automatic weighbridge control that sends every transaction to the company ERP, with no manual entry.</p>
+        <blockquote>"[Quote PIC klien]"<footer>Nama, Jabatan</footer></blockquote></div></article>
+      <article class="case"><div class="img">Foto: kompresor</div><div class="body">
+        <span class="where">Toyota Indonesia, automotive</span><h3>Real-time compressor monitoring</h3>
+        <p>Pressure, temperature and vibration monitoring on a Kaeser ES300 compressor for continuous operation.</p>
+        <blockquote>"[Quote PIC klien]"<footer>Nama, Jabatan</footer></blockquote></div></article>
+    </div>
+    <span class="note">Draft: tambahkan angka hasil per case kalau ada (misal jam rekap manual yang hilang, downtime turun).</span>
+  </div>
+</section>
+
+<!-- 8. SERVICES + HOW WE WORK -->
+<section id="services" style="padding-top:0">
+  <div class="wrap">
+    <h2>Services from survey to support</h2>
+    <p class="lede">Need something beyond our products? We build and support it end to end.</p>
+    <div class="svc">
+      <div><h3>Edge device installation</h3><p>Sensors, gateways, PLC, VFD, panels and wiring, installed and commissioned on site.</p></div>
+      <div><h3>In-house training</h3><p>Hands-on industrial IoT and dashboard training with hardware kits and structured modules, as delivered for Toyota Indonesia.</p></div>
+      <div><h3>Custom system integration</h3><p>Automation and data projects built around your existing machines, from retrofit to full control panels.</p></div>
+      <div><h3>Maintenance and support</h3><p>Remote monitoring, preventive visits and SLA-based support after go-live.</p></div>
+    </div>
+    <div class="how">
+      <h3 class="title">How we work</h3>
+      <div class="steps">
+        <div class="step"><h3>Site survey</h3><p>We map your machines, data points and network, then propose the right product or custom scope.</p></div>
+        <div class="step"><h3>Pilot on one line</h3><p>Go live on a single line or area first, so you see results before committing further.</p></div>
+        <div class="step"><h3>Scale up</h3><p>Roll out to more lines and sites on the same platform, with training and support for your team.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. BLOG -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="head-row"><h2>Insights and news</h2><a class="btn sm" href="#">All articles</a></div>
+    <div class="posts">
+      <a class="post" href="#"><div class="thumb"></div><small>Guide, 5 min read</small><h3>How AI turns existing CCTV into a safety inspector</h3></a>
+      <a class="post" href="#"><div class="thumb"></div><small>Case study, 4 min read</small><h3>Connecting a weighbridge to ERP: what changed on the ground</h3></a>
+      <a class="post" href="#"><div class="thumb"></div><small>News</small><h3>Ichibot launches its edge computer for Indonesian industry</h3></a>
+    </div>
+  </div>
+</section>
+
+<!-- 10. FAQ -->
+<section class="faq" style="padding-top:0">
+  <div class="wrap">
+    <div><h2>Questions we hear often</h2><p class="lede">Something else on your mind? Talk to our engineers directly.</p></div>
+    <div>
+      <details><summary>Do we need to replace our existing machines?</summary><p>No. Ichibot works with the PLCs, meters and machines you already have, and adds retrofit sensors where data isn't available yet.</p></details>
+      <details><summary>Where is our data stored?</summary><p>Your choice. Data can stay fully on-premise, go to the cloud, or both. The edge device always keeps a local log.</p></details>
+      <details><summary>How long does a typical project take?</summary><p>A pilot on one line usually goes live in 2–6 weeks after the site survey, depending on the number of devices and integrations.</p></details>
+      <details><summary>Can it integrate with our ERP?</summary><p>Yes, through API, direct database connection or MQTT. We map the data together with your IT team during implementation.</p></details>
+      <details><summary>What happens when the internet goes down?</summary><p>The edge device keeps collecting and logging data locally, and syncs automatically once the connection is back.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 11. CTA -->
+<section class="cta" id="contact">
+  <div class="wrap">
+    <h2>Tell us about your plant</h2>
+    <p class="lede">Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.</p>
+    <div class="actions"><a class="btn primary" href="#">Book a site survey</a><a class="btn" href="#">Chat on WhatsApp</a></div>
+  </div>
+</section>
+</main>
+
+<!-- 12. FOOTER -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <div><a class="brand" href="#"><span class="mark"></span>Ichibot</a><p style="color:var(--muted);margin-top:.9rem;max-width:30ch">PT Gagas Anagata Semesta. Intelligent industrial hub from Yogyakarta, Indonesia.</p></div>
+      <div><h4>Products</h4><ul><li><a href="#">Energy monitoring</a></li><li><a href="#">AI Vision Box</a></li><li><a href="#">Equipment monitoring</a></li><li><a href="#">Marine safety</a></li><li><a href="#">Smart plantation</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Case studies</a></li><li><a href="#">Insights</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div><h4>Ecosystem</h4><ul><li><a href="#">Ichibot Store</a></li><li><a href="#">Ichibot Robotics</a></li><li><a href="#">Training</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="legal"><span>© 2026 PT Gagas Anagata Semesta</span><span>Alamat kantor, email, nomor WA, sosmed</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=false; try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+  /* hub pulses */
+  var g=document.getElementById('pulses'), ns='http://www.w3.org/2000/svg';
+  ['i1','i2','i3','i4','o1','o2','o3','o4'].forEach(function(id,k){
+    [0,1].forEach(function(j){
+      var c=document.createElementNS(ns,'circle'); c.setAttribute('r','3.5');
+      c.setAttribute('class','pulse'+(id[0]==='o'?' out':''));
+      c.setAttribute('filter', j? '' : '');
+      var a=document.createElementNS(ns,'animateMotion'); a.setAttribute('dur','2.6s'); a.setAttribute('repeatCount','indefinite');
+      a.setAttribute('begin',((k%4)*.55+(id[0]==='o'?1.3:0)+j*1.3).toFixed(2)+'s');
+      var m=document.createElementNS(ns,'mpath'); m.setAttribute('href','#'+id); a.appendChild(m); c.appendChild(a); g.appendChild(c);
+    });
+  });
+  var svg=document.getElementById('hubsvg'); if(reduce&&svg.pauseAnimations){svg.pauseAnimations()}
+
+  /* products */
+  var icons={
+    energy:'<path d="M9 1 3 9h5l-1 6 6-8H8z"/>',
+    vision:'<rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/><circle cx="8" cy="8" r="2.5"/>',
+    equip:'<circle cx="8" cy="8" r="6"/><path d="M8 8l4-3"/>',
+    marine:'<path d="M1.5 12c1.5 1.5 3 1.5 4.5 0s3-1.5 4.5 0 3 1 4 .5"/><path d="M4 10V5h8v5M8 5V2"/>',
+    plant:'<path d="M8 15V7"/><path d="M8 9C5 9 3 7 3 4c3 0 5 2 5 5z"/><path d="M8 7c0-3 2-5 5-5 0 3-2 5-5 5z"/>'
+  };
+  var P=[
+    {k:'energy',name:'Smart energy usage monitoring',desc:'See kWh, peak load and power quality per transformer, panel and line, in real time.',inc:'Power meters, edge gateway, energy dashboard template',proof:['Toyota Indonesia: 2 MVA transformer','Penerbit Erlangga: electricity substation'],label:'Proven at',time:'Live in [X] weeks',
+     top:'Main panel, Plant 1',m:[['412','kWh today'],['1.8 MW','Peak load'],['0.97','Power factor']],line:[60,52,58,40,46,30,36,24,34,28,20,26]},
+    {k:'vision',name:'AI Vision Box',desc:'Turn existing CCTV into automatic inspectors for PPE compliance, safety zones and spill detection.',inc:'Edge AI unit, pre-trained models, alert dashboard',proof:['Pertamina: PPE detection','Pertamina: PPE and oil spill detection'],label:'Proven at',time:'Live in [X] weeks',
+     top:'Gate 3, CCTV-07',m:[['97%','PPE compliance'],['2','Violations today'],['12','Cameras']],line:[20,22,18,24,20,26,22,18,20,16,22,18]},
+    {k:'equip',name:'Smart equipment monitoring',desc:'Track pressure, temperature, vibration and status of compressors, pumps and vehicles before they fail.',inc:'Retrofit sensors, PLC integration, condition alerts',proof:['Toyota Indonesia: Kaeser compressor','Pertamina: vehicle tilt and pitch','PT Garam: main pump automation'],label:'Proven at',time:'Live in [X] weeks',
+     top:'Compressor ES300',m:[['7.2 bar','Pressure'],['68 °C','Temperature'],['2.1 mm/s','Vibration']],line:[40,42,38,44,40,46,42,50,48,56,52,60]},
+    {k:'marine',name:'Marine safety monitoring',desc:'Early warning for ship docking speed, heel, wind speed and wave level at ports and jetties.',inc:'Docking sensors, weather and wave station, audio-visual alarm',proof:['Pertamina: marine docking early warning','Pertamina: wind speed and wave monitoring'],label:'Proven at',time:'Live in [X] weeks',
+     top:'Jetty 2',m:[['0.12 m/s','Docking speed'],['14 kn','Wind'],['0.8 m','Wave height']],line:[30,40,28,44,34,50,30,46,36,42,32,38]},
+    {k:'plant',name:'Smart plantation',desc:'Solar-powered soil monitoring over LoRa for large oil palm plantations with no grid or signal.',inc:'Solar sensor nodes, LoRa gateway, soil dashboard',proof:['Oil palm plantation, on-going'],label:'Pilot running at',time:'Pilot',pilot:true,
+     top:'Block A-12',m:[['32%','Soil moisture'],['5.6','Soil pH'],['48','Nodes online']],line:[50,48,46,44,40,38,36,50,48,46,44,42]}
+  ];
+  var tl=document.getElementById('tablist'), panel=document.getElementById('panel'), cur=0;
+  function spark(v){var w=300,h=110,max=70,step=w/(v.length-1);
+    var pts=v.map(function(y,i){return (i*step).toFixed(1)+','+(h-y/max*h*.9).toFixed(1)}).join(' ');
+    return '<svg viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--live)" stop-opacity=".3"/><stop offset="1" stop-color="var(--live)" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#sg)" points="0,110 '+pts+' 300,110"/><polyline fill="none" stroke="var(--live)" stroke-width="2" vector-effect="non-scaling-stroke" points="'+pts+'"/></svg>'}
+  function render(i,focus){
+    cur=i;
+    Array.prototype.forEach.call(tl.children,function(b,j){b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1});
+    var p=P[i];
+    panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+    panel.setAttribute('aria-labelledby','tab-'+i);
+    panel.innerHTML='<div><h3>'+p.name+'</h3><p class="desc">'+p.desc+'</p><dl><div><dt>What\'s included</dt><dd>'+p.inc+'</dd></div><div><dt>'+p.label+'</dt><dd><ul class="proof">'+p.proof.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></dd></div><div><dt>Deployment</dt><dd>'+p.time+'</dd></div></dl><div style="margin-top:1.6rem"><a class="btn sm" href="#contact">Request a demo</a></div></div>'+
+      '<div class="mock"><div class="mock-top"><span>'+p.top+'</span><em>● Live</em></div><div class="metrics">'+p.m.map(function(x){return '<div class="metric"><b>'+x[0]+'</b><small>'+x[1]+'</small></div>'}).join('')+'</div><div class="spark">'+spark(p.line)+'</div></div>';
+    if(focus) tl.children[i].focus();
+  }
+  P.forEach(function(p,i){
+    var b=document.createElement('button'); b.className='tab'; b.type='button'; b.id='tab-'+i; b.setAttribute('role','tab'); b.setAttribute('aria-controls','panel');
+    b.innerHTML='<span class="ic"><svg viewBox="0 0 16 16">'+icons[p.k]+'</svg></span>'+p.name+(p.pilot?'<span class="pill">Pilot</span>':'');
+    b.addEventListener('click',function(){render(i)});
+    tl.appendChild(b);
+  });
+  tl.addEventListener('keydown',function(e){
+    var n=P.length;
+    if(['ArrowDown','ArrowRight'].indexOf(e.key)>-1){e.preventDefault();render((cur+1)%n,true)}
+    if(['ArrowUp','ArrowLeft'].indexOf(e.key)>-1){e.preventDefault();render((cur-1+n)%n,true)}
+  });
+  render(0);
+
+  /* deployment toggle */
+  var D={onprem:'Data stays inside your plant network. Dashboards run on a local server or the edge itself. Best for strict IT and security policies.',
+         cloud:'The edge publishes to the cloud, so managers can open dashboards from anywhere with no server to maintain.',
+         hybrid:'Operators use the local dashboard on site, while summaries sync to the cloud for management and multi-site views.'};
+  var out=document.getElementById('depout');
+  document.querySelectorAll('[data-dep]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('[data-dep]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+      out.textContent=D[b.dataset.dep];
+    });
+  });
+  out.textContent=D.onprem;
+})();
+</script>
+</body>
+</html>
