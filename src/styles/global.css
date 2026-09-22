@@ -218,12 +218,13 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 @media (max-width:700px){.svc{grid-template-columns:1fr}}
 .how{margin-top:4.5rem}
 .how h3.title{font-size:1.4rem;letter-spacing:-.02em}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;position:relative;counter-reset:s}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:2rem;position:relative;counter-reset:s}
 .steps::before{content:"";position:absolute;top:15px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,var(--accent),var(--live))}
 .step{position:relative;counter-increment:s}
 .step::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--panel);border:1px solid var(--border2);font-weight:600;font-size:.9rem;margin-bottom:1rem;position:relative}
 .step p{color:var(--muted);margin-top:.4rem;font-size:.95rem}
-@media (max-width:760px){.steps{grid-template-columns:1fr}.steps::before{display:none}}
+@media (max-width:1000px){.steps{grid-template-columns:repeat(2,1fr);row-gap:2.2rem}.steps::before{display:none}}
+@media (max-width:620px){.steps{grid-template-columns:1fr}}
 
 /* blog */
 .posts{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
@@ -361,3 +362,9 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .tile-quote .sample{margin-left:auto;align-self:flex-start;font-size:.65rem;font-weight:600;
   letter-spacing:.06em;text-transform:uppercase;color:var(--draft);
   border:1px solid color-mix(in srgb,var(--draft) 35%,transparent);border-radius:999px;padding:.15rem .5rem}
+
+/* services — a line icon above each card title, same 16px language as the
+   product tabs. No enclosing box: four boxed icons in a 2x2 grid reads as a
+   template, a bare mark does not. */
+.svc-ic{display:block;width:22px;height:22px;margin-bottom:.95rem;color:var(--accent)}
+.svc-ic *{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
