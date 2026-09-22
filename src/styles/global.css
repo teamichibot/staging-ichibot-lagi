@@ -15,7 +15,7 @@
   --bg:#FBFBFC; --bg2:#F2F3F5; --panel:#FFFFFF; --text:#121418; --muted:#5E6470; --faint:#8C919B;
   --border:rgba(18,20,24,.10); --border2:rgba(18,20,24,.16);
   --accent:#0369A1; --accent-soft:rgba(3,105,161,.12); --on-accent:#FFFFFF;
-  --live:#0FA38C; --live-soft:rgba(15,163,140,.14); --draft:#C2571A;
+  --live:#0369A1; --live-soft:rgba(3,105,161,.12); --draft:#C2571A;
   --glow:rgba(3,105,161,.16); --shadow:0 1px 2px rgba(18,20,24,.06),0 12px 40px -12px rgba(18,20,24,.18);
   --h1a:#121418; --h1b:#4A505B;
   box-sizing:border-box;
@@ -25,7 +25,7 @@
   :root:not([data-theme="light"]){
     --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
     --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
-    --accent:#38BDF8; --accent-soft:rgba(56,189,248,.12); --on-accent:#08090B; --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+    --accent:#38BDF8; --accent-soft:rgba(56,189,248,.12); --on-accent:#08090B; --live:#38BDF8; --live-soft:rgba(56,189,248,.12); --draft:#F0955E;
     --glow:rgba(56,189,248,.14); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
     --h1a:#FFFFFF; --h1b:#8A8F98;
   }
@@ -33,7 +33,7 @@
 :root[data-theme="dark"]{
   --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
   --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
-  --accent:#38BDF8; --accent-soft:rgba(56,189,248,.12); --on-accent:#08090B; --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+  --accent:#38BDF8; --accent-soft:rgba(56,189,248,.12); --on-accent:#08090B; --live:#38BDF8; --live-soft:rgba(56,189,248,.12); --draft:#F0955E;
   --glow:rgba(56,189,248,.14); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
   --h1a:#FFFFFF; --h1b:#8A8F98;
 }
@@ -106,8 +106,6 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
   background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
   background-size:56px 56px;mask-image:radial-gradient(ellipse 70% 55% at 50% 30%,#000 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 30%,#000 30%,transparent 75%)}
 .hero .wrap{position:relative;text-align:center}
-.chip{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--muted);border:1px solid var(--border2);border-radius:999px;padding:.3rem .8rem;background:var(--panel)}
-.chip i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 4px var(--live-soft)}
 .hero h1{font-size:clamp(2.8rem,8.5vw,6rem);font-weight:650;line-height:.98;letter-spacing:-.045em;margin:1.4rem auto 0;max-width:12ch;
   background:linear-gradient(180deg,var(--h1a) 30%,var(--h1b));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .lede{margin:1.5rem auto 0;font-size:clamp(1.05rem,1.8vw,1.25rem);max-width:52ch}
@@ -128,10 +126,10 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .hub .core .sub{fill:var(--bg);opacity:.6;font-size:10.5px;font-weight:400}
 .hub .ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.6}
 .hub .pulse{fill:var(--accent)}
-.hub .pulse.out{fill:var(--live)}
+.hub .pulse.out{fill:var(--live);opacity:.5}
 .hub .col{fill:var(--faint);font:500 11px "Geist Variable",sans-serif;letter-spacing:.02em}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.hero .chip,.hero h1,.hero .lede,.hero .actions,.stage{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero h1,.hero .lede,.hero .actions,.stage{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
 .hero h1{animation-delay:.06s}.hero .lede{animation-delay:.14s}.hero .actions{animation-delay:.22s}.stage{animation-delay:.34s}
 @media (prefers-reduced-motion:reduce){.hero *,.stage{animation:none!important}html{scroll-behavior:auto}}
 

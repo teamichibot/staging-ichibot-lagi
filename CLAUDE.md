@@ -101,6 +101,15 @@ it already has, so:
   light accent, `#08090B` on the dark one — because a single value fails one
   of them. The draft file still renders amber and is not being repainted; it
   is the reference for layout and interaction, not for accent colour.
+- **One accent colour, not two.** The draft paired amber with a teal `--live`
+  for status dots, sparklines and the "Proven at" bullets. `--live` is now the
+  same blue as `--accent` in both themes. Where hue previously carried meaning —
+  the hub diagram's incoming vs outgoing pulses — opacity carries it instead.
+- **No chip above the hero headline.** The draft opened with a "Running at
+  Pertamina and Toyota Indonesia" pill; it is removed. The client logo row
+  immediately below still carries that proof.
+- Centred hero, the gradient headline, the radial glows, the card radii and the
+  staggered hero entrance are all **kept** — reviewed and approved as-is.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
