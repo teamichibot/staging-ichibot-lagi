@@ -71,4 +71,32 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
 - Final protocol list matching the edge computer at launch
 - Office address, email, WhatsApp number, social links
 
+## Amendments (decided 2026-09-22, these override the sections above)
+
+The brief originally specified static output with all content in Astro content
+collections. That is **not** what we are building. Ichibot needs the admin panel
+it already has, so:
+
+- **Astro server output** via `@astrojs/vercel`, not a pure static build.
+  Marketing pages are prerendered where they can be; anything reading live data
+  and the whole admin area render on the server.
+- **Supabase stays the single source of truth** for blog posts, products,
+  services, clients and team — same `site_data` key/value table and `blog_posts`
+  table the old site uses. Content collections are *not* used for these.
+- **The admin panel is ported** from the old Next.js site: cookie `admin_token`
+  checked against `ADMIN_PASSWORD`, login page, list/edit/reorder/save screens,
+  and JSON endpoints under `/api/admin/*`. Editing must stay login → edit →
+  save → live, with no rebuild step.
+- **Migration runs into Supabase, not out of it.** The 24 Markdown posts in
+  `content/blog/` are imported into the `blog_posts` table so there is one
+  source. All 183 existing posts are kept; the 23-way category list gets
+  consolidated during the import.
+- **Old product URLs are dropped**, not redirected. The 12 current products are
+  consolidated into the 5 in this brief and the old `/produk/[slug]` paths are
+  allowed to 404.
+- Language stays **English-first** as specified, with `/id/...` to follow.
+
+Everything else in this brief — layout, design tokens, page structure,
+accessibility, SEO and the "do not invent" list — still stands.
+
 @AGENTS.md
