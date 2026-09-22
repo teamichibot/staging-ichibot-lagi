@@ -1,0 +1,15 @@
+---
+// Brief open item: monochrome logo files plus written permission per client.
+// Until those land, the draft's text treatment stands in.
+const clients = ['Pertamina', 'Toyota', 'Citra Borneo Utama', 'Erlangga', 'PT Garam']
+---
+
+<section class="logos">
+  <div class="wrap">
+    <p>Trusted by state-owned enterprises and global manufacturers in Indonesia</p>
+    <div class="logo-row">{clients.map((c) => <span>{c}</span>)}</div>
+    <span class="note" style="text-align:center">
+      Draft: replace with monochrome logo files once written permission is in hand.
+    </span>
+  </div>
+</section>

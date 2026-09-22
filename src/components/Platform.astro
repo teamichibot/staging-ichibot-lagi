@@ -1,0 +1,70 @@
+---
+// Carried over from the approved draft.
+---
+
+<section id="platform" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <h2>One platform behind every product</h2>
+    <p class="lede">All Ichibot products run on the same edge and dashboard stack. Add a new line, a new site or a new product without starting over.</p>
+    <div class="bento">
+      <div class="tile t-dash">
+        <h3>Dashboard visualization</h3>
+        <p>Ready-made templates per industry, fully customizable, on desktop or phone.</p>
+        <div class="viz">
+          <div class="dash-mini">
+            <div class="metric"><b>86%</b><small>OEE</small></div>
+            <div class="metric"><b>412</b><small>kWh today</small></div>
+            <div class="metric"><b>7.2</b><small>bar pressure</small></div>
+            <div class="metric"><b>2</b><small>open alerts</small></div>
+          </div>
+          <div class="bars" aria-hidden="true"><span style="height:40%"></span><span style="height:55%"></span><span style="height:48%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:80%"></span><span style="height:74%"></span><span style="height:88%"></span><span style="height:66%"></span><span style="height:92%"></span><span style="height:78%"></span><span style="height:85%"></span></div>
+        </div>
+      </div>
+      <div class="tile t-erp">
+        <h3>Connects to your ERP</h3>
+        <p>Weighing, production, downtime and energy data go straight into your ERP or MES. Running at Citra Borneo Utama.</p>
+        <div class="viz flow"><span>Weighbridge</span><i></i><span class="hl">Edge</span><i></i><span>ERP</span></div>
+      </div>
+      <div class="tile t-dep">
+        <h3>On-premise or cloud, your choice</h3>
+        <p>Data is always logged on the edge, so nothing is lost when the internet drops.</p>
+        <div class="viz">
+          <div class="seg" role="group" aria-label="Deployment option">
+            <button type="button" aria-pressed="true" data-dep="onprem">On-prem</button>
+            <button type="button" aria-pressed="false" data-dep="cloud">Cloud</button>
+            <button type="button" aria-pressed="false" data-dep="hybrid">Hybrid</button>
+          </div>
+          <p class="dep-out" id="depout"></p>
+        </div>
+      </div>
+      <div class="tile t-proto">
+        <h3>Speaks industrial protocols</h3>
+        <p>One edge device reads the equipment you already have.</p>
+        <div class="viz chips"><span>Modbus RTU</span><span>Modbus TCP</span><span>MQTT</span><span>OPC UA</span><span>RS-485</span><span>Ethernet</span><span>RTSP</span><span>REST API</span></div>
+      </div>
+    </div>
+    <span class="note">Draft: re-check the protocol list against what the edge computer supports at launch.</span>
+  </div>
+</section>
+
+<script>
+  const copy: Record<string, string> = {
+    onprem:
+      'Data stays inside your plant network. Dashboards run on a local server or the edge itself. Best for strict IT and security policies.',
+    cloud:
+      'The edge publishes to the cloud, so managers can open dashboards from anywhere with no server to maintain.',
+    hybrid:
+      'Operators use the local dashboard on site, while summaries sync to the cloud for management and multi-site views.',
+  }
+  const output = document.getElementById('depout')
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-dep]'))
+  if (output && buttons.length) {
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        for (const other of buttons) other.setAttribute('aria-pressed', String(other === button))
+        output.textContent = copy[button.dataset.dep!] ?? ''
+      })
+    }
+    output.textContent = copy.onprem
+  }
+</script>

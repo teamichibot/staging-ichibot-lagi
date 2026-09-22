@@ -1,0 +1,19 @@
+---
+const links = [
+  { href: '#products', label: 'Products' },
+  { href: '#platform', label: 'Platform' },
+  { href: '#industries', label: 'Industries' },
+  { href: '#cases', label: 'Case studies' },
+  { href: '#services', label: 'Services' },
+]
+---
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="mark"></span>Ichibot</a>
+    <ul>
+      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+    </ul>
+    <a class="btn primary sm" href="#contact">Book a site survey</a>
+  </div>
+</header>
