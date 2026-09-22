@@ -27,43 +27,110 @@ const protocols = [
       <div class="tile t-2">
         <h3>Connectivity</h3>
         <p>We read the equipment you already own — PLCs, VFDs, power meters, IP cameras — and retrofit sensors where there is no data to read yet.</p>
-        <div class="viz chips">{protocols.map((x) => <span>{x}</span>)}</div>
+        <div class="viz">
+          <svg class="art" viewBox="0 0 300 74" aria-hidden="true">
+            <path class="wire w-a" d="M22 4v22" /><path class="wire w-b" d="M62 4v22" />
+            <path class="wire w-a" d="M102 4v22" /><path class="wire w-c" d="M142 4v22" />
+            <path class="wire w-b" d="M182 4v22" /><path class="wire w-a" d="M222 4v22" />
+            <path class="wire w-c" d="M262 4v22" />
+            <rect class="strip" x="6" y="26" width="288" height="30" rx="4" />
+            {[22, 62, 102, 142, 182, 222, 262].map((x) => (
+              <g><rect class="port" x={x - 13} y="31" width="26" height="20" rx="2.5" />
+                 <circle class="screw" cx={x} cy="41" r="3.4" />
+                 <path class="slot" d={`M${x - 2} 41h4`} /></g>
+            ))}
+            <path class="rail" d="M6 62h288" />
+          </svg>
+          <div class="chips">{protocols.map((x) => <span>{x}</span>)}</div>
+        </div>
       </div>
 
       <div class="tile t-2">
         <h3>Edge and storage</h3>
         <p>The edge device collects and logs on site, so history survives a dropped connection and is there later for audits and reports.</p>
-        <div class="viz flow">
-          <span>Collect</span><i></i><span class="hl">Log</span><i></i><span>Sync</span>
+        <div class="viz">
+          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
+            <path class="rail" d="M6 78h288" />
+            {[0,1,2,3,4,5,6,7,8,9,10,11,12,13].map((i) => {
+              const h = [30,38,26,42,34,46,31,39,27,44,36,48,33,41][i]
+              const offline = i >= 5 && i <= 9
+              return <rect class={offline ? 'bar held' : 'bar'} x={12 + i * 20} y={78 - h} width="12" height={h} rx="2" />
+            })}
+            <path class="gap" d="M108 10v68M212 10v68" />
+            <text class="cap" x="160" y="8" text-anchor="middle">connection down</text>
+            <path class="sync" d="M212 22h58" />
+            <path class="sync" d="M264 17l6 5-6 5" />
+            <text class="cap" x="272" y="38" text-anchor="end">synced</text>
+          </svg>
         </div>
       </div>
 
       <div class="tile t-2">
         <h3>AI ready</h3>
         <p>Vision models and anomaly detection run on the same box that collects the data, so detection does not wait on a round trip to a server.</p>
-        <div class="viz flow">
-          <span>Stream</span><i></i><span class="hl">Infer</span><i></i><span>Alert</span>
+        <div class="viz">
+          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
+            <rect class="frame" x="6" y="6" width="288" height="80" rx="6" />
+            <path class="floor" d="M6 66h288" />
+            <g class="figure">
+              <circle cx="74" cy="34" r="8" /><path d="M74 42v16M66 48h16M68 58l-4 8M80 58l4 8" />
+            </g>
+            <rect class="det hit" x="56" y="22" width="36" height="50" rx="3" />
+            <text class="tag" x="58" y="18">helmet ok</text>
+            <g class="figure">
+              <circle cx="186" cy="36" r="8" /><path d="M186 44v16M178 50h16M180 60l-4 6M192 60l4 6" />
+            </g>
+            <rect class="det miss" x="168" y="24" width="36" height="48" rx="3" />
+            <text class="tag warn" x="170" y="20">no vest</text>
+          </svg>
         </div>
       </div>
 
       <div class="tile t-3">
         <h3>Dashboards built for the case</h3>
         <p>Not one template stretched to fit. A plantation gets soil and irrigation; a substation gets load, power factor and cost per line.</p>
-        <div class="viz">
-          <div class="dash-mini">
-            <div class="metric"><b>86%</b><small>OEE</small></div>
-            <div class="metric"><b>412</b><small>kWh today</small></div>
-            <div class="metric"><b>7.2</b><small>bar pressure</small></div>
-            <div class="metric"><b>2</b><small>open alerts</small></div>
-          </div>
+        <div class="viz two-up">
+          <figure>
+            <svg class="art" viewBox="0 0 150 86" aria-hidden="true">
+              <rect class="frame" x="3" y="3" width="144" height="80" rx="5" />
+              <path class="arc" d="M30 58a28 28 0 0 1 56 0" />
+              <path class="arc on" d="M30 58a28 28 0 0 1 16-25" />
+              <circle class="screw" cx="58" cy="58" r="2.5" />
+              {[0,1,2,3].map((i) => <rect class="bar" x={98} y={26 + i * 13} width={[38,26,32,20][i]} height="7" rx="2" />)}
+            </svg>
+            <figcaption>Plantation</figcaption>
+          </figure>
+          <figure>
+            <svg class="art" viewBox="0 0 150 86" aria-hidden="true">
+              <rect class="frame" x="3" y="3" width="144" height="80" rx="5" />
+              <path class="trend" d="M14 58l18-9 16 6 18-16 16 9 18-14 16 8 16-5" />
+              {[0,1,2].map((i) => <rect class="chip-box" x={14 + i * 42} y="66" width="34" height="12" rx="2.5" />)}
+            </svg>
+            <figcaption>Substation</figcaption>
+          </figure>
         </div>
       </div>
 
       <div class="tile t-3">
         <h3>Straight into your ERP</h3>
         <p>Weighing, production, downtime and energy data land in your ERP or MES without anyone retyping them. Running at Citra Borneo Utama.</p>
-        <div class="viz flow">
-          <span>Weighbridge</span><i></i><span class="hl">Edge</span><i></i><span>ERP</span>
+        <div class="viz">
+          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
+            <g class="ticket">
+              <rect x="8" y="20" width="62" height="52" rx="4" />
+              <path d="M20 34h38M20 44h30M20 54h34" />
+            </g>
+            <text class="cap" x="39" y="84" text-anchor="middle">weigh ticket</text>
+            <path class="sync" d="M78 46h44" /><path class="sync" d="M116 41l6 5-6 5" />
+            <g class="table">
+              <rect x="132" y="16" width="160" height="60" rx="4" />
+              <path class="head" d="M132 30h160" />
+              <rect class="row new" x="140" y="36" width="144" height="10" rx="2" />
+              <rect class="row" x="140" y="50" width="144" height="10" rx="2" />
+              <rect class="row" x="140" y="64" width="144" height="10" rx="2" />
+            </g>
+            <text class="cap" x="212" y="88" text-anchor="middle">ERP record</text>
+          </svg>
         </div>
       </div>
 

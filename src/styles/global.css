@@ -408,3 +408,53 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .wa-float:hover{transform:translateY(-2px);filter:brightness(1.08)}
 .wa-float:active{transform:translateY(0)}
 @media (prefers-reduced-motion:reduce){.wa-float{transition:none}.wa-float:hover{transform:none}}
+
+/* platform tile artwork — each tile draws its own mechanism, so the bento
+   stops repeating one chip-row shape five times */
+.tile .art{display:block;width:100%;height:auto;margin-top:.2rem}
+.tile .art *{vector-effect:non-scaling-stroke}
+.tile .art .rail{stroke:var(--border2);stroke-width:1.2;fill:none}
+.tile .art .cap{fill:var(--faint);font:400 8px var(--font-sans)}
+
+/* connectivity: a DIN terminal strip with wires landing on it */
+.tile .art .strip{fill:var(--panel);stroke:var(--border2);stroke-width:1.2}
+.tile .art .port{fill:var(--bg2);stroke:var(--border);stroke-width:1}
+.tile .art .screw{fill:none;stroke:var(--faint);stroke-width:1.1}
+.tile .art .slot{stroke:var(--faint);stroke-width:1.1}
+.tile .art .wire{fill:none;stroke-width:1.6;stroke-linecap:round}
+.tile .art .w-a{stroke:var(--accent)}
+.tile .art .w-b{stroke:var(--faint)}
+.tile .art .w-c{stroke:var(--border2)}
+
+/* edge: bars keep being written while the line is down, then flush */
+.tile .art .bar{fill:var(--accent);opacity:.55}
+.tile .art .bar.held{fill:none;stroke:var(--accent);stroke-width:1.2;stroke-dasharray:3 2.5}
+.tile .art .gap{stroke:var(--border2);stroke-width:1;stroke-dasharray:3 3;fill:none}
+.tile .art .sync{stroke:var(--accent);stroke-width:1.4;fill:none}
+
+/* ai: detections drawn on the frame */
+.tile .art .frame{fill:var(--bg2);stroke:var(--border);stroke-width:1.2}
+.tile .art .floor{stroke:var(--border2);stroke-width:1;fill:none}
+.tile .art .figure *{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-linecap:round}
+.tile .art .det{fill:none;stroke-width:1.4}
+.tile .art .det.hit{stroke:var(--accent)}
+.tile .art .det.miss{stroke:var(--draft);stroke-dasharray:4 3}
+.tile .art .tag{fill:var(--accent);font:600 8px var(--font-sans)}
+.tile .art .tag.warn{fill:var(--draft)}
+
+/* dashboards: two layouts that plainly are not the same template */
+.two-up{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.two-up figure{margin:0}
+.two-up figcaption{margin-top:.5rem;font-size:.78rem;color:var(--faint)}
+.tile .art .arc{fill:none;stroke:var(--border2);stroke-width:5;stroke-linecap:round}
+.tile .art .arc.on{stroke:var(--accent)}
+.tile .art .trend{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round}
+.tile .art .chip-box{fill:var(--bg2);stroke:var(--border);stroke-width:1}
+
+/* erp: a ticket lands as a row */
+.tile .art .ticket rect{fill:var(--bg2);stroke:var(--border2);stroke-width:1.2}
+.tile .art .ticket path{stroke:var(--faint);stroke-width:1.2;fill:none;stroke-linecap:round}
+.tile .art .table rect{fill:var(--panel);stroke:var(--border2);stroke-width:1.2}
+.tile .art .table .head{stroke:var(--border2);stroke-width:1;fill:none}
+.tile .art .table .row{fill:var(--bg2);stroke:none}
+.tile .art .table .row.new{fill:var(--accent);opacity:.5}
