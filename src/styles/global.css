@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* Design tokens lifted verbatim from reference/ichibot-website-draft.html.
+   The draft is the approved spec — change values there first, not here. */
+:root{
+  --bg:#FBFBFC; --bg2:#F2F3F5; --panel:#FFFFFF; --text:#121418; --muted:#5E6470; --faint:#8C919B;
+  --border:rgba(18,20,24,.10); --border2:rgba(18,20,24,.16);
+  --accent:#E89A0C; --accent-soft:rgba(232,154,12,.14); --on-accent:#1A1200;
+  --live:#0FA38C; --live-soft:rgba(15,163,140,.14); --draft:#C2571A;
+  --glow:rgba(232,154,12,.18); --shadow:0 1px 2px rgba(18,20,24,.06),0 12px 40px -12px rgba(18,20,24,.18);
+  --h1a:#121418; --h1b:#4A505B;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
+    --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
+    --accent:#F7B32B; --accent-soft:rgba(247,179,43,.12); --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+    --glow:rgba(247,179,43,.16); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
+    --h1a:#FFFFFF; --h1b:#8A8F98;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#08090B; --bg2:#0E1014; --panel:#121419; --text:#EDEEF0; --muted:#8A8F98; --faint:#626873;
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14);
+  --accent:#F7B32B; --accent-soft:rgba(247,179,43,.12); --live:#2DD4BF; --live-soft:rgba(45,212,191,.12); --draft:#F0955E;
+  --glow:rgba(247,179,43,.16); --shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px -20px rgba(0,0,0,.8);
+  --h1a:#FFFFFF; --h1b:#8A8F98;
+}
+/* Expose the tokens to Tailwind utilities (v4 is CSS-first: no tailwind.config.js). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg2);
+  --color-panel: var(--panel);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-border2: var(--border2);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-live: var(--live);
+  --color-live-soft: var(--live-soft);
+  --color-draft: var(--draft);
+  --font-sans: "Geist Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+html {
+  scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 72px);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg { max-width: 100%; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

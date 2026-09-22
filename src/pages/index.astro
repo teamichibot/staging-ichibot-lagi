@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Ichibot — Intelligent industrial hub"
+  description="Ichibot connects machines, lines and plants to real-time data and AI, so Indonesian industry can act on what is happening on the floor."
+>
+  <main style="max-width:1160px;margin:0 auto;padding:6rem clamp(1.1rem,4vw,2rem)">
+    <p style="color:var(--accent);font-weight:600;margin:0 0 1rem">Phase 0</p>
+    <h1 style="font-size:clamp(1.9rem,4vw,3rem);font-weight:600;letter-spacing:-.022em;line-height:1.08;margin:0">
+      Foundation is up.
+    </h1>
+    <p style="color:var(--muted);font-size:1.12rem;max-width:56ch;margin-top:1.1rem">
+      Astro with server output, Tailwind v4 wired to the approved design tokens,
+      and Geist self-hosted. Light and dark both follow the system setting.
+      The homepage sections land in phase 1.
+    </p>
+
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:2.5rem">
+      {['bg','bg2','panel','text','muted','border','accent','live'].map((name) => (
+        <div style={`border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;background:var(--panel)`}>
+          <span style={`display:block;width:100%;height:28px;border-radius:6px;background:var(--${name});border:1px solid var(--border)`}></span>
+          <code style="font-size:.8rem;color:var(--muted)">--{name}</code>
+        </div>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
