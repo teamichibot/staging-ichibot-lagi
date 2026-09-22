@@ -1,29 +1,86 @@
 ---
 /**
- * Each anchor line below restates something already proven elsewhere on this
- * page — named clients, the protocol list from the platform section, where the
- * team is based. No metric is introduced that we cannot point at.
+ * Each column carries a small schematic rather than a decorative icon: the
+ * drawing states the same thing the heading does. Structure is drawn in the
+ * border colour, and the one accent element is whatever carries the point.
+ *
+ * Anchor lines restate something already evidenced elsewhere on the page —
+ * the named clients, the protocol list from the platform section, where the
+ * team sits. No metric appears that we cannot point at.
  */
 const reasons = [
   {
     title: 'Proven at scale',
     body: 'Systems running at Pertamina, Toyota Indonesia and national agribusiness groups.',
     anchor: 'Pertamina · Toyota Indonesia · Citra Borneo Utama',
+    // one line, more sites hanging off it
+    art: `
+      <line class="rail" x1="6" y1="70" x2="234" y2="70"/>
+      <g class="unit">
+        <rect x="20" y="50" width="26" height="16" rx="3"/>
+      </g>
+      <g class="unit">
+        <rect x="96" y="50" width="26" height="16" rx="3"/>
+        <rect x="96" y="30" width="26" height="16" rx="3"/>
+      </g>
+      <g class="unit">
+        <rect x="172" y="50" width="26" height="16" rx="3"/>
+        <rect x="172" y="30" width="26" height="16" rx="3"/>
+        <rect x="172" y="10" width="26" height="16" rx="3"/>
+      </g>
+      <line class="tick" x1="33" y1="66" x2="33" y2="70"/>
+      <line class="tick" x1="109" y1="66" x2="109" y2="70"/>
+      <line class="tick" x1="185" y1="66" x2="185" y2="70"/>`,
   },
   {
     title: 'Works with old machines',
     body: 'We retrofit sensors and read existing PLCs, so you get data without replacing equipment.',
     anchor: 'Modbus RTU/TCP · OPC UA · RS-485 · RTSP',
+    // the dashed box is what you already own; the accent parts are what we add
+    art: `
+      <rect class="old" x="8" y="20" width="84" height="48" rx="5"/>
+      <line class="old" x1="24" y1="34" x2="76" y2="34"/>
+      <line class="old" x1="24" y1="46" x2="60" y2="46"/>
+      <rect class="new" x="86" y="36" width="16" height="16" rx="3"/>
+      <path class="flow" d="M102 44h44"/>
+      <circle class="dot" cx="118" cy="44" r="2.5"/>
+      <circle class="dot" cx="134" cy="44" r="2.5"/>
+      <rect class="sink" x="148" y="26" width="84" height="36" rx="5"/>
+      <line class="rail" x1="164" y1="38" x2="216" y2="38"/>
+      <line class="rail" x1="164" y1="50" x2="200" y2="50"/>`,
   },
   {
     title: 'Global capability, local price',
     body: 'Edge and dashboard features on par with global brands, at a cost that fits Indonesian plants.',
     anchor: 'Built and supported in Indonesia',
+    // one capability set, two very different price tags
+    art: `
+      <g class="caps">
+        <circle cx="16" cy="16" r="4.5"/><circle cx="38" cy="16" r="4.5"/><circle cx="60" cy="16" r="4.5"/>
+        <circle cx="82" cy="16" r="4.5"/><circle cx="104" cy="16" r="4.5"/><circle cx="126" cy="16" r="4.5"/>
+      </g>
+      <line class="rail" x1="12" y1="32" x2="228" y2="32"/>
+      <rect class="cost-a" x="12" y="46" width="188" height="11" rx="5.5"/>
+      <rect class="cost-b" x="12" y="66" width="66" height="11" rx="5.5"/>`,
   },
   {
     title: 'Engineers who show up',
     body: 'Our own team surveys, installs, trains and supports, from Yogyakarta to your site.',
     anchor: 'In-house team, based in Yogyakarta',
+    // base on the left, your plant on the right, an actual route between them
+    art: `
+      <path class="route" d="M34 54C70 54 86 22 122 22s58 34 92 34"/>
+      <circle class="dot" cx="70" cy="37" r="2.5"/>
+      <circle class="dot" cx="122" cy="22" r="2.5"/>
+      <circle class="dot" cx="174" cy="37" r="2.5"/>
+      <g class="pin-a">
+        <path d="M34 54c0 0-9-10-9-16a9 9 0 0 1 18 0c0 6-9 16-9 16z"/>
+        <circle cx="34" cy="37.5" r="3.2"/>
+      </g>
+      <g class="pin-b">
+        <rect x="200" y="38" width="30" height="20" rx="3"/>
+        <path d="M207 38v-7l6 4v-4l6 4"/>
+      </g>`,
   },
 ]
 ---
@@ -39,6 +96,7 @@ const reasons = [
       {
         reasons.map((r) => (
           <div>
+            <svg class="why-art" viewBox="0 0 240 84" aria-hidden="true" set:html={r.art} />
             <h3>{r.title}</h3>
             <p>{r.body}</p>
             <span class="anchor">{r.anchor}</span>

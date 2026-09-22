@@ -203,8 +203,10 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 
 /* industries */
 .ind{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem}
-.ind a{text-decoration:none;border:1px solid var(--border2);background:var(--panel);border-radius:999px;padding:.55rem 1.05rem;font-size:.93rem;transition:border-color .15s}
-.ind a:hover{border-color:var(--accent)}
+.ind-item{display:inline-flex;align-items:center;gap:.55rem;border:1px solid var(--border2);
+  background:var(--panel);border-radius:999px;padding:.55rem 1.05rem .55rem .85rem;font-size:.93rem}
+.ind-item svg{width:16px;height:16px;flex:none;color:var(--accent)}
+.ind-item svg *{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
 /* why */
 .why{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;border-top:1px solid var(--border)}
@@ -307,7 +309,27 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
   .sector .what{grid-column:1/-1}
 }
 
-/* why — a concrete anchor under each reason, so the column is a claim plus its
+/* why — each column is a schematic, a claim, and the evidence for it.
+   The drawings share one language: structure in the border colour, and the
+   single accent element is whatever actually carries the point. */
+.why-art{display:block;width:100%;max-width:240px;height:auto;margin:0 0 1.35rem;overflow:visible}
+.why-art *{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.why-art .rail,.why-art .tick{stroke:var(--border2);stroke-width:1.5}
+.why-art .unit rect{stroke:var(--border2);stroke-width:1.5;fill:var(--bg2)}
+.why-art .unit rect:last-child{stroke:var(--accent)}
+.why-art .old{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 3}
+.why-art .new{stroke:var(--accent);stroke-width:1.5;fill:var(--accent-soft)}
+.why-art .flow,.why-art .route{stroke:var(--accent);stroke-width:1.5}
+.why-art .route{stroke-dasharray:5 4}
+.why-art .dot{fill:var(--accent);stroke:none}
+.why-art .sink{stroke:var(--border2);stroke-width:1.5;fill:var(--bg2)}
+.why-art .caps circle{fill:var(--accent);stroke:none}
+.why-art .cost-a{stroke:none;fill:var(--border2)}
+.why-art .cost-b{stroke:none;fill:var(--accent)}
+.why-art .pin-a *{stroke:var(--accent);stroke-width:1.5}
+.why-art .pin-b *{stroke:var(--border2);stroke-width:1.5}
+
+/* a concrete anchor under each reason, so the column is a claim plus its
    evidence rather than a claim on its own. */
 /* Columns stretch so the anchors align on one baseline; otherwise each hairline
    sits at whatever height its paragraph happened to end, which reads as sloppy
