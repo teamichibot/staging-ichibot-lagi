@@ -94,6 +94,13 @@ it already has, so:
 - **Old product URLs are dropped**, not redirected. The 12 current products are
   consolidated into the 5 in this brief and the old `/produk/[slug]` paths are
   allowed to 404.
+- **The accent is Ichibot blue, not amber.** The brief and the draft both use
+  amber; that is overridden. `--accent` is `#0369A1` in light and `#38BDF8`
+  (the sky-400 the old site already used) in dark, picked so small text clears
+  4.5:1 on each background. `--on-accent` now differs per theme — white on the
+  light accent, `#08090B` on the dark one — because a single value fails one
+  of them. The draft file still renders amber and is not being repainted; it
+  is the reference for layout and interaction, not for accent colour.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
