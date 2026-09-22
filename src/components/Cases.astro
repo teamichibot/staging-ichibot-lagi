@@ -71,7 +71,7 @@ studies.forEach((study, i) => {
         <div class="mosaic">
           {tiles.map((tile) =>
             tile.kind === 'case' ? (
-              <a class="tile-case" href={`/blog/${tile.data.slug}`}>
+              <div class="tile-case">
                 <span class={tile.tall ? 'shot tall' : 'shot'}>
                   <Image
                     src={tile.data.image}
@@ -83,9 +83,10 @@ studies.forEach((study, i) => {
                   />
                 </span>
                 <span class="tile-title">{tile.data.title}</span>
-              </a>
+              </div>
             ) : (
               <figure class="tile-quote">
+                {tile.data.sample && <span class="sample">Sample</span>}
                 <blockquote>{tile.data.quote}</blockquote>
                 <figcaption>
                   <span class="avatar" aria-hidden="true" />
@@ -93,7 +94,6 @@ studies.forEach((study, i) => {
                     <b>{tile.data.name}</b>
                     <small>{tile.data.role}</small>
                   </span>
-                  {tile.data.sample && <span class="sample">Sample</span>}
                 </figcaption>
               </figure>
             )
@@ -103,7 +103,8 @@ studies.forEach((study, i) => {
     }
 
     <span class="note">
-      Draft: the quotes are written samples, attributed to a role and sector rather
+      Draft: tiles are not clickable yet — /blog/[slug] does not exist until phase 3,
+      so linking them here would 404. The quotes are written samples, attributed to a role and sector rather
       than to a named client. Replace with cleared client quotes, and add a result
       figure per case where one exists.
     </span>
