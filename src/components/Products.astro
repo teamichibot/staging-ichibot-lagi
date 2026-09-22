@@ -63,79 +63,59 @@ function sparkPoints(values: number[]) {
             tabindex="0"
             hidden={i !== 0}
           >
-            <div>
-              <h3>{p.name}</h3>
-              <p class="desc">{p.desc}</p>
-              <dl>
-                <div>
-                  <dt>What's included</dt>
-                  <dd>{p.included}</dd>
-                </div>
-                <div>
-                  <dt>{p.proofLabel}</dt>
-                  <dd>
-                    <ul class="proof">
-                      {p.proof.map((x) => <li>{x}</li>)}
-                    </ul>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Deployment</dt>
-                  <dd>{p.deploymentTime}</dd>
-                </div>
-              </dl>
-              <div style="margin-top:1.6rem">
-                <a class="btn sm" href="#contact">Request a demo</a>
-              </div>
-            </div>
-
             {p.screenshot ? (
               <figure class="shot-frame">
                 <Image
                   src={p.screenshot}
                   alt={`${p.name} dashboard`}
                   widths={[640, 960, 1280]}
-                  sizes="(max-width: 900px) 92vw, 46vw"
+                  sizes="(max-width: 900px) 92vw, 62vw"
                   loading="lazy"
                 />
               </figure>
             ) : (
-            <div class="mock">
-              <div class="mock-top">
-                <span>{p.mock.top}</span>
-                <em>● Live</em>
+              <div class="mock">
+                <div class="mock-top">
+                  <span>{p.mock.top}</span>
+                  <em>● Live</em>
+                </div>
+                <div class="metrics">
+                  {p.mock.metrics.map(([value, label]) => (
+                    <div class="metric">
+                      <b>{value}</b>
+                      <small>{label}</small>
+                    </div>
+                  ))}
+                </div>
+                <div class="spark">
+                  <svg viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                      <linearGradient id={`sg-${i}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="var(--live)" stop-opacity=".3" />
+                        <stop offset="1" stop-color="var(--live)" stop-opacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <polygon
+                      fill={`url(#sg-${i})`}
+                      points={`0,110 ${sparkPoints(p.mock.line)} 300,110`}
+                    />
+                    <polyline
+                      fill="none"
+                      stroke="var(--live)"
+                      stroke-width="2"
+                      vector-effect="non-scaling-stroke"
+                      points={sparkPoints(p.mock.line)}
+                    />
+                  </svg>
+                </div>
               </div>
-              <div class="metrics">
-                {p.mock.metrics.map(([value, label]) => (
-                  <div class="metric">
-                    <b>{value}</b>
-                    <small>{label}</small>
-                  </div>
-                ))}
-              </div>
-              <div class="spark">
-                <svg viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true">
-                  <defs>
-                    <linearGradient id={`sg-${i}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stop-color="var(--live)" stop-opacity=".3" />
-                      <stop offset="1" stop-color="var(--live)" stop-opacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <polygon
-                    fill={`url(#sg-${i})`}
-                    points={`0,110 ${sparkPoints(p.mock.line)} 300,110`}
-                  />
-                  <polyline
-                    fill="none"
-                    stroke="var(--live)"
-                    stroke-width="2"
-                    vector-effect="non-scaling-stroke"
-                    points={sparkPoints(p.mock.line)}
-                  />
-                </svg>
-              </div>
-            </div>
             )}
+
+            <div class="panel-copy">
+              <h3>{p.name}</h3>
+              <p class="desc">{p.desc}</p>
+              <a class="btn sm" href="#contact">Request a demo</a>
+            </div>
           </div>
         ))
       }
