@@ -1,3 +1,4 @@
+import energyDashboard from '../assets/products/energy-monitoring-dashboard.jpg'
 import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
 /**
@@ -42,6 +43,7 @@ export const products: Product[] = [
     proofLabel: 'Proven at',
     proof: ['Toyota Indonesia: 2 MVA transformer', 'Penerbit Erlangga: electricity substation'],
     deploymentTime: 'Live in [X] weeks',
+    screenshot: energyDashboard,
     mock: {
       top: 'Main panel, Plant 1',
       metrics: [['412', 'kWh today'], ['1.8 MW', 'Peak load'], ['0.97', 'Power factor']],
