@@ -35,7 +35,7 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
 2. **Client logos** — Pertamina, Toyota, Citra Borneo Utama, Erlangga, PT Garam (monochrome SVG).
 3. **Products** — tabbed interface, 5 products from the `products` collection. Each: name, description, what's included, "Proven at" client list, deployment time, dashboard mockup/screenshot.
    - Smart energy usage monitoring — Toyota (2 MVA transformer), Erlangga (substation)
-   - AI Vision Box — Pertamina (PPE detection, PPE + oil spill)
+   - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
    - Smart equipment monitoring — Toyota (Kaeser compressor), Pertamina (vehicle tilt & pitch), PT Garam (main pump)
    - Marine safety monitoring — Pertamina (docking early warning, wind & wave)
    - Smart plantation — **Pilot** badge, oil palm LoRa soil monitoring (on-going)

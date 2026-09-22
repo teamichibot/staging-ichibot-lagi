@@ -52,7 +52,7 @@ export const products: Product[] = [
   },
   {
     key: 'vision',
-    name: 'AI Vision Box',
+    name: 'AI Vision Engine',
     desc: 'Turn existing CCTV into automatic inspectors for PPE compliance, safety zones and spill detection.',
     included: 'Edge AI unit, pre-trained models, alert dashboard',
     proofLabel: 'Proven at',
