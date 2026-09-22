@@ -1,11 +1,11 @@
 ---
-// Carried over from the approved draft.
+import { whatsappLink } from '../lib/contact'
 ---
 
 <section class="cta" id="contact">
   <div class="wrap">
     <h2>Tell us about your plant</h2>
     <p class="lede">Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.</p>
-    <div class="actions"><a class="btn primary" href="#">Book a site survey</a><a class="btn" href="#">Chat on WhatsApp</a></div>
+    <div class="actions"><a class="btn primary" href="#">Book a site survey</a><a class="btn" href={whatsappLink} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></div>
   </div>
 </section>
