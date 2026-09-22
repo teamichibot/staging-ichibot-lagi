@@ -137,7 +137,15 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .logos{padding:3rem 0 1rem}
 .logos p{text-align:center;color:var(--faint);font-size:.9rem}
 .logo-row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(1.5rem,5vw,3.5rem);margin-top:1.6rem}
-.logo-row span{font-weight:650;font-size:1.15rem;color:var(--muted);letter-spacing:-.02em;opacity:.8}
+.logo-row{align-items:center}
+/* Flattened to silhouettes so one row works on both themes: the files are a
+   mix of navy, red and black marks that would either glare or disappear. */
+.logo-row img{width:auto;object-fit:contain;filter:grayscale(1) brightness(0) opacity(.45);
+  transition:opacity .15s}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.55)}
+}
+:root[data-theme="dark"] .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.55)}
 
 /* products tabs */
 .tabs{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;margin-top:3rem}
@@ -352,9 +360,13 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 @media (prefers-reduced-motion:reduce){.tile-case:hover img{transform:none}}
 
 .tile-quote{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
-  padding:2.3rem 1.5rem;display:flex;flex-direction:column}
+  padding:2.3rem 1.5rem;display:flex;flex-direction:column;
+  /* The gap under the quote is not a margin — the card is simply taller than
+     its text and the attribution sits on the floor. That keeps the authors on
+     one line across cards whatever length the quotes run to. */
+  min-height:29rem}
 .tile-quote blockquote{margin:0;font-size:1.15rem;line-height:1.55;letter-spacing:-.012em}
-.tile-quote figcaption{display:flex;align-items:center;gap:.85rem;margin-top:2.6rem}
+.tile-quote figcaption{display:flex;align-items:center;gap:.85rem;margin-top:auto;padding-top:2.6rem}
 .tile-quote .avatar{width:40px;height:40px;border-radius:50%;flex:none;
   background:var(--border2);border:1px solid var(--border)}
 .tile-quote b{display:block;font-size:.95rem;font-weight:600;line-height:1.35}

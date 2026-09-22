@@ -1,15 +1,49 @@
 ---
-// Brief open item: monochrome logo files plus written permission per client.
-// Until those land, the draft's text treatment stands in.
-const clients = ['Pertamina', 'Toyota', 'Citra Borneo Utama', 'Erlangga', 'PT Garam']
+import { Image } from 'astro:assets'
+import pertamina from '../../public/logos/clients/pertamina.png'
+import toyota from '../../public/logos/clients/toyota.png'
+import cbu from '../../public/logos/clients/citra-borneo-utama.png'
+import erlangga from '../../public/logos/clients/erlangga.png'
+import garam from '../../public/logos/clients/pt-garam.png'
+
+/**
+ * Real logo files, served from our own origin. The source records hotlink four
+ * of these from Wikimedia and the clients' own sites, which breaks the moment
+ * one of them reorganises or blocks hotlinking.
+ *
+ * Every file has an alpha channel, so they take a flat silhouette cleanly —
+ * that is the monochrome treatment the brief asks for, and it is the only way
+ * one row reads on both a near-white and a near-black background.
+ *
+ * `height` is tuned per logo rather than shared: normalising on height alone
+ * leaves the wide wordmarks shouting and the square marks whispering.
+ */
+const clients = [
+  { name: 'Pertamina', src: pertamina, height: 30 },
+  { name: 'Toyota', src: toyota, height: 22 },
+  { name: 'Citra Borneo Utama', src: cbu, height: 38 },
+  { name: 'Penerbit Erlangga', src: erlangga, height: 30 },
+  { name: 'PT Garam', src: garam, height: 40 },
+]
 ---
 
 <section class="logos">
   <div class="wrap">
     <p>Trusted by state-owned enterprises and global manufacturers in Indonesia</p>
-    <div class="logo-row">{clients.map((c) => <span>{c}</span>)}</div>
-    <span class="note" style="text-align:center">
-      Draft: replace with monochrome logo files once written permission is in hand.
-    </span>
+    <div class="logo-row">
+      {
+        clients.map((c) => (
+          <Image
+            src={c.src}
+            alt={c.name}
+            height={c.height * 2}
+            width={0}
+            densities={[1, 2]}
+            style={`height:${c.height}px`}
+            loading="lazy"
+          />
+        ))
+      }
+    </div>
   </div>
 </section>
