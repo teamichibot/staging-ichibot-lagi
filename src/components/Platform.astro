@@ -1,15 +1,54 @@
 ---
-// Carried over from the approved draft.
+/**
+ * Positioning corrected 2026-09-23. The section used to claim every product
+ * runs on one shared platform, which is not true — use cases diverge too far
+ * for that. What Ichibot actually sells is owning the whole chain: getting the
+ * data out of the equipment, the edge, storage, the dashboard, the ERP hand-off
+ * and the AI on top, either on-premise or in the cloud.
+ */
+const protocols = [
+  'Modbus RTU', 'Modbus TCP', 'MQTT', 'OPC UA', 'RS-485', 'Ethernet', 'RTSP', 'REST API',
+]
 ---
 
-<section id="platform" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<section
+  id="platform"
+  style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)"
+>
   <div class="wrap">
-    <h2>One platform behind every product</h2>
-    <p class="lede">All Ichibot products run on the same edge and dashboard stack. Add a new line, a new site or a new product without starting over.</p>
+    <h2>We build the whole chain, not one link in it</h2>
+    <p class="lede">
+      A weighbridge screen and a soil-moisture screen have almost nothing in common, so
+      there is no single dashboard that fits every plant. What is the same every time is
+      everything underneath it — and we build all of it.
+    </p>
+
     <div class="bento">
-      <div class="tile t-dash">
-        <h3>Dashboard visualization</h3>
-        <p>Ready-made templates per industry, fully customizable, on desktop or phone.</p>
+      <div class="tile t-2">
+        <h3>Connectivity</h3>
+        <p>We read the equipment you already own — PLCs, VFDs, power meters, IP cameras — and retrofit sensors where there is no data to read yet.</p>
+        <div class="viz chips">{protocols.map((x) => <span>{x}</span>)}</div>
+      </div>
+
+      <div class="tile t-2">
+        <h3>Edge and storage</h3>
+        <p>The edge device collects and logs on site, so history survives a dropped connection and is there later for audits and reports.</p>
+        <div class="viz flow">
+          <span>Collect</span><i></i><span class="hl">Log</span><i></i><span>Sync</span>
+        </div>
+      </div>
+
+      <div class="tile t-2">
+        <h3>AI ready</h3>
+        <p>Vision models and anomaly detection run on the same box that collects the data, so detection does not wait on a round trip to a server.</p>
+        <div class="viz flow">
+          <span>Stream</span><i></i><span class="hl">Infer</span><i></i><span>Alert</span>
+        </div>
+      </div>
+
+      <div class="tile t-3">
+        <h3>Dashboards built for the case</h3>
+        <p>Not one template stretched to fit. A plantation gets soil and irrigation; a substation gets load, power factor and cost per line.</p>
         <div class="viz">
           <div class="dash-mini">
             <div class="metric"><b>86%</b><small>OEE</small></div>
@@ -17,17 +56,20 @@
             <div class="metric"><b>7.2</b><small>bar pressure</small></div>
             <div class="metric"><b>2</b><small>open alerts</small></div>
           </div>
-          <div class="bars" aria-hidden="true"><span style="height:40%"></span><span style="height:55%"></span><span style="height:48%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:80%"></span><span style="height:74%"></span><span style="height:88%"></span><span style="height:66%"></span><span style="height:92%"></span><span style="height:78%"></span><span style="height:85%"></span></div>
         </div>
       </div>
-      <div class="tile t-erp">
-        <h3>Connects to your ERP</h3>
-        <p>Weighing, production, downtime and energy data go straight into your ERP or MES. Running at Citra Borneo Utama.</p>
-        <div class="viz flow"><span>Weighbridge</span><i></i><span class="hl">Edge</span><i></i><span>ERP</span></div>
+
+      <div class="tile t-3">
+        <h3>Straight into your ERP</h3>
+        <p>Weighing, production, downtime and energy data land in your ERP or MES without anyone retyping them. Running at Citra Borneo Utama.</p>
+        <div class="viz flow">
+          <span>Weighbridge</span><i></i><span class="hl">Edge</span><i></i><span>ERP</span>
+        </div>
       </div>
-      <div class="tile t-dep">
-        <h3>On-premise or cloud, your choice</h3>
-        <p>Data is always logged on the edge, so nothing is lost when the internet drops.</p>
+
+      <div class="tile t-6">
+        <h3>On-premise or cloud, across the whole chain</h3>
+        <p>The same stack runs either way, so the decision is your IT policy's to make rather than ours.</p>
         <div class="viz">
           <div class="seg" role="group" aria-label="Deployment option">
             <button type="button" aria-pressed="true" data-dep="onprem">On-prem</button>
@@ -37,13 +79,11 @@
           <p class="dep-out" id="depout"></p>
         </div>
       </div>
-      <div class="tile t-proto">
-        <h3>Speaks industrial protocols</h3>
-        <p>One edge device reads the equipment you already have.</p>
-        <div class="viz chips"><span>Modbus RTU</span><span>Modbus TCP</span><span>MQTT</span><span>OPC UA</span><span>RS-485</span><span>Ethernet</span><span>RTSP</span><span>REST API</span></div>
-      </div>
     </div>
-    <span class="note">Draft: re-check the protocol list against what the edge computer supports at launch.</span>
+
+    <span class="note">
+      Draft: re-check the protocol list against what the edge computer supports at launch.
+    </span>
   </div>
 </section>
 

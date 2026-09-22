@@ -191,7 +191,7 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-top:3rem}
 .tile{background:var(--panel);border:1px solid var(--border2);border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;gap:.6rem;overflow:hidden;position:relative}
 .tile p{color:var(--muted);font-size:.95rem}
-.t-dash{grid-column:span 4}.t-erp{grid-column:span 2}.t-dep{grid-column:span 3}.t-proto{grid-column:span 3}
+.t-2{grid-column:span 2}.t-3{grid-column:span 3}.t-6{grid-column:span 6}
 .tile .viz{margin-top:auto;padding-top:1rem}
 .dash-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
 .dash-mini .metric{background:var(--bg2)}
@@ -207,7 +207,7 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .dep-out{font-size:.9rem;color:var(--text);min-height:3.2em;margin-top:.8rem}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chips span{font-size:.82rem;border:1px solid var(--border2);border-radius:6px;padding:.25rem .55rem;color:var(--muted);background:var(--bg2)}
-@media (max-width:900px){.t-dash,.t-erp,.t-dep,.t-proto{grid-column:span 6}.dash-mini{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:900px){.t-2,.t-3{grid-column:span 6}.dash-mini{grid-template-columns:repeat(2,1fr)}}
 
 
 /* why */

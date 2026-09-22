@@ -115,6 +115,15 @@ it already has, so:
   link. The sectors Ichibot works in are already evidenced by the client logo
   row and the named deployments in the products section, so the pills were
   restating what the page proves elsewhere. Do not add it back.
+- **The platform section is not "one platform behind every product".** That
+  headline and its lede claimed every product runs on the same shared stack,
+  which Ichibot corrected on 2026-09-23: use cases diverge too far for one
+  dashboard to serve them, and a technical buyer would catch the overreach.
+  What Ichibot actually sells is owning the entire chain — connectivity to the
+  equipment, the edge, storage, dashboards built per case, the ERP hand-off,
+  and AI on top — any of it on-premise or in the cloud. The section is now
+  "We build the whole chain, not one link in it", and the bento maps those
+  stages. Do not restore the old framing from item 4 above.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
