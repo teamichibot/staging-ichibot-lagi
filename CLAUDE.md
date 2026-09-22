@@ -110,6 +110,11 @@ it already has, so:
   immediately below still carries that proof.
 - Centred hero, the gradient headline, the radial glows, the card radii and the
   staggered hero entrance are all **kept** — reviewed and approved as-is.
+- **The industries section is dropped.** Item 5 of the page structure above —
+  the row of sector pills — is removed from the homepage along with its nav
+  link. The sectors Ichibot works in are already evidenced by the client logo
+  row and the named deployments in the products section, so the pills were
+  restating what the page proves elsewhere. Do not add it back.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
