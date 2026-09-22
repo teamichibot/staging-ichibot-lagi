@@ -1,7 +1,48 @@
 ---
-// Hub diagram geometry is lifted verbatim from the approved draft. The pulse
-// circles are generated client-side because there are 16 of them and they only
-// differ by which path they ride.
+/**
+ * Hub diagram geometry is lifted verbatim from the approved draft. The nodes
+ * are generated from data rather than eight hand-written SVG groups, so a label
+ * or an icon can change in one place.
+ *
+ * Icons are 16x16 in their own coordinate space and translated into position;
+ * each draws the thing the node is, not a generic glyph.
+ *
+ * The pulse circles are generated client-side because there are 16 of them and
+ * they only differ by which path they ride.
+ */
+const icons = {
+  // a controller module with its terminal block
+  plc: '<rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5.6 3v10"/><path d="M8 6.2h3.6M8 9.8h3.6"/>',
+  // a dial reading a physical quantity
+  sensor: '<circle cx="8" cy="8" r="5.6"/><path d="M8 8l3-2.4"/><path d="M8 2.4v1.4M13.6 8h-1.4M8 13.6v-1.4M2.4 8h1.4"/>',
+  // a video camera
+  camera: '<rect x="1.6" y="4.2" width="9.4" height="7.6" rx="1.6"/><path d="M11 7.2l3.4-2.2v6l-3.4-2.2z"/>',
+  // a meter with a bolt in it
+  meter: '<rect x="2" y="2" width="12" height="12" rx="2"/><path d="M8.8 4.4 6.1 8.4h2l-.7 3.2 2.9-4.2h-2z"/>',
+  // a chart on a screen
+  dashboard: '<rect x="1.6" y="2.6" width="12.8" height="10.8" rx="1.6"/><path d="M4.8 10.8V8.4M8 10.8V5.6M11.2 10.8V7.6"/>',
+  // a database
+  erp: '<ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4"/><path d="M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>',
+  // a bell
+  alert: '<path d="M4.2 6.8a3.8 3.8 0 0 1 7.6 0c0 2.9 1.1 4 1.1 4H3.1s1.1-1.1 1.1-4z"/><path d="M6.7 13a1.5 1.5 0 0 0 2.6 0"/>',
+  // a spark, for something inferred rather than measured
+  ai: '<path d="M6.6 2.2 7.8 5.4 11 6.6 7.8 7.8 6.6 11 5.4 7.8 2.2 6.6 5.4 5.4z"/><path d="M11.6 10.2l.7 1.5 1.5.7-1.5.7-.7 1.5-.7-1.5-1.5-.7 1.5-.7z"/>',
+}
+
+/** Left column feeds the system; right column is what it feeds. */
+const sources = [
+  { y: 70, icon: 'plc', title: 'PLC and VFD', sub: 'Modbus RTU / TCP' },
+  { y: 155, icon: 'sensor', title: 'Sensors', sub: 'Temp, pressure, vibration' },
+  { y: 240, icon: 'camera', title: 'IP cameras', sub: 'RTSP video' },
+  { y: 325, icon: 'meter', title: 'Energy meters', sub: 'kWh, power quality' },
+]
+
+const outputs = [
+  { y: 70, icon: 'dashboard', title: 'Dashboard', sub: 'Live KPIs and trends' },
+  { y: 155, icon: 'erp', title: 'ERP / MES', sub: 'Automatic data sync' },
+  { y: 240, icon: 'alert', title: 'Alerts', sub: 'WhatsApp, email, siren' },
+  { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections' },
+]
 ---
 
 <section class="hero">
@@ -14,14 +55,14 @@
     </div>
 
     <div class="stage">
-      <div class="window hub" role="img" aria-label="Machines, sensors, cameras and meters send data to Ichibot Edge, which delivers it to dashboards, ERP, alerts and AI insights">
-        <div class="window-bar"><b></b><b></b><b></b><span>ichibot edge / data flow</span></div>
+      <div class="window hub" role="img" aria-label="Machines, sensors, cameras and meters send data to the Ichibot system, which delivers it to dashboards, ERP, alerts and AI insights">
+        <div class="window-bar"><b></b><b></b><b></b><span>ichibot system / data flow</span></div>
         <svg id="hubsvg" viewBox="0 0 1000 440">
           <defs>
             <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
           </defs>
           <text class="col" x="120" y="42" text-anchor="middle">Shop floor</text>
-          <text class="col" x="500" y="42" text-anchor="middle">Edge, on-prem or cloud</text>
+          <text class="col" x="500" y="42" text-anchor="middle">On-prem or cloud</text>
           <text class="col" x="880" y="42" text-anchor="middle">Decisions</text>
           <g id="wires">
             <path id="i1" class="wire" d="M215 95 C330 95 330 220 420 220"/>
@@ -33,19 +74,27 @@
             <path id="o3" class="wire" d="M580 220 C670 220 670 265 785 265"/>
             <path id="o4" class="wire" d="M580 220 C670 220 670 350 785 350"/>
           </g>
-          <g class="node"><rect x="25" y="70" width="190" height="50" rx="10"/><text x="45" y="92">PLC and VFD</text><text class="sub" x="45" y="108">Modbus RTU / TCP</text></g>
-          <g class="node"><rect x="25" y="155" width="190" height="50" rx="10"/><text x="45" y="177">Sensors</text><text class="sub" x="45" y="193">Temp, pressure, vibration</text></g>
-          <g class="node"><rect x="25" y="240" width="190" height="50" rx="10"/><text x="45" y="262">IP cameras</text><text class="sub" x="45" y="278">RTSP video</text></g>
-          <g class="node"><rect x="25" y="325" width="190" height="50" rx="10"/><text x="45" y="347">Energy meters</text><text class="sub" x="45" y="363">kWh, power quality</text></g>
+          {sources.map((n) => (
+            <g class="node">
+              <rect x="25" y={n.y} width="190" height="50" rx="10" />
+              <g class="ic" transform={`translate(41 ${n.y + 17})`} set:html={icons[n.icon as keyof typeof icons]} />
+              <text x="68" y={n.y + 22}>{n.title}</text>
+              <text class="sub" x="68" y={n.y + 38}>{n.sub}</text>
+            </g>
+          ))}
           <rect class="ring" x="412" y="142" width="176" height="156" rx="20"><animate attributeName="opacity" values=".6;.15;.6" dur="3s" repeatCount="indefinite"/></rect>
           <g class="core"><rect class="bg" x="420" y="150" width="160" height="140" rx="16"/>
             <rect x="436" y="166" width="14" height="14" rx="3" fill="var(--accent)"/>
-            <text x="500" y="222" text-anchor="middle">Ichibot Edge</text>
+            <text x="500" y="222" text-anchor="middle">Ichibot System</text>
             <text class="sub" x="500" y="244" text-anchor="middle">Collect, log, run AI</text></g>
-          <g class="node"><rect x="785" y="70" width="190" height="50" rx="10"/><text x="805" y="92">Dashboard</text><text class="sub" x="805" y="108">Live KPIs and trends</text></g>
-          <g class="node"><rect x="785" y="155" width="190" height="50" rx="10"/><text x="805" y="177">ERP / MES</text><text class="sub" x="805" y="193">Automatic data sync</text></g>
-          <g class="node"><rect x="785" y="240" width="190" height="50" rx="10"/><text x="805" y="262">Alerts</text><text class="sub" x="805" y="278">WhatsApp, email, siren</text></g>
-          <g class="node"><rect x="785" y="325" width="190" height="50" rx="10"/><text x="805" y="347">AI insights</text><text class="sub" x="805" y="363">Anomalies, detections</text></g>
+          {outputs.map((n) => (
+            <g class="node">
+              <rect x="785" y={n.y} width="190" height="50" rx="10" />
+              <g class="ic" transform={`translate(801 ${n.y + 17})`} set:html={icons[n.icon as keyof typeof icons]} />
+              <text x="828" y={n.y + 22}>{n.title}</text>
+              <text class="sub" x="828" y={n.y + 38}>{n.sub}</text>
+            </g>
+          ))}
           <g id="pulses"></g>
         </svg>
       </div>
