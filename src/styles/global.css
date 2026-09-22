@@ -384,3 +384,8 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
   overflow:hidden}
 @media (max-width:900px){.panel:has(.shot-frame){grid-template-columns:1fr}}
 .shot-frame img{display:block;width:100%;height:auto}
+/* services — a line icon above each card title, same 16px language as the
+   product tabs. No enclosing box: four boxed icons in a 2x2 grid reads as a
+   template, a bare mark does not. */
+.svc-ic{display:block;width:22px;height:22px;margin-bottom:.95rem;color:var(--accent)}
+.svc-ic *{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
