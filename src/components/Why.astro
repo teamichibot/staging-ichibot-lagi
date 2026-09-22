@@ -1,15 +1,50 @@
 ---
-// Carried over from the approved draft.
+/**
+ * Each anchor line below restates something already proven elsewhere on this
+ * page — named clients, the protocol list from the platform section, where the
+ * team is based. No metric is introduced that we cannot point at.
+ */
+const reasons = [
+  {
+    title: 'Proven at scale',
+    body: 'Systems running at Pertamina, Toyota Indonesia and national agribusiness groups.',
+    anchor: 'Pertamina · Toyota Indonesia · Citra Borneo Utama',
+  },
+  {
+    title: 'Works with old machines',
+    body: 'We retrofit sensors and read existing PLCs, so you get data without replacing equipment.',
+    anchor: 'Modbus RTU/TCP · OPC UA · RS-485 · RTSP',
+  },
+  {
+    title: 'Global capability, local price',
+    body: 'Edge and dashboard features on par with global brands, at a cost that fits Indonesian plants.',
+    anchor: 'Built and supported in Indonesia',
+  },
+  {
+    title: 'Engineers who show up',
+    body: 'Our own team surveys, installs, trains and supports, from Yogyakarta to your site.',
+    anchor: 'In-house team, based in Yogyakarta',
+  },
+]
 ---
 
 <section style="padding-top:0">
   <div class="wrap">
     <h2>Why industries choose Ichibot</h2>
+    <p class="lede">
+      The hard part of industrial IoT is rarely the dashboard. It is getting a straight
+      answer out of equipment that was installed long before anyone thought about data.
+    </p>
     <div class="why">
-      <div><h3>Proven at scale</h3><p>Systems running at Pertamina, Toyota Indonesia and national agribusiness groups.</p></div>
-      <div><h3>Works with old machines</h3><p>We retrofit sensors and read existing PLCs, so you get data without replacing equipment.</p></div>
-      <div><h3>Global capability, local price</h3><p>Edge and dashboard features on par with global brands, at a cost that fits Indonesian plants.</p></div>
-      <div><h3>Engineers who show up</h3><p>Our own team surveys, installs, trains and supports, from Yogyakarta to your site.</p></div>
+      {
+        reasons.map((r) => (
+          <div>
+            <h3>{r.title}</h3>
+            <p>{r.body}</p>
+            <span class="anchor">{r.anchor}</span>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

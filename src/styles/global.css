@@ -289,3 +289,34 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 
 /* .panel is display:grid, which beats the [hidden] attribute's display:none. */
 .panel[hidden] { display: none; }
+
+/* industries — a spec sheet, not a row of pills: every sector carries the
+   deployment that proves it. Hairlines and type do the separating; no cards. */
+.sectors{margin:3rem 0 0;display:grid}
+.sector{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr) minmax(0,11rem);
+  gap:1rem 2rem;align-items:baseline;padding:1.35rem 0;border-top:1px solid var(--border)}
+.sector:last-child{border-bottom:1px solid var(--border)}
+.sector dt{font-weight:600;letter-spacing:-.015em}
+.sector dd{margin:0}
+.sector .what{color:var(--muted);font-size:.95rem;max-width:62ch}
+.sector .who{color:var(--accent);font-size:.9rem;font-weight:550;text-align:right}
+@media (max-width:900px){
+  .sector{grid-template-columns:1fr auto;gap:.35rem 1rem;padding:1.15rem 0}
+  .sector dt{grid-column:1}
+  .sector .who{grid-column:2;grid-row:1;text-align:right}
+  .sector .what{grid-column:1/-1}
+}
+
+/* why — a concrete anchor under each reason, so the column is a claim plus its
+   evidence rather than a claim on its own. */
+/* Columns stretch so the anchors align on one baseline; otherwise each hairline
+   sits at whatever height its paragraph happened to end, which reads as sloppy
+   rather than deliberate. */
+.why div{display:flex;flex-direction:column;padding-bottom:1.6rem}
+.why .anchor{margin-top:auto;padding-top:.85rem;border-top:1px solid var(--border);
+  font-size:.8rem;line-height:1.45;color:var(--faint);letter-spacing:.01em;
+  /* Reserve two lines so every hairline lands on the same baseline. The page is
+     border-box, which would fold the padding and border into min-height and let
+     a one-line anchor stay short, so this box measures its content instead. */
+  box-sizing:content-box;min-height:calc(2 * 1.45em)}
+.why p{margin-bottom:1.1rem}

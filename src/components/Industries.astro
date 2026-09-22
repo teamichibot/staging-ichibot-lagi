@@ -1,13 +1,61 @@
 ---
-// Carried over from the approved draft.
+/**
+ * Every deployment named here is sourced from the brief's product list.
+ * Nothing is invented. "Salt and mining" names only the salt work, because
+ * there is no mining client to point at.
+ */
+const industries = [
+  {
+    name: 'Oil & gas and energy',
+    what: 'CCTV turned into PPE and oil-spill inspectors, plus tilt and pitch monitoring on service vehicles.',
+    client: 'Pertamina',
+  },
+  {
+    name: 'Automotive manufacturing',
+    what: 'A 2 MVA transformer and a Kaeser ES300 compressor watched for load, pressure, temperature and vibration.',
+    client: 'Toyota Indonesia',
+  },
+  {
+    name: 'Agribusiness and plantation',
+    what: 'Weighbridge automation feeding every transaction straight into the ERP, with a LoRa soil pilot in oil palm.',
+    client: 'Citra Borneo Utama',
+  },
+  {
+    name: 'Printing and publishing',
+    what: 'Electricity substation monitoring for load, power quality and cost per line.',
+    client: 'Penerbit Erlangga',
+  },
+  {
+    name: 'Port and marine',
+    what: 'Docking speed early warning with wind and wave monitoring at the jetty.',
+    client: 'Pertamina',
+  },
+  {
+    name: 'Salt and mining',
+    what: 'Main pump automation and monitoring across the evaporation ponds, built to survive a corrosive site.',
+    client: 'PT Garam',
+  },
+]
 ---
 
 <section id="industries">
   <div class="wrap">
     <h2>Industries we serve</h2>
-    <div class="ind">
-      <a href="#">Oil &amp; gas and energy</a><a href="#">Automotive manufacturing</a><a href="#">Agribusiness and plantation</a>
-      <a href="#">Printing and publishing</a><a href="#">Port and marine</a><a href="#">Salt and mining</a>
-    </div>
+    <p class="lede">
+      Six sectors, each with a system already running. If yours is on this list, we have
+      met your constraints before.
+    </p>
+
+    <dl class="sectors">
+      {
+        industries.map((item) => (
+          <div class="sector">
+            <dt>{item.name}</dt>
+            <dd class="what">{item.what}</dd>
+            <dd class="who">{item.client}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </section>
