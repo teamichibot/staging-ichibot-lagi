@@ -12,6 +12,12 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   integrations: [mdx(), sitemap()],
+  image: {
+    // Case-study photos live on Ichibot's own image host. They are 2 MB PNGs at
+    // source, so they go through Astro's optimiser rather than straight into
+    // the page.
+    domains: ['img.ichibot.id'],
+  },
   vite: {
     plugins: [tailwindcss()],
   },
