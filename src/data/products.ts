@@ -1,3 +1,5 @@
+import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
+
 /**
  * The five packaged products from the brief.
  *
@@ -17,7 +19,13 @@ export type Product = {
   proof: string[]
   deploymentTime: string
   pilot?: boolean
-  /** Illustrative dashboard mockup. Brief open item: swap for real screenshots. */
+  /**
+   * A real screenshot of the product's own dashboard. Where one exists it
+   * replaces `mock` entirely — the brief's open item is to get rid of the
+   * mockups, not to decorate them.
+   */
+  screenshot?: ImageMetadata
+  /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
     metrics: [value: string, label: string][]
@@ -95,6 +103,7 @@ export const products: Product[] = [
     proof: ['Oil palm plantation, on-going'],
     deploymentTime: 'Pilot',
     pilot: true,
+    screenshot: plantationDashboard,
     mock: {
       top: 'Block A-12',
       metrics: [['32%', 'Soil moisture'], ['5.6', 'Soil pH'], ['48', 'Nodes online']],

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import { products } from '../data/products'
 
 const icons: Record<string, string> = {
@@ -88,6 +89,17 @@ function sparkPoints(values: number[]) {
               </div>
             </div>
 
+            {p.screenshot ? (
+              <figure class="shot-frame">
+                <Image
+                  src={p.screenshot}
+                  alt={`${p.name} dashboard`}
+                  widths={[640, 960, 1280]}
+                  sizes="(max-width: 900px) 92vw, 46vw"
+                  loading="lazy"
+                />
+              </figure>
+            ) : (
             <div class="mock">
               <div class="mock-top">
                 <span>{p.mock.top}</span>
@@ -123,6 +135,7 @@ function sparkPoints(values: number[]) {
                 </svg>
               </div>
             </div>
+            )}
           </div>
         ))
       }
