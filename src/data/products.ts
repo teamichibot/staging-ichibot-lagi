@@ -1,4 +1,5 @@
 import energyDashboard from '../assets/products/energy-monitoring-dashboard.jpg'
+import equipmentDashboard from '../assets/products/equipment-monitoring-dashboard.jpg'
 import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
 /**
@@ -76,6 +77,7 @@ export const products: Product[] = [
       'PT Garam: main pump automation',
     ],
     deploymentTime: 'Live in [X] weeks',
+    screenshot: equipmentDashboard,
     mock: {
       top: 'Compressor ES300',
       metrics: [['7.2 bar', 'Pressure'], ['68 °C', 'Temperature'], ['2.1 mm/s', 'Vibration']],
