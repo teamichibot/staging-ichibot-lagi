@@ -3,7 +3,7 @@ import equipmentDashboard from '../assets/products/equipment-monitoring-dashboar
 import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
 /**
- * The five packaged products from the brief.
+ * The four packaged products from the brief.
  *
  * Hardcoded for phase 1. Phase 2 moves this to Supabase so the admin panel can
  * edit it; the shape here is what that query has to return.
@@ -12,7 +12,7 @@ import plantationDashboard from '../assets/products/smart-plantation-dashboard.j
  * rather than guessed, because it is a promise made to a customer.
  */
 export type Product = {
-  key: 'energy' | 'vision' | 'equip' | 'marine' | 'plant'
+  key: 'energy' | 'vision' | 'equip' | 'plant'
   name: string
   desc: string
   included: string
@@ -82,20 +82,6 @@ export const products: Product[] = [
       top: 'Compressor ES300',
       metrics: [['7.2 bar', 'Pressure'], ['68 °C', 'Temperature'], ['2.1 mm/s', 'Vibration']],
       line: [40, 42, 38, 44, 40, 46, 42, 50, 48, 56, 52, 60],
-    },
-  },
-  {
-    key: 'marine',
-    name: 'Marine safety monitoring',
-    desc: 'Early warning for ship docking speed, heel, wind speed and wave level at ports and jetties.',
-    included: 'Docking sensors, weather and wave station, audio-visual alarm',
-    proofLabel: 'Proven at',
-    proof: ['Pertamina: marine docking early warning', 'Pertamina: wind speed and wave monitoring'],
-    deploymentTime: 'Live in [X] weeks',
-    mock: {
-      top: 'Jetty 2',
-      metrics: [['0.12 m/s', 'Docking speed'], ['14 kn', 'Wind'], ['0.8 m', 'Wave height']],
-      line: [30, 40, 28, 44, 34, 50, 30, 46, 36, 42, 32, 38],
     },
   },
   {
