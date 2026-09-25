@@ -85,7 +85,7 @@ const reasons = [
 ]
 ---
 
-<section style="padding-top:0">
+<section>
   <div class="wrap">
     <h2>Why industries choose Ichibot</h2>
     <p class="lede">
@@ -96,7 +96,7 @@ const reasons = [
       {
         reasons.map((r) => (
           <div>
-            <svg class="why-art" viewBox="0 0 240 84" aria-hidden="true" set:html={r.art} />
+            <svg class="why-art" viewBox="0 0 240 84" preserveAspectRatio="xMinYMax meet" aria-hidden="true" set:html={r.art} />
             <h3>{r.title}</h3>
             <p>{r.body}</p>
             <span class="anchor">{r.anchor}</span>

@@ -300,7 +300,7 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 /* why — each column is a schematic, a claim, and the evidence for it.
    The drawings share one language: structure in the border colour, and the
    single accent element is whatever actually carries the point. */
-.why-art{display:block;width:100%;max-width:240px;height:auto;margin:0 0 1.35rem;overflow:visible}
+.why-art{display:block;width:100%;max-width:240px;height:84px;margin:0 0 1.35rem;overflow:visible}
 .why-art *{fill:none;stroke-linecap:round;stroke-linejoin:round}
 .why-art .rail,.why-art .tick{stroke:var(--border2);stroke-width:1.5}
 .why-art .unit rect{stroke:var(--border2);stroke-width:1.5;fill:var(--bg2)}
