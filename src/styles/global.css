@@ -433,11 +433,14 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 
 /* ai: detections drawn on the frame */
 .tile .art .frame{fill:var(--bg2);stroke:var(--border);stroke-width:1.2}
-.tile .art .floor{stroke:var(--border2);stroke-width:1;fill:none}
-.tile .art .figure *{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-linecap:round}
-.tile .art .det{fill:none;stroke-width:1.4}
-.tile .art .det.hit{stroke:var(--accent)}
-.tile .art .det.miss{stroke:var(--draft);stroke-dasharray:4 3}
+.tile .art .src *{fill:none;stroke:var(--faint);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+.tile .art .edge{stroke:var(--border2);stroke-width:.8}
+.tile .art .edge.on{stroke:var(--accent);stroke-width:1.4}
+.tile .art .node{fill:var(--bg2);stroke:var(--faint);stroke-width:1.2}
+.tile .art .node.on{fill:var(--accent);stroke:var(--accent)}
+.tile .art .out{fill:none;stroke-width:1.2}
+.tile .art .out.hit{stroke:var(--accent)}
+.tile .art .out.miss{stroke:var(--draft);stroke-dasharray:4 3}
 .tile .art .tag{fill:var(--accent);font:600 8px var(--font-sans)}
 .tile .art .tag.warn{fill:var(--draft)}
 

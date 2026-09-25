@@ -9,6 +9,19 @@
 const protocols = [
   'Modbus RTU', 'Modbus TCP', 'MQTT', 'OPC UA', 'RS-485', 'Ethernet', 'RTSP', 'REST API',
 ]
+
+/** A small 3-4-2 network drawn inside the edge chip; one path is lit to read as a live inference. */
+const layers = [[128, [30, 46, 62]], [152, [24, 40, 54, 68]], [176, [38, 56]]] as const
+const lit = [[0, 0], [1, 1], [2, 0]]
+const isLit = (l: number, i: number) => lit.some(([a, b]) => a === l && b === i)
+const net = {
+  nodes: layers.flatMap(([x, ys], l) => ys.map((y, i) => [x, y, isLit(l, i)] as const)),
+  edges: layers.slice(1).flatMap(([x, ys], l) =>
+    ys.flatMap((y, i) =>
+      layers[l][1].map((py, j) => [[layers[l][0], py], [x, y], isLit(l, j) && isLit(l + 1, i)] as const),
+    ),
+  ),
+}
 ---
 
 <section
@@ -70,18 +83,22 @@ const protocols = [
         <p>Vision models and anomaly detection run on the same box that collects the data, so detection does not wait on a round trip to a server.</p>
         <div class="viz">
           <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
-            <rect class="frame" x="6" y="6" width="288" height="80" rx="6" />
-            <path class="floor" d="M6 66h288" />
-            <g class="figure">
-              <circle cx="74" cy="34" r="8" /><path d="M74 42v16M66 48h16M68 58l-4 8M80 58l4 8" />
+            <g class="src">
+              <rect x="12" y="18" width="28" height="18" rx="3" /><circle cx="26" cy="27" r="5" /><path d="M40 24l7-4v14l-7-4" />
+              <path d="M10 66h7l4-9 5 16 4-12 4 7 4-2h8" />
             </g>
-            <rect class="det hit" x="56" y="22" width="36" height="50" rx="3" />
-            <text class="tag" x="58" y="18">helmet ok</text>
-            <g class="figure">
-              <circle cx="186" cy="36" r="8" /><path d="M186 44v16M178 50h16M180 60l-4 6M192 60l4 6" />
-            </g>
-            <rect class="det miss" x="168" y="24" width="36" height="48" rx="3" />
-            <text class="tag warn" x="170" y="20">no vest</text>
+            <path class="wire w-b" d="M50 27C80 27 82 34 110 34" />
+            <path class="wire w-b" d="M52 66C80 66 82 58 110 58" />
+            {[124, 138, 152, 166, 180].map((x) => <path class="slot" d={`M${x} 6v6M${x} 80v6`} />)}
+            <rect class="chip-box" x="110" y="12" width="84" height="68" rx="6" />
+            {net.edges.map(([a, b, on]) => <path class:list={['edge', { on }]} d={`M${a[0]} ${a[1]}L${b[0]} ${b[1]}`} />)}
+            {net.nodes.map(([x, y, on]) => <circle class:list={['node', { on }]} cx={x} cy={y} r="3" />)}
+            <path class="wire w-a" d="M194 38C204 38 204 26 212 26" />
+            <path class="wire w-c" d="M194 56C204 56 204 66 212 66" />
+            <rect class="out hit" x="212" y="17" width="80" height="18" rx="9" />
+            <text class="tag" x="224" y="29">helmet 0.98</text>
+            <rect class="out miss" x="212" y="57" width="80" height="18" rx="9" />
+            <text class="tag warn" x="224" y="69">anomaly 0.87</text>
           </svg>
         </div>
       </div>
