@@ -228,13 +228,6 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .chips span{font-size:.82rem;border:1px solid var(--border2);border-radius:6px;padding:.25rem .55rem;color:var(--muted);background:var(--bg2)}
 
 
-/* why */
-.why{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:3rem;border-top:1px solid var(--border)}
-.why div{padding:1.6rem 1.4rem 0 0}
-.why div+div{padding-left:1.4rem;border-left:1px solid var(--border)}
-.why p{color:var(--muted);margin-top:.5rem;font-size:.95rem}
-@media (max-width:900px){.why{grid-template-columns:1fr 1fr}.why div:nth-child(3){padding-left:0;border-left:0}}
-@media (max-width:560px){.why{grid-template-columns:1fr}.why div,.why div+div{padding-left:0;border-left:0}}
 
 
 /* services + steps */
@@ -316,40 +309,6 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
   .sector .who{grid-column:2;grid-row:1;text-align:right}
   .sector .what{grid-column:1/-1}
 }
-
-/* why — each column is a schematic, a claim, and the evidence for it.
-   The drawings share one language: structure in the border colour, and the
-   single accent element is whatever actually carries the point. */
-.why-art{display:block;width:100%;max-width:240px;height:84px;margin:0 0 1.35rem;overflow:visible}
-.why-art *{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.why-art .rail,.why-art .tick{stroke:var(--border2);stroke-width:1.5}
-.why-art .unit rect{stroke:var(--border2);stroke-width:1.5;fill:var(--bg2)}
-.why-art .unit rect:last-child{stroke:var(--accent)}
-.why-art .old{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 3}
-.why-art .new{stroke:var(--accent);stroke-width:1.5;fill:var(--accent-soft)}
-.why-art .flow,.why-art .route{stroke:var(--accent);stroke-width:1.5}
-.why-art .route{stroke-dasharray:5 4}
-.why-art .dot{fill:var(--accent);stroke:none}
-.why-art .sink{stroke:var(--border2);stroke-width:1.5;fill:var(--bg2)}
-.why-art .caps circle{fill:var(--accent);stroke:none}
-.why-art .cost-a{stroke:none;fill:var(--border2)}
-.why-art .cost-b{stroke:none;fill:var(--accent)}
-.why-art .pin-a *{stroke:var(--accent);stroke-width:1.5}
-.why-art .pin-b *{stroke:var(--border2);stroke-width:1.5}
-
-/* a concrete anchor under each reason, so the column is a claim plus its
-   evidence rather than a claim on its own. */
-/* Columns stretch so the anchors align on one baseline; otherwise each hairline
-   sits at whatever height its paragraph happened to end, which reads as sloppy
-   rather than deliberate. */
-.why div{display:flex;flex-direction:column;padding-bottom:1.6rem}
-.why .anchor{margin-top:auto;padding-top:.85rem;border-top:1px solid var(--border);
-  font-size:.8rem;line-height:1.45;color:var(--faint);letter-spacing:.01em;
-  /* Reserve two lines so every hairline lands on the same baseline. The page is
-     border-box, which would fold the padding and border into min-height and let
-     a one-line anchor stay short, so this box measures its content instead. */
-  box-sizing:content-box;min-height:calc(2 * 1.45em)}
-.why p{margin-bottom:1.1rem}
 
 /* cases — a mosaic of real site photos with client quotes slotted between them.
    Columns rather than a grid so tiles keep their own height and nothing lines

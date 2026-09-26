@@ -130,6 +130,8 @@ it already has, so:
   also asked for this section's copy to be plain and descriptive, not
   slogan-style ("not one template stretched to fit" and the like). Do not
   restore the old framing from item 4 above.
+- **The "Why industries choose Ichibot" section is dropped** (2026-09-27,
+  item 6 of the page structure). Do not add it back.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
