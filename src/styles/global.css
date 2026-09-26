@@ -310,9 +310,9 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
   .sector .what{grid-column:1/-1}
 }
 
-/* cases — a horizontal carousel of 796x458 photo cards. The track starts at
-   the page column and bleeds off the right edge of the viewport, so the next
-   card is always visibly waiting. Scroll-snaps per card; prev/next buttons are
+/* cases — a horizontal carousel of 796x458 photo cards. The track runs the
+   full viewport width, bleeding off both edges, while cards snap into line
+   with the page column, so the previous and next cards both show. Scroll-snaps per card; prev/next buttons are
    added by script. Cards are not links yet — /blog/[slug] arrives in phase 3. */
 .head-row{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
 .head-actions{display:flex;align-items:center;gap:.75rem}
@@ -324,7 +324,11 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .car-btn:disabled{opacity:.35;cursor:default}
 .car-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .carousel{display:flex;gap:1rem;margin-top:2.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
-  margin-right:calc(50% - 50vw);padding-right:calc(50vw - 50%);scroll-padding-inline:0;overscroll-behavior-x:contain}
+  /* distance from the viewport edge to the page column, mirroring .wrap
+     (max-width 1160px, border-box, side padding clamp(1.1rem,4vw,2rem)); a %
+     would not work here because scroll-padding resolves against the track */
+  --bleed:calc(max(0px,(100vw - 1160px) / 2) + clamp(1.1rem,4vw,2rem));
+  margin-inline:calc(-1 * var(--bleed));padding-inline:var(--bleed);scroll-padding-inline:var(--bleed);overscroll-behavior-x:contain}
 .carousel::-webkit-scrollbar{display:none}
 .carousel:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:18px}
 .case-card{position:relative;flex:none;width:min(796px,86vw);aspect-ratio:796/458;scroll-snap-align:start;
