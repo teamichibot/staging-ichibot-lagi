@@ -1,0 +1,180 @@
+---
+/**
+ * A built-in-HTML replica of the Power Monitoring System dashboard, used in
+ * place of the screenshot on the Smart energy monitoring product. Figures are
+ * the ones from the anonymised capture (Power Meter 1 / Production room A);
+ * no client is named.
+ *
+ * It is laid out at a fixed design width and scaled to fit its container by
+ * a small script, so on a phone it shrinks like a picture instead of
+ * reflowing into a long column. Colours come from the site tokens, so it
+ * follows light and dark.
+ */
+const W = 1040
+
+/** Seeded, so every build draws the same spikes. */
+function series(seed: number, n: number, shape: (i: number, r: () => number) => number) {
+  let s = seed
+  const r = () => ((s = (s * 16807) % 2147483647) / 2147483647)
+  return Array.from({ length: n }, (_, i) => shape(i, r))
+}
+// meter 1: bursts during working shifts, flat overnight gaps
+const m1 = series(11, 180, (i, r) => {
+  const day = i % 30
+  const idle = day > 22 && day < 27
+  return idle ? 0.06 + r() * 0.04 : 0.25 + r() * 0.75
+})
+// meter 2: a steadier daily rhythm
+const m2 = series(29, 180, (i, r) => 0.35 + Math.abs(Math.sin(i / 2.6)) * 0.5 + r() * 0.15)
+
+const path = (vals: number[], w = 480, h = 54) =>
+  vals.map((v, i) => `${i ? 'L' : 'M'}${((i / (vals.length - 1)) * w).toFixed(1)} ${(h - v * h * 0.92).toFixed(1)}`).join('')
+
+const meters = [
+  {
+    name: 'Power Meter 1',
+    place: 'Production room A',
+    va: 43650,
+    pct: 4.2,
+    capacity: '1,040,000',
+    peak: '446,704',
+    peakPct: '43.0%',
+    peakAt: '15 Sep, 09:52',
+    avg: '136',
+    trend: path(m1),
+    grid: 3,
+    cells: [
+      ['Active Power', '39 kW'], ['Frequency', '50.01 Hz'], ['Power Factor', '0.90'],
+      ['Voltage (R)', '232.4 V'], ['Voltage (S)', '235.4 V'], ['Voltage (T)', '233.6 V'],
+      ['Current (R)', '76.0 A'], ['Current (S)', '58.5 A'], ['Current (T)', '58.5 A'],
+    ],
+    reading: '2,516,229 / 2,592,000',
+    energy: '85,977 kWh',
+    bill: 'Rp 96,494,368',
+    tariff: 'Rp 1,036/kWh',
+  },
+  {
+    name: 'Power Meter 2',
+    place: 'Production room B',
+    va: 686,
+    pct: 9.8,
+    capacity: '7,000',
+    peak: '6,214',
+    peakPct: '88.8%',
+    peakAt: '21 Sep, 12:16',
+    avg: '2',
+    trend: path(m2),
+    grid: 2,
+    cells: [
+      ['Active Power', '618.19 W'], ['Current', '2.94 A'],
+      ['Voltage', '246.75 V'], ['Frequency', '50.0 Hz'],
+      ['Power Factor', '0.90'],
+    ],
+    reading: '2,506,635 / 2,592,000',
+    energy: '1,689 kWh',
+    bill: 'Rp 3,378,045',
+    tariff: 'Rp 2,000/kWh',
+  },
+]
+const ranges = ['1H', '1D', '7D', '30D', 'This month']
+---
+
+<div class="edash-fit">
+  <div class="edash" style={`width:${W}px`} role="img" aria-label="Power monitoring dashboard with two power meters showing apparent power, a 30-day trend, per-phase readings, total energy and estimated bill">
+    <header class="ed-top">
+      <span class="ed-brand">
+        <svg viewBox="0 0 20 20"><path d="M1 11h4l2.5-6 4 11 2.5-7H19" /></svg>
+        <span><b>Power Monitoring System</b><small><i></i>Live Monitoring</small></span>
+      </span>
+      <span class="ed-ranges">
+        {ranges.map((r) => <em class:list={{ on: r === '30D' }}>{r}</em>)}
+        <em class="ed-custom">Custom ▾</em>
+      </span>
+      <span class="ed-clock" data-clock>27 September 2026 · 09:42:10</span>
+      <span class="ed-btn">Dashboard</span>
+    </header>
+
+    <div class="ed-meters">
+      {meters.map((m, mi) => (
+        <section class="ed-card">
+          <div class="ed-card-head">
+            <span class="ed-ic"><svg viewBox="0 0 20 20"><path d="M1 11h4l2.5-6 4 11 2.5-7H19" /></svg></span>
+            <span><b>{m.name}</b><small>{m.place}</small></span>
+            <span class="ed-ok">✓ NORMAL</span>
+          </div>
+
+          <div class="ed-big">
+            <b data-va={m.va}>{m.va.toLocaleString('en-US')}</b><span>VA</span>
+          </div>
+          <p class="ed-sub">Apparent Power <b>{m.pct}%</b><br />of <b>{m.capacity} VA</b> capacity</p>
+          <div class="ed-bar"><i style={`width:${Math.max(m.pct, 3)}%`}></i></div>
+          <p class="ed-cap">Percentage of apparent power usage</p>
+
+          <div class="ed-trend">
+            <div class="ed-trend-head"><span>Apparent power</span><span>30D</span></div>
+            <svg viewBox="0 0 480 54" preserveAspectRatio="none">
+              <path class="ed-line" d={m.trend} />
+            </svg>
+            <div class="ed-trend-foot">
+              <div><small>Peak</small><b>{m.peak} <em>VA · {m.peakPct}</em></b><small>{m.peakAt}</small></div>
+              <div><small>Total (avg)</small><b>{m.avg} <em>kVA</em></b><small>Total in selected range</small></div>
+            </div>
+          </div>
+
+          <div class="ed-grid" style={`grid-template-columns:repeat(${m.grid},1fr)`}>
+            {m.cells.map(([label, value]) => <div><small>{label}</small><b>{value}</b></div>)}
+          </div>
+
+          <div class="ed-range">
+            <div class="ed-range-head">
+              <span><b>Range 30D</b><small>24 Aug, 05:25 → 23 Sep, 05:25</small></span>
+              <span class="ed-reading">{m.reading}</span>
+            </div>
+            <div class="ed-row"><span>Total energy</span><b class="ed-green">{m.energy}</b></div>
+            <div class="ed-row"><span>Estimated bill</span><b class="ed-green">{m.bill}</b></div>
+            <div class="ed-row ed-tariff"><span>Active tariff</span><span>{m.tariff}</span></div>
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scale the fixed-width dashboard to its container, like an image would.
+  // Also tick the clock and nudge the big VA readings so it reads as live
+  // (skipped under prefers-reduced-motion).
+  for (const fit of document.querySelectorAll<HTMLElement>('.edash-fit')) {
+    const dash = fit.querySelector<HTMLElement>('.edash')!
+    const size = () => {
+      const s = Math.min(1, fit.clientWidth / dash.offsetWidth)
+      dash.style.transform = `scale(${s})`
+      fit.style.height = `${dash.offsetHeight * s}px`
+    }
+    new ResizeObserver(size).observe(fit)
+    fit.classList.add('scaled')
+    size()
+
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue
+    const clock = dash.querySelector<HTMLElement>('[data-clock]')
+    const vas = Array.from(dash.querySelectorAll<HTMLElement>('[data-va]'))
+    let t = new Date(2026, 8, 27, 9, 42, 10).getTime()
+    let timer = 0
+    const tick = () => {
+      t += 1000
+      const d = new Date(t)
+      const hh = String(d.getHours()).padStart(2, '0')
+      const mm = String(d.getMinutes()).padStart(2, '0')
+      const ss = String(d.getSeconds()).padStart(2, '0')
+      if (clock) clock.textContent = `27 September 2026 · ${hh}:${mm}:${ss}`
+      for (const el of vas) {
+        const base = Number(el.dataset.va)
+        el.textContent = Math.round(base * (1 + (Math.random() - 0.5) * 0.012)).toLocaleString('en-US')
+      }
+    }
+    new IntersectionObserver(([e]) => {
+      clearInterval(timer)
+      if (e.isIntersecting) timer = window.setInterval(tick, 1000)
+    }).observe(fit)
+  }
+</script>

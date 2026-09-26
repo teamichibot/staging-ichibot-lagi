@@ -1,4 +1,3 @@
-import energyDashboard from '../assets/products/energy-monitoring-dashboard.jpg'
 import equipmentDashboard from '../assets/products/equipment-monitoring-dashboard.jpg'
 import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
@@ -27,6 +26,11 @@ export type Product = {
    * mockups, not to decorate them.
    */
   screenshot?: ImageMetadata
+  /**
+   * A dashboard rebuilt in HTML instead of a screenshot: crisp at any size and
+   * follows the site theme. Takes precedence over `screenshot`.
+   */
+  replica?: 'energy'
   /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
@@ -44,7 +48,7 @@ export const products: Product[] = [
     proofLabel: 'Proven at',
     proof: ['Toyota Indonesia: 2 MVA transformer', 'Penerbit Erlangga: electricity substation'],
     deploymentTime: 'Live in [X] weeks',
-    screenshot: energyDashboard,
+    replica: 'energy',
     mock: {
       top: 'Main panel, Plant 1',
       metrics: [['412', 'kWh today'], ['1.8 MW', 'Peak load'], ['0.97', 'Power factor']],
