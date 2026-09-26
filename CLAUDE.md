@@ -38,7 +38,7 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
    - Smart equipment monitoring — Toyota (Kaeser compressor), Pertamina (vehicle tilt & pitch), PT Garam (main pump)
    - Smart plantation system — **Pilot** badge, oil palm LoRa soil monitoring (on-going)
    - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
-4. **Platform** — bento grid: dashboard visualization, ERP integration (Weighbridge → Edge → ERP, Citra Borneo Utama), on-prem/cloud/hybrid toggle, protocol chips.
+4. **Platform** — bento grid: dashboard visualization, ERP integration (Weighbridge → Edge → ERP, Citra Borneo Utama), protocol chips.
 5. **Industries** — pill links: oil & gas and energy, automotive, agribusiness, printing & publishing, port & marine, salt & mining.
 6. **Why Ichibot** — 4 columns: proven at scale, works with old machines, global capability local price, engineers who show up.
 7. **Case studies** — 3 cards with client quote inside: Pertamina PPE detection, Citra Borneo weighbridge ERP, Toyota compressor monitoring. Link to all projects.

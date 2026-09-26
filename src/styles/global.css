@@ -238,10 +238,6 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .flow span{border:1px solid var(--border2);background:var(--bg2);border-radius:8px;padding:.35rem .6rem}
 .flow span.hl{border-color:var(--accent);background:var(--accent-soft)}
 .flow i{flex:1;min-width:14px;height:1px;background:var(--border2);position:relative}
-.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px}
-.seg button{font:inherit;font-size:.85rem;border:0;background:transparent;color:var(--muted);padding:.35rem .9rem;border-radius:999px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--panel);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.dep-out{font-size:.9rem;color:var(--text);min-height:3.2em;margin-top:.8rem}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem}
 .chips span{font-size:.82rem;border:1px solid var(--border2);border-radius:6px;padding:.25rem .55rem;color:var(--muted);background:var(--bg2)}
 @media (max-width:900px){.t-2,.t-3{grid-column:span 6}.dash-mini{grid-template-columns:repeat(2,1fr)}}

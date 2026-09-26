@@ -150,41 +150,7 @@ const net = {
           </svg>
         </div>
       </div>
-
-      <div class="tile t-6">
-        <h3>On-premise or cloud, across the whole chain</h3>
-        <p>The same stack runs either way, so the decision is your IT policy's to make rather than ours.</p>
-        <div class="viz">
-          <div class="seg" role="group" aria-label="Deployment option">
-            <button type="button" aria-pressed="true" data-dep="onprem">On-prem</button>
-            <button type="button" aria-pressed="false" data-dep="cloud">Cloud</button>
-            <button type="button" aria-pressed="false" data-dep="hybrid">Hybrid</button>
-          </div>
-          <p class="dep-out" id="depout"></p>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
-<script>
-  const copy: Record<string, string> = {
-    onprem:
-      'Data stays inside your plant network. Dashboards run on a local server or the edge itself. Best for strict IT and security policies.',
-    cloud:
-      'The edge publishes to the cloud, so managers can open dashboards from anywhere with no server to maintain.',
-    hybrid:
-      'Operators use the local dashboard on site, while summaries sync to the cloud for management and multi-site views.',
-  }
-  const output = document.getElementById('depout')
-  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-dep]'))
-  if (output && buttons.length) {
-    for (const button of buttons) {
-      button.addEventListener('click', () => {
-        for (const other of buttons) other.setAttribute('aria-pressed', String(other === button))
-        output.textContent = copy[button.dataset.dep!] ?? ''
-      })
-    }
-    output.textContent = copy.onprem
-  }
-</script>
