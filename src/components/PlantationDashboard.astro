@@ -1,0 +1,234 @@
+---
+/**
+ * An HTML replica of the Smart Plantation System (SPS) dashboard, used in
+ * place of the screenshot on the Smart plantation system product. Sidebar,
+ * fleet summary, filters and eight soil-sensor node cards. Readings are
+ * illustrative and name no client or estate.
+ *
+ * The green sidebar is SPS's own identity and stays green in both themes;
+ * everything else follows the site tokens. Laid out at a fixed width inside
+ * ReplicaFit. While on screen, moisture and temperature drift, their
+ * sparklines scroll and the "last update" counters tick, except under
+ * prefers-reduced-motion.
+ */
+import ReplicaFit from './ReplicaFit.astro'
+
+const W = 1040
+
+function rng(seed: number) {
+  let s = seed
+  return () => ((s = (s * 16807) % 2147483647) / 2147483647)
+}
+const SW = 120
+const SH = 30
+/** 24 points of history ending on the current value, as sparkline points */
+function spark(seed: number, value: number, lo: number, hi: number) {
+  const r = rng(seed)
+  const span = hi - lo
+  const raw = Array.from({ length: 24 }, (_, i) => Math.sin(i / 3.2 + seed) * span * 0.18 + (r() - 0.5) * span * 0.14)
+  const shift = value - raw[23]
+  return raw.map((v) => Math.min(hi, Math.max(lo, v + shift)))
+}
+const pts = (vals: number[], lo: number, hi: number) =>
+  vals.map((v, i) => `${((i / (vals.length - 1)) * SW).toFixed(1)},${(SH - ((v - lo) / (hi - lo)) * SH).toFixed(1)}`).join(' ')
+
+type Node = {
+  name: string
+  block: string
+  status: 'online' | 'delayed' | 'offline'
+  moisture?: number
+  temp?: number
+  ec?: number
+  ph?: number
+  sal?: number
+  n?: number
+  p?: number
+  k?: number
+  ago: number
+  signal: number
+  battery: number
+}
+const nodes: Node[] = [
+  { name: 'Palm 01', block: 'Block A', status: 'online', moisture: 46.2, temp: 28.4, ec: 812, ph: 5.6, sal: 402, n: 41, p: 22, k: 148, ago: 12, signal: 4, battery: 92 },
+  { name: 'Palm 02', block: 'Block B', status: 'online', moisture: 39.8, temp: 29.1, ec: 764, ph: 5.4, sal: 388, n: 37, p: 19, k: 132, ago: 18, signal: 3, battery: 88 },
+  { name: 'Palm 03', block: 'Block C', status: 'online', moisture: 23.6, temp: 30.7, ec: 1024, ph: 5.1, sal: 512, n: 29, p: 15, k: 118, ago: 9, signal: 4, battery: 95 },
+  { name: 'Palm 04', block: 'Block D', status: 'online', moisture: 51.3, temp: 27.6, ec: 698, ph: 5.9, sal: 356, n: 45, p: 24, k: 156, ago: 25, signal: 2, battery: 76 },
+  { name: 'Palm 05', block: 'Block E', status: 'online', moisture: 43.1, temp: 28.8, ec: 845, ph: 5.7, sal: 418, n: 39, p: 21, k: 141, ago: 31, signal: 3, battery: 81 },
+  { name: 'Palm 06', block: 'Block F', status: 'delayed', moisture: 37.5, temp: 29.4, ec: 790, ph: 5.5, sal: 395, n: 36, p: 18, k: 129, ago: 372, signal: 1, battery: 34 },
+  { name: 'Palm 07', block: 'Block G', status: 'online', moisture: 48.9, temp: 27.9, ec: 731, ph: 6.0, sal: 371, n: 43, p: 23, k: 150, ago: 6, signal: 4, battery: 97 },
+  { name: 'Palm 08', block: 'Block H', status: 'offline', ago: 7920, signal: 0, battery: 0 },
+]
+const count = (s: Node['status']) => nodes.filter((n) => n.status === s).length
+const LOW_MOISTURE = 25
+
+const agoText = (s: number) => (s < 60 ? `${s} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : `${Math.round(s / 3600)} h ago`)
+
+const menu = [
+  { group: 'Monitoring', items: ['Dashboard', 'History & charts', 'Estate map', 'Alerts & thresholds'] },
+  { group: 'Configuration', items: ['Devices', 'MQTT server', 'Users'] },
+  { group: 'System', items: ['Settings', 'Audit log'] },
+]
+---
+
+<ReplicaFit width={W} label="Smart plantation dashboard with eight solar-powered soil sensor nodes showing moisture, temperature, EC, pH, salinity and NPK">
+  <div class="pdash">
+    <aside class="pd-side">
+      <div class="pd-logo">
+        <svg viewBox="0 0 20 20"><path d="M10 18V9" /><path d="M10 11C6 11 3.5 8.5 3.5 4.5 7.5 4.5 10 7 10 11z" /><path d="M10 9c0-4 2.5-6.5 6.5-6.5 0 4-2.5 6.5-6.5 6.5z" /></svg>
+        <span><b>SPS</b><small>Smart Plantation System</small></span>
+      </div>
+      {menu.map((g) => (
+        <div class="pd-group">
+          <small>{g.group}</small>
+          {g.items.map((it) => <span class:list={['pd-item', { on: it === 'Dashboard' }]}>{it}</span>)}
+        </div>
+      ))}
+    </aside>
+
+    <div class="pd-main">
+      <header class="pd-top">
+        <span class="pd-clock" data-pclock>Sun, 27 Sep 2026 · 09:42:10</span>
+        <span class="pd-user"><i>AD</i>Administrator</span>
+      </header>
+
+      <div class="pd-title">
+        <b>Dashboard</b>
+        <small>Soil conditions across every sensor node, updated in real time.</small>
+      </div>
+
+      <div class="pd-kpis">
+        <div><small>Total devices</small><b>{nodes.length}</b></div>
+        <div class="ok"><small>Online</small><b>{count('online')}</b></div>
+        <div class="delay"><small>Delayed</small><b>{count('delayed')}</b></div>
+        <div class="off"><small>Offline</small><b>{count('offline')}</b></div>
+        <div class="alert"><small>Active alerts</small><b>1</b><em>Palm 03 moisture below {LOW_MOISTURE}%</em></div>
+      </div>
+
+      <div class="pd-filters">
+        <span class="pd-search">Search name, block or topic</span>
+        <span class="pd-seg"><em class="on">All</em><em>Online</em><em>Delayed</em><em>Offline</em></span>
+        <span class="pd-live"><i></i>Realtime</span>
+      </div>
+
+      <div class="pd-grid">
+        {nodes.map((n, i) => {
+          const off = n.status === 'offline'
+          const dry = n.moisture !== undefined && n.moisture < LOW_MOISTURE
+          const mVals = off ? [] : spark(11 + i * 7, n.moisture!, 15, 60)
+          const tVals = off ? [] : spark(5 + i * 5, n.temp!, 24, 34)
+          return (
+            <section class:list={['pd-card', n.status, { dry }]} data-node={i} data-ago={n.ago}>
+              <div class="pd-card-head">
+                <span><b>{n.name}</b><small>{n.block}</small></span>
+                <span class="pd-status">{n.status === 'online' ? 'Online' : n.status === 'delayed' ? 'Delayed' : 'Offline'}</span>
+              </div>
+
+              <div class="pd-main-reads">
+                <div class:list={['pd-read', { warn: dry }]}>
+                  <small>Moisture</small>
+                  <b>{off ? '—' : <span data-live="m" data-base={n.moisture} data-step="0.4" data-dp="1">{n.moisture!.toFixed(1)}</span>}<em>%</em></b>
+                  {!off && (
+                    <svg viewBox={`0 0 ${SW} ${SH}`} preserveAspectRatio="none" data-spark="m" data-lo="15" data-hi="60" data-vals={mVals.map((v) => v.toFixed(2)).join(',')}>
+                      <polyline points={pts(mVals, 15, 60)} />
+                    </svg>
+                  )}
+                </div>
+                <div class="pd-read temp">
+                  <small>Temperature</small>
+                  <b>{off ? '—' : <span data-live="t" data-base={n.temp} data-step="0.15" data-dp="1">{n.temp!.toFixed(1)}</span>}<em>°C</em></b>
+                  {!off && (
+                    <svg viewBox={`0 0 ${SW} ${SH}`} preserveAspectRatio="none" data-spark="t" data-lo="24" data-hi="34" data-vals={tVals.map((v) => v.toFixed(2)).join(',')}>
+                      <polyline points={pts(tVals, 24, 34)} />
+                    </svg>
+                  )}
+                </div>
+              </div>
+
+              <div class="pd-minor">
+                {[
+                  ['EC', n.ec, 'µS/cm'],
+                  ['pH', n.ph?.toFixed(1), ''],
+                  ['Salinity', n.sal, 'mg/L'],
+                  ['N', n.n, 'mg/kg'],
+                  ['P', n.p, 'mg/kg'],
+                  ['K', n.k, 'mg/kg'],
+                ].map(([label, value, unit]) => (
+                  <div><small>{label}</small><b>{value ?? '—'}<em>{unit}</em></b></div>
+                ))}
+              </div>
+
+              <div class="pd-foot">
+                <span class="pd-ago" data-ago-text>{off ? `Last seen ${agoText(n.ago)}` : agoText(n.ago)}</span>
+                <span class="pd-meta">
+                  <span class="pd-signal" title="LoRa signal">{[1, 2, 3, 4].map((b) => <i class:list={{ on: b <= n.signal }} />)}</span>
+                  <span class:list={['pd-batt', { low: n.battery < 40 }]}>☀ {off ? '—' : `${n.battery}%`}</span>
+                </span>
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    </div>
+  </div>
+</ReplicaFit>
+
+<script>
+  // Live feel while on screen: the clock and "ago" counters tick, online
+  // nodes report every few seconds (their counter resets), and moisture and
+  // temperature drift with their sparklines scrolling. Off under reduced motion.
+  for (const dash of document.querySelectorAll<HTMLElement>('.pdash')) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) break
+    const clock = dash.querySelector<HTMLElement>('[data-pclock]')
+    const SW = 120
+    const SH = 30
+    const agoText = (s: number) => (s < 60 ? `${s} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : `${Math.round(s / 3600)} h ago`)
+    let t = new Date(2026, 8, 27, 9, 42, 10).getTime()
+    let timer = 0
+
+    const tick = () => {
+      t += 1000
+      const d = new Date(t)
+      const p = (n: number) => String(n).padStart(2, '0')
+      if (clock) clock.textContent = `Sun, 27 Sep 2026 · ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`
+
+      for (const card of dash.querySelectorAll<HTMLElement>('[data-node]')) {
+        const offline = card.classList.contains('offline')
+        const delayed = card.classList.contains('delayed')
+        let ago = Number(card.dataset.ago) + 1
+        // online nodes report now and then; a report resets the counter and moves the readings
+        const reports = !offline && !delayed && Math.random() < 0.18
+        if (reports) {
+          ago = 0
+          for (const el of card.querySelectorAll<HTMLElement>('[data-live]')) {
+            const base = Number(el.dataset.base)
+            const step = Number(el.dataset.step)
+            const prev = Number(el.textContent)
+            const next = prev + (Math.random() - 0.5) * 2 * step + (base - prev) * 0.2
+            el.textContent = next.toFixed(Number(el.dataset.dp))
+            const svg = card.querySelector<SVGSVGElement>(`[data-spark="${el.dataset.live}"]`)
+            if (svg) {
+              const lo = Number(svg.dataset.lo)
+              const hi = Number(svg.dataset.hi)
+              const vals = svg.dataset.vals!.split(',').map(Number)
+              vals.shift()
+              vals.push(next)
+              svg.dataset.vals = vals.map((v) => v.toFixed(2)).join(',')
+              svg.querySelector('polyline')!.setAttribute(
+                'points',
+                vals.map((v, i) => `${((i / (vals.length - 1)) * SW).toFixed(1)},${(SH - ((v - lo) / (hi - lo)) * SH).toFixed(1)}`).join(' '),
+              )
+            }
+          }
+        }
+        card.dataset.ago = String(ago)
+        const label = card.querySelector<HTMLElement>('[data-ago-text]')!
+        label.textContent = offline ? `Last seen ${agoText(ago)}` : agoText(ago)
+      }
+    }
+
+    new IntersectionObserver(([e]) => {
+      clearInterval(timer)
+      if (e.isIntersecting) timer = window.setInterval(tick, 1000)
+    }).observe(dash)
+  }
+</script>

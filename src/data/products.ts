@@ -1,4 +1,3 @@
-import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
 /**
  * The four packaged products, in the order they are shown.
@@ -29,7 +28,7 @@ export type Product = {
    * A dashboard rebuilt in HTML instead of a screenshot: crisp at any size and
    * follows the site theme. Takes precedence over `screenshot`.
    */
-  replica?: 'energy' | 'equipment'
+  replica?: 'energy' | 'equipment' | 'plantation'
   /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
@@ -82,7 +81,7 @@ export const products: Product[] = [
     proof: ['Oil palm plantation, on-going'],
     deploymentTime: 'Pilot',
     pilot: true,
-    screenshot: plantationDashboard,
+    replica: 'plantation',
     mock: {
       top: 'Block A-12',
       metrics: [['32%', 'Soil moisture'], ['5.6', 'Soil pH'], ['48', 'Nodes online']],
