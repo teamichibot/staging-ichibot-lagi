@@ -4,102 +4,76 @@ import { getCaseStudies } from '../lib/case-studies'
 
 const studies = await getCaseStudies(9)
 
-/**
- * Sample quotes so the mosaic can be judged at real text length. They are
- * written, not collected — so they are attributed to a role and a sector
- * rather than to Pertamina, Toyota or Citra Borneo Utama. Putting invented
- * words in a named client's mouth would be a fabricated endorsement from a
- * real company, which is a different thing from a layout placeholder.
- *
- * Replace wholesale once real quotes are cleared, and drop `sample`.
- */
-const quotes = [
-  {
-    quote:
-      'The data was on the machines all along. What we did not have was anyone reading it before something broke.',
-    name: 'Production Manager',
-    role: 'Automotive plant',
-    sample: true,
-  },
-  {
-    quote:
-      'Nothing was replaced. They clipped sensors onto equipment that had been running since before I joined.',
-    name: 'Head of Maintenance',
-    role: 'Oil and gas',
-    sample: true,
-  },
-  {
-    quote:
-      'The survey took a day. We ran the pilot on one line for a month before committing to the rest of the site.',
-    name: 'Plant Engineering Lead',
-    role: 'Agribusiness group',
-    sample: true,
-  },
-]
-
-/**
- * Interleave quotes into the photo run so the mosaic alternates rather than
- * showing all photos then all quotes. Positions are uneven on purpose — an even
- * every-third rhythm reads as a template.
- */
-type Tile =
-  | { kind: 'case'; data: (typeof studies)[number]; tall: boolean }
-  | { kind: 'quote'; data: (typeof quotes)[number] }
-
-const quoteAfter = new Set([1, 4, 6])
-const tiles: Tile[] = []
-studies.forEach((study, i) => {
-  // vary the crop so columns do not line up into rows
-  tiles.push({ kind: 'case', data: study, tall: i % 3 === 1 })
-  if (quoteAfter.has(i) && quotes[tiles.filter((t) => t.kind === 'quote').length]) {
-    tiles.push({ kind: 'quote', data: quotes[tiles.filter((t) => t.kind === 'quote').length] })
-  }
-})
 ---
 
 <section id="cases">
   <div class="wrap">
     <div class="head-row">
       <h2>Case studies</h2>
-      <a class="btn sm" href="/blog?category=Case Study">All projects</a>
+      <div class="head-actions">
+        <div class="car-nav" hidden>
+          <button type="button" class="car-btn" data-dir="-1" aria-label="Previous case study">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+          </button>
+          <button type="button" class="car-btn" data-dir="1" aria-label="Next case study">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+          </button>
+        </div>
+        <a class="btn sm" href="/blog?category=Case Study">All projects</a>
+      </div>
     </div>
 
     {
       studies.length === 0 ? (
         <p class="lede">Case studies are temporarily unavailable.</p>
       ) : (
-        <div class="mosaic">
-          {tiles.map((tile) =>
-            tile.kind === 'case' ? (
-              <div class="tile-case">
-                <span class={tile.tall ? 'shot tall' : 'shot'}>
-                  <Image
-                    src={tile.data.image}
-                    alt={tile.data.title}
-                    width={720}
-                    height={tile.tall ? 900 : 540}
-                    loading="lazy"
-                    inferSize={false}
-                  />
-                </span>
-                <span class="tile-title">{tile.data.title}</span>
+        <div class="carousel" tabindex="0" role="region" aria-label="Case studies">
+          {studies.map((study) => (
+            <article class="case-card">
+              <Image
+                src={study.image}
+                alt=""
+                width={796}
+                height={458}
+                densities={[1, 2]}
+                loading="lazy"
+                inferSize={false}
+              />
+              <div class="case-copy">
+                <h3>{study.title}</h3>
+                {study.excerpt && <p>{study.excerpt}</p>}
               </div>
-            ) : (
-              <figure class="tile-quote">
-                {tile.data.sample && <span class="sample">Sample</span>}
-                <blockquote>{tile.data.quote}</blockquote>
-                <figcaption>
-                  <span class="avatar" aria-hidden="true" />
-                  <span>
-                    <b>{tile.data.name}</b>
-                    <small>{tile.data.role}</small>
-                  </span>
-                </figcaption>
-              </figure>
-            )
-          )}
+            </article>
+          ))}
         </div>
       )
     }
   </div>
 </section>
+
+<script>
+  // Prev/next scroll by one card. The buttons only appear once this runs, so
+  // without JS the carousel is still a plain scrollable row.
+  {
+    const track = document.querySelector<HTMLElement>('.carousel')
+    const nav = document.querySelector<HTMLElement>('.car-nav')
+    if (track && nav) {
+      const [prev, next] = Array.from(nav.querySelectorAll<HTMLButtonElement>('.car-btn'))
+      const stepSize = () => {
+        const card = track.querySelector<HTMLElement>('.case-card')
+        return card ? card.offsetWidth + parseFloat(getComputedStyle(track).columnGap || '0') : track.clientWidth
+      }
+      const sync = () => {
+        prev.disabled = track.scrollLeft <= 2
+        next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2
+      }
+      for (const b of [prev, next]) {
+        b.addEventListener('click', () => track.scrollBy({ left: Number(b.dataset.dir) * stepSize(), behavior: 'smooth' }))
+      }
+      track.addEventListener('scroll', sync, { passive: true })
+      new ResizeObserver(sync).observe(track)
+      nav.hidden = false
+      sync()
+    }
+  }
+</script>

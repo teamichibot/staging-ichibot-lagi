@@ -310,51 +310,36 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
   .sector .what{grid-column:1/-1}
 }
 
-/* cases — a mosaic of real site photos with client quotes slotted between them.
-   Columns rather than a grid so tiles keep their own height and nothing lines
-   up into rows.
-
-   Four columns in the normal page column. The extra room asked for is vertical
-   space *inside* each tile, not a wider section or wider gutters — horizontal
-   rhythm stays exactly as it was. */
+/* cases — a horizontal carousel of 796x458 photo cards. The track starts at
+   the page column and bleeds off the right edge of the viewport, so the next
+   card is always visibly waiting. Scroll-snaps per card; prev/next buttons are
+   added by script. Cards are not links yet — /blog/[slug] arrives in phase 3. */
 .head-row{display:flex;justify-content:space-between;align-items:end;gap:1rem;flex-wrap:wrap}
-.mosaic{margin-top:3rem;columns:4;column-gap:1rem}
-.mosaic > *{break-inside:avoid;margin:0 0 1rem;display:block}
-
-.tile-case{position:relative;text-decoration:none;border-radius:16px;overflow:hidden;
-  border:1px solid var(--border2);background:var(--bg2);isolation:isolate}
-.tile-case .shot{display:block;aspect-ratio:4/3;overflow:hidden}
-.tile-case .shot.tall{aspect-ratio:3/4}
-.tile-case img{width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-.tile-case::after{content:"";position:absolute;inset:auto 0 0 0;height:58%;
-  background:linear-gradient(to top,rgba(4,6,10,.92),rgba(4,6,10,.45) 45%,transparent);
-  pointer-events:none}
-.tile-case .tile-title{position:absolute;z-index:1;left:1rem;right:1rem;bottom:1.3rem;
-  color:#fff;font-weight:600;font-size:1.02rem;line-height:1.35;letter-spacing:-.01em;
+.head-actions{display:flex;align-items:center;gap:.75rem}
+.car-nav{display:flex;gap:.4rem}
+.car-nav[hidden]{display:none}
+.car-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+  background:var(--panel);border:1px solid var(--border2);color:var(--text);transition:opacity .15s,background .15s}
+.car-btn:hover:not(:disabled){background:var(--bg2)}
+.car-btn:disabled{opacity:.35;cursor:default}
+.car-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.carousel{display:flex;gap:1rem;margin-top:2.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+  margin-right:calc(50% - 50vw);padding-right:calc(50vw - 50%);scroll-padding-inline:0;overscroll-behavior-x:contain}
+.carousel::-webkit-scrollbar{display:none}
+.carousel:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:18px}
+.case-card{position:relative;flex:none;width:min(796px,86vw);aspect-ratio:796/458;scroll-snap-align:start;
+  border-radius:18px;overflow:hidden;border:1px solid var(--border2);background:var(--bg2);isolation:isolate}
+.case-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.case-card::after{content:"";position:absolute;inset:auto 0 0 0;height:62%;
+  background:linear-gradient(to top,rgba(4,6,10,.9),rgba(4,6,10,.45) 50%,transparent);pointer-events:none}
+.case-copy{position:absolute;z-index:1;left:clamp(1rem,3vw,1.8rem);right:clamp(1rem,3vw,1.8rem);bottom:clamp(1rem,3vw,1.6rem);color:#fff}
+.case-copy h3{font-size:clamp(1.05rem,2vw,1.45rem);font-weight:600;letter-spacing:-.02em;line-height:1.25;max-width:32ch;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.tile-case:hover img{transform:scale(1.03)}
-@media (prefers-reduced-motion:reduce){.tile-case:hover img{transform:none}}
-
-.tile-quote{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
-  padding:2.3rem 1.5rem;display:flex;flex-direction:column;
-  /* The gap under the quote is not a margin — the card is simply taller than
-     its text and the attribution sits on the floor. That keeps the authors on
-     one line across cards whatever length the quotes run to. */
-  min-height:29rem}
-.tile-quote blockquote{margin:0;font-size:1.15rem;line-height:1.55;letter-spacing:-.012em}
-.tile-quote figcaption{display:flex;align-items:center;gap:.85rem;margin-top:auto;padding-top:2.6rem}
-.tile-quote .avatar{width:40px;height:40px;border-radius:50%;flex:none;
-  background:var(--border2);border:1px solid var(--border)}
-.tile-quote b{display:block;font-size:.95rem;font-weight:600;line-height:1.35}
-.tile-quote small{display:block;color:var(--faint);font-size:.85rem;margin-top:.15rem}
-/* the sample marker sits above the quote, so it is read before the words are */
-.tile-quote .sample{align-self:flex-start;margin-bottom:1.5rem;font-size:.65rem;font-weight:600;
-  letter-spacing:.06em;text-transform:uppercase;color:var(--draft);
-  border:1px solid color-mix(in srgb,var(--draft) 35%,transparent);border-radius:999px;padding:.2rem .55rem}
-
-@media (max-width:1000px){.mosaic{columns:2}}
-@media (max-width:620px){.mosaic{columns:1}}
+.case-copy p{margin-top:.45rem;color:rgba(255,255,255,.78);font-size:.92rem;max-width:60ch;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.case-card:hover img{transform:scale(1.03)}
+@media (prefers-reduced-motion:reduce){.case-card img{transition:none}.case-card:hover img{transform:none}}
+@media (max-width:620px){.case-copy p{display:none}}
 
 /* a real product screenshot, framed rather than mocked up */
 .shot-frame{margin:0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;
