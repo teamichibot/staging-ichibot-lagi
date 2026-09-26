@@ -146,9 +146,9 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .logo-row img{width:auto;object-fit:contain;filter:grayscale(1) brightness(0) opacity(.45);
   transition:opacity .15s}
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.55)}
+  :root:not([data-theme="light"]) .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.85)}
 }
-:root[data-theme="dark"] .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.55)}
+:root[data-theme="dark"] .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.85)}
 
 /* products tabs */
 .tabs{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;margin-top:3rem}
