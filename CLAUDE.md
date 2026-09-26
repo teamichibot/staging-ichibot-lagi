@@ -122,10 +122,10 @@ it already has, so:
   equipment, the edge, storage, dashboards built per case, the ERP hand-off,
   and AI on top — any of it on-premise or in the cloud. The section is now
   "End-to-end industrial IoT". On 2026-09-27 the bento was replaced by four
-  large rows, copy left and a framed UI mockup right: 01 Sensor and data
-  connection (data point list), 02 Real-time monitoring dashboard (live KPIs,
-  trend, alarm), 03 Database log and recap (log table, recaps, export),
-  04 Application and integration (ERP/MES sync, AI analytics, WhatsApp
+  large, unnumbered rows, copy left and a framed UI mockup right: Sensor and
+  data connection (data point list), Real-time monitoring dashboard (live KPIs,
+  trend, alarm), Database log and recap (log table, recaps, export),
+  Application and integration (ERP/MES sync, AI analytics, WhatsApp
   notification). Mockup values are illustrative and name no client. Ichibot
   also asked for this section's copy to be plain and descriptive, not
   slogan-style ("not one template stretched to fit" and the like). Do not
