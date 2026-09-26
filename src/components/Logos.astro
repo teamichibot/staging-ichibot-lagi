@@ -11,9 +11,12 @@ import garam from '../../public/logos/clients/pt-garam.png'
  * of these from Wikimedia and the clients' own sites, which breaks the moment
  * one of them reorganises or blocks hotlinking.
  *
- * Every file has an alpha channel, so they take a flat silhouette cleanly —
- * that is the monochrome treatment the brief asks for, and it is the only way
- * one row reads on both a near-white and a near-black background.
+ * They are shown in grayscale, not as flat silhouettes, so the tonal detail
+ * inside each mark survives (a flat fill turned Citra Borneo Utama's leaf-in-
+ * a-drop into a plain water drop). On dark backgrounds most of them are
+ * inverted so their dark wordmarks stay readable; `lightMark` logos are
+ * already light-toned and are only brightened, since inverting would turn
+ * them dark.
  *
  * `height` is tuned per logo rather than shared: normalising on height alone
  * leaves the wide wordmarks shouting and the square marks whispering.
@@ -21,7 +24,7 @@ import garam from '../../public/logos/clients/pt-garam.png'
 const clients = [
   { name: 'Pertamina', src: pertamina, height: 30 },
   { name: 'Toyota', src: toyota, height: 22 },
-  { name: 'Citra Borneo Utama', src: cbu, height: 38 },
+  { name: 'Citra Borneo Utama', src: cbu, height: 38, lightMark: true },
   { name: 'Penerbit Erlangga', src: erlangga, height: 30 },
   { name: 'PT Garam', src: garam, height: 40 },
 ]
@@ -39,6 +42,7 @@ const clients = [
             height={c.height * 2}
             width={0}
             densities={[1, 2]}
+            class:list={{ 'light-mark': c.lightMark }}
             style={`height:${c.height}px`}
             loading="lazy"
           />

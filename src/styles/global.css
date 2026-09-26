@@ -143,12 +143,15 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 .logo-row{align-items:center}
 /* Flattened to silhouettes so one row works on both themes: the files are a
    mix of navy, red and black marks that would either glare or disappear. */
-.logo-row img{width:auto;object-fit:contain;filter:grayscale(1) brightness(0) opacity(.45);
+.logo-row img{width:auto;object-fit:contain;filter:grayscale(1) opacity(.8);
   transition:opacity .15s}
+.logo-row img.light-mark{filter:grayscale(1) brightness(.7) contrast(1.2)}
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.85)}
+  :root:not([data-theme="light"]) .logo-row img{filter:grayscale(1) invert(1) opacity(.85)}
+  :root:not([data-theme="light"]) .logo-row img.light-mark{filter:grayscale(1) brightness(1.4) opacity(.9)}
 }
-:root[data-theme="dark"] .logo-row img{filter:grayscale(1) brightness(0) invert(1) opacity(.85)}
+:root[data-theme="dark"] .logo-row img{filter:grayscale(1) invert(1) opacity(.85)}
+:root[data-theme="dark"] .logo-row img.light-mark{filter:grayscale(1) brightness(1.4) opacity(.9)}
 
 /* products tabs */
 .tabs{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;margin-top:3rem}
