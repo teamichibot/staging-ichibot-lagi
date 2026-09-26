@@ -38,7 +38,7 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
    - Smart equipment monitoring — Toyota (Kaeser compressor), Pertamina (vehicle tilt & pitch), PT Garam (main pump)
    - Smart plantation system — **Pilot** badge, oil palm LoRa soil monitoring (on-going)
    - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
-4. **Platform** — bento grid: dashboard visualization, ERP integration (Weighbridge → Edge → ERP, Citra Borneo Utama), protocol chips.
+4. **Platform** — four large feature rows with UI mockups (see amendments).
 5. **Industries** — pill links: oil & gas and energy, automotive, agribusiness, printing & publishing, port & marine, salt & mining.
 6. **Why Ichibot** — 4 columns: proven at scale, works with old machines, global capability local price, engineers who show up.
 7. **Case studies** — 3 cards with client quote inside: Pertamina PPE detection, Citra Borneo weighbridge ERP, Toyota compressor monitoring. Link to all projects.
@@ -121,12 +121,15 @@ it already has, so:
   What Ichibot actually sells is owning the entire chain — connectivity to the
   equipment, the edge, storage, dashboards built per case, the ERP hand-off,
   and AI on top — any of it on-premise or in the cloud. The section is now
-  "End-to-end industrial IoT" and the bento maps those stages with plain
-  titles: Sensor & Data Integration, Database Collection, AI Analytics Ready,
-  Dashboard Visualization, ERP/MES Integration. On 2026-09-27 Ichibot asked
-  for this section's copy to be plain and descriptive, not slogan-style
-  ("not one template stretched to fit" and the like). Do not restore the old
-  framing from item 4 above.
+  "End-to-end industrial IoT". On 2026-09-27 the bento was replaced by four
+  large rows, copy left and a framed UI mockup right: 01 Sensor and data
+  connection (data point list), 02 Real-time monitoring dashboard (live KPIs,
+  trend, alarm), 03 Database log and recap (log table, recaps, export),
+  04 Application and integration (ERP/MES sync, AI analytics, WhatsApp
+  notification). Mockup values are illustrative and name no client. Ichibot
+  also asked for this section's copy to be plain and descriptive, not
+  slogan-style ("not one template stretched to fit" and the like). Do not
+  restore the old framing from item 4 above.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,

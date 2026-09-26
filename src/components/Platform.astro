@@ -2,26 +2,51 @@
 /**
  * Positioning corrected 2026-09-23. The section used to claim every product
  * runs on one shared platform, which is not true — use cases diverge too far
- * for that. What Ichibot actually sells is every layer of the system:
- * integration, data collection, AI analytics, dashboards and ERP/MES hand-off.
- * Copy here is kept plain and descriptive (2026-09-27).
+ * for that. What Ichibot actually sells is every layer of the system.
+ *
+ * Laid out 2026-09-27 as four large rows, copy on the left and a UI mockup on
+ * the right, each mockup framed with a soft accent glow. The mockups are
+ * built in HTML so they follow the theme; the numbers in them are
+ * illustrative, not a client's data. Copy stays plain and descriptive.
  */
 const protocols = [
   'Modbus RTU', 'Modbus TCP', 'MQTT', 'OPC UA', 'RS-485', 'Ethernet', 'RTSP', 'REST API',
 ]
 
-/** A small 3-4-2 network drawn inside the edge chip; one path is lit to read as a live inference. */
-const layers = [[128, [30, 46, 62]], [152, [24, 40, 54, 68]], [176, [38, 56]]] as const
-const lit = [[0, 0], [1, 1], [2, 0]]
-const isLit = (l: number, i: number) => lit.some(([a, b]) => a === l && b === i)
-const net = {
-  nodes: layers.flatMap(([x, ys], l) => ys.map((y, i) => [x, y, isLit(l, i)] as const)),
-  edges: layers.slice(1).flatMap(([x, ys], l) =>
-    ys.flatMap((y, i) =>
-      layers[l][1].map((py, j) => [[layers[l][0], py], [x, y], isLit(l, j) && isLit(l + 1, i)] as const),
-    ),
-  ),
-}
+/** 1 — data points, as the connection list shows them */
+const points = [
+  { name: 'Main panel · Active power', src: 'PM-01 · Modbus TCP · 40001', value: '412.6', unit: 'kW', state: 'ok' },
+  { name: 'Main panel · Power factor', src: 'PM-01 · Modbus TCP · 40011', value: '0.97', unit: '', state: 'ok' },
+  { name: 'Compressor ES300 · Pressure', src: 'PLC-02 · Modbus RTU · 30005', value: '7.2', unit: 'bar', state: 'ok' },
+  { name: 'Compressor ES300 · Temperature', src: 'PLC-02 · Modbus RTU · 30007', value: '82.4', unit: '°C', state: 'warn' },
+  { name: 'Pump P1 · Vibration', src: 'VIB-03 · MQTT · pump/p1/vib', value: '2.1', unit: 'mm/s', state: 'ok' },
+  { name: 'Gate 3 · PPE compliance', src: 'CAM-07 · RTSP · edge model', value: '97', unit: '%', state: 'ok' },
+  { name: 'Soil node A-12 · Moisture', src: 'LoRa-12 · MQTT · soil/a12', value: '32', unit: '%', state: 'stale' },
+]
+
+/** 2 — a pressure trend for the dashboard mockup, drawn at build time */
+const trend = [6.9, 7.0, 7.1, 6.95, 7.05, 7.2, 7.15, 7.3, 7.25, 7.1, 7.2, 7.35, 7.3, 7.2, 7.25, 7.4, 7.3, 7.2, 7.15, 7.25]
+const TW = 520
+const TH = 150
+const toY = (v: number) => TH - ((v - 6.6) / (7.8 - 6.6)) * TH
+const trendLine = trend.map((v, i) => `${((i / (trend.length - 1)) * TW).toFixed(1)},${toY(v).toFixed(1)}`).join(' ')
+const limitY = toY(7.6).toFixed(1)
+
+/** 3 — database log rows */
+const logRows = [
+  ['2026-09-27 09:42:10', 'Compressor ES300 · Temperature', '82.4 °C'],
+  ['2026-09-27 09:42:10', 'Compressor ES300 · Pressure', '7.2 bar'],
+  ['2026-09-27 09:42:05', 'Main panel · Active power', '412.6 kW'],
+  ['2026-09-27 09:42:05', 'Main panel · Power factor', '0.97'],
+  ['2026-09-27 09:42:00', 'Pump P1 · Vibration', '2.1 mm/s'],
+  ['2026-09-27 09:41:55', 'Main panel · Active power', '409.8 kW'],
+  ['2026-09-27 09:41:50', 'Compressor ES300 · Temperature', '81.9 °C'],
+]
+const recap = [
+  ['Energy today', '4,812 kWh'],
+  ['Peak load', '1.8 MW'],
+  ['Running hours', '21.5 h'],
+]
 ---
 
 <section
@@ -32,125 +57,172 @@ const net = {
     <h2>End-to-end industrial IoT</h2>
     <p class="lede">
       We handle every layer of the system: connecting to your machines and sensors,
-      collecting and storing the data, analysing it, and delivering it to dashboards and
-      your ERP or MES.
+      monitoring them in real time, logging the data, and putting it to work in your other
+      applications.
     </p>
 
-    <div class="bento">
-      <div class="tile t-2">
-        <h3>Sensor &amp; Data Integration</h3>
-        <p>Connect PLCs, VFDs, power meters, IP cameras and new sensors using standard industrial protocols.</p>
-        <div class="viz">
-          <svg class="art" viewBox="0 0 300 74" aria-hidden="true">
-            <path class="wire w-a" d="M22 4v22" /><path class="wire w-b" d="M62 4v22" />
-            <path class="wire w-a" d="M102 4v22" /><path class="wire w-c" d="M142 4v22" />
-            <path class="wire w-b" d="M182 4v22" /><path class="wire w-a" d="M222 4v22" />
-            <path class="wire w-c" d="M262 4v22" />
-            <rect class="strip" x="6" y="26" width="288" height="30" rx="4" />
-            {[22, 62, 102, 142, 182, 222, 262].map((x) => (
-              <g><rect class="port" x={x - 13} y="31" width="26" height="20" rx="2.5" />
-                 <circle class="screw" cx={x} cy="41" r="3.4" />
-                 <path class="slot" d={`M${x - 2} 41h4`} /></g>
-            ))}
-            <path class="rail" d="M6 62h288" />
-          </svg>
-          <div class="chips">{protocols.map((x) => <span>{x}</span>)}</div>
+    <div class="features">
+      <article class="feature">
+        <div class="feature-copy">
+          <span class="feature-num">01</span>
+          <h3>Sensor and data connection</h3>
+          <p>
+            Connect PLCs, controllers, power meters, IP cameras and sensors. Every signal
+            becomes a named data point with its source, unit and status.
+          </p>
+          <div class="chips">{protocols.map((p) => <span>{p}</span>)}</div>
         </div>
-      </div>
+        <div class="feature-shot" aria-hidden="true">
+          <div class="ui">
+            <div class="ui-head">
+              <b>Data points</b><span class="count">128 live</span>
+              <span class="search">Search tag or device</span>
+            </div>
+            <ul class="points">
+              {points.map((p) => (
+                <li>
+                  <i class:list={['dot', p.state]} />
+                  <span class="pt"><b>{p.name}</b><small>{p.src}</small></span>
+                  <span class:list={['val', p.state]}>{p.value}<small>{p.unit}</small></span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </article>
 
-      <div class="tile t-2">
-        <h3>Database Collection</h3>
-        <p>Data from every device is collected and stored in a database. The edge device buffers locally, so no data is lost if the network goes down.</p>
-        <div class="viz">
-          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
-            <path class="rail" d="M6 78h288" />
-            {[0,1,2,3,4,5,6,7,8,9,10,11,12,13].map((i) => {
-              const h = [30,38,26,42,34,46,31,39,27,44,36,48,33,41][i]
-              const offline = i >= 5 && i <= 9
-              return <rect class={offline ? 'bar held' : 'bar'} x={12 + i * 20} y={78 - h} width="12" height={h} rx="2" />
-            })}
-            <path class="gap" d="M108 10v68M212 10v68" />
-            <text class="cap" x="160" y="8" text-anchor="middle">connection down</text>
-            <path class="sync" d="M212 22h58" />
-            <path class="sync" d="M264 17l6 5-6 5" />
-            <text class="cap" x="272" y="38" text-anchor="end">synced</text>
-          </svg>
+      <article class="feature">
+        <div class="feature-copy">
+          <span class="feature-num">02</span>
+          <h3>Real-time monitoring dashboard</h3>
+          <p>
+            See live values, trends and alarms for each machine and line, on site or from
+            anywhere.
+          </p>
         </div>
-      </div>
+        <div class="feature-shot" aria-hidden="true">
+          <div class="ui">
+            <div class="ui-head">
+              <b>Compressor room · Line 1</b><span class="live">● Live</span>
+              <span class="ranges"><em>1H</em><em class="on">24H</em><em>7D</em></span>
+            </div>
+            <div class="kpis">
+              <div><small>Pressure</small><b data-live="7.2" data-step="0.05" data-dp="1">7.2</b><span>bar</span></div>
+              <div><small>Temperature</small><b class="warn" data-live="82.4" data-step="0.3" data-dp="1">82.4</b><span>°C</span></div>
+              <div><small>Power</small><b data-live="41.8" data-step="0.4" data-dp="1">41.8</b><span>kW</span></div>
+            </div>
+            <div class="chart">
+              <div class="chart-head"><span>Pressure, last 24 hours</span><span>limit 7.6 bar</span></div>
+              <svg viewBox={`0 0 ${TW} ${TH}`} preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="var(--accent)" stop-opacity=".28" />
+                    <stop offset="1" stop-color="var(--accent)" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <line class="limit" x1="0" x2={TW} y1={limitY} y2={limitY} />
+                <polygon fill="url(#trend-fill)" points={`0,${TH} ${trendLine} ${TW},${TH}`} />
+                <polyline class="line" points={trendLine} />
+              </svg>
+              <div class="axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>now</span></div>
+            </div>
+            <div class="alarm"><i class="dot warn" /> High temperature · Compressor ES300 <span>09:42</span></div>
+          </div>
+        </div>
+      </article>
 
-      <div class="tile t-2">
-        <h3>AI Analytics Ready</h3>
-        <p>Run anomaly detection and computer vision models on your data, on the edge device or on the server.</p>
-        <div class="viz">
-          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
-            <g class="src">
-              <rect x="12" y="18" width="28" height="18" rx="3" /><circle cx="26" cy="27" r="5" /><path d="M40 24l7-4v14l-7-4" />
-              <path d="M10 66h7l4-9 5 16 4-12 4 7 4-2h8" />
-            </g>
-            <path class="wire w-b" d="M50 27C80 27 82 34 110 34" />
-            <path class="wire w-b" d="M52 66C80 66 82 58 110 58" />
-            {[124, 138, 152, 166, 180].map((x) => <path class="slot" d={`M${x} 6v6M${x} 80v6`} />)}
-            <rect class="chip-box" x="110" y="12" width="84" height="68" rx="6" />
-            {net.edges.map(([a, b, on]) => <path class:list={['edge', { on }]} d={`M${a[0]} ${a[1]}L${b[0]} ${b[1]}`} />)}
-            {net.nodes.map(([x, y, on]) => <circle class:list={['node', { on }]} cx={x} cy={y} r="3" />)}
-            <path class="wire w-a" d="M194 38C204 38 204 26 212 26" />
-            <path class="wire w-c" d="M194 56C204 56 204 66 212 66" />
-            <rect class="out hit" x="212" y="17" width="80" height="18" rx="9" />
-            <text class="tag" x="224" y="29">helmet 0.98</text>
-            <rect class="out miss" x="212" y="57" width="80" height="18" rx="9" />
-            <text class="tag warn" x="224" y="69">anomaly 0.87</text>
-          </svg>
+      <article class="feature">
+        <div class="feature-copy">
+          <span class="feature-num">03</span>
+          <h3>Database log and recap</h3>
+          <p>
+            Every reading is stored in a database. Browse the history, and get hourly, daily
+            and monthly recaps ready to export for reports and audits.
+          </p>
         </div>
-      </div>
+        <div class="feature-shot" aria-hidden="true">
+          <div class="ui">
+            <div class="ui-head">
+              <span class="tabs-mini"><em class="on">Log</em><em>Hourly recap</em><em>Daily recap</em></span>
+              <span class="export">Export CSV</span>
+            </div>
+            <div class="recap">
+              {recap.map(([label, value]) => <div><small>{label}</small><b>{value}</b></div>)}
+            </div>
+            <table class="log">
+              <thead><tr><th>Timestamp</th><th>Data point</th><th>Value</th></tr></thead>
+              <tbody>
+                {logRows.map(([t, name, value]) => <tr><td>{t}</td><td>{name}</td><td>{value}</td></tr>)}
+              </tbody>
+            </table>
+            <div class="log-foot">Showing 7 of 1,284,560 rows</div>
+          </div>
+        </div>
+      </article>
 
-      <div class="tile t-3">
-        <h3>Dashboard Visualization</h3>
-        <p>Dashboards designed for each use case, showing real-time values, trends and alerts.</p>
-        <div class="viz two-up">
-          <figure>
-            <svg class="art" viewBox="0 0 150 86" aria-hidden="true">
-              <rect class="frame" x="3" y="3" width="144" height="80" rx="5" />
-              <path class="arc" d="M30 58a28 28 0 0 1 56 0" />
-              <path class="arc on" d="M30 58a28 28 0 0 1 16-25" />
-              <circle class="screw" cx="58" cy="58" r="2.5" />
-              {[0,1,2,3].map((i) => <rect class="bar" x={98} y={26 + i * 13} width={[38,26,32,20][i]} height="7" rx="2" />)}
-            </svg>
-            <figcaption>Plantation</figcaption>
-          </figure>
-          <figure>
-            <svg class="art" viewBox="0 0 150 86" aria-hidden="true">
-              <rect class="frame" x="3" y="3" width="144" height="80" rx="5" />
-              <path class="trend" d="M14 58l18-9 16 6 18-16 16 9 18-14 16 8 16-5" />
-              {[0,1,2].map((i) => <rect class="chip-box" x={14 + i * 42} y="66" width="34" height="12" rx="2.5" />)}
-            </svg>
-            <figcaption>Substation</figcaption>
-          </figure>
+      <article class="feature">
+        <div class="feature-copy">
+          <span class="feature-num">04</span>
+          <h3>Application and integration</h3>
+          <p>
+            Put the data to work in other systems: sync records to your ERP or MES, run AI
+            analytics for anomalies and detections, and send notifications by WhatsApp or
+            email.
+          </p>
         </div>
-      </div>
-
-      <div class="tile t-3">
-        <h3>ERP/MES Integration</h3>
-        <p>Send production, weighing, downtime and energy data to your ERP or MES automatically. In use at Citra Borneo Utama.</p>
-        <div class="viz">
-          <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
-            <g class="ticket">
-              <rect x="8" y="20" width="62" height="52" rx="4" />
-              <path d="M20 34h38M20 44h30M20 54h34" />
-            </g>
-            <text class="cap" x="39" y="84" text-anchor="middle">weigh ticket</text>
-            <path class="sync" d="M78 46h44" /><path class="sync" d="M116 41l6 5-6 5" />
-            <g class="table">
-              <rect x="132" y="16" width="160" height="60" rx="4" />
-              <path class="head" d="M132 30h160" />
-              <rect class="row new" x="140" y="36" width="144" height="10" rx="2" />
-              <rect class="row" x="140" y="50" width="144" height="10" rx="2" />
-              <rect class="row" x="140" y="64" width="144" height="10" rx="2" />
-            </g>
-            <text class="cap" x="212" y="88" text-anchor="middle">ERP record</text>
-          </svg>
+        <div class="feature-shot" aria-hidden="true">
+          <div class="ui apps">
+            <div class="app">
+              <span class="app-ic"><svg viewBox="0 0 16 16"><ellipse cx="8" cy="4" rx="5" ry="2" /><path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4" /><path d="M3 8c0 1.1 2.2 2 5 2s5-.9 5-2" /></svg></span>
+              <div class="app-body">
+                <small>ERP / MES</small>
+                <b>Weighing record synced</b>
+                <span>WB-0927-0142 · 28,460 kg · Truck B 9123 KT</span>
+              </div>
+              <span class="badge ok">Synced 09:41</span>
+            </div>
+            <div class="app">
+              <span class="app-ic"><svg viewBox="0 0 16 16"><path d="M6.6 2.2 7.8 5.4 11 6.6 7.8 7.8 6.6 11 5.4 7.8 2.2 6.6 5.4 5.4z" /><path d="M11.6 10.2l.7 1.5 1.5.7-1.5.7-.7 1.5-.7-1.5-1.5-.7 1.5-.7z" /></svg></span>
+              <div class="app-body">
+                <small>AI analytics</small>
+                <b>Anomaly detected</b>
+                <span>Pump P1 vibration 38% above its normal pattern</span>
+              </div>
+              <span class="badge">Score 0.91</span>
+            </div>
+            <div class="app">
+              <span class="app-ic"><svg viewBox="0 0 16 16"><path d="M4.2 6.8a3.8 3.8 0 0 1 7.6 0c0 2.9 1.1 4 1.1 4H3.1s1.1-1.1 1.1-4z" /><path d="M6.7 13a1.5 1.5 0 0 0 2.6 0" /></svg></span>
+              <div class="app-body">
+                <small>Notification · WhatsApp</small>
+                <p class="bubble">⚠ Compressor ES300 temperature 82.4 °C, above the 80 °C limit.<time>09:42</time></p>
+                <span>Sent to Maintenance team</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
   </div>
 </section>
 
+<script>
+  // Nudge the dashboard mockup's KPI values so it reads as live. Skipped under
+  // prefers-reduced-motion, and only runs while the section is on screen.
+  {
+    const values = Array.from(document.querySelectorAll<HTMLElement>('[data-live]'))
+    if (values.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let timer = 0
+      const tick = () => {
+        for (const el of values) {
+          const base = Number(el.dataset.live)
+          const step = Number(el.dataset.step)
+          el.textContent = (base + (Math.random() - 0.5) * 2 * step).toFixed(Number(el.dataset.dp))
+        }
+      }
+      new IntersectionObserver(([e]) => {
+        clearInterval(timer)
+        if (e.isIntersecting) timer = window.setInterval(tick, 1500)
+      }).observe(values[0].closest('.feature')!)
+    }
+  }
+</script>
