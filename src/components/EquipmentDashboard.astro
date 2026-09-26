@@ -2,9 +2,9 @@
 /**
  * An HTML replica of the compressor monitoring dashboard, used in place of a
  * screenshot on the Smart equipment monitoring product. A CCTV-style live
- * view of the machine, run and load hours, gauges and trend charts. Readings
- * are illustrative and name no client; the machine picture is the ES300
- * render the dashboard itself uses.
+ * view of a compressor room, run and load hours, gauges and trend charts.
+ * Readings are illustrative and name no client; the camera picture is a
+ * supplied render of a compressor room, not a client site.
  *
  * Laid out at a fixed width inside ReplicaFit. While on screen the clock
  * ticks, readings drift and the charts scroll, except under
@@ -12,7 +12,7 @@
  */
 import { Image } from 'astro:assets'
 import ReplicaFit from './ReplicaFit.astro'
-import machine from '../assets/products/compressor-es300.jpg'
+import room from '../assets/products/compressor-room.jpg'
 
 const W = 1040
 
@@ -25,6 +25,8 @@ function rng(seed: number) {
 type Reading = {
   key: string
   name: string
+  /** shorter label for the narrow gauge cards */
+  short?: string
   unit: string
   value: number
   dp: number
@@ -41,14 +43,13 @@ const readings: Reading[] = [
   { key: 'out', name: 'Output pressure', unit: 'bar', value: 7.2, dp: 1, min: 0, max: 10, step: 0.08, seed: 3, lo: 6.2, hi: 8.0 },
   { key: 'oilp', name: 'Oil pressure', unit: 'bar', value: 2.0, dp: 1, min: 0, max: 5, step: 0.05, seed: 5, lo: 1.5, hi: 2.5 },
   { key: 'vib', name: 'Vibration', unit: 'mm/s', value: 6.4, dp: 1, min: 0, max: 12, warnAt: 6, step: 0.25, seed: 7, lo: 2.5, hi: 8.5 },
-  { key: 'dp', name: 'Differential pressure', unit: 'bar', value: 0.3, dp: 2, min: 0, max: 1, step: 0.02, seed: 9 },
-]
-const charts: Reading[] = [
+  { key: 'dp', name: 'Differential pressure', short: 'Diff. pressure', unit: 'bar', value: 0.3, dp: 2, min: 0, max: 1, step: 0.02, seed: 9, lo: 0.1, hi: 0.5 },
   { key: 'temp', name: 'Oil temperature', unit: '°C', value: 56.7, dp: 1, min: 40, max: 90, warnAt: 80, step: 0.6, seed: 13, lo: 40, hi: 85 },
-  readings[0],
-  readings[1],
-  readings[2],
 ]
+const byKey = (k: string) => readings.find((r) => r.key === k)!
+/** Gauge order and chart order differ: gauges lead with pressure, charts with temperature. */
+const gauges = ['out', 'oilp', 'temp', 'vib', 'dp'].map(byKey)
+const charts = ['temp', 'out', 'oilp', 'vib', 'dp'].map(byKey)
 
 /** Gauge: a 240° arc, drawn once; the value is a dash along it. */
 const G = { cx: 60, cy: 58, r: 44 }
@@ -91,7 +92,7 @@ const toPoints = (vals: number[], r: Reading) =>
     <header class="qd-top">
       <span class="qd-brand">
         <span class="qd-logo"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="11" rx="2" /><path d="M6 5V3h8v2M7 9h6M7 12h4" /></svg></span>
-        <span><b>Compressor ES300</b><small><i></i>Online · compressor/line-2</small></span>
+        <span><b>Compressor room</b><small><i></i>Online · 3 compressors · compressor/line-2</small></span>
       </span>
       <span class="qd-ranges"><em>1H</em><em>6H</em><em class="on">24H</em><em>7D</em></span>
       <span class="qd-clock" data-qclock>27 Sep 2026 · 09:42:10</span>
@@ -101,9 +102,13 @@ const toPoints = (vals: number[], r: Reading) =>
       <div class="qd-left">
         <section class="qd-card qd-cam">
           <div class="qd-cam-view">
-            <Image src={machine} alt="" width={440} loading="lazy" />
+            {/* image and detection boxes drift together, so the boxes stay on their machines */}
+            <div class="qd-scene">
+              <Image src={room} alt="" width={720} loading="lazy" />
+              <span class="qd-box" style="left:3.4%;top:38.7%;right:62.9%;bottom:27.4%"><em>Compressor 1 · running</em></span>
+              <span class="qd-box" style="left:50.8%;top:62.9%;right:29.5%;bottom:6%"><em>Compressor 3 · running</em></span>
+            </div>
             <span class="qd-scan"></span>
-            <span class="qd-box"><em>ES300 · running</em></span>
             <span class="qd-osd qd-osd-tl">CAM-02 · Compressor room</span>
             <span class="qd-osd qd-osd-tr"><i></i>LIVE</span>
             <span class="qd-osd qd-osd-bl" data-qcamclock>2026-09-27 09:42:10</span>
@@ -134,11 +139,11 @@ const toPoints = (vals: number[], r: Reading) =>
 
       <div class="qd-right">
         <div class="qd-gauges">
-          {readings.map((r) => {
+          {gauges.map((r) => {
             const warn = r.warnAt !== undefined && r.value >= r.warnAt
             return (
               <section class:list={['qd-card', 'qd-gauge', { warn }]} data-gauge={r.key} data-min={r.min} data-max={r.max} data-warn={r.warnAt ?? ''}>
-                <div class="qd-card-head"><b>{r.name}</b></div>
+                <div class="qd-card-head"><b>{r.short ?? r.name}</b></div>
                 <svg viewBox="0 0 120 84">
                   <path class="qd-track" d={arc} />
                   <path class="qd-val" d={arc} pathLength="100" style={`stroke-dasharray:${pct(r)} 100`} />

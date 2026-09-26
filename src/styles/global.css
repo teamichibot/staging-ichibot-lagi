@@ -438,14 +438,14 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .qd-card-head small{color:var(--faint);font-size:10.5px}
 /* CCTV tile: the camera image is always dark, whatever the site theme */
 .qd-cam{padding:0;overflow:hidden}
-.qd-cam-view{position:relative;aspect-ratio:4/3;background:#0b0d10;overflow:hidden}
-.qd-cam-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.03);
-  filter:saturate(.55) contrast(1.08) brightness(.92);animation:qd-drift 14s ease-in-out infinite alternate}
+.qd-cam-view{position:relative;aspect-ratio:1024/723;background:#0b0d10;overflow:hidden}
+.qd-scene{position:absolute;inset:0;transform:scale(1.03);animation:qd-drift 14s ease-in-out infinite alternate}
+.qd-scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.55) contrast(1.08) brightness(.92)}
 @keyframes qd-drift{from{transform:scale(1.03) translate(-1%,0)}to{transform:scale(1.06) translate(1%,-.5%)}}
 .qd-scan{position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55));mix-blend-mode:multiply}
-.qd-box{position:absolute;left:8%;top:21%;right:6%;bottom:15%;border:1.5px solid #38bdf8;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
-.qd-box em{position:absolute;top:-19px;left:-1.5px;font-style:normal;font-size:10px;font-weight:600;color:#08090b;background:#38bdf8;padding:1px 6px;border-radius:3px 3px 3px 0}
+.qd-box{position:absolute;border:1.5px solid #38bdf8;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.qd-box em{position:absolute;top:-17px;left:-1.5px;white-space:nowrap;font-style:normal;font-size:9.5px;font-weight:600;color:#08090b;background:#38bdf8;padding:1px 6px;border-radius:3px 3px 3px 0}
 .qd-osd{position:absolute;font:600 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.8);letter-spacing:.02em}
 .qd-osd-tl{top:9px;left:10px}.qd-osd-tr{top:9px;right:10px;display:flex;align-items:center;gap:5px}
 .qd-osd-bl{bottom:9px;left:10px}.qd-osd-br{bottom:9px;right:10px;opacity:.75}
@@ -464,10 +464,10 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .qd-ratio b{color:var(--text)}
 .qd-bar{height:6px;border-radius:99px;background:var(--bg2);overflow:hidden}
 .qd-bar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
-.qd-gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.qd-gauges{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .qd-gauge{text-align:center;padding:10px 10px 12px}
 .qd-gauge .qd-card-head{justify-content:center;margin-bottom:2px}
-.qd-gauge .qd-card-head b{font-size:11.5px;font-weight:500;color:var(--muted)}
+.qd-gauge .qd-card-head b{white-space:nowrap;font-size:11px;font-weight:500;color:var(--muted)}
 .qd-gauge svg{width:100%;height:auto;display:block}
 .qd-track{fill:none;stroke:var(--bg2);stroke-width:8;stroke-linecap:round}
 .qd-val{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .8s ease}
@@ -476,12 +476,15 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .qd-needle line{stroke:var(--text);stroke-width:2.2;stroke-linecap:round}
 .qd-hub{fill:var(--text)}
 .qd-gauge text{fill:var(--faint);font-size:8px}
-.qd-reading b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.qd-reading b{font-size:20px;font-weight:700;letter-spacing:-.02em}
 .qd-reading span{color:var(--muted);margin-left:4px}
 .qd-state{display:block;color:var(--faint);font-size:10px}
 .qd-gauge.warn .qd-val{stroke:var(--draft)}
 .qd-gauge.warn .qd-reading b,.qd-gauge.warn .qd-state{color:var(--draft)}
-.qd-charts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qd-charts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+/* five charts: three across the top row, two wider ones below */
+.qd-chart{grid-column:span 2}
+.qd-chart:nth-child(n+4){grid-column:span 3}
 .qd-now{color:var(--muted)}
 .qd-now b{font-size:17px;font-weight:700;color:var(--accent)}
 .qd-chart.warn .qd-now b{color:var(--draft)}
@@ -492,7 +495,7 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .qd-chart.warn .qd-area{fill:color-mix(in srgb,var(--draft) 14%,transparent)}
 .qd-limit{stroke:var(--draft);stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke;opacity:.7}
 .qd-axis{display:flex;justify-content:space-between;color:var(--faint);font-size:9.5px;margin-top:4px}
-@media (prefers-reduced-motion:reduce){.qd-cam-view img,.qd-osd-tr i{animation:none}}
+@media (prefers-reduced-motion:reduce){.qd-scene,.qd-osd-tr i{animation:none}}
 /* services — a line icon above each card title, same 16px language as the
    product tabs. No enclosing box: four boxed icons in a 2x2 grid reads as a
    template, a bare mark does not. */
