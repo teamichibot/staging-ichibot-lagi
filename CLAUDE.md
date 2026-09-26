@@ -33,11 +33,11 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
 ## Page structure (home)
 1. **Hero** — chip "Running at Pertamina and Toyota Indonesia", H1 "Intelligent industrial hub", tagline, CTAs (Book a site survey / Explore products), animated hub diagram in a window frame (sources → Ichibot Edge → dashboard, ERP/MES, alerts, AI insights).
 2. **Client logos** — Pertamina, Toyota, Citra Borneo Utama, Erlangga, PT Garam (monochrome SVG).
-3. **Products** — tabbed interface, 4 products from the `products` collection. Each: name, description, what's included, "Proven at" client list, deployment time, dashboard mockup/screenshot.
-   - Smart energy usage monitoring — Toyota (2 MVA transformer), Erlangga (substation)
-   - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
+3. **Products** — horizontal browser-style tabs over one panel, 4 products from the `products` collection. Each: name, description, what's included, "Proven at" client list, deployment time, dashboard mockup/screenshot.
+   - Smart energy monitoring — Toyota (2 MVA transformer), Erlangga (substation)
    - Smart equipment monitoring — Toyota (Kaeser compressor), Pertamina (vehicle tilt & pitch), PT Garam (main pump)
-   - Smart plantation — **Pilot** badge, oil palm LoRa soil monitoring (on-going)
+   - Smart plantation system — **Pilot** badge, oil palm LoRa soil monitoring (on-going)
+   - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
 4. **Platform** — bento grid: dashboard visualization, ERP integration (Weighbridge → Edge → ERP, Citra Borneo Utama), on-prem/cloud/hybrid toggle, protocol chips.
 5. **Industries** — pill links: oil & gas and energy, automotive, agribusiness, printing & publishing, port & marine, salt & mining.
 6. **Why Ichibot** — 4 columns: proven at scale, works with old machines, global capability local price, engineers who show up.

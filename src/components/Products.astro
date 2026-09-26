@@ -144,6 +144,7 @@ function sparkPoints(values: number[]) {
           panel.classList.add('swap')
         }
       })
+      tabs[index].scrollIntoView({ block: 'nearest', inline: 'nearest' })
       if (moveFocus) tabs[index].focus()
     }
 
