@@ -17,7 +17,6 @@ export type Product = {
   proofLabel: string
   proof: string[]
   deploymentTime: string
-  pilot?: boolean
   /**
    * A real screenshot of the product's own dashboard. Where one exists it
    * replaces `mock` entirely — the brief's open item is to get rid of the
@@ -80,7 +79,6 @@ export const products: Product[] = [
     proofLabel: 'Pilot running at',
     proof: ['Oil palm plantation, on-going'],
     deploymentTime: 'Pilot',
-    pilot: true,
     replica: 'plantation',
     mock: {
       top: 'Block A-12',

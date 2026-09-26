@@ -36,7 +36,7 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
 3. **Products** — horizontal browser-style tabs over one panel, 4 products from the `products` collection. Each: name, description, what's included, "Proven at" client list, deployment time, dashboard mockup/screenshot.
    - Smart energy monitoring — Toyota (2 MVA transformer), Erlangga (substation)
    - Smart equipment monitoring — Toyota (Kaeser compressor), Pertamina (vehicle tilt & pitch), PT Garam (main pump)
-   - Smart plantation system — **Pilot** badge, oil palm LoRa soil monitoring (on-going)
+   - Smart plantation system — oil palm LoRa soil monitoring (on-going; no Pilot badge, removed 2026-09-27)
    - AI Vision Engine — Pertamina (PPE detection, PPE + oil spill)
 4. **Platform** — four large feature rows with UI mockups (see amendments).
 5. **Industries** — pill links: oil & gas and energy, automotive, agribusiness, printing & publishing, port & marine, salt & mining.

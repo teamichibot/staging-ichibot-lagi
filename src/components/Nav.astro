@@ -32,7 +32,7 @@ const links = [
                 <a href={`#product-${p.key}`}>
                   <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
                   <span>
-                    <b>{p.name}{p.pilot && <em>Pilot</em>}</b>
+                    <b>{p.name}</b>
                     <small>{p.desc}</small>
                   </span>
                 </a>
@@ -61,7 +61,7 @@ const links = [
           <li>
             <a href={`#product-${p.key}`}>
               <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
-              {p.name}{p.pilot && <em>Pilot</em>}
+              {p.name}
             </a>
           </li>
         ))}
