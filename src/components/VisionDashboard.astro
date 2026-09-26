@@ -1,0 +1,170 @@
+---
+/**
+ * AI Vision Engine demo: CCTV footage with real object detections drawn over
+ * it, plus a side panel that follows the video.
+ *
+ * The boxes are not hand-placed. scripts/vision/detect.py ran YOLO11x with
+ * ByteTrack over the clip, offline, and scored each tracked person's torso
+ * for hi-vis colour; scripts/vision/build.py turned that into
+ * public/media/vision/vision-detections.json. The browser only plays the
+ * video and draws the boxes for the current frame, so production needs no
+ * model, GPU or Python.
+ *
+ * PLACEHOLDER FOOTAGE: the clip is a third party's YouTube video (CCTVDOC.COM)
+ * used to build and test this component. Replace it with Ichibot's own
+ * footage, or a commercially licensed stock clip, before this goes to
+ * production, and rerun the two scripts.
+ */
+import ReplicaFit from './ReplicaFit.astro'
+
+const W = 1040
+const base = '/media/vision/'
+---
+
+<ReplicaFit width={W} label="AI Vision Engine: CCTV footage of a warehouse floor with people detected and tracked, hi-vis vest checks, a conveyor lane zone and an event log">
+  <div class="vdash" data-vision={`${base}vision-detections.json`}>
+    <header class="vd-top">
+      <span class="vd-brand">
+        <span class="vd-logo"><svg viewBox="0 0 20 20"><rect x="2" y="5" width="12" height="10" rx="2" /><path d="M14 9l4-2.5v7L14 11" /><circle cx="8" cy="10" r="2.2" /></svg></span>
+        <span><b>AI Vision Engine</b><small><i></i>CAM-07 · Warehouse floor · PPE and zone rules</small></span>
+      </span>
+      <span class="vd-model">YOLO11 · on edge device</span>
+    </header>
+
+    <div class="vd-body">
+      <div class="vd-stage">
+        <video muted loop playsinline preload="metadata" poster={`${base}vision-poster.jpg`}>
+          <source src={`${base}vision-demo.webm`} type="video/webm" />
+          <source src={`${base}vision-demo.mp4`} type="video/mp4" />
+        </video>
+        <div class="vd-zone" style="left:84%"><span>Conveyor lane</span></div>
+        <div class="vd-boxes"></div>
+        <span class="vd-osd vd-osd-tl">CAM-07 · Warehouse floor</span>
+        <span class="vd-osd vd-osd-tr"><i></i>LIVE · AI</span>
+        <span class="vd-osd vd-osd-bl" data-vclock>2026-09-27 09:42:10</span>
+        <span class="vd-osd vd-osd-br">6 fps · 1280×640</span>
+      </div>
+
+      <aside class="vd-side">
+        <div class="vd-stats">
+          <div><small>People in view</small><b data-stat="people">0</b></div>
+          <div class="ok"><small>Vest detected</small><b data-stat="vest">0</b></div>
+          <div class="warn"><small>Vest not visible</small><b data-stat="novest">0</b></div>
+          <div><small>In conveyor lane</small><b data-stat="zone">0</b></div>
+        </div>
+        <div class="vd-log">
+          <div class="vd-log-head"><b>Events</b><small>this clip</small></div>
+          <ul data-log>
+            <li class="vd-empty">Waiting for events…</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</ReplicaFit>
+
+<script>
+  type Det = [id: number, x: number, y: number, w: number, h: number, conf: number, state: 0 | 1 | 2]
+  type Data = { fps: number; zoneX: number; frames: Det[][]; events: [number, 'zone' | 'novest', number][] }
+
+  for (const dash of document.querySelectorAll<HTMLElement>('.vdash')) {
+    const video = dash.querySelector('video')!
+    const layer = dash.querySelector<HTMLElement>('.vd-boxes')!
+    const clock = dash.querySelector<HTMLElement>('[data-vclock]')!
+    const log = dash.querySelector<HTMLElement>('[data-log]')!
+    const stat = (k: string) => dash.querySelector<HTMLElement>(`[data-stat="${k}"]`)!
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+    let data: Data | null = null
+    let shownFrame = -1
+    let logged = 0
+
+    const fmt = (s: number) => {
+      const t = new Date(2026, 8, 27, 9, 42, 10 + Math.floor(s))
+      const p = (n: number) => String(n).padStart(2, '0')
+      return `${p(t.getHours())}:${p(t.getMinutes())}:${p(t.getSeconds())}`
+    }
+
+    const drawFrame = (i: number) => {
+      if (!data || i === shownFrame) return
+      shownFrame = i
+      const dets = data.frames[i] ?? []
+      layer.replaceChildren(
+        ...dets.map(([id, x, y, w, h, conf, state]) => {
+          const box = document.createElement('div')
+          box.className = `vd-box s${state}`
+          box.style.cssText = `left:${x * 100}%;top:${y * 100}%;width:${w * 100}%;height:${h * 100}%`
+          const tag = document.createElement('em')
+          tag.textContent =
+            state === 1 ? `Person ${id} · Vest ✓` : state === 2 ? `Person ${id} · Vest not visible` : `Person ${conf.toFixed(2)}`
+          box.append(tag)
+          return box
+        }),
+      )
+      stat('people').textContent = String(dets.length)
+      stat('vest').textContent = String(dets.filter((d) => d[6] === 1).length)
+      stat('novest').textContent = String(dets.filter((d) => d[6] === 2).length)
+      stat('zone').textContent = String(dets.filter((d) => d[1] + d[3] / 2 >= data!.zoneX).length)
+    }
+
+    const syncLog = (t: number) => {
+      if (!data) return
+      const due = data.events.filter(([at]) => at <= t + 0.001).length
+      if (due < logged) {
+        // the clip looped: start the log over
+        logged = 0
+        log.replaceChildren()
+      }
+      if (due > logged) log.querySelector('.vd-empty')?.remove()
+      for (; logged < due; logged++) {
+        const [at, kind, n] = data.events[logged]
+        const li = document.createElement('li')
+        li.className = kind === 'novest' ? 'warn' : ''
+        li.innerHTML =
+          kind === 'novest'
+            ? `<b>Vest not visible</b><span>Person ${n} · near packing table</span><time>${fmt(at)}</time>`
+            : `<b>Person entered conveyor lane</b><span>${n} in lane</span><time>${fmt(at)}</time>`
+        log.prepend(li)
+      }
+      if (!log.children.length) log.innerHTML = '<li class="vd-empty">Waiting for events…</li>'
+    }
+
+    const onTime = (t: number) => {
+      if (!data) return
+      drawFrame(Math.min(data.frames.length - 1, Math.floor(t * data.fps + 0.001)))
+      clock.textContent = `2026-09-27 ${fmt(t)}`
+      syncLog(t)
+    }
+
+    // exact per-frame sync where supported, animation frames otherwise
+    const hasVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype
+    const loopVFC = (_: number, meta: { mediaTime: number }) => {
+      onTime(meta.mediaTime)
+      video.requestVideoFrameCallback(loopVFC)
+    }
+    const loopRAF = () => {
+      onTime(video.currentTime)
+      if (!video.paused) requestAnimationFrame(loopRAF)
+    }
+
+    const start = async () => {
+      if (!data) {
+        data = (await (await fetch(dash.dataset.vision!)).json()) as Data
+        if (hasVFC) video.requestVideoFrameCallback(loopVFC)
+        video.addEventListener('play', () => !hasVFC && requestAnimationFrame(loopRAF))
+        video.addEventListener('seeked', () => onTime(video.currentTime))
+      }
+      if (still) {
+        // one frame, fully annotated, no motion
+        video.currentTime = 1
+        onTime(1)
+        return
+      }
+      video.play().catch(() => onTime(video.currentTime))
+    }
+
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) start()
+      else video.pause()
+    }).observe(dash)
+  }
+</script>

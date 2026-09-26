@@ -69,6 +69,11 @@ Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in he
 - Real dashboard screenshots (Klenik / Ichiboard) to replace mockups
 - Final protocol list matching the edge computer at launch
 - Office address, email, WhatsApp number, social links
+- **AI Vision Engine demo footage is a placeholder.** `public/media/vision/` holds a
+  third party's YouTube clip (CCTVDOC.COM) used to build the detection demo. It
+  must be replaced with Ichibot's own footage or a commercially licensed clip
+  before production: drop the new video in, rerun `scripts/vision/detect.py`
+  then `scripts/vision/build.py`, and re-encode the MP4/WebM/poster.
 
 ## Amendments (decided 2026-09-22, these override the sections above)
 

@@ -205,7 +205,7 @@ const recap = [
   // Nudge the dashboard mockup's KPI values so it reads as live. Skipped under
   // prefers-reduced-motion, and only runs while the section is on screen.
   {
-    const values = Array.from(document.querySelectorAll<HTMLElement>('[data-live]'))
+    const values = Array.from(document.querySelectorAll<HTMLElement>('.feature [data-live]'))
     if (values.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       let timer = 0
       const tick = () => {

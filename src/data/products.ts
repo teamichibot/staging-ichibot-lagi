@@ -28,7 +28,7 @@ export type Product = {
    * A dashboard rebuilt in HTML instead of a screenshot: crisp at any size and
    * follows the site theme. Takes precedence over `screenshot`.
    */
-  replica?: 'energy' | 'equipment' | 'plantation'
+  replica?: 'energy' | 'equipment' | 'plantation' | 'vision'
   /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
@@ -96,6 +96,7 @@ export const products: Product[] = [
     proofLabel: 'Proven at',
     proof: ['Pertamina: PPE detection', 'Pertamina: PPE and oil spill detection'],
     deploymentTime: 'Live in [X] weeks',
+    replica: 'vision',
     mock: {
       top: 'Gate 3, CCTV-07',
       metrics: [['97%', 'PPE compliance'], ['2', 'Violations today'], ['12', 'Cameras']],

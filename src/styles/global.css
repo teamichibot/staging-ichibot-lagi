@@ -570,6 +570,55 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .pd-signal i.on{background:var(--sp)}
 .pd-batt.low{color:#d97706}
 @media (prefers-reduced-motion:reduce){.pd-live i{animation:none}}
+
+/* AI Vision Engine demo: footage with detections drawn from JSON. The video
+   area is always dark, whatever the site theme. */
+.vdash{background:var(--bg2);padding:16px;font-size:12px;line-height:1.35;color:var(--text);font-variant-numeric:tabular-nums}
+.vd-top{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.vd-brand{display:flex;align-items:center;gap:10px}
+.vd-logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.vd-logo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+.vd-brand b{display:block;font-size:16px;font-weight:600}
+.vd-brand small{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:10.5px}
+.vd-brand small i{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e}
+.vd-model{margin-left:auto;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:4px 10px;font-weight:600;font-size:11px}
+.vd-body{display:grid;grid-template-columns:1fr 250px;gap:12px;align-items:start}
+.vd-stage{position:relative;aspect-ratio:2/1;border-radius:12px;overflow:hidden;background:#0b0d10;border:1px solid var(--border2)}
+.vd-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.vd-boxes{position:absolute;inset:0;pointer-events:none}
+.vd-box{position:absolute;border:1.5px solid rgba(255,255,255,.7);border-radius:2px}
+.vd-box em{position:absolute;left:-1.5px;bottom:100%;margin-bottom:1px;white-space:nowrap;font-style:normal;font-size:9px;font-weight:600;line-height:1.3;
+  padding:0 4px;border-radius:2px;background:rgba(255,255,255,.75);color:#08090b}
+.vd-box.s1{border-color:#38bdf8}
+.vd-box.s1 em{background:#38bdf8}
+.vd-box.s2{border-color:#fb923c;border-width:2px;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 0 12px rgba(251,146,60,.5)}
+.vd-box.s2 em{background:#fb923c}
+.vd-box.s0{border-color:rgba(255,255,255,.55);border-style:dashed}
+.vd-box.s0 em{background:rgba(255,255,255,.6);font-weight:500}
+.vd-zone{position:absolute;top:0;bottom:0;right:0;background:rgba(250,204,21,.08);border-left:1.5px dashed rgba(250,204,21,.8)}
+.vd-zone span{position:absolute;bottom:26px;left:6px;font-size:9.5px;font-weight:600;color:#08090b;background:rgba(250,204,21,.9);padding:1px 5px;border-radius:2px}
+.vd-osd{position:absolute;font:600 10.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.85)}
+.vd-osd-tl{top:8px;left:10px}.vd-osd-tr{top:8px;right:10px;display:flex;align-items:center;gap:5px}
+.vd-osd-bl{bottom:8px;left:10px}.vd-osd-br{bottom:8px;right:10px;opacity:.75}
+.vd-osd-tr i{width:7px;height:7px;border-radius:50%;background:#ef4444;animation:qd-rec 1.2s steps(2) infinite}
+.vd-side{display:flex;flex-direction:column;gap:10px}
+.vd-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vd-stats div{background:var(--panel);border:1px solid var(--border2);border-radius:10px;padding:8px 10px}
+.vd-stats small{display:block;color:var(--muted);font-size:10px}
+.vd-stats b{font-size:22px;font-weight:700}
+.vd-stats .ok b{color:var(--accent)}.vd-stats .warn b{color:var(--draft)}
+.vd-log{background:var(--panel);border:1px solid var(--border2);border-radius:10px;padding:10px;height:190px;display:flex;flex-direction:column;overflow:hidden}
+.vd-log-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.vd-log-head b{font-size:12.5px}.vd-log-head small{color:var(--faint);font-size:10px}
+.vd-log ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.vd-log li{display:grid;grid-template-columns:1fr auto;gap:0 6px;border-left:2px solid var(--accent);padding:3px 0 3px 8px;animation:vd-in .35s ease}
+.vd-log li.warn{border-left-color:var(--draft)}
+.vd-log li b{font-size:11px;font-weight:600}
+.vd-log li span{grid-column:1;color:var(--muted);font-size:10px}
+.vd-log li time{grid-row:1;grid-column:2;color:var(--faint);font-size:10px}
+.vd-log li.vd-empty{border:0;color:var(--faint);display:block;animation:none}
+@keyframes vd-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.vd-osd-tr i,.vd-log li{animation:none}}
 /* services — a line icon above each card title, same 16px language as the
    product tabs. No enclosing box: four boxed icons in a 2x2 grid reads as a
    template, a bare mark does not. */
