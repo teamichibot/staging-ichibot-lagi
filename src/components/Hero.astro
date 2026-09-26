@@ -105,9 +105,9 @@ const outputs = [
 
 <script>
   /**
-   * Hero background: a field of dots whose size and brightness follow a few
-   * slow, overlapping waves, so the field seems to breathe and drift. The
-   * brightest crests pick up the accent colour. Colours come from the CSS
+   * Hero background: a fine, even dot matrix with two broad, slow waves of
+   * brightness passing through it. The brightest band picks up the accent
+   * colour. Colours come from the CSS
    * tokens, so it follows the theme; it pauses off-screen and in hidden tabs,
    * and draws one still frame under prefers-reduced-motion.
    */
@@ -115,7 +115,7 @@ const outputs = [
     const canvas = document.querySelector<HTMLCanvasElement>('.hero-bg')
     const ctx = canvas?.getContext('2d')
     if (canvas && ctx) {
-      const GAP = 22
+      const GAP = 16
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches
       let w = 0, h = 0, faint = '', accent = '', running = false, visible = true, frame = 0
 
@@ -132,30 +132,20 @@ const outputs = [
         canvas.height = h * dpr
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       }
-      // fixed per-dot jitter so the field reads as scattered, not as a grid
-      const jitter = (i: number) => {
-        const v = Math.sin(i * 12.9898) * 43758.5453
-        return (v - Math.floor(v) - 0.5) * GAP * 0.7
-      }
       const draw = (t: number) => {
         ctx.clearRect(0, 0, w, h)
         const s = t / 1000
-        let i = 0
-        for (let gy = GAP / 2; gy < h; gy += GAP) {
-          for (let gx = GAP / 2; gx < w; gx += GAP, i++) {
-            const x = gx + jitter(i)
-            const y = gy + jitter(i + 7919)
+        for (let y = GAP / 2; y < h; y += GAP) {
+          for (let x = GAP / 2; x < w; x += GAP) {
+            // two broad, slow waves: one sweeping across, one rippling out from the right
             const v =
-              (Math.sin(x * 0.009 + s * 0.3) +
-                Math.sin(y * 0.014 - s * 0.24) +
-                Math.sin((x + y) * 0.006 + s * 0.18) +
-                Math.sin(Math.hypot(x - w * 0.7, y - h * 0.3) * 0.011 - s * 0.35)) / 8 + 0.5
-            const k = v * v * v * v
-            const crest = v > 0.84
-            ctx.globalAlpha = crest ? 0.35 + (v - 0.84) * 2.5 : 0.08 + k * 0.7
-            ctx.fillStyle = crest ? accent : faint
+              (Math.sin(x * 0.004 + y * 0.003 + s * 0.25) +
+                Math.sin(Math.hypot(x - w * 0.75, y - h * 0.35) * 0.008 - s * 0.3)) / 4 + 0.5
+            const k = v * v
+            ctx.globalAlpha = 0.1 + k * 0.45
+            ctx.fillStyle = v > 0.8 ? accent : faint
             ctx.beginPath()
-            ctx.arc(x, y, 0.4 + k * 3, 0, Math.PI * 2)
+            ctx.arc(x, y, 0.7 + k * 0.9, 0, Math.PI * 2)
             ctx.fill()
           }
         }
