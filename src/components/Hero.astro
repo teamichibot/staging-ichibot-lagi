@@ -107,9 +107,12 @@ const outputs = [
   /**
    * Hero background: a fine, even dot matrix with two broad, slow waves of
    * brightness passing through it. The brightest band picks up the accent
-   * colour. Colours come from the CSS
-   * tokens, so it follows the theme; it pauses off-screen and in hidden tabs,
-   * and draws one still frame under prefers-reduced-motion.
+   * colour. Dots near the pointer light up and follow it with a little lag;
+   * while the pointer is over the hero the wave's accent steps back so the
+   * pointer is the one highlight. Colours come from the CSS tokens, so it
+   * follows the theme; it pauses off-screen and in hidden tabs. Under
+   * prefers-reduced-motion the waves hold still and the pointer highlight
+   * snaps to position instead of easing.
    */
   {
     const canvas = document.querySelector<HTMLCanvasElement>('.hero-bg')
@@ -117,7 +120,10 @@ const outputs = [
     if (canvas && ctx) {
       const GAP = 16
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+      const REACH = 150
       let w = 0, h = 0, faint = '', accent = '', running = false, visible = true, frame = 0
+      // pointer: target position and presence, and the eased values drawn
+      let tx = 0, ty = 0, tOn = 0, px = 0, py = 0, on = 0
 
       const readColours = () => {
         const cs = getComputedStyle(document.documentElement)
@@ -142,15 +148,20 @@ const outputs = [
               (Math.sin(x * 0.004 + y * 0.003 + s * 0.25) +
                 Math.sin(Math.hypot(x - w * 0.75, y - h * 0.35) * 0.008 - s * 0.3)) / 4 + 0.5
             const k = v * v
-            ctx.globalAlpha = 0.1 + k * 0.45
-            ctx.fillStyle = v > 0.8 ? accent : faint
+            const near = on > 0.01 ? Math.max(0, 1 - Math.hypot(x - px, y - py) / REACH) : 0
+            const f = near * near * on
+            ctx.globalAlpha = Math.min(1, 0.1 + k * 0.45 * (1 - f) + f * 0.85)
+            ctx.fillStyle = f > 0.12 || (v > 0.8 && on < 0.5) ? accent : faint
             ctx.beginPath()
-            ctx.arc(x, y, 0.7 + k * 0.9, 0, Math.PI * 2)
+            ctx.arc(x, y, 0.7 + k * 0.9 + f * 1.4, 0, Math.PI * 2)
             ctx.fill()
           }
         }
       }
       const loop = (t: number) => {
+        px += (tx - px) * 0.14
+        py += (ty - py) * 0.14
+        on += (tOn - on) * 0.08
         draw(t)
         frame = requestAnimationFrame(loop)
       }
@@ -168,6 +179,19 @@ const outputs = [
       document.addEventListener('visibilitychange', update)
       matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColours(); draw(performance.now()) })
       new MutationObserver(() => { readColours(); draw(performance.now()) }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+      const hero = canvas.parentElement!
+      hero.addEventListener('pointermove', (e) => {
+        const r = canvas.getBoundingClientRect()
+        tx = e.clientX - r.left
+        ty = e.clientY - r.top
+        if (on < 0.01) { px = tx; py = ty }
+        tOn = 1
+        if (still) { px = tx; py = ty; on = 1; draw(0) }
+      })
+      hero.addEventListener('pointerleave', () => {
+        tOn = 0
+        if (still) { on = 0; draw(0) }
+      })
       update()
     }
   }
