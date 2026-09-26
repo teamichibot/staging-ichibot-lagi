@@ -2,9 +2,9 @@
 /**
  * Positioning corrected 2026-09-23. The section used to claim every product
  * runs on one shared platform, which is not true — use cases diverge too far
- * for that. What Ichibot actually sells is owning the whole chain: getting the
- * data out of the equipment, the edge, storage, the dashboard, the ERP hand-off
- * and the AI on top, either on-premise or in the cloud.
+ * for that. What Ichibot actually sells is every layer of the system:
+ * integration, data collection, AI analytics, dashboards and ERP/MES hand-off.
+ * Copy here is kept plain and descriptive (2026-09-27).
  */
 const protocols = [
   'Modbus RTU', 'Modbus TCP', 'MQTT', 'OPC UA', 'RS-485', 'Ethernet', 'RTSP', 'REST API',
@@ -29,17 +29,17 @@ const net = {
   style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)"
 >
   <div class="wrap">
-    <h2>We build the whole chain, not one link in it</h2>
+    <h2>End-to-end industrial IoT</h2>
     <p class="lede">
-      A weighbridge screen and a soil-moisture screen have almost nothing in common, so
-      there is no single dashboard that fits every plant. What is the same every time is
-      everything underneath it — and we build all of it.
+      We handle every layer of the system: connecting to your machines and sensors,
+      collecting and storing the data, analysing it, and delivering it to dashboards and
+      your ERP or MES.
     </p>
 
     <div class="bento">
       <div class="tile t-2">
-        <h3>Connectivity</h3>
-        <p>We read the equipment you already own — PLCs, VFDs, power meters, IP cameras — and retrofit sensors where there is no data to read yet.</p>
+        <h3>Sensor &amp; Data Integration</h3>
+        <p>Connect PLCs, VFDs, power meters, IP cameras and new sensors using standard industrial protocols.</p>
         <div class="viz">
           <svg class="art" viewBox="0 0 300 74" aria-hidden="true">
             <path class="wire w-a" d="M22 4v22" /><path class="wire w-b" d="M62 4v22" />
@@ -59,8 +59,8 @@ const net = {
       </div>
 
       <div class="tile t-2">
-        <h3>Edge and storage</h3>
-        <p>The edge device collects and logs on site, so history survives a dropped connection and is there later for audits and reports.</p>
+        <h3>Database Collection</h3>
+        <p>Data from every device is collected and stored in a database. The edge device buffers locally, so no data is lost if the network goes down.</p>
         <div class="viz">
           <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
             <path class="rail" d="M6 78h288" />
@@ -79,8 +79,8 @@ const net = {
       </div>
 
       <div class="tile t-2">
-        <h3>AI ready</h3>
-        <p>Vision models and anomaly detection run on the same box that collects the data, so detection does not wait on a round trip to a server.</p>
+        <h3>AI Analytics Ready</h3>
+        <p>Run anomaly detection and computer vision models on your data, on the edge device or on the server.</p>
         <div class="viz">
           <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
             <g class="src">
@@ -104,8 +104,8 @@ const net = {
       </div>
 
       <div class="tile t-3">
-        <h3>Dashboards built for the case</h3>
-        <p>Not one template stretched to fit. A plantation gets soil and irrigation; a substation gets load, power factor and cost per line.</p>
+        <h3>Dashboard Visualization</h3>
+        <p>Dashboards designed for each use case, showing real-time values, trends and alerts.</p>
         <div class="viz two-up">
           <figure>
             <svg class="art" viewBox="0 0 150 86" aria-hidden="true">
@@ -129,8 +129,8 @@ const net = {
       </div>
 
       <div class="tile t-3">
-        <h3>Straight into your ERP</h3>
-        <p>Weighing, production, downtime and energy data land in your ERP or MES without anyone retyping them. Running at Citra Borneo Utama.</p>
+        <h3>ERP/MES Integration</h3>
+        <p>Send production, weighing, downtime and energy data to your ERP or MES automatically. In use at Citra Borneo Utama.</p>
         <div class="viz">
           <svg class="art" viewBox="0 0 300 92" aria-hidden="true">
             <g class="ticket">

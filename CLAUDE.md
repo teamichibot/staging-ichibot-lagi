@@ -121,8 +121,12 @@ it already has, so:
   What Ichibot actually sells is owning the entire chain — connectivity to the
   equipment, the edge, storage, dashboards built per case, the ERP hand-off,
   and AI on top — any of it on-premise or in the cloud. The section is now
-  "We build the whole chain, not one link in it", and the bento maps those
-  stages. Do not restore the old framing from item 4 above.
+  "End-to-end industrial IoT" and the bento maps those stages with plain
+  titles: Sensor & Data Integration, Database Collection, AI Analytics Ready,
+  Dashboard Visualization, ERP/MES Integration. On 2026-09-27 Ichibot asked
+  for this section's copy to be plain and descriptive, not slogan-style
+  ("not one template stretched to fit" and the like). Do not restore the old
+  framing from item 4 above.
 - Language stays **English-first** as specified, with `/id/...` to follow.
 
 Everything else in this brief — layout, design tokens, page structure,
