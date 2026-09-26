@@ -43,52 +43,10 @@ const outputs = [
   { y: 240, icon: 'alert', title: 'Alerts', sub: 'WhatsApp, email, siren' },
   { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections' },
 ]
-
-/**
- * Hero background: faint telemetry traces, the kind of signal the hub reads.
- * Three signal types so it reads as machine data rather than a pattern: a
- * slow analog drift (temperature, pressure), a stepped digital line (a PLC
- * state) and a flat line with spikes (vibration). Seeded, so every build
- * draws the same picture. A few traces carry a travelling accent pulse.
- */
-function traces() {
-  let seed = 7
-  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
-  const W = 1440
-  const step = 16
-  const out: { d: string; live: boolean; delay: number; dur: number }[] = []
-  for (let row = 0, y = 36; y < 720; row++, y += 34) {
-    const kind = row % 3
-    const amp = 5 + rand() * 7
-    let pts: [number, number][] = []
-    let phase = rand() * 6
-    let level = 0
-    for (let x = -step; x <= W + step; x += step) {
-      let v = 0
-      if (kind === 0) v = Math.sin(x / 90 + phase) * amp + Math.sin(x / 37 + phase * 2) * amp * 0.35
-      else if (kind === 1) {
-        if (rand() < 0.12) level = rand() < 0.5 ? -amp : amp * 0.6
-        v = level
-      } else v = rand() < 0.06 ? (rand() - 0.5) * amp * 3.2 : (rand() - 0.5) * 1.6
-      if (kind === 1 && pts.length) pts.push([x, pts[pts.length - 1][1]])
-      pts.push([x, y + v])
-    }
-    const d = 'M' + pts.map(([x, py]) => `${x} ${py.toFixed(1)}`).join('L')
-    const live = row % 5 === 2
-    out.push({ d, live, delay: -rand() * 9, dur: 7 + rand() * 5 })
-  }
-  return out
-}
-const heroTraces = traces()
 ---
 
 <section class="hero">
-  <svg class="hero-bg" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    {heroTraces.map((t) => <path class="trace" d={t.d} />)}
-    {heroTraces.filter((t) => t.live).map((t) => (
-      <path class="trace pulse" pathLength="1000" d={t.d} style={`animation-delay:${t.delay.toFixed(2)}s;animation-duration:${t.dur.toFixed(2)}s`} />
-    ))}
-  </svg>
+  <canvas class="hero-bg" aria-hidden="true"></canvas>
   <div class="wrap">
     <h1>Intelligent industrial hub</h1>
     <p class="lede">We help Indonesian industries connect every machine, see what's happening in real time, and act on it, from the shop floor to your ERP.</p>
@@ -146,6 +104,84 @@ const heroTraces = traces()
 </section>
 
 <script>
+  /**
+   * Hero background: a field of dots whose size and brightness follow a few
+   * slow, overlapping waves, so the field seems to breathe and drift. The
+   * brightest crests pick up the accent colour. Colours come from the CSS
+   * tokens, so it follows the theme; it pauses off-screen and in hidden tabs,
+   * and draws one still frame under prefers-reduced-motion.
+   */
+  {
+    const canvas = document.querySelector<HTMLCanvasElement>('.hero-bg')
+    const ctx = canvas?.getContext('2d')
+    if (canvas && ctx) {
+      const GAP = 22
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+      let w = 0, h = 0, faint = '', accent = '', running = false, visible = true, frame = 0
+
+      const readColours = () => {
+        const cs = getComputedStyle(document.documentElement)
+        faint = cs.getPropertyValue('--faint').trim()
+        accent = cs.getPropertyValue('--accent').trim()
+      }
+      const resize = () => {
+        const dpr = Math.min(devicePixelRatio || 1, 2)
+        w = canvas.clientWidth
+        h = canvas.clientHeight
+        canvas.width = w * dpr
+        canvas.height = h * dpr
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      }
+      // fixed per-dot jitter so the field reads as scattered, not as a grid
+      const jitter = (i: number) => {
+        const v = Math.sin(i * 12.9898) * 43758.5453
+        return (v - Math.floor(v) - 0.5) * GAP * 0.7
+      }
+      const draw = (t: number) => {
+        ctx.clearRect(0, 0, w, h)
+        const s = t / 1000
+        let i = 0
+        for (let gy = GAP / 2; gy < h; gy += GAP) {
+          for (let gx = GAP / 2; gx < w; gx += GAP, i++) {
+            const x = gx + jitter(i)
+            const y = gy + jitter(i + 7919)
+            const v =
+              (Math.sin(x * 0.009 + s * 0.3) +
+                Math.sin(y * 0.014 - s * 0.24) +
+                Math.sin((x + y) * 0.006 + s * 0.18) +
+                Math.sin(Math.hypot(x - w * 0.7, y - h * 0.3) * 0.011 - s * 0.35)) / 8 + 0.5
+            const k = v * v * v * v
+            const crest = v > 0.84
+            ctx.globalAlpha = crest ? 0.35 + (v - 0.84) * 2.5 : 0.08 + k * 0.7
+            ctx.fillStyle = crest ? accent : faint
+            ctx.beginPath()
+            ctx.arc(x, y, 0.4 + k * 3, 0, Math.PI * 2)
+            ctx.fill()
+          }
+        }
+      }
+      const loop = (t: number) => {
+        draw(t)
+        frame = requestAnimationFrame(loop)
+      }
+      const update = () => {
+        const should = visible && !document.hidden && !still
+        if (should && !running) { running = true; frame = requestAnimationFrame(loop) }
+        if (!should && running) { running = false; cancelAnimationFrame(frame) }
+      }
+
+      readColours()
+      resize()
+      draw(0)
+      new ResizeObserver(() => { resize(); draw(performance.now()) }).observe(canvas)
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; update() }).observe(canvas)
+      document.addEventListener('visibilitychange', update)
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColours(); draw(performance.now()) })
+      new MutationObserver(() => { readColours(); draw(performance.now()) }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+      update()
+    }
+  }
+
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const group = document.getElementById('pulses')
   const svg = document.getElementById('hubsvg') as SVGSVGElement | null
