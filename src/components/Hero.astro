@@ -57,7 +57,15 @@ const outputs = [
 
     <div class="stage">
       <div class="window hub" role="img" aria-label="Machines, sensors, cameras and meters send data to the Ichibot system, which delivers it to dashboards, ERP, alerts and AI insights">
-        <div class="window-bar"><b></b><b></b><b></b><span>ichibot system / data flow</span></div>
+        <div class="window-bar" aria-hidden="true">
+          <span class="lights"><b></b><b></b><b></b></span>
+          <span class="win-tab"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" /><circle cx="8" cy="8" r="1.8" /></svg>Data flow<i>×</i></span>
+          <span class="win-new">+</span>
+        </div>
+        <div class="window-toolbar" aria-hidden="true">
+          <span class="nav">‹ ›</span>
+          <span class="omnibox"><svg viewBox="0 0 16 16"><rect x="4" y="7" width="8" height="6" rx="1.2" /><path d="M5.8 7V5.4a2.2 2.2 0 0 1 4.4 0V7" /></svg>ichibot.local/system/data-flow</span>
+        </div>
         <svg id="hubsvg" viewBox="0 0 1000 440">
           <defs>
             <filter id="gl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
