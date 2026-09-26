@@ -1,6 +1,14 @@
 ---
+/**
+ * Site navbar. Desktop: a Products dropdown listing each product (links open
+ * that product's tab via #product-<key>), plain section links, and the survey
+ * CTA; the link for the section in view is marked. Below 880px the links fold
+ * into a menu panel behind a toggle button.
+ */
+import { products } from '../data/products'
+import { productIcons } from '../data/product-icons'
+
 const links = [
-  { href: '#products', label: 'Products' },
   { href: '#platform', label: 'Platform' },
   { href: '#cases', label: 'Case studies' },
   { href: '#services', label: 'Services' },
@@ -10,9 +18,131 @@ const links = [
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Ichibot home"><span class="logo" role="img" aria-label="Ichibot"></span></a>
-    <ul>
-      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-    </ul>
-    <a class="btn primary sm" href="#contact">Book a site survey</a>
+
+    <nav class="nav-links" aria-label="Main">
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn" aria-expanded="false" aria-controls="nav-products" data-section="products">
+          Products
+          <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" /></svg>
+        </button>
+        <div class="nav-panel" id="nav-products">
+          <ul>
+            {products.map((p) => (
+              <li>
+                <a href={`#product-${p.key}`}>
+                  <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
+                  <span>
+                    <b>{p.name}{p.pilot && <em>Pilot</em>}</b>
+                    <small>{p.desc}</small>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="nav-panel-all" href="#products">See all products →</a>
+        </div>
+      </div>
+      {links.map((l) => <a href={l.href} data-section={l.href.slice(1)}>{l.label}</a>)}
+    </nav>
+
+    <div class="nav-end">
+      <a class="btn primary sm nav-cta" href="#contact">Book a site survey</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav-mobile" id="nav-mobile" hidden>
+    <div class="wrap">
+      <small>Products</small>
+      <ul>
+        {products.map((p) => (
+          <li>
+            <a href={`#product-${p.key}`}>
+              <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
+              {p.name}{p.pilot && <em>Pilot</em>}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <small>Company</small>
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+      <a class="btn primary" href="#contact">Book a site survey</a>
+    </div>
   </div>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('header.nav')!
+
+  // Products dropdown: opens on hover (via CSS) and on click/keyboard (via aria-expanded).
+  const drop = header.querySelector<HTMLElement>('.nav-drop')!
+  const dropBtn = drop.querySelector<HTMLButtonElement>('.nav-drop-btn')!
+  const setDrop = (open: boolean) => dropBtn.setAttribute('aria-expanded', String(open))
+  dropBtn.addEventListener('click', () => setDrop(dropBtn.getAttribute('aria-expanded') !== 'true'))
+  drop.addEventListener('focusout', (e) => {
+    if (!drop.contains(e.relatedTarget as Node)) setDrop(false)
+  })
+  drop.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+    setDrop(false)
+    // hover keeps the panel open under the pointer; this closes it after a pick
+    drop.classList.add('picked')
+  }))
+  drop.addEventListener('mouseleave', () => drop.classList.remove('picked'))
+
+  // Mobile menu
+  const toggle = header.querySelector<HTMLButtonElement>('.nav-toggle')!
+  const mobile = header.querySelector<HTMLElement>('.nav-mobile')!
+  const setMobile = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open))
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+    mobile.hidden = !open
+    header.classList.toggle('menu-open', open)
+  }
+  toggle.addEventListener('click', () => setMobile(mobile.hidden))
+  mobile.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMobile(false)))
+  matchMedia('(min-width: 881px)').addEventListener('change', (e) => e.matches && setMobile(false))
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return
+    if (dropBtn.getAttribute('aria-expanded') === 'true') {
+      setDrop(false)
+      dropBtn.focus()
+    }
+    if (!mobile.hidden) {
+      setMobile(false)
+      toggle.focus()
+    }
+  })
+  document.addEventListener('click', (e) => {
+    if (!drop.contains(e.target as Node)) setDrop(false)
+  })
+
+  // Shadow once the page scrolls under the bar
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 4)
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+
+  // Mark the link for the section in view
+  const navItems = Array.from(header.querySelectorAll<HTMLElement>('.nav-links [data-section]'))
+  const sections = navItems
+    .map((el) => document.getElementById(el.dataset.section!))
+    .filter((s): s is HTMLElement => !!s)
+  const inView = new Set<string>()
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) e.isIntersecting ? inView.add(e.target.id) : inView.delete(e.target.id)
+      const current = sections.find((s) => inView.has(s.id))?.id
+      for (const el of navItems) {
+        if (el.dataset.section === current) el.setAttribute('aria-current', 'true')
+        else el.removeAttribute('aria-current')
+      }
+    },
+    // a section counts as current while it crosses a band just under the bar
+    { rootMargin: '-80px 0px -60% 0px' },
+  )
+  sections.forEach((s) => spy.observe(s))
+</script>
