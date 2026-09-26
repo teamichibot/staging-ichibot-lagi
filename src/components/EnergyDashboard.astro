@@ -5,11 +5,11 @@
  * the ones from the anonymised capture (Power Meter 1 / Production room A);
  * no client is named.
  *
- * It is laid out at a fixed design width and scaled to fit its container by
- * a small script, so on a phone it shrinks like a picture instead of
- * reflowing into a long column. Colours come from the site tokens, so it
- * follows light and dark.
+ * Laid out at a fixed design width inside ReplicaFit, which scales it to its
+ * container. Colours come from the site tokens, so it follows light and dark.
  */
+import ReplicaFit from './ReplicaFit.astro'
+
 const W = 1040
 
 /** Seeded, so every build draws the same spikes. */
@@ -79,8 +79,8 @@ const meters = [
 const ranges = ['1H', '1D', '7D', '30D', 'This month']
 ---
 
-<div class="edash-fit">
-  <div class="edash" style={`width:${W}px`} role="img" aria-label="Power monitoring dashboard with two power meters showing apparent power, a 30-day trend, per-phase readings, total energy and estimated bill">
+<ReplicaFit width={W} label="Power monitoring dashboard with two power meters showing apparent power, a 30-day trend, per-phase readings, total energy and estimated bill">
+  <div class="edash">
     <header class="ed-top">
       <span class="ed-brand">
         <svg viewBox="0 0 20 20"><path d="M1 11h4l2.5-6 4 11 2.5-7H19" /></svg>
@@ -138,24 +138,13 @@ const ranges = ['1H', '1D', '7D', '30D', 'This month']
       ))}
     </div>
   </div>
-</div>
+</ReplicaFit>
 
 <script>
-  // Scale the fixed-width dashboard to its container, like an image would.
-  // Also tick the clock and nudge the big VA readings so it reads as live
-  // (skipped under prefers-reduced-motion).
-  for (const fit of document.querySelectorAll<HTMLElement>('.edash-fit')) {
-    const dash = fit.querySelector<HTMLElement>('.edash')!
-    const size = () => {
-      const s = Math.min(1, fit.clientWidth / dash.offsetWidth)
-      dash.style.transform = `scale(${s})`
-      fit.style.height = `${dash.offsetHeight * s}px`
-    }
-    new ResizeObserver(size).observe(fit)
-    fit.classList.add('scaled')
-    size()
-
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue
+  // Tick the clock and nudge the big VA readings so it reads as live, while
+  // on screen and not under prefers-reduced-motion.
+  for (const dash of document.querySelectorAll<HTMLElement>('.edash')) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) break
     const clock = dash.querySelector<HTMLElement>('[data-clock]')
     const vas = Array.from(dash.querySelectorAll<HTMLElement>('[data-va]'))
     let t = new Date(2026, 8, 27, 9, 42, 10).getTime()
@@ -175,6 +164,6 @@ const ranges = ['1H', '1D', '7D', '30D', 'This month']
     new IntersectionObserver(([e]) => {
       clearInterval(timer)
       if (e.isIntersecting) timer = window.setInterval(tick, 1000)
-    }).observe(fit)
+    }).observe(dash)
   }
 </script>

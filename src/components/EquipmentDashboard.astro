@@ -1,0 +1,250 @@
+---
+/**
+ * An HTML replica of the compressor monitoring dashboard, used in place of a
+ * screenshot on the Smart equipment monitoring product. A CCTV-style live
+ * view of the machine, run and load hours, gauges and trend charts. Readings
+ * are illustrative and name no client; the machine picture is the ES300
+ * render the dashboard itself uses.
+ *
+ * Laid out at a fixed width inside ReplicaFit. While on screen the clock
+ * ticks, readings drift and the charts scroll, except under
+ * prefers-reduced-motion.
+ */
+import { Image } from 'astro:assets'
+import ReplicaFit from './ReplicaFit.astro'
+import machine from '../assets/products/compressor-es300.jpg'
+
+const W = 1040
+
+/** Seeded noise, so every build draws the same history. */
+function rng(seed: number) {
+  let s = seed
+  return () => ((s = (s * 16807) % 2147483647) / 2147483647)
+}
+
+type Reading = {
+  key: string
+  name: string
+  unit: string
+  value: number
+  dp: number
+  min: number
+  max: number
+  warnAt?: number
+  step: number
+  seed: number
+  /** y-range of the trend chart, tighter than the gauge so movement shows */
+  lo?: number
+  hi?: number
+}
+const readings: Reading[] = [
+  { key: 'out', name: 'Output pressure', unit: 'bar', value: 7.2, dp: 1, min: 0, max: 10, step: 0.08, seed: 3, lo: 6.2, hi: 8.0 },
+  { key: 'oilp', name: 'Oil pressure', unit: 'bar', value: 2.0, dp: 1, min: 0, max: 5, step: 0.05, seed: 5, lo: 1.5, hi: 2.5 },
+  { key: 'vib', name: 'Vibration', unit: 'mm/s', value: 6.4, dp: 1, min: 0, max: 12, warnAt: 6, step: 0.25, seed: 7, lo: 2.5, hi: 8.5 },
+  { key: 'dp', name: 'Differential pressure', unit: 'bar', value: 0.3, dp: 2, min: 0, max: 1, step: 0.02, seed: 9 },
+]
+const charts: Reading[] = [
+  { key: 'temp', name: 'Oil temperature', unit: '°C', value: 56.7, dp: 1, min: 40, max: 90, warnAt: 80, step: 0.6, seed: 13, lo: 40, hi: 85 },
+  readings[0],
+  readings[1],
+  readings[2],
+]
+
+/** Gauge: a 240° arc, drawn once; the value is a dash along it. */
+const G = { cx: 60, cy: 58, r: 44 }
+const polar = (deg: number) => {
+  const a = ((deg - 90) * Math.PI) / 180
+  return [G.cx + G.r * Math.cos(a), G.cy + G.r * Math.sin(a)]
+}
+const [sx, sy] = polar(-120)
+const [ex, ey] = polar(120)
+const arc = `M${sx.toFixed(2)} ${sy.toFixed(2)}A${G.r} ${G.r} 0 1 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`
+const pct = (r: Reading) => Math.round(((r.value - r.min) / (r.max - r.min)) * 100)
+const ticks = Array.from({ length: 9 }, (_, i) => {
+  const deg = -120 + i * 30
+  const a = ((deg - 90) * Math.PI) / 180
+  return [G.cx + (G.r - 9) * Math.cos(a), G.cy + (G.r - 9) * Math.sin(a), G.cx + (G.r - 5) * Math.cos(a), G.cy + (G.r - 5) * Math.sin(a)]
+})
+
+const CW = 300
+const CH = 70
+const lo = (r: Reading) => r.lo ?? r.min
+const hi = (r: Reading) => r.hi ?? r.max
+/** 24 h of history: a daily load swing plus noise, ending on the current value. */
+const history = (r: Reading) => {
+  const rand = rng(r.seed)
+  const span = hi(r) - lo(r)
+  const n = 48
+  const raw = Array.from({ length: n }, (_, i) =>
+    Math.sin((i / n) * Math.PI * 2 + r.seed) * span * 0.16 + (rand() - 0.5) * span * 0.12,
+  )
+  const shift = r.value - raw[n - 1]
+  return raw.map((v) => Math.min(hi(r), Math.max(lo(r), v + shift)))
+}
+const yOf = (v: number, r: Reading) => CH - ((v - lo(r)) / (hi(r) - lo(r))) * CH
+const toPoints = (vals: number[], r: Reading) =>
+  vals.map((v, i) => `${((i / (vals.length - 1)) * CW).toFixed(1)},${yOf(v, r).toFixed(1)}`).join(' ')
+---
+
+<ReplicaFit width={W} label="Compressor monitoring dashboard with a live camera view, run and load hours, pressure, vibration and temperature gauges and trend charts">
+  <div class="qdash">
+    <header class="qd-top">
+      <span class="qd-brand">
+        <span class="qd-logo"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="11" rx="2" /><path d="M6 5V3h8v2M7 9h6M7 12h4" /></svg></span>
+        <span><b>Compressor ES300</b><small><i></i>Online · compressor/line-2</small></span>
+      </span>
+      <span class="qd-ranges"><em>1H</em><em>6H</em><em class="on">24H</em><em>7D</em></span>
+      <span class="qd-clock" data-qclock>27 Sep 2026 · 09:42:10</span>
+    </header>
+
+    <div class="qd-body">
+      <div class="qd-left">
+        <section class="qd-card qd-cam">
+          <div class="qd-cam-view">
+            <Image src={machine} alt="" width={440} loading="lazy" />
+            <span class="qd-scan"></span>
+            <span class="qd-box"><em>ES300 · running</em></span>
+            <span class="qd-osd qd-osd-tl">CAM-02 · Compressor room</span>
+            <span class="qd-osd qd-osd-tr"><i></i>LIVE</span>
+            <span class="qd-osd qd-osd-bl" data-qcamclock>2026-09-27 09:42:10</span>
+            <span class="qd-osd qd-osd-br">1080p · 25 fps</span>
+          </div>
+        </section>
+
+        <section class="qd-card">
+          <div class="qd-card-head"><b>Uptime</b><small>Service interval 90,000 h</small></div>
+          <div class="qd-hours">
+            <div class="qd-hour warn">
+              <small>Run hours</small>
+              <b>89,675<em> h</em></b>
+              <span>Service due soon</span>
+            </div>
+            <div class="qd-hour">
+              <small>Load hours</small>
+              <b>60,715<em> h</em></b>
+              <span>Normal</span>
+            </div>
+          </div>
+          <div class="qd-ratio">
+            <div><span>Load ratio</span><b>67.7%</b></div>
+            <div class="qd-bar"><i style="width:67.7%"></i></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="qd-right">
+        <div class="qd-gauges">
+          {readings.map((r) => {
+            const warn = r.warnAt !== undefined && r.value >= r.warnAt
+            return (
+              <section class:list={['qd-card', 'qd-gauge', { warn }]} data-gauge={r.key} data-min={r.min} data-max={r.max} data-warn={r.warnAt ?? ''}>
+                <div class="qd-card-head"><b>{r.name}</b></div>
+                <svg viewBox="0 0 120 84">
+                  <path class="qd-track" d={arc} />
+                  <path class="qd-val" d={arc} pathLength="100" style={`stroke-dasharray:${pct(r)} 100`} />
+                  {ticks.map(([x1, y1, x2, y2]) => <line class="qd-tick" x1={x1} y1={y1} x2={x2} y2={y2} />)}
+                  <g class="qd-needle" style={`transform:rotate(${-120 + pct(r) * 2.4}deg)`}>
+                    <line x1={G.cx} y1={G.cy} x2={G.cx} y2={G.cy - G.r + 14} />
+                  </g>
+                  <circle class="qd-hub" cx={G.cx} cy={G.cy} r="3.5" />
+                  <text x="14" y="82">{r.min}</text>
+                  <text x="106" y="82" text-anchor="end">{r.max}</text>
+                </svg>
+                <div class="qd-reading"><b data-val={r.key} data-dp={r.dp} data-step={r.step} data-base={r.value}>{r.value.toFixed(r.dp)}</b><span>{r.unit}</span></div>
+                <small class="qd-state">{warn ? 'Above alert level' : 'Within range'}</small>
+              </section>
+            )
+          })}
+        </div>
+
+        <div class="qd-charts">
+          {charts.map((r) => {
+            const vals = history(r)
+            const warn = r.warnAt !== undefined && r.value >= r.warnAt
+            return (
+              <section class:list={['qd-card', 'qd-chart', { warn }]} data-chart={r.key} data-min={lo(r)} data-max={hi(r)} data-vals={vals.map((v) => v.toFixed(3)).join(',')}>
+                <div class="qd-card-head">
+                  <b>{r.name}</b>
+                  <span class="qd-now"><b data-val={r.key} data-dp={r.dp} data-step={r.step} data-base={r.value}>{r.value.toFixed(r.dp)}</b> {r.unit}</span>
+                </div>
+                <svg viewBox={`0 0 ${CW} ${CH}`} preserveAspectRatio="none">
+                  {r.warnAt !== undefined && (
+                    <line class="qd-limit" x1="0" x2={CW} y1={yOf(r.warnAt, r)} y2={yOf(r.warnAt, r)} />
+                  )}
+                  <polygon class="qd-area" points={`0,${CH} ${toPoints(vals, r)} ${CW},${CH}`} />
+                  <polyline class="qd-line" points={toPoints(vals, r)} />
+                </svg>
+                <div class="qd-axis"><span>-24h</span><span>-12h</span><span>now</span></div>
+              </section>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+</ReplicaFit>
+
+<script>
+  // Live feel while on screen: clocks tick, readings drift around their base,
+  // gauges follow, and each chart scrolls one step. Off under reduced motion.
+  for (const dash of document.querySelectorAll<HTMLElement>('.qdash')) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) break
+    const clock = dash.querySelector<HTMLElement>('[data-qclock]')
+    const camClock = dash.querySelector<HTMLElement>('[data-qcamclock]')
+    const CW = 300
+    const CH = 70
+    const current: Record<string, number> = {}
+    let t = new Date(2026, 8, 27, 9, 42, 10).getTime()
+    let timer = 0
+
+    const tick = () => {
+      t += 1000
+      const d = new Date(t)
+      const p = (n: number) => String(n).padStart(2, '0')
+      const hms = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`
+      if (clock) clock.textContent = `27 Sep 2026 · ${hms}`
+      if (camClock) camClock.textContent = `2026-09-27 ${hms}`
+
+      // one new value per reading, shared by its gauge and its chart
+      const seen = new Set<string>()
+      for (const el of dash.querySelectorAll<HTMLElement>('[data-val]')) {
+        const key = el.dataset.val!
+        if (!seen.has(key)) {
+          seen.add(key)
+          const base = Number(el.dataset.base)
+          const step = Number(el.dataset.step)
+          const prev = current[key] ?? base
+          current[key] = prev + (Math.random() - 0.5) * 2 * step + (base - prev) * 0.2
+        }
+        el.textContent = current[key].toFixed(Number(el.dataset.dp))
+      }
+
+      for (const g of dash.querySelectorAll<HTMLElement>('[data-gauge]')) {
+        const v = current[g.dataset.gauge!]
+        const min = Number(g.dataset.min)
+        const max = Number(g.dataset.max)
+        const pct = Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100))
+        g.querySelector<SVGPathElement>('.qd-val')!.style.strokeDasharray = `${pct} 100`
+        g.querySelector<SVGGElement>('.qd-needle')!.style.transform = `rotate(${-120 + pct * 2.4}deg)`
+        if (g.dataset.warn) g.classList.toggle('warn', v >= Number(g.dataset.warn))
+      }
+
+      for (const c of dash.querySelectorAll<HTMLElement>('[data-chart]')) {
+        const min = Number(c.dataset.min)
+        const max = Number(c.dataset.max)
+        const vals = c.dataset.vals!.split(',').map(Number)
+        vals.shift()
+        vals.push(current[c.dataset.chart!])
+        c.dataset.vals = vals.map((v) => v.toFixed(3)).join(',')
+        const pts = vals.map((v, i) => `${((i / (vals.length - 1)) * CW).toFixed(1)},${(CH - ((v - min) / (max - min)) * CH).toFixed(1)}`).join(' ')
+        c.querySelector('.qd-line')!.setAttribute('points', pts)
+        c.querySelector('.qd-area')!.setAttribute('points', `0,${CH} ${pts} ${CW},${CH}`)
+      }
+    }
+
+    new IntersectionObserver(([e]) => {
+      clearInterval(timer)
+      if (e.isIntersecting) timer = window.setInterval(tick, 1000)
+    }).observe(dash)
+  }
+</script>

@@ -1,4 +1,3 @@
-import equipmentDashboard from '../assets/products/equipment-monitoring-dashboard.jpg'
 import plantationDashboard from '../assets/products/smart-plantation-dashboard.jpg'
 
 /**
@@ -30,7 +29,7 @@ export type Product = {
    * A dashboard rebuilt in HTML instead of a screenshot: crisp at any size and
    * follows the site theme. Takes precedence over `screenshot`.
    */
-  replica?: 'energy'
+  replica?: 'energy' | 'equipment'
   /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
@@ -67,7 +66,7 @@ export const products: Product[] = [
       'PT Garam: main pump automation',
     ],
     deploymentTime: 'Live in [X] weeks',
-    screenshot: equipmentDashboard,
+    replica: 'equipment',
     mock: {
       top: 'Compressor ES300',
       metrics: [['7.2 bar', 'Pressure'], ['68 °C', 'Temperature'], ['2.1 mm/s', 'Vibration']],

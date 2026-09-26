@@ -1,0 +1,33 @@
+---
+/**
+ * Holds a dashboard replica laid out at a fixed design width and scales it to
+ * its container, so on a phone it shrinks like a picture instead of
+ * reflowing. Without JS it scrolls sideways at full size.
+ */
+interface Props {
+  width: number
+  label: string
+}
+const { width, label } = Astro.props
+---
+
+<div class="replica-fit">
+  <div class="replica" style={`width:${width}px`} role="img" aria-label={label}>
+    <slot />
+  </div>
+</div>
+
+<script>
+  for (const fit of document.querySelectorAll<HTMLElement>('.replica-fit')) {
+    const inner = fit.querySelector<HTMLElement>('.replica')!
+    const size = () => {
+      const s = Math.min(1, fit.clientWidth / inner.offsetWidth)
+      inner.style.transform = `scale(${s})`
+      fit.style.height = `${inner.offsetHeight * s}px`
+    }
+    new ResizeObserver(size).observe(fit)
+    new ResizeObserver(size).observe(inner)
+    fit.classList.add('scaled')
+    size()
+  }
+</script>
