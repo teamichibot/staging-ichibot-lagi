@@ -154,20 +154,29 @@ header.nav{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,
 :root[data-theme="dark"] .logo-row img.light-mark{filter:grayscale(1) brightness(1.4) opacity(.9)}
 
 /* products tabs */
-/* browser-style tabs: the selected tab shares the panel's surface and border
-   and overlaps its top edge by 1px, so tab and panel read as one sheet */
-.tabs{margin-top:3rem}
-.tablist{display:flex;gap:2px;padding:0 .9rem;margin-bottom:-1px;position:relative;z-index:1;overflow-x:auto;scrollbar-width:none}
+/* Chrome-style tabs. The strip and the panel share one frame: the strip is
+   the frame colour, the selected tab and the panel are one surface, and the
+   tab's bottom corners flare outwards into the panel. No borders on the tabs
+   themselves — fill does the separating, as in the browser. */
+.tabs{--strip:var(--bg2);margin-top:3rem;background:var(--strip);border:1px solid var(--border2);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.tabs .panel{border:0;border-radius:0;box-shadow:none}
+/* in dark mode bg2 sits too close to the panel colour; the page colour gives the strip real contrast */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabs{--strip:var(--bg)}}
+:root[data-theme="dark"] .tabs{--strip:var(--bg)}
+.tablist{display:flex;padding:.55rem .8rem 0;overflow-x:auto;scrollbar-width:none}
 .tablist::-webkit-scrollbar{display:none}
-/* on narrow screens the strip scrolls; fade the right edge so the next tab reads as "more" */
-@media (max-width:900px){.tablist{padding:0 2rem 0 .5rem;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}}
-.tab{position:relative;display:flex;align-items:center;gap:.55rem;flex:none;white-space:nowrap;font:inherit;font-size:.92rem;font-weight:500;color:var(--muted);
-  background:transparent;border:1px solid transparent;border-bottom:0;border-radius:12px 12px 0 0;padding:.75rem 1.15rem .8rem;cursor:pointer;transition:background .15s,color .15s}
-.tab:hover{color:var(--text);background:var(--bg2)}
-.tab[aria-selected="true"]{color:var(--text);background:var(--panel);border-color:var(--border2)}
-/* a divider between two unselected neighbours, as in a browser tab strip */
-.tab:not([aria-selected="true"])+.tab:not([aria-selected="true"])::before{content:"";position:absolute;left:-2px;top:30%;bottom:30%;width:1px;background:var(--border2)}
-.tab:hover::before,.tab:hover+.tab::before{opacity:0}
+@media (max-width:900px){.tablist{padding-right:2rem;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}}
+.tab{--flare:10px;position:relative;display:flex;align-items:center;gap:.55rem;flex:none;white-space:nowrap;font:inherit;font-size:.9rem;font-weight:500;color:var(--muted);
+  border:0;border-radius:10px 10px 0 0;padding:.62rem 1.1rem .7rem;cursor:pointer;transition:background-color .15s,color .15s;
+  /* the divider between unselected neighbours is a background line, so both pseudo-elements stay free for the flares */
+  background:transparent}
+.tab+.tab{background:linear-gradient(var(--border2),var(--border2)) left center/1px 44% no-repeat}
+.tab:hover{color:var(--text);background:color-mix(in srgb,var(--panel) 55%,transparent)}
+.tab:hover+.tab,.tab[aria-selected="true"]+.tab{background-image:none}
+.tab[aria-selected="true"]{color:var(--text);background:var(--panel);z-index:1}
+.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{content:"";position:absolute;bottom:0;width:var(--flare);height:var(--flare);pointer-events:none}
+.tab[aria-selected="true"]::before{left:calc(-1 * var(--flare));background:radial-gradient(circle at 0 0,transparent calc(var(--flare) - .5px),var(--panel) var(--flare))}
+.tab[aria-selected="true"]::after{right:calc(-1 * var(--flare));background:radial-gradient(circle at 100% 0,transparent calc(var(--flare) - .5px),var(--panel) var(--flare))}
 .tab .ic{width:18px;height:18px;display:grid;place-items:center;flex:none;color:var(--faint)}
 .tab[aria-selected="true"] .ic{color:var(--accent)}
 .tab .ic svg{width:16px;height:16px}
