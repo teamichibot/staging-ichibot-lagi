@@ -43,9 +43,52 @@ const outputs = [
   { y: 240, icon: 'alert', title: 'Alerts', sub: 'WhatsApp, email, siren' },
   { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections' },
 ]
+
+/**
+ * Hero background: faint telemetry traces, the kind of signal the hub reads.
+ * Three signal types so it reads as machine data rather than a pattern: a
+ * slow analog drift (temperature, pressure), a stepped digital line (a PLC
+ * state) and a flat line with spikes (vibration). Seeded, so every build
+ * draws the same picture. A few traces carry a travelling accent pulse.
+ */
+function traces() {
+  let seed = 7
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+  const W = 1440
+  const step = 16
+  const out: { d: string; live: boolean; delay: number; dur: number }[] = []
+  for (let row = 0, y = 36; y < 720; row++, y += 34) {
+    const kind = row % 3
+    const amp = 5 + rand() * 7
+    let pts: [number, number][] = []
+    let phase = rand() * 6
+    let level = 0
+    for (let x = -step; x <= W + step; x += step) {
+      let v = 0
+      if (kind === 0) v = Math.sin(x / 90 + phase) * amp + Math.sin(x / 37 + phase * 2) * amp * 0.35
+      else if (kind === 1) {
+        if (rand() < 0.12) level = rand() < 0.5 ? -amp : amp * 0.6
+        v = level
+      } else v = rand() < 0.06 ? (rand() - 0.5) * amp * 3.2 : (rand() - 0.5) * 1.6
+      if (kind === 1 && pts.length) pts.push([x, pts[pts.length - 1][1]])
+      pts.push([x, y + v])
+    }
+    const d = 'M' + pts.map(([x, py]) => `${x} ${py.toFixed(1)}`).join('L')
+    const live = row % 5 === 2
+    out.push({ d, live, delay: -rand() * 9, dur: 7 + rand() * 5 })
+  }
+  return out
+}
+const heroTraces = traces()
 ---
 
 <section class="hero">
+  <svg class="hero-bg" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    {heroTraces.map((t) => <path class="trace" d={t.d} />)}
+    {heroTraces.filter((t) => t.live).map((t) => (
+      <path class="trace pulse" pathLength="1000" d={t.d} style={`animation-delay:${t.delay.toFixed(2)}s;animation-duration:${t.dur.toFixed(2)}s`} />
+    ))}
+  </svg>
   <div class="wrap">
     <h1>Intelligent industrial hub</h1>
     <p class="lede">We help Indonesian industries connect every machine, see what's happening in real time, and act on it, from the shop floor to your ERP.</p>
