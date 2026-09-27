@@ -1,0 +1,9 @@
+---
+/**
+ * The admin panel is the old Next.js site's, deployed on its own at
+ * admin.ichibot.id (branch admin-standalone) against the same Supabase.
+ * Old bookmarks to www.ichibot.id/admin/... land there.
+ */
+const path = Astro.params.path ? `/${Astro.params.path}` : ''
+return Astro.redirect(`https://admin.ichibot.id/admin${path}${Astro.url.search}`, 302)
+---
