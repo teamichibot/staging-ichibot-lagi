@@ -1,15 +1,59 @@
 ---
-// Carried over from the approved draft.
+import { EMAIL, OLD_SITE, WHATSAPP_NUMBER, socials, whatsappLink } from '../lib/contact'
+
+/**
+ * Contact details, social links and the About, Insights, Internship and
+ * ecosystem URLs are the ones the current site uses. About and Insights point
+ * at pages on www.ichibot.id until v2 has its own.
+ */
+const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
+const ext = { target: '_blank', rel: 'noopener' }
 ---
 
 <footer class="site">
   <div class="wrap">
     <div class="foot">
-      <div><a class="brand" href="#" aria-label="Ichibot"><span class="logo" role="img" aria-label="Ichibot"></span></a><p style="color:var(--muted);margin-top:.9rem;max-width:30ch">PT Gagas Anagata Semesta. Intelligent industrial hub from Yogyakarta, Indonesia.</p></div>
-      <div><h4>Products</h4><ul><li><a href="#product-energy">Smart energy monitoring</a></li><li><a href="#product-equip">Smart equipment monitoring</a></li><li><a href="#product-plant">Smart plantation system</a></li><li><a href="#product-vision">AI Vision Engine</a></li></ul></div>
-      <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Case studies</a></li><li><a href="#">Insights</a></li><li><a href="#">Careers</a></li></ul></div>
-      <div><h4>Ecosystem</h4><ul><li><a href="#">Ichibot Store</a></li><li><a href="#">Ichibot Robotics</a></li><li><a href="#">Training</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div>
+        <a class="brand" href="/" aria-label="Ichibot home"><span class="logo" role="img" aria-label="Ichibot"></span></a>
+        <p class="foot-about">PT Gagas Anagata Semesta. Intelligent industrial hub from Yogyakarta, Indonesia.</p>
+        <ul class="foot-contact">
+          <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          <li><a href={whatsappLink} {...ext}>WhatsApp {waDisplay}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#product-energy">Smart energy monitoring</a></li>
+          <li><a href="#product-equip">Smart equipment monitoring</a></li>
+          <li><a href="#product-plant">Smart plantation system</a></li>
+          <li><a href="#product-vision">AI Vision Engine</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href={`${OLD_SITE}/about`}>About</a></li>
+          <li><a href="#cases">Case studies</a></li>
+          <li><a href={`${OLD_SITE}/blog`}>Insights</a></li>
+          <li><a href="https://internship.ichibot.id" {...ext}>Internship</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ecosystem</h4>
+        <ul>
+          <li><a href="https://www.store.ichibot.id" {...ext}>Ichibot Store</a></li>
+          <li><a href="https://robotics.ichibot.id" {...ext}>Ichibot Robotics</a></li>
+          <li><a href="#services">Training</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="legal"><span>© 2026 PT Gagas Anagata Semesta</span><span>[Office address, email, WhatsApp, social links]</span></div>
+    <div class="legal">
+      <span>© 2026 PT Gagas Anagata Semesta</span>
+      <span class="foot-social">
+        {socials.map((s) => <a href={s.href} {...ext}>{s.label}</a>)}
+      </span>
+    </div>
   </div>
 </footer>
