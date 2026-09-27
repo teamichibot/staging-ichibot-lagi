@@ -5,7 +5,7 @@
  * CTA; the link for the section in view is marked. Below 880px the links fold
  * into a menu panel behind a toggle button.
  */
-import { products } from '../data/products'
+import { getProducts } from '../lib/content'
 import { productIcons } from '../data/product-icons'
 
 const links = [
@@ -13,6 +13,8 @@ const links = [
   { href: '#cases', label: 'Case studies' },
   { href: '#services', label: 'Services' },
 ]
+
+const products = await getProducts()
 ---
 
 <header class="nav">

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { products } from '../data/products'
+import { getProducts } from '../lib/content'
 import { productIcons } from '../data/product-icons'
 import EnergyDashboard from './EnergyDashboard.astro'
 import EquipmentDashboard from './EquipmentDashboard.astro'
@@ -19,6 +19,8 @@ function sparkPoints(values: number[]) {
     .map((y, i) => `${(i * step).toFixed(1)},${(h - (y / max) * h * 0.9).toFixed(1)}`)
     .join(' ')
 }
+
+const products = await getProducts()
 ---
 
 <section id="products">
