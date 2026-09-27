@@ -4,7 +4,10 @@ import { getClientLogos } from '../lib/site-data'
 /**
  * Client logos, read live from Supabase (`site_data.clients.industry`), the
  * list managed in the admin panel under Logo Klien, so adding or reordering a
- * client there changes this row without a deploy.
+ * client there changes this row without a deploy. Images go through
+ * /client-logo/<id>, which serves each one from our origin with CDN caching,
+ * and load eagerly: lazy loading never fires for logos parked off-screen in
+ * the moving track, which left the row empty on phones.
  *
  * The logos come from many hosts in many colours, so they get one treatment:
  * grayscale in light mode, grayscale-inverted in dark mode (a white JPG
@@ -28,7 +31,7 @@ const logos = await getClientLogos()
             <ul class="marquee-list" aria-hidden={copy === 1 ? 'true' : undefined}>
               {logos.map((c) => (
                 <li>
-                  <img src={c.logo} alt={copy === 0 ? c.name : ''} loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                  <img src={`/client-logo/${encodeURIComponent(c.id)}`} alt={copy === 0 ? c.name : ''} decoding="async" />
                 </li>
               ))}
             </ul>

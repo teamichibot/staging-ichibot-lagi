@@ -48,7 +48,7 @@ const cards = studies.map((s) => {
               <div class="case-info">
                 <div class="case-meta">
                   {c.client && (
-                    <img class="case-logo" src={c.client.logo} alt={c.client.name} loading="lazy" referrerpolicy="no-referrer" />
+                    <img class="case-logo" src={`/client-logo/${encodeURIComponent(c.client.id)}`} alt={c.client.name} loading="lazy" />
                   )}
                   {c.tag && (
                     <span class="case-tag">
