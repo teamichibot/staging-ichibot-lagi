@@ -167,7 +167,12 @@ function sparkPoints(values: number[]) {
           panel.classList.add('swap')
         }
       })
-      tabs[index].scrollIntoView({ block: 'nearest', inline: 'nearest' })
+      // Bring the picked tab to the start of the strip (where it scrolls, on
+      // narrow screens) so the tabs after it stay in view and read as more
+      // options. Only the strip scrolls; the page does not move.
+      const pad = parseFloat(getComputedStyle(tablist!).paddingLeft) || 0
+      const left = tablist!.scrollLeft + tabs[index].getBoundingClientRect().left - tablist!.getBoundingClientRect().left - pad
+      tablist!.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
       if (moveFocus) tabs[index].focus()
     }
 
