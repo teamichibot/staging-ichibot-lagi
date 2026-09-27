@@ -145,7 +145,7 @@ header.nav.menu-open{background:var(--bg)}
 .hero .wrap{position:relative;text-align:center}
 .hero h1{font-size:clamp(2.8rem,8.5vw,6rem);font-weight:650;line-height:.98;letter-spacing:-.045em;margin:1.4rem auto 0;max-width:12ch;
   background:linear-gradient(180deg,var(--h1a) 30%,var(--h1b));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero .lede{margin:1.5rem auto 0;font-size:clamp(1.05rem,1.8vw,1.25rem);max-width:52ch}
+.hero .lede{margin:1.5rem auto 0;font-size:clamp(1.05rem,1.8vw,1.25rem);max-width:64ch;text-wrap:balance}
 .hero .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:.7rem;margin-top:2.2rem}
 .stage{position:relative;margin-top:clamp(3rem,7vw,5rem)}
 .stage::before{content:"";position:absolute;left:50%;top:40%;width:80%;height:70%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--glow),transparent);filter:blur(30px);pointer-events:none}
