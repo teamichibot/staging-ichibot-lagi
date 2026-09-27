@@ -110,12 +110,15 @@ const scalable = (label: string, value: string) => {
             <span class="ed-ok" data-status>✓ NORMAL</span>
           </div>
 
+          <div class="ed-top-row">
+          <div class="ed-now">
           <div class="ed-big">
             <b data-va>{m.va.toLocaleString('en-US')}</b><span>VA</span>
           </div>
           <p class="ed-sub">Apparent Power <b data-pct>{m.pct}%</b><br />of <b>{m.capacity} VA</b> capacity</p>
           <div class="ed-bar"><i data-bar style={`width:${Math.max(m.pct, 3)}%`}></i></div>
           <p class="ed-cap">Percentage of apparent power usage</p>
+          </div>
 
           <div class="ed-trend">
             <div class="ed-trend-head"><span>Apparent power</span><span>30D</span></div>
@@ -126,6 +129,7 @@ const scalable = (label: string, value: string) => {
               <div data-peak={Number(m.peak.replace(/,/g, ''))}><small>Peak</small><b><span data-peak-va>{m.peak}</span> <em>VA · <span data-peak-pct>{m.peakPct}</span></em></b><small data-peak-at>{m.peakAt}</small></div>
               <div><small>Total (avg)</small><b>{m.avg} <em>kVA</em></b><small>Total in selected range</small></div>
             </div>
+          </div>
           </div>
 
           <div class="ed-grid" style={`grid-template-columns:repeat(${m.grid},1fr)`}>
@@ -145,9 +149,11 @@ const scalable = (label: string, value: string) => {
               <span><b>Range 30D</b><small>24 Aug, 05:25 → 23 Sep, 05:25</small></span>
               <span class="ed-reading">{m.reading}</span>
             </div>
-            <div class="ed-row"><span>Total energy</span><b class="ed-green">{m.energy}</b></div>
-            <div class="ed-row"><span>Estimated bill</span><b class="ed-green">{m.bill}</b></div>
-            <div class="ed-row ed-tariff"><span>Active tariff</span><span>{m.tariff}</span></div>
+            <div class="ed-range-vals">
+              <div><small>Total energy</small><b class="ed-green">{m.energy}</b></div>
+              <div><small>Estimated bill</small><b class="ed-green">{m.bill}</b></div>
+              <div><small>Active tariff</small><b>{m.tariff}</b></div>
+            </div>
           </div>
         </section>
       ))}
