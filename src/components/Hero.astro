@@ -70,8 +70,7 @@ const vPos = (i: number, rows: number[]) => ({ x: V.cols[i % 2], y: rows[Math.fl
 
 /**
  * Desktop hub geometry. Each wire lands on its own port on the gateway
- * rather than all meeting at one point, and carries its protocol as a label
- * at its midpoint (the midpoint of these symmetric cubics is exact).
+ * rather than all meeting at one point.
  */
 const D = (() => {
   const srcX = 16, outX = 770, nodeW = 214, nodeH = 58
@@ -80,10 +79,8 @@ const D = (() => {
   const ports = [183, 211, 239, 267]
   const inPaths = rows.map((r, i) => `M${srcX + nodeW} ${r + 29} C315 ${r + 29} 315 ${ports[i]} ${core.x} ${ports[i]}`)
   const outPaths = rows.map((r, i) => `M${core.x + core.w} ${ports[i]} C685 ${ports[i]} 685 ${r + 29} ${outX} ${r + 29}`)
-  const protoLabels = ['Modbus', 'MQTT', 'RTSP', 'Modbus TCP']
-  const protos = rows.map((r, i) => [protoLabels[i], 315, (r + 29 + ports[i]) / 2] as const)
   const spark = [[0, 14], [7, 10], [14, 12], [21, 6], [28, 9], [35, 4], [42, 7], [52, 2]]
-  return { srcX, outX, nodeW, nodeH, rows, core, ports, inPaths, outPaths, protos, spark }
+  return { srcX, outX, nodeW, nodeH, rows, core, ports, inPaths, outPaths, spark }
 })()
 ---
 
@@ -104,25 +101,19 @@ const D = (() => {
           <span class="win-tab"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" /><circle cx="8" cy="8" r="1.8" /></svg>Data flow<i>×</i></span>
           <span class="win-new">+</span>
         </div>
-        <div class="window-toolbar" aria-hidden="true">
-          <span class="nav">‹ ›</span>
-          <span class="omnibox"><svg viewBox="0 0 16 16"><rect x="4" y="7" width="8" height="6" rx="1.2" /><path d="M5.8 7V5.4a2.2 2.2 0 0 1 4.4 0V7" /></svg>ichibot.local/system/data-flow</span>
-        </div>
-        <svg id="hubsvg" viewBox="0 0 1000 440">
+        <svg id="hubsvg" viewBox="0 42 1000 356">
           <defs>
             <linearGradient id="dev-metal" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stop-color="#232833" /><stop offset="1" stop-color="#12151b" />
             </linearGradient>
           </defs>
-          <text class="col" x={D.srcX + D.nodeW / 2} y="36" text-anchor="middle">Shop floor</text>
-          <text class="col" x="500" y="36" text-anchor="middle">Edge · on-prem or cloud</text>
-          <text class="col" x={D.outX + D.nodeW / 2} y="36" text-anchor="middle">Decisions</text>
           <g id="wires">
             {D.inPaths.map((d, i) => <path id={`i${i + 1}`} class="wire" d={d} />)}
             {D.outPaths.map((d, i) => <path id={`o${i + 1}`} class="wire" d={d} />)}
           </g>
           {sources.map((n, i) => {
             const y = D.rows[i]
+            const { text: liveText, ...liveAttrs } = n.live
             return (
               <g class="node">
                 <rect x={D.srcX} y={y} width={D.nodeW} height={D.nodeH} rx="10" />
@@ -130,7 +121,7 @@ const D = (() => {
                 <text x={D.srcX + 46} y={y + 25}>{n.title}</text>
                 <text class="sub" x={D.srcX + 46} y={y + 42}>{n.sub}</text>
                 <circle class="live-dot" cx={D.srcX + D.nodeW - 14} cy={y + 21} r="2.6" />
-                <text class="live" x={D.srcX + D.nodeW - 22} y={y + 25} text-anchor="end" {...n.live}>{n.live.text}</text>
+                <text class="live" x={D.srcX + D.nodeW - 22} y={y + 25} text-anchor="end" {...liveAttrs}>{liveText}</text>
               </g>
             )
           })}
@@ -152,22 +143,14 @@ const D = (() => {
                   <g class="chip warn"><rect x={rx - 44} y={y + 13} width="44" height="17" rx="8.5" /><text x={rx - 22} y={y + 25} text-anchor="middle" data-alerts>2 new</text></g>
                 )}
                 {n.icon === 'ai' && (
-                  <g class="chip"><rect x={rx - 60} y={y + 13} width="60" height="17" rx="8.5" /><text x={rx - 30} y={y + 25} text-anchor="middle">score 0.91</text></g>
+                  <g class="chip"><rect x={rx - 64} y={y + 13} width="64" height="17" rx="8.5" /><text x={rx - 32} y={y + 25} text-anchor="middle">1 anomaly</text></g>
                 )}
               </g>
             )
           })}
           <g class="pulses" data-wires="i1 i2 i3 i4 o1 o2 o3 o4"></g>
-          {D.protos.map(([label, px, py]) => (
-            <g class="proto">
-              <rect x={px - label.length * 3 - 8} y={py - 9} width={label.length * 6 + 16} height="18" rx="9" />
-              <text x={px} y={py + 3.5} text-anchor="middle">{label}</text>
-            </g>
-          ))}
         </svg>
-        <svg id="hubsvg-v" viewBox="0 0 360 536">
-          <text class="col" x="180" y="22" text-anchor="middle">Shop floor</text>
-          <text class="col" x="180" y="526" text-anchor="middle">Decisions</text>
+        <svg id="hubsvg-v" viewBox="0 18 360 504">
           <g>
             {vIn.map((d, i) => <path id={`vi${i + 1}`} class="wire" d={d} />)}
             {vOut.map((d, i) => <path id={`vo${i + 1}`} class="wire" d={d} />)}

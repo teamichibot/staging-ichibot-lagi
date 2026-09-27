@@ -151,8 +151,8 @@ header.nav.menu-open{background:var(--bg)}
 .stage::before{content:"";position:absolute;left:50%;top:40%;width:80%;height:70%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--glow),transparent);filter:blur(30px);pointer-events:none}
 .window{position:relative;background:var(--panel);border:1px solid var(--border2);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;text-align:left}
 /* Chrome-style window chrome, matching the product tabs: a strip in the frame
-   colour, one selected tab whose bottom corners flare into the toolbar, then a
-   slim toolbar with an address pill. Decorative, so hidden from assistive tech. */
+   colour and one selected tab whose bottom corners flare into the content below.
+   Decorative, so hidden from assistive tech. */
 .window{--strip:var(--bg2)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .window{--strip:var(--bg)}}
 :root[data-theme="dark"] .window{--strip:var(--bg)}
@@ -167,11 +167,7 @@ header.nav.menu-open{background:var(--bg)}
 .win-tab svg{flex:none;width:13px;height:13px;fill:none;stroke:var(--accent);stroke-width:1.6}
 .win-tab i{margin-left:auto;font-style:normal;color:var(--faint);font-size:.9rem;line-height:1}
 .win-new{align-self:center;color:var(--faint);font-size:1rem;margin-left:.4rem}
-.window-toolbar{display:flex;align-items:center;gap:.8rem;height:38px;padding:0 .8rem;border-bottom:1px solid var(--border);font-size:.76rem;color:var(--faint)}
-.window-toolbar .nav{letter-spacing:.5em;font-size:.95rem}
-.omnibox{flex:1;white-space:nowrap;overflow:hidden;max-width:440px;display:flex;align-items:center;gap:.45rem;height:26px;padding:0 .8rem;border-radius:999px;background:var(--bg2);color:var(--muted)}
-.omnibox svg{flex:none;width:12px;height:12px;fill:none;stroke:var(--faint);stroke-width:1.5}
-@media (max-width:600px){.window-toolbar{display:none}.win-tab{min-width:0}}
+@media (max-width:600px){.win-tab{min-width:0}}
 .hub #hubsvg{display:block;width:100%;height:auto}
 .hub #hubsvg-v{display:none;width:100%;height:auto;padding:.4rem .2rem .8rem}
 @media (max-width:640px){.hub #hubsvg{display:none}.hub #hubsvg-v{display:block}}
@@ -181,7 +177,6 @@ header.nav.menu-open{background:var(--bg)}
 .hub .wire{fill:none;stroke:var(--border2);stroke-width:1.5}
 .hub .pulse{fill:var(--accent)}
 .hub .pulse.out{fill:var(--live);opacity:.5}
-.hub .col{fill:var(--faint);font:500 11px "Geist Variable",sans-serif;letter-spacing:.02em}
 /* hub nodes: live readouts */
 .hub .node .live{fill:var(--accent);font:600 12px "Geist Variable",sans-serif;font-variant-numeric:tabular-nums}
 .hub .live-dot{fill:#22c55e;animation:hub-blink 2.4s ease-in-out infinite}
@@ -190,8 +185,6 @@ header.nav.menu-open{background:var(--bg)}
 .hub .chip text{fill:var(--accent);font:600 9.5px "Geist Variable",sans-serif}
 .hub .chip.warn rect{fill:color-mix(in srgb,var(--draft) 16%,transparent)}
 .hub .chip.warn text{fill:var(--draft)}
-.hub .proto rect{fill:var(--panel);stroke:var(--border2)}
-.hub .proto text{fill:var(--muted);font:500 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em}
 /* hub core: the edge gateway, dark hardware in both themes */
 .hub .dev-ring{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:.35;animation:hub-ring 3s ease-in-out infinite}
 .hub .dev-body{fill:url(#dev-metal);stroke:#323946;stroke-width:1.2}
@@ -212,7 +205,7 @@ header.nav.menu-open{background:var(--bg)}
 .hub .led-pwr circle{fill:#22c55e;filter:drop-shadow(0 0 3px #22c55e)}
 .hub .led-net circle{fill:#38bdf8;filter:drop-shadow(0 0 3px #38bdf8);animation:hub-blink .9s steps(2) infinite}
 .hub .led-run circle{fill:#22c55e;filter:drop-shadow(0 0 3px #22c55e);animation:hub-blink 1.8s ease-in-out infinite}
-.hub .led-ai circle{fill:#f59e0b;filter:drop-shadow(0 0 3px #f59e0b);animation:hub-blink 2.6s steps(3) infinite}
+.hub .led-ai circle{fill:#38bdf8;filter:drop-shadow(0 0 3px #38bdf8);animation:hub-blink 2.6s steps(3) infinite}
 @keyframes hub-blink{50%{opacity:.25}}
 @keyframes hub-ring{50%{opacity:.1}}
 @media (prefers-reduced-motion:reduce){.hub .live-dot,.hub .dev-ring,.hub .dev-led circle{animation:none}}
