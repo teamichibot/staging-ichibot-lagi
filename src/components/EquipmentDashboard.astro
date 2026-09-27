@@ -14,7 +14,8 @@ import { Image } from 'astro:assets'
 import ReplicaFit from './ReplicaFit.astro'
 import room from '../assets/products/compressor-room.jpg'
 
-const W = 1040
+// 940px wide it is 588px tall: 16:10, like the real screen.
+const W = 940
 
 /** Seeded noise, so every build draws the same history. */
 function rng(seed: number) {
@@ -87,7 +88,7 @@ const toPoints = (vals: number[], r: Reading) =>
   vals.map((v, i) => `${((i / (vals.length - 1)) * CW).toFixed(1)},${yOf(v, r).toFixed(1)}`).join(' ')
 ---
 
-<ReplicaFit width={W} label="Compressor monitoring dashboard with a live camera view, run and load hours, pressure, vibration and temperature gauges and trend charts">
+<ReplicaFit width={W} ratio={10 / 16} label="Compressor monitoring dashboard with a live camera view, run and load hours, pressure, vibration and temperature gauges and trend charts">
   <div class="qdash">
     <header class="qd-top">
       <span class="qd-brand">

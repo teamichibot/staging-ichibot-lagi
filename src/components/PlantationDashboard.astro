@@ -13,7 +13,8 @@
  */
 import ReplicaFit from './ReplicaFit.astro'
 
-const W = 1040
+// 1180px wide it is 738px tall: 16:10, like the real screen.
+const W = 1180
 
 function rng(seed: number) {
   let s = seed
@@ -70,7 +71,7 @@ const menu = [
 ]
 ---
 
-<ReplicaFit width={W} label="Smart plantation dashboard with eight solar-powered soil sensor nodes showing moisture, temperature, EC, pH, salinity and NPK">
+<ReplicaFit width={W} ratio={10 / 16} label="Smart plantation dashboard with eight solar-powered soil sensor nodes showing moisture, temperature, EC, pH, salinity and NPK">
   <div class="pdash">
     <aside class="pd-side">
       <div class="pd-logo">
@@ -87,13 +88,14 @@ const menu = [
 
     <div class="pd-main">
       <header class="pd-top">
-        <span class="pd-title"><b>Dashboard</b><small>Soil conditions across every sensor node, updated in real time.</small></span>
-        <span class="pd-search">Search name, block or topic</span>
-        <span class="pd-seg"><em class="on">All</em><em>Online</em><em>Delayed</em><em>Offline</em></span>
-        <span class="pd-live"><i></i>Realtime</span>
         <span class="pd-clock" data-pclock>Sun, 27 Sep 2026 · 09:42:10</span>
-        <span class="pd-user"><i>AD</i>Admin</span>
+        <span class="pd-user"><i>AD</i>Administrator</span>
       </header>
+
+      <div class="pd-title">
+        <b>Dashboard</b>
+        <small>Soil conditions across every sensor node, updated in real time.</small>
+      </div>
 
       <div class="pd-kpis">
         <div><small>Total devices</small><b>{nodes.length}</b></div>
@@ -103,6 +105,11 @@ const menu = [
         <div class="alert"><small>Active alerts</small><b>1</b><em>Palm 03 moisture below {LOW_MOISTURE}%</em></div>
       </div>
 
+      <div class="pd-filters">
+        <span class="pd-search">Search name, block or topic</span>
+        <span class="pd-seg"><em class="on">All</em><em>Online</em><em>Delayed</em><em>Offline</em></span>
+        <span class="pd-live"><i></i>Realtime</span>
+      </div>
 
       <div class="pd-grid">
         {nodes.map((n, i) => {

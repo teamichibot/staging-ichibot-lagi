@@ -603,29 +603,6 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .qd-limit{stroke:var(--draft);stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke;opacity:.7}
 .qd-axis{display:flex;justify-content:space-between;color:var(--faint);font-size:9.5px;margin-top:4px}
 @media (prefers-reduced-motion:reduce){.qd-scene,.qd-osd-tr i{animation:none}}
-/* compact equipment layout: fits the shared 1040x475 product frame at full width */
-.qdash{padding:14px}
-.qd-top{padding:6px 14px;margin-bottom:10px}
-.qd-logo{width:28px;height:28px}
-.qd-brand b{font-size:14px}
-.qd-body{gap:10px}
-.qd-left,.qd-right{gap:10px}
-.qd-card{padding:9px 12px}
-.qd-card-head{margin-bottom:5px}
-.qd-gauge{padding:7px 8px 8px}
-.qd-gauge svg{height:62px}
-.qd-reading b{font-size:17px}
-.qd-state{font-size:9px}
-.qd-charts{gap:8px}
-.qd-chart svg{height:50px}
-.qd-now b{font-size:15px}
-.qd-axis{margin-top:2px}
-.qd-hour{padding:7px 10px}
-.qd-hour b{font-size:19px}
-.qd-body{grid-template-columns:318px 1fr}
-.qd-hour{padding:6px 10px}
-.qd-hours{gap:6px}
-.qd-ratio{margin-top:7px}
 
 /* HTML replica of the Smart Plantation System dashboard. The green sidebar is
    SPS's own identity and stays green in both themes. */
@@ -695,41 +672,6 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .pd-signal i.on{background:var(--sp)}
 .pd-batt.low{color:#d97706}
 @media (prefers-reduced-motion:reduce){.pd-live i{animation:none}}
-/* compact plantation layout: fits the shared 1040x475 product frame at full width */
-.pdash{grid-template-columns:168px 1fr}
-.pd-side{padding:12px 10px;gap:12px}
-.pd-item{padding:5px 9px;font-size:11.5px}
-.pd-main{padding:10px 12px 12px;gap:8px}
-.pd-top{justify-content:flex-start;gap:8px;font-size:10.5px}
-.pd-title{display:flex;flex-direction:column;margin-right:auto;min-width:0}
-.pd-title b{font-size:16px;font-weight:700;line-height:1.1}
-.pd-title small{color:var(--muted);font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pd-top .pd-search{flex:none;width:150px;max-width:none;padding:4px 8px;font-size:10px}
-.pd-top .pd-seg em{padding:3px 7px;font-size:10px}
-.pd-top .pd-live{margin-left:0;padding:3px 8px;font-size:10px}
-.pd-top .pd-clock{font-size:10px;white-space:nowrap}
-.pd-user{padding:2px 8px 2px 2px;font-size:10.5px}
-.pd-user i{width:20px;height:20px;font-size:8.5px}
-.pd-kpis div{padding:6px 10px}
-.pd-kpis small{font-size:9px}
-.pd-kpis b{font-size:16px;line-height:1.2}
-.pd-kpis em{font-size:9.5px}
-.pd-grid{gap:8px}
-.pd-card{padding:8px 9px;gap:6px;border-radius:10px}
-.pd-card-head b{font-size:12px}
-.pd-card-head small{font-size:9.5px}
-.pd-status{font-size:9px;padding:1px 7px}
-.pd-main-reads{gap:5px}
-.pd-read{padding:4px 6px 3px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:4px;align-items:end}
-.pd-read small{grid-column:1 / -1;font-size:8px}
-.pd-read b{font-size:14px;line-height:1.1}
-.pd-read b em{font-size:8.5px}
-.pd-read svg{height:18px;margin:0;align-self:center}
-.pd-minor{grid-template-columns:repeat(6,1fr);gap:2px 4px}
-.pd-minor small{font-size:8.5px}
-.pd-minor b{font-size:10.5px;display:block;white-space:nowrap}
-.pd-minor em{display:none}
-.pd-foot{padding-top:4px;font-size:9.5px}
 
 /* Custom tab: a dashboard builder with an empty project */
 .cdash{background:var(--bg2);padding:12px 14px;font-size:12px;line-height:1.35;color:var(--text);display:flex;flex-direction:column;gap:10px}
@@ -1076,21 +1018,33 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .skip-link:focus{top:.6rem}
 main:focus{outline:none}
 
-/* Smart energy monitoring: copy stacked on the left, the 16:10 dashboard on
-   the right, like the real screen. Stacks (mockup first) below 900px. */
+/* Product panels: copy stacked on the left, the 16:10 dashboard on the right,
+   like the real screen. Stacks (dashboard first) below 900px. */
 .panel.panel-split{grid-template-columns:minmax(0,1fr) minmax(0,2.5fr);align-items:center;gap:clamp(1.5rem,3vw,2.5rem)}
 .panel-split .panel-copy{order:-1;flex-direction:column;align-items:flex-start;justify-content:center;gap:1.4rem}
 .panel-split .panel-text{max-width:none}
-@media (max-width:900px){.panel.panel-split{grid-template-columns:1fr}.panel-split .panel-copy{order:0}}
-/* the energy replica fills its 16:10 frame (1320 x 825) */
+@media (max-width:900px){.panel.panel-split{grid-template-columns:minmax(0,1fr)}.panel-split .panel-copy{order:0}}
+/* each replica fills its 16:10 frame at its own design width */
 .replica > .edash{min-height:825px}
-/* The energy dashboard gets the platform mockups' glow: a dark rounded frame,
-   a blurred accent light behind the screen, and the screen itself with an
-   accent-tinted top edge, open at the bottom like a window onto it. */
-.panel-split .shot-frame.replica-frame{position:relative;border-radius:28px;background:var(--bg);border:1px solid var(--border);
-  padding:clamp(1.1rem,2.8vw,2.2rem) clamp(.9rem,2.4vw,1.9rem) 0;overflow:hidden;isolation:isolate}
-.panel-split .shot-frame.replica-frame::before{content:"";position:absolute;inset:18% 8% -10%;z-index:-1;border-radius:40px;
-  background:radial-gradient(60% 55% at 50% 30%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 72%);filter:blur(34px);opacity:.55}
-.panel-split .replica-fit{border:1px solid var(--border2);border-bottom:0;border-radius:14px 14px 0 0;overflow:hidden;
+.replica > .qdash{min-height:588px}
+.replica > .pdash{min-height:738px}
+.replica > .cdash{height:650px}
+/* AI Vision at 1400 x 875: the camera view fills the height, the side column
+   stretches, and boxes ride a 2:1 layer sized like the covered video */
+.replica > .vdash{height:875px;display:flex;flex-direction:column}
+.vdash .vd-body{flex:1;min-height:0;grid-template-columns:1fr 230px;align-items:stretch}
+.vdash .vd-stage{aspect-ratio:auto;height:100%}
+/* the crop is anchored 70% across so the conveyor zone (84%) stays in view;
+   video and box layer use the same anchor so boxes stay on their objects */
+.vdash .vd-stage video{object-position:70% 50%}
+.vd-frame{position:absolute;top:0;bottom:0;left:70%;height:100%;aspect-ratio:2/1;transform:translateX(-70%);pointer-events:none}
+.vdash .vd-side{min-height:0}
+.vdash .vd-log{height:auto;flex:1;min-height:0}
+/* Product dashboards get the platform mockups' glow, without a frame: a
+   blurred accent light behind the screen, and the screen with an
+   accent-tinted edge and soft glow. */
+.panel-split .shot-frame.replica-frame{position:relative;min-width:0;background:none;border:0;border-radius:0;padding:0;overflow:visible;isolation:isolate}
+.panel-split .shot-frame.replica-frame::before{content:"";position:absolute;inset:10% 6% -6%;z-index:-1;border-radius:40px;
+  background:radial-gradient(60% 55% at 50% 40%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 72%);filter:blur(34px);opacity:.55}
+.panel-split .replica-fit{border:1px solid var(--border2);border-radius:14px;overflow:hidden;
   box-shadow:0 -1px 0 color-mix(in srgb,var(--accent) 30%,transparent),0 0 48px -12px color-mix(in srgb,var(--accent) 40%,transparent)}
-@media (max-width:640px){.panel-split .shot-frame.replica-frame{border-radius:20px}}

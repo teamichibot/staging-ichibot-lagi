@@ -17,11 +17,13 @@
  */
 import ReplicaFit from './ReplicaFit.astro'
 
-const W = 1040
+// 1400px wide, so at 16:10 the camera view is as wide as it can be (about
+// 3:2); the 2:1 footage is cropped at the sides, never at the conveyor zone.
+const W = 1400
 const base = '/media/vision/'
 ---
 
-<ReplicaFit width={W} label="AI Vision Engine: CCTV footage of a warehouse floor with people detected and tracked, hi-vis vest checks, a conveyor lane zone and an event log">
+<ReplicaFit width={W} ratio={10 / 16} label="AI Vision Engine: CCTV footage of a warehouse floor with people detected and tracked, hi-vis vest checks, a conveyor lane zone and an event log">
   <div class="vdash" data-vision={`${base}vision-detections.json`}>
     <header class="vd-top">
       <span class="vd-brand">
@@ -37,8 +39,12 @@ const base = '/media/vision/'
           <source src={`${base}vision-demo.webm`} type="video/webm" />
           <source src={`${base}vision-demo.mp4`} type="video/mp4" />
         </video>
-        <div class="vd-zone" style="left:84%"><span>Conveyor lane</span></div>
-        <div class="vd-boxes"></div>
+        {/* boxes and zone sit on a 2:1 layer matching the covered video, so they
+            stay on their objects however the stage crops the footage */}
+        <div class="vd-frame">
+          <div class="vd-zone" style="left:84%"><span>Conveyor lane</span></div>
+          <div class="vd-boxes"></div>
+        </div>
         <span class="vd-osd vd-osd-tl">CAM-07 · Warehouse floor</span>
         <span class="vd-osd vd-osd-tr"><i></i>LIVE · AI</span>
         <span class="vd-osd vd-osd-bl" data-vclock>2026-09-27 09:42:10</span>
