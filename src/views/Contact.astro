@@ -1,0 +1,116 @@
+---
+/**
+ * Site survey request, in either language, with the fields the brief lists
+ * (name, company, industry, phone/WhatsApp, message) plus an optional email
+ * to reply to. The route handles the POST (lib/contact-mail.ts) and passes
+ * the result in. Works without JavaScript. Industry values are sent in
+ * English whatever the page language, so the team's inbox stays consistent.
+ */
+import PageLayout from '../layouts/PageLayout.astro'
+import { EMAIL, SURVEY_FORM, WHATSAPP_NUMBER, whatsappLinkFor } from '../lib/contact'
+import type { ContactResult } from '../lib/contact-mail'
+import { langFromUrl, localize } from '../i18n'
+
+interface Props {
+  result: ContactResult
+}
+
+const { status, values } = Astro.props.result
+const lang = langFromUrl(Astro.url)
+const whatsappLink = whatsappLinkFor(lang)
+
+const industries: [value: string, id: string][] = [
+  ['Oil, gas and energy', 'Migas dan energi'],
+  ['Automotive and manufacturing', 'Otomotif dan manufaktur'],
+  ['Agribusiness and plantation', 'Agribisnis dan perkebunan'],
+  ['Printing and publishing', 'Percetakan dan penerbitan'],
+  ['Port and marine', 'Pelabuhan dan maritim'],
+  ['Salt and mining', 'Garam dan pertambangan'],
+  ['Government or education', 'Pemerintahan atau pendidikan'],
+  ['Other', 'Lainnya'],
+]
+
+const t = {
+  en: {
+    metaTitle: 'Contact — Ichibot', metaDesc: "Book a site survey: tell us about your plant and Ichibot's engineers will get back to you.",
+    title: 'Tell us about your plant', lede: 'Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.',
+    thanks: 'Thank you', thanksBody: 'Your request has reached our team. We will get back to you shortly.', home: 'Back to home',
+    invalid: 'Please fill in your name, phone or WhatsApp number and message, and check the email address.',
+    failed: 'Your message could not be sent. Please try again, or', failedLink: 'message us on WhatsApp',
+    name: 'Name', company: 'Company', industry: 'Industry', select: 'Select', phone: 'Phone or WhatsApp', email: 'Email', message: 'Message',
+    placeholder: 'Which machines or processes do you want to monitor?', send: 'Send request',
+    direct: 'Direct contact', projectForm: 'Project form', projectFormLink: 'Industrial project form',
+  },
+  id: {
+    metaTitle: 'Kontak — Ichibot', metaDesc: 'Jadwalkan survei lokasi: ceritakan tentang pabrik Anda dan engineer Ichibot akan menghubungi Anda.',
+    title: 'Ceritakan tentang pabrik Anda', lede: 'Engineer kami akan berkunjung, memetakan mesin dan data Anda, lalu mengusulkan pilot yang sesuai anggaran.',
+    thanks: 'Terima kasih', thanksBody: 'Permintaan Anda sudah diterima tim kami. Kami akan segera menghubungi Anda.', home: 'Kembali ke beranda',
+    invalid: 'Mohon isi nama, nomor telepon atau WhatsApp, dan pesan Anda, serta periksa alamat email.',
+    failed: 'Pesan Anda gagal terkirim. Silakan coba lagi, atau', failedLink: 'hubungi kami via WhatsApp',
+    name: 'Nama', company: 'Perusahaan', industry: 'Industri', select: 'Pilih', phone: 'Telepon atau WhatsApp', email: 'Email', message: 'Pesan',
+    placeholder: 'Mesin atau proses apa yang ingin Anda pantau?', send: 'Kirim permintaan',
+    direct: 'Kontak langsung', projectForm: 'Formulir proyek', projectFormLink: 'Formulir proyek industri',
+  },
+}[lang]
+
+const action = `${localize('/contact', lang)}#contact-form`
+const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
+---
+
+<PageLayout title={t.metaTitle} description={t.metaDesc} cta={false}>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>{t.title}</h1>
+      <p class="lede">{t.lede}</p>
+    </div>
+  </section>
+
+  <section class="page-body" id="contact-form">
+    <div class="wrap contact">
+      <div class="contact-card">
+        {status === 'sent' ? (
+          <div class="contact-done" role="status">
+            <h2>{t.thanks}</h2>
+            <p>{t.thanksBody}</p>
+            <a class="btn sm" href={localize('/', lang)}>{t.home}</a>
+          </div>
+        ) : (
+          <form method="post" action={action}>
+            {status === 'invalid' && <p class="form-error" role="alert">{t.invalid}</p>}
+            {status === 'failed' && (
+              <p class="form-error" role="alert">
+                {t.failed} <a href={whatsappLink} target="_blank" rel="noopener">{t.failedLink}</a>.
+              </p>
+            )}
+            <div class="form-grid">
+              <label><span>{t.name} <em aria-hidden="true">*</em></span><input name="name" required autocomplete="name" value={values.name} /></label>
+              <label><span>{t.company}</span><input name="company" autocomplete="organization" value={values.company} /></label>
+              <label>
+                <span>{t.industry}</span>
+                <select name="industry">
+                  <option value="">{t.select}</option>
+                  {industries.map(([value, idLabel]) => <option value={value} selected={values.industry === value}>{lang === 'id' ? idLabel : value}</option>)}
+                </select>
+              </label>
+              <label><span>{t.phone} <em aria-hidden="true">*</em></span><input name="phone" type="tel" required autocomplete="tel" value={values.phone} /></label>
+              <label class="span"><span>{t.email}</span><input name="email" type="email" autocomplete="email" value={values.email} /></label>
+              <label class="span"><span>{t.message} <em aria-hidden="true">*</em></span><textarea name="message" rows="5" required placeholder={t.placeholder}>{values.message}</textarea></label>
+              <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <button class="btn primary" type="submit">{t.send}</button>
+          </form>
+        )}
+      </div>
+
+      <aside class="contact-side">
+        <h2>{t.direct}</h2>
+        <ul>
+          <li><small>Email</small><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          <li><small>WhatsApp</small><a href={whatsappLink} target="_blank" rel="noopener">{waDisplay}</a></li>
+          <li><small>{t.projectForm}</small><a href={SURVEY_FORM} target="_blank" rel="noopener">{t.projectFormLink}</a></li>
+        </ul>
+        <p>PT Gagas Anagata Semesta, Yogyakarta, Indonesia.</p>
+      </aside>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,43 @@
+---
+/** The homepage, in either language (the language comes from the URL). */
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Nav from '../components/Nav.astro'
+import Hero from '../components/Hero.astro'
+import Logos from '../components/Logos.astro'
+import Products from '../components/Products.astro'
+import Platform from '../components/Platform.astro'
+import Cases from '../components/Cases.astro'
+import Services from '../components/Services.astro'
+import BlogPreview from '../components/BlogPreview.astro'
+import Faq from '../components/Faq.astro'
+import Cta from '../components/Cta.astro'
+import Footer from '../components/Footer.astro'
+import { langFromUrl } from '../i18n'
+
+const meta = {
+  en: {
+    title: 'Ichibot — Intelligent industrial hub | Industrial IoT and AI',
+    description: 'Industrial IoT (Internet of Things) and AI for Indonesian plants: Ichibot connects every machine to real-time data, from the shop floor to your ERP. Running at Pertamina and Toyota Indonesia.',
+  },
+  id: {
+    title: 'Ichibot — Intelligent industrial hub | Industrial IoT dan AI',
+    description: 'Industrial IoT (Internet of Things) dan AI untuk pabrik di Indonesia: Ichibot menghubungkan setiap mesin ke data real-time, dari lantai produksi hingga ERP Anda. Berjalan di Pertamina dan Toyota Indonesia.',
+  },
+}[langFromUrl(Astro.url)]
+---
+
+<BaseLayout title={meta.title} description={meta.description}>
+  <Nav />
+  <main>
+    <Hero />
+    <Logos />
+    <Products />
+    <Platform />
+    <Cases />
+    <Services />
+    <BlogPreview />
+    <Faq />
+    <Cta />
+  </main>
+  <Footer />
+</BaseLayout>

@@ -92,8 +92,8 @@ export async function getPost(slug: string): Promise<Post | null> {
   return filePosts.find((p) => p.slug === slug) ?? null
 }
 
-export const formatDate = (d: string) =>
-  d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+export const formatDate = (d: string, lang: 'en' | 'id' = 'en') =>
+  d ? new Date(d).toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
 
 /** Stock photo the old site showed for posts without an image. */
 export const FALLBACK_IMAGE =

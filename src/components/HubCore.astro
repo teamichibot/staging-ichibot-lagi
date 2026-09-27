@@ -1,4 +1,6 @@
 ---
+import { langFromUrl } from '../i18n'
+
 /**
  * The hub diagram's core, drawn as the edge gateway it is: a dark hardware
  * body with corner screws, a port on each side for every wire, live message
@@ -17,6 +19,7 @@ interface Props {
 }
 const { x, y, w, h, portsIn = [], portsOut = [], compact = false } = Astro.props
 const cx = x + w / 2
+const sub = langFromUrl(Astro.url) === 'id' ? 'Kumpulkan · catat · jalankan AI' : 'Collect · log · run AI'
 const leds = ['PWR', 'NET', 'RUN', 'AI']
 const ledStep = (w - 60) / (leds.length - 1)
 const ledY = compact ? y + h - 26 : y + 186
@@ -40,7 +43,7 @@ const ledY = compact ? y + h - 26 : y + 186
   )}
   <text class="dev-name" x={cx} y={compact ? y + 38 : y + 64} text-anchor="middle">Ichibot</text>
   <text class="dev-name" x={cx} y={compact ? y + 58 : y + 84} text-anchor="middle">Smart System</text>
-  <text class="dev-sub" x={cx} y={compact ? y + 76 : y + 104} text-anchor="middle">Collect · log · run AI</text>
+  <text class="dev-sub" x={cx} y={compact ? y + 76 : y + 104} text-anchor="middle">{sub}</text>
 
   {!compact && (
     <>

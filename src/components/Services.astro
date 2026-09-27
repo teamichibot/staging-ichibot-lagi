@@ -1,4 +1,8 @@
 ---
+import { langFromUrl } from '../i18n'
+
+const lang = langFromUrl(Astro.url)
+
 /**
  * Icons follow the same 16px stroke language as the product tabs and the hub
  * diagram: line only, accent coloured, no enclosing box. Each one draws the
@@ -6,31 +10,31 @@
  */
 const services = [
   {
-    title: 'Edge device installation',
-    body: 'Sensors, gateways, PLC, VFD, panels and wiring, installed and commissioned on site.',
+    title: lang === 'id' ? 'Instalasi perangkat edge' : 'Edge device installation',
+    body: lang === 'id' ? 'Sensor, gateway, PLC, VFD, panel, dan pengkabelan, dipasang dan di-commissioning di lokasi.' : 'Sensors, gateways, PLC, VFD, panels and wiring, installed and commissioned on site.',
     // a gateway with ports and antennae
     icon: `<rect x="1.8" y="5.2" width="12.4" height="7" rx="1.6"/>
            <path d="M4.6 8.7h1M7.5 8.7h1M10.4 8.7h1"/>
            <path d="M4.6 5.2V2.6M11.4 5.2V2.6"/>`,
   },
   {
-    title: 'In-house training',
-    body: 'Hands-on industrial IoT and dashboard training with hardware kits and structured modules, as delivered for Toyota Indonesia.',
+    title: lang === 'id' ? 'Pelatihan in-house' : 'In-house training',
+    body: lang === 'id' ? 'Pelatihan praktik industrial IoT dan dashboard dengan kit hardware dan modul terstruktur, seperti yang kami berikan untuk Toyota Indonesia.' : 'Hands-on industrial IoT and dashboard training with hardware kits and structured modules, as delivered for Toyota Indonesia.',
     // a board on a stand, with a trend drawn on it
     icon: `<rect x="1.8" y="2" width="12.4" height="8.4" rx="1.4"/>
            <path d="M4.6 7.6 6.9 5.3l1.8 1.8 2.7-2.9"/>
            <path d="M8 10.4V13M5.3 13h5.4"/>`,
   },
   {
-    title: 'Custom system integration',
-    body: 'Automation and data projects built around your existing machines, from retrofit to full control panels.',
+    title: lang === 'id' ? 'Integrasi sistem custom' : 'Custom system integration',
+    body: lang === 'id' ? 'Proyek otomasi dan data yang dibangun di sekitar mesin Anda yang sudah ada, dari retrofit hingga panel kontrol lengkap.' : 'Automation and data projects built around your existing machines, from retrofit to full control panels.',
     // separate systems wired into one
     icon: `<circle cx="3.6" cy="3.6" r="1.9"/><circle cx="12.4" cy="3.6" r="1.9"/><circle cx="8" cy="12.4" r="1.9"/>
            <path d="M5.5 3.6h5M4.5 5.3l2.6 5.4M11.5 5.3 8.9 10.7"/>`,
   },
   {
-    title: 'Maintenance and support',
-    body: 'Remote monitoring, preventive visits and SLA-based support after go-live.',
+    title: lang === 'id' ? 'Perawatan dan dukungan' : 'Maintenance and support',
+    body: lang === 'id' ? 'Pemantauan jarak jauh, kunjungan preventif, dan dukungan berbasis SLA setelah sistem berjalan.' : 'Remote monitoring, preventive visits and SLA-based support after go-live.',
     // a wrench
     icon: `<path d="M10.6 2.3a3.9 3.9 0 0 0-4.8 5L2.3 10.8a1.7 1.7 0 0 0 2.4 2.4l3.5-3.5a3.9 3.9 0 0 0 5-4.8L11 6.3 9.1 4.4z"/>`,
   },
@@ -38,28 +42,28 @@ const services = [
 
 const steps = [
   {
-    title: 'Analysis',
-    body: 'We identify the problem, the lines involved and the data needed, which defines what the site survey covers.',
+    title: lang === 'id' ? 'Analisis' : 'Analysis',
+    body: lang === 'id' ? 'Kami mengidentifikasi masalah, lini yang terlibat, dan data yang dibutuhkan, yang menentukan cakupan survei lokasi.' : 'We identify the problem, the lines involved and the data needed, which defines what the site survey covers.',
   },
   {
-    title: 'Site survey',
-    body: 'We map your machines, data points and network, then propose the right product or custom scope.',
+    title: lang === 'id' ? 'Survei lokasi' : 'Site survey',
+    body: lang === 'id' ? 'Kami memetakan mesin, data point, dan jaringan Anda, lalu mengusulkan produk atau cakupan custom yang tepat.' : 'We map your machines, data points and network, then propose the right product or custom scope.',
   },
   {
-    title: 'Pilot on one line',
-    body: 'Go live on a single line or area first, so you see results before committing further.',
+    title: lang === 'id' ? 'Pilot di satu lini' : 'Pilot on one line',
+    body: lang === 'id' ? 'Jalankan dulu di satu lini atau area, sehingga Anda melihat hasilnya sebelum melangkah lebih jauh.' : 'Go live on a single line or area first, so you see results before committing further.',
   },
   {
-    title: 'Scale up',
-    body: 'Roll out to more lines and sites, with training and support for your team.',
+    title: lang === 'id' ? 'Perluas' : 'Scale up',
+    body: lang === 'id' ? 'Terapkan ke lebih banyak lini dan lokasi, dengan pelatihan dan dukungan untuk tim Anda.' : 'Roll out to more lines and sites, with training and support for your team.',
   },
 ]
 ---
 
 <section id="services" style="padding-top:0">
   <div class="wrap">
-    <h2>Services from survey to support</h2>
-    <p class="lede">Need something beyond our products? We build and support it end to end.</p>
+    <h2>{lang === 'id' ? 'Layanan dari survei hingga dukungan' : 'Services from survey to support'}</h2>
+    <p class="lede">{lang === 'id' ? 'Butuh lebih dari produk kami? Kami bangun dan dukung dari awal sampai akhir.' : 'Need something beyond our products? We build and support it end to end.'}</p>
 
     <div class="svc">
       {
@@ -74,7 +78,7 @@ const steps = [
     </div>
 
     <div class="how">
-      <h3 class="title">How we work</h3>
+      <h3 class="title">{lang === 'id' ? 'Cara kami bekerja' : 'How we work'}</h3>
       <div class="steps">
         {
           steps.map((s) => (

@@ -1,11 +1,18 @@
 ---
-import { EMAIL, WHATSAPP_NUMBER, socials, whatsappLink } from '../lib/contact'
+import { EMAIL, WHATSAPP_NUMBER, socials, whatsappLinkFor } from '../lib/contact'
+import { basePath, langFromUrl, localize } from '../i18n'
 
 /**
  * Contact details, social links and the Internship and ecosystem URLs are the
  * ones the old site used. Section anchors live on the homepage.
  */
-const home = Astro.url.pathname === '/' ? '' : '/'
+const lang = langFromUrl(Astro.url)
+const home = basePath(Astro.url.pathname) === '/' ? '' : localize('/', lang)
+const whatsappLink = whatsappLinkFor(lang)
+const t = {
+  en: { home: 'Ichibot home', about: 'PT Gagas Anagata Semesta. Intelligent industrial hub from Yogyakarta, Indonesia.', products: 'Products', company: 'Company', aboutLink: 'About', cases: 'Case studies', insights: 'Insights', internship: 'Internship', ecosystem: 'Ecosystem', training: 'Training', contact: 'Contact' },
+  id: { home: 'Beranda Ichibot', about: 'PT Gagas Anagata Semesta. Intelligent industrial hub dari Yogyakarta, Indonesia.', products: 'Produk', company: 'Perusahaan', aboutLink: 'Tentang kami', cases: 'Studi kasus', insights: 'Artikel', internship: 'Magang', ecosystem: 'Ekosistem', training: 'Pelatihan', contact: 'Kontak' },
+}[lang]
 const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
 const ext = { target: '_blank', rel: 'noopener' }
 ---
@@ -14,15 +21,15 @@ const ext = { target: '_blank', rel: 'noopener' }
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="/" aria-label="Ichibot home"><span class="logo" role="img" aria-label="Ichibot"></span></a>
-        <p class="foot-about">PT Gagas Anagata Semesta. Intelligent industrial hub from Yogyakarta, Indonesia.</p>
+        <a class="brand" href={localize('/', lang)} aria-label={t.home}><span class="logo" role="img" aria-label="Ichibot"></span></a>
+        <p class="foot-about">{t.about}</p>
         <ul class="foot-contact">
           <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
           <li><a href={whatsappLink} {...ext}>WhatsApp {waDisplay}</a></li>
         </ul>
       </div>
       <div>
-        <h4>Products</h4>
+        <h4>{t.products}</h4>
         <ul>
           <li><a href={`${home}#product-energy`}>Smart energy monitoring</a></li>
           <li><a href={`${home}#product-equip`}>Smart equipment monitoring</a></li>
@@ -32,21 +39,21 @@ const ext = { target: '_blank', rel: 'noopener' }
         </ul>
       </div>
       <div>
-        <h4>Company</h4>
+        <h4>{t.company}</h4>
         <ul>
-          <li><a href="/about">About</a></li>
-          <li><a href={`${home}#cases`}>Case studies</a></li>
-          <li><a href="/blog">Insights</a></li>
-          <li><a href="https://internship.ichibot.id" {...ext}>Internship</a></li>
+          <li><a href={localize('/about', lang)}>{t.aboutLink}</a></li>
+          <li><a href={`${home}#cases`}>{t.cases}</a></li>
+          <li><a href={localize('/blog', lang)}>{t.insights}</a></li>
+          <li><a href="https://internship.ichibot.id" {...ext}>{t.internship}</a></li>
         </ul>
       </div>
       <div>
-        <h4>Ecosystem</h4>
+        <h4>{t.ecosystem}</h4>
         <ul>
           <li><a href="https://www.store.ichibot.id" {...ext}>Ichibot Store</a></li>
           <li><a href="https://robotics.ichibot.id" {...ext}>Ichibot Robotics</a></li>
-          <li><a href={`${home}#services`}>Training</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href={`${home}#services`}>{t.training}</a></li>
+          <li><a href={localize('/contact', lang)}>{t.contact}</a></li>
         </ul>
       </div>
     </div>

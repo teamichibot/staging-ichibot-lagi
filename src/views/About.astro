@@ -1,0 +1,163 @@
+---
+/**
+ * About Ichibot. The Bahasa copy is the old site's /about; the English is a
+ * translation of it, with no new claims added. The team comes from `site_data.team`, managed in
+ * the admin; the old site's built-in team list was placeholder people, so
+ * there is no fallback and the section is hidden when the admin has none.
+ */
+import PageLayout from '../layouts/PageLayout.astro'
+import { langFromUrl } from '../i18n'
+import { readSiteData } from '../lib/site-data'
+
+type TeamMember = { name: string; role: string; bio: string; image: string }
+const team = (await readSiteData<TeamMember[]>('team', [])).filter((m) => m.name)
+
+const lang = langFromUrl(Astro.url)
+
+const en = {
+  meta: { title: 'About — Ichibot', description: 'Ichibot helps Indonesian manufacturers, energy companies and institutions turn operational data into decisions with industrial IoT and AI. Founded in Yogyakarta in 2016.' },
+  h1: 'AI and IoT for Indonesian industry',
+  lede: 'We help manufacturers, energy and transport companies and government institutions turn operational data into decisions, with modular technology that is ready for production.',
+  stats: [
+    { value: '4,000+', label: 'Engineers and innovators' },
+    { value: '1,500+', label: 'Components in Ichibot Store' },
+    { value: '~10', label: 'Years of experience' },
+    { value: '50+', label: 'Enterprise clients' },
+  ],
+  storyTitle: 'Meaningful change, not a generic solution',
+  story: [
+    'Ichibot exists because of one conviction: Industry 4.0 does not come from generic solutions bought off the shelf. Real change needs deep technical support, adaptation to how each client actually operates, and a thorough transfer of knowledge.',
+    'That is why every engagement includes three things: an end-to-end industrial AI-IoT solution, enablement for the client’s internal team to maintain and extend the system themselves, and access to the engineering ecosystem we have built over almost a decade.',
+  ],
+  timelineTitle: 'Almost a decade of building',
+  timelineLede: 'From the robotics arena to a national industrial AI-IoT platform.',
+  milestones: [
+    { year: '2016', title: 'Born in the competition arena', desc: 'Ichibot was founded in Yogyakarta by Angga Priyatmoko and a group of young engineers. Our engineering was forged in high-level robotics competitions, which demand precise hardware, reliable real-time systems and optimisation down to the component. That discipline is still how we work.' },
+    { year: '2019', title: 'From lab to company', desc: 'Ichibot joined the Amikom Business Park (ABP) incubator and grew from a research team into a structured technology company, moving from hardware engineering into IoT and AI integration for industry.' },
+    { year: '2021', title: 'Asia Hardware Battle', desc: 'Recognition at Asia Hardware Battle confirmed Ichibot’s engineering on a regional stage and validated its industrial IoT and AI work as ready to compete at Asian level.' },
+    { year: '2022', title: 'Toyota and Pertamina', desc: 'Partnerships with Pertamina and Toyota established Ichibot as a domestic technology partner trusted with large-scale work. Real-time IoT monitoring on a Toyota production line became the flagship project that proved the platform.' },
+    { year: 'Today', title: 'A national ecosystem', desc: 'The Ichibot ecosystem now spans an active community of more than 4,000 engineers and innovators, and Ichibot Store with 1,500+ electronic components and sensors for research and development.' },
+  ],
+  whyTitle: 'Why work with Ichibot',
+  why: [
+    { title: 'Full stack, from silicon to cloud', desc: 'We work from firmware and non-standard communication protocols up to the cloud platform. When what a project needs is not on the market, our team builds it in-house, with no dependence on outside vendors.' },
+    { title: 'End-to-end solutions plus enablement', desc: 'Every engagement covers an end-to-end AI-IoT solution, training so the client’s own team can run it, and access to the engineer and component ecosystem we have built over almost a decade.' },
+    { title: 'An ecosystem of 4,000+ engineers', desc: 'An active community that is both our talent pipeline and a contribution to Indonesia’s technological independence, backed by Ichibot Store and its 1,500+ components.' },
+    { title: 'Proven at enterprise scale', desc: 'Toyota, Pertamina, BCA and other Indonesian enterprises run our systems in demanding production environments.' },
+  ],
+  teamTitle: 'The people behind Ichibot',
+}
+
+/** The old site's own Bahasa copy (tag v1-nextjs-site, app/about + Timeline). */
+const id: typeof en = {
+  meta: { title: 'Tentang Kami — Ichibot', description: 'Ichibot membantu industri Indonesia mengubah data operasional menjadi keputusan dengan industrial IoT dan AI. Didirikan di Yogyakarta pada 2016.' },
+  h1: 'AI-IoT untuk industri Indonesia',
+  lede: 'Membantu perusahaan manufaktur, energi, transportasi, dan institusi pemerintahan mengubah data operasional menjadi keputusan strategis melalui arsitektur teknologi yang modular dan siap produksi.',
+  stats: [
+    { value: '4.000+', label: 'Engineer dan inovator' },
+    { value: '1.500+', label: 'Komponen di Ichibot Store' },
+    { value: '~10', label: 'Tahun pengalaman' },
+    { value: '50+', label: 'Klien enterprise' },
+  ],
+  storyTitle: 'Transformasi bermakna, bukan solusi generik',
+  story: [
+    'Ichibot hadir karena satu keyakinan: akselerasi Industri 4.0 tidak lahir dari solusi generik yang dibeli lepas dari rak. Transformasi yang bermakna hanya mungkin melalui pendampingan teknis yang mendalam, adaptasi pada konteks operasional klien, dan transfer pengetahuan yang menyeluruh.',
+    'Karena itu, setiap engagement kami selalu mencakup tiga hal: solusi AI-IoT industri yang end-to-end, enablement bagi tim internal klien untuk memelihara dan mengembangkan sistemnya sendiri, dan akses ke ekosistem engineer yang telah kami rawat selama hampir satu dekade.',
+  ],
+  timelineTitle: 'Hampir satu dekade inovasi',
+  timelineLede: 'Dari arena robotika hingga platform AI-IoT industri berskala nasional.',
+  milestones: [
+    { year: '2016', title: 'Lahir dari arena kompetisi', desc: 'Ichibot didirikan di Yogyakarta oleh Angga Priyatmoko bersama sekelompok engineer muda. Kapabilitas rekayasa ditempa melalui kompetisi robotika tingkat tinggi, yang menuntut presisi hardware, keandalan sistem real-time, dan optimasi hingga tingkat komponen. Disiplin inilah yang menjadi DNA kami.' },
+    { year: '2019', title: 'Dari lab ke perusahaan', desc: 'Bergabung dengan Amikom Business Park (ABP) Incubator dan bertransformasi dari tim riset menjadi perusahaan teknologi yang terstruktur. Kapabilitas berkembang dari rekayasa perangkat keras menuju integrasi IoT dan AI untuk kebutuhan industri.' },
+    { year: '2021', title: 'Asia Hardware Battle', desc: 'Pengakuan di ajang Asia Hardware Battle mengukuhkan kemampuan rekayasa Ichibot di panggung regional. Kapabilitas IoT dan AI untuk industri mendapat validasi internasional sebagai solusi yang siap bersaing di level Asia.' },
+    { year: '2022', title: 'Toyota dan Pertamina', desc: 'Kemitraan strategis dengan Pertamina dan Toyota mengukuhkan posisi Ichibot sebagai mitra teknologi dalam negeri yang layak dipercaya untuk pekerjaan berskala besar. Sistem IoT monitoring real-time di lini produksi Toyota menjadi flagship project yang membuktikan keandalan platform kami.' },
+    { year: 'Kini', title: 'Ekosistem nasional', desc: 'Ekosistem Ichibot kini mencakup lebih dari 4.000 engineer dan inovator dalam komunitas yang aktif, serta Ichibot Store dengan 1.500+ komponen elektronika dan sensor untuk riset dan pengembangan.' },
+  ],
+  whyTitle: 'Mengapa bekerja dengan Ichibot',
+  why: [
+    { title: 'Full-stack dari silikon ke cloud', desc: 'Kami memahami sistem dari level firmware dan protokol komunikasi non-standar hingga platform cloud. Ketika kebutuhan tak tersedia di pasar, tim kami mengerjakannya in-house, tanpa ketergantungan vendor luar.' },
+    { title: 'Solusi end-to-end plus enablement', desc: 'Setiap engagement mencakup solusi AI-IoT yang end-to-end, enablement tim internal klien untuk mandiri, dan akses ke ekosistem engineer serta komponen yang telah kami rawat hampir satu dekade.' },
+    { title: 'Ekosistem 4.000+ engineer', desc: 'Komunitas aktif yang menjadi talent pipeline dan kontribusi nyata pada kedaulatan teknologi nasional. Ichibot Store dengan 1.500+ komponen mendukung riset dan pengembangan di seluruh Indonesia.' },
+    { title: 'Terbukti di skala enterprise', desc: 'Toyota, Pertamina, BCA, dan perusahaan enterprise Indonesia menjalankan sistem kami di lingkungan produksi yang menuntut.' },
+  ],
+  teamTitle: 'Orang-orang di balik Ichibot',
+}
+
+const c = lang === 'id' ? id : en
+---
+
+<PageLayout title={c.meta.title} description={c.meta.description}>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>{c.h1}</h1>
+      <p class="lede">{c.lede}</p>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <dl class="stats">
+        {c.stats.map((s) => (
+          <div><dt>{s.label}</dt><dd>{s.value}</dd></div>
+        ))}
+      </dl>
+
+      <div class="about-story">
+        <h2>{c.storyTitle}</h2>
+        <div>
+          {c.story.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <h2>{c.timelineTitle}</h2>
+      <p class="lede">{c.timelineLede}</p>
+      <ol class="timeline">
+        {c.milestones.map((m) => (
+          <li>
+            <span class="timeline-year">{m.year}</span>
+            <div>
+              <h3>{m.title}</h3>
+              <p>{m.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <h2>{c.whyTitle}</h2>
+      <div class="why-grid">
+        {c.why.map((w) => (
+          <div>
+            <h3>{w.title}</h3>
+            <p>{w.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {team.length > 0 && (
+    <section class="page-body">
+      <div class="wrap">
+        <h2>{c.teamTitle}</h2>
+        <ul class="team">
+          {team.map((m) => (
+            <li>
+              {m.image && <img src={m.image} alt="" loading="lazy" decoding="async" />}
+              <h3>{m.name}</h3>
+              <small>{m.role}</small>
+              {m.bio && <p lang="id">{m.bio}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+</PageLayout>

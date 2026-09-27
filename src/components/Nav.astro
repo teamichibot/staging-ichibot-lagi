@@ -5,29 +5,45 @@
  * CTA; the link for the section in view is marked. Below 880px the links fold
  * into a menu panel behind a toggle button.
  */
-import { products } from '../data/products'
+import { productsFor } from '../data/products'
 import { productIcons } from '../data/product-icons'
+import { basePath, langFromUrl, localize, type Lang } from '../i18n'
 
-// Section anchors live on the homepage; other pages link back to them.
-const home = Astro.url.pathname === '/' ? '' : '/'
+const lang = langFromUrl(Astro.url)
+const page = basePath(Astro.url.pathname)
+const products = productsFor(lang)
+const t = {
+  en: { products: 'Products', all: 'See all products →', how: 'How it works', cases: 'Case studies', services: 'Services', insights: 'Insights', cta: 'Book a site survey', company: 'Company', open: 'Open menu', close: 'Close menu', home: 'Ichibot home', main: 'Main', language: 'Language' },
+  id: { products: 'Produk', all: 'Lihat semua produk →', how: 'Cara kerja', cases: 'Studi kasus', services: 'Layanan', insights: 'Artikel', cta: 'Jadwalkan survei lokasi', company: 'Perusahaan', open: 'Buka menu', close: 'Tutup menu', home: 'Beranda Ichibot', main: 'Utama', language: 'Bahasa' },
+}[lang]
+
+// Section anchors live on the homepage; other pages link back to it.
+const home = page === '/' ? '' : localize('/', lang)
 // The CTA scrolls to the survey section on pages that have one (all but /contact).
-const contactHref = Astro.url.pathname === '/contact' ? '#contact-form' : '#contact'
+const contactHref = page === '/contact' ? '#contact-form' : '#contact'
+const blog = localize('/blog', lang)
 const links = [
-  { href: `${home}#platform`, label: 'How it works' },
-  { href: `${home}#cases`, label: 'Case studies' },
-  { href: `${home}#services`, label: 'Services' },
-  { href: '/blog', label: 'Insights' },
+  { href: `${home}#platform`, label: t.how },
+  { href: `${home}#cases`, label: t.cases },
+  { href: `${home}#services`, label: t.services },
+  { href: blog, label: t.insights },
 ]
+// Same page in each language, keeping filters such as ?category=.
+const langs: { code: Lang; label: string; name: string }[] = [
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'id', label: 'ID', name: 'Bahasa Indonesia' },
+]
+const switchHref = (l: Lang) => localize(page, l) + Astro.url.search
 ---
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="Ichibot home"><span class="logo" role="img" aria-label="Ichibot"></span></a>
+    <a class="brand" href={localize('/', lang)} aria-label={t.home}><span class="logo" role="img" aria-label="Ichibot"></span></a>
 
-    <nav class="nav-links" aria-label="Main">
+    <nav class="nav-links" aria-label={t.main}>
       <div class="nav-drop">
         <button type="button" class="nav-drop-btn" aria-expanded="false" aria-controls="nav-products" data-section="products">
-          Products
+          {t.products}
           <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" /></svg>
         </button>
         <div class="nav-panel" id="nav-products">
@@ -44,15 +60,20 @@ const links = [
               </li>
             ))}
           </ul>
-          <a class="nav-panel-all" href={`${home}#products`}>See all products →</a>
+          <a class="nav-panel-all" href={`${home}#products`}>{t.all}</a>
         </div>
       </div>
-      {links.map((l) => <a href={l.href} data-section={l.href.split('#')[1]} aria-current={l.href === '/blog' && Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>{l.label}</a>)}
+      {links.map((l) => <a href={l.href} data-section={l.href.split('#')[1]} aria-current={l.href === blog && page.startsWith('/blog') ? 'page' : undefined}>{l.label}</a>)}
     </nav>
 
     <div class="nav-end">
-      <a class="btn primary sm nav-cta" href={contactHref}>Book a site survey</a>
-      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label="Open menu">
+      <div class="lang-switch" role="group" aria-label={t.language}>
+        {langs.map((l) => (
+          <a href={switchHref(l.code)} hreflang={l.code} lang={l.code} title={l.name} aria-current={l.code === lang ? 'true' : undefined}>{l.label}</a>
+        ))}
+      </div>
+      <a class="btn primary sm nav-cta" href={contactHref}>{t.cta}</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label={t.open} data-open={t.open} data-close={t.close}>
         <span></span><span></span>
       </button>
     </div>
@@ -60,7 +81,7 @@ const links = [
 
   <div class="nav-mobile" id="nav-mobile" hidden>
     <div class="wrap">
-      <small>Products</small>
+      <small>{t.products}</small>
       <ul>
         {products.map((p) => (
           <li>
@@ -71,11 +92,11 @@ const links = [
           </li>
         ))}
       </ul>
-      <small>Company</small>
+      <small>{t.company}</small>
       <ul>
         {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
       </ul>
-      <a class="btn primary" href={contactHref}>Book a site survey</a>
+      <a class="btn primary" href={contactHref}>{t.cta}</a>
     </div>
   </div>
 </header>
@@ -103,7 +124,7 @@ const links = [
   const mobile = header.querySelector<HTMLElement>('.nav-mobile')!
   const setMobile = (open: boolean) => {
     toggle.setAttribute('aria-expanded', String(open))
-    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+    toggle.setAttribute('aria-label', (open ? toggle.dataset.close : toggle.dataset.open) ?? '')
     mobile.hidden = !open
     header.classList.toggle('menu-open', open)
   }

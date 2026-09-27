@@ -1,6 +1,6 @@
 ---
-import Contact from '../views/Contact.astro'
-import { handleContactForm } from '../lib/contact-mail'
+import Contact from '../../views/Contact.astro'
+import { handleContactForm } from '../../lib/contact-mail'
 
 const result = await handleContactForm(Astro.request, import.meta.env.RESEND_API_KEY)
 Astro.response.status = result.httpStatus

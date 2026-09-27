@@ -36,9 +36,18 @@ export function clientFor(text: string, logos: ClientLogo[]): ClientLogo | undef
   }
 }
 
-export function tagFor(text: string): CaseTag | undefined {
+/** Bahasa labels for the tags that are not product names. */
+const TAG_LABELS_ID: Record<string, string> = {
+  'In-house training': 'Pelatihan in-house',
+  'Custom system integration': 'Integrasi sistem custom',
+  'Custom monitoring system': 'Sistem monitoring custom',
+}
+
+export function tagFor(text: string, lang: 'en' | 'id' = 'en'): CaseTag | undefined {
   const hit = TAG_RULES.find(([re]) => re.test(text))
-  return hit ? { label: hit[1], icon: hit[2] } : undefined
+  if (!hit) return undefined
+  const label = lang === 'id' ? (TAG_LABELS_ID[hit[1]] ?? hit[1]) : hit[1]
+  return { label, icon: hit[2] }
 }
 
 /** 16x16 line icons: the product ones, plus two for service-led projects. */

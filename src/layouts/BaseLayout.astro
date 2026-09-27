@@ -2,6 +2,7 @@
 import '@fontsource-variable/geist'
 import '../styles/global.css'
 import WhatsAppButton from '../components/WhatsAppButton.astro'
+import { basePath, langFromUrl, localize } from '../i18n'
 
 interface Props {
   title: string
@@ -14,16 +15,24 @@ interface Props {
 
 const { title, description, image, type = 'website' } = Astro.props
 const canonical = new URL(Astro.url.pathname, Astro.site)
+const lang = langFromUrl(Astro.url)
+// Every page exists in both languages at the same path, /id-prefixed for Bahasa.
+const base = basePath(Astro.url.pathname)
+const alt = (l: 'en' | 'id') => new URL(localize(base, l), Astro.site).href
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={alt('en')} />
+    <link rel="alternate" hreflang="id" href={alt('id')} />
+    <link rel="alternate" hreflang="x-default" href={alt('en')} />
+    <meta property="og:locale" content={lang === 'id' ? 'id_ID' : 'en_US'} />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

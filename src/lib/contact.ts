@@ -7,9 +7,16 @@
  */
 export const WHATSAPP_NUMBER = '6287763484384'
 
-const GREETING = 'Hello Ichibot, I would like to talk about monitoring for our plant.'
+const GREETING = {
+  en: 'Hello Ichibot, I would like to talk about monitoring for our plant.',
+  id: 'Halo Ichibot, saya ingin berdiskusi tentang monitoring untuk pabrik kami.',
+}
 
-export const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(GREETING)}`
+const wa = (text: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
+
+/** WhatsApp link with the opening message in the visitor's language. */
+export const whatsappLinkFor = (lang: 'en' | 'id') => wa(GREETING[lang])
+export const whatsappLink = whatsappLinkFor('en')
 
 /** From the old site's footer and CTA (branch main: lib/translations.ts, CTASection.tsx). */
 export const EMAIL = 'hello@ichibot.id'
@@ -21,9 +28,13 @@ export const socials = [
 ]
 
 /** WhatsApp link whose opening message names the product the visitor asked about. */
-export const demoLink = (product: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    product === 'Custom'
-      ? 'Hello Ichibot, I would like to discuss a custom system for our plant.'
-      : `Hello Ichibot, I would like to request a demo of ${product}.`,
-  )}`
+export const demoLink = (product: string, lang: 'en' | 'id' = 'en') =>
+  wa(
+    lang === 'id'
+      ? product === 'Custom'
+        ? 'Halo Ichibot, saya ingin berdiskusi tentang sistem custom untuk pabrik kami.'
+        : `Halo Ichibot, saya ingin meminta demo ${product}.`
+      : product === 'Custom'
+        ? 'Hello Ichibot, I would like to discuss a custom system for our plant.'
+        : `Hello Ichibot, I would like to request a demo of ${product}.`,
+  )

@@ -3,15 +3,21 @@ import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
 import { getClientLogos } from '../lib/site-data'
 import { clientFor, tagFor, tagIcons } from '../lib/case-tags'
+import { langFromUrl, localize } from '../i18n'
 
 /**
  * Cards follow the Insights layout: a rounded photo, then the client's logo
  * and the product or service the project shows, then the title. Three to a view on desktop.
  */
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: { title: 'Case studies', prev: 'Previous case study', next: 'Next case study', all: 'All projects', empty: 'Case studies are temporarily unavailable.', region: 'Case studies', sample: 'Sample', logo: 'Client logo' },
+  id: { title: 'Studi kasus', prev: 'Studi kasus sebelumnya', next: 'Studi kasus berikutnya', all: 'Semua proyek', empty: 'Studi kasus sedang tidak tersedia.', region: 'Studi kasus', sample: 'Contoh', logo: 'Logo klien' },
+}[lang]
 const [studies, logos] = await Promise.all([getCaseStudies(9), getClientLogos()])
 const cards = studies.map((s) => {
   const text = `${s.title} ${s.excerpt ?? ''}`
-  return { ...s, client: clientFor(s.title, logos), tag: tagFor(text) }
+  return { ...s, client: clientFor(s.title, logos), tag: tagFor(text, lang) }
 })
 
 /**
@@ -23,12 +29,22 @@ const cards = studies.map((s) => {
  * a placeholder, since a real logo beside an invented quote would read as an
  * endorsement the client never gave.
  */
-const quotes: { quote: string; name: string; role: string; sample?: boolean; clientId?: string }[] = [
-  { quote: 'We finally see what every compressor is doing before it trips, not after the line stops.', name: 'Maintenance Manager', role: 'Automotive manufacturer', sample: true },
-  { quote: 'The weighbridge now writes straight into our ERP. Nobody retypes a ticket any more.', name: 'Operations Head', role: 'Agribusiness group', sample: true },
-  { quote: 'They clipped sensors onto equipment older than half our team, and it just started reporting.', name: 'Plant Engineer', role: 'State-owned enterprise', sample: true },
-  { quote: 'The pilot ran on one line for a month. That was enough to approve the rest of the site.', name: 'Engineering Lead', role: 'Manufacturing plant', sample: true },
-]
+type Quote = { quote: string; name: string; role: string; sample?: boolean; clientId?: string }
+const quotesByLang: Record<'en' | 'id', Quote[]> = {
+  en: [
+    { quote: 'We finally see what every compressor is doing before it trips, not after the line stops.', name: 'Maintenance Manager', role: 'Automotive manufacturer', sample: true },
+    { quote: 'The weighbridge now writes straight into our ERP. Nobody retypes a ticket any more.', name: 'Operations Head', role: 'Agribusiness group', sample: true },
+    { quote: 'They clipped sensors onto equipment older than half our team, and it just started reporting.', name: 'Plant Engineer', role: 'State-owned enterprise', sample: true },
+    { quote: 'The pilot ran on one line for a month. That was enough to approve the rest of the site.', name: 'Engineering Lead', role: 'Manufacturing plant', sample: true },
+  ],
+  id: [
+    { quote: 'Akhirnya kami tahu kondisi setiap kompresor sebelum trip, bukan setelah lini berhenti.', name: 'Maintenance Manager', role: 'Produsen otomotif', sample: true },
+    { quote: 'Jembatan timbang kini langsung tercatat ke ERP kami. Tidak ada lagi yang mengetik ulang tiket.', name: 'Kepala Operasional', role: 'Grup agribisnis', sample: true },
+    { quote: 'Mereka memasang sensor di peralatan yang lebih tua dari separuh tim kami, dan datanya langsung masuk.', name: 'Plant Engineer', role: 'Badan usaha milik negara', sample: true },
+    { quote: 'Pilot berjalan di satu lini selama sebulan. Itu cukup untuk menyetujui penerapan di seluruh lokasi.', name: 'Engineering Lead', role: 'Pabrik manufaktur', sample: true },
+  ],
+}
+const quotes = quotesByLang[lang]
 type Item = { kind: 'case'; c: (typeof cards)[number]; i: number } | { kind: 'quote'; q: (typeof quotes)[number] }
 const items: Item[] = []
 cards.forEach((c, i) => {
@@ -42,30 +58,30 @@ cards.forEach((c, i) => {
 <section id="cases">
   <div class="wrap">
     <div class="head-row">
-      <h2>Case studies</h2>
+      <h2>{t.title}</h2>
       <div class="head-actions">
         <div class="car-nav" hidden>
-          <button type="button" class="car-btn" data-dir="-1" aria-label="Previous case study">
+          <button type="button" class="car-btn" data-dir="-1" aria-label={t.prev}>
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
           </button>
-          <button type="button" class="car-btn" data-dir="1" aria-label="Next case study">
+          <button type="button" class="car-btn" data-dir="1" aria-label={t.next}>
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
           </button>
         </div>
-        <a class="btn sm" href="/blog?category=Case Study">All projects</a>
+        <a class="btn sm" href={`${localize('/blog', lang)}?category=Case%20Study`}>{t.all}</a>
       </div>
     </div>
 
     {
       studies.length === 0 ? (
-        <p class="lede">Case studies are temporarily unavailable.</p>
+        <p class="lede">{t.empty}</p>
       ) : (
-        <div class="carousel" tabindex="0" role="region" aria-label="Case studies">
+        <div class="carousel" tabindex="0" role="region" aria-label={t.region}>
           {items.map((it) =>
             it.kind === 'quote' ? (
               <figure class="case-quote">
                 <div class="quote-box">
-                  {it.q.sample && <span class="sample">Sample</span>}
+                  {it.q.sample && <span class="sample">{t.sample}</span>}
                   <blockquote>“{it.q.quote}”</blockquote>
                 </div>
                 <figcaption>
@@ -73,7 +89,7 @@ cards.forEach((c, i) => {
                     {it.q.clientId ? (
                       <img class="case-logo" src={`/client-logo/${encodeURIComponent(it.q.clientId)}`} alt="" loading="lazy" />
                     ) : (
-                      <span class="logo-slot">Client logo</span>
+                      <span class="logo-slot">{t.logo}</span>
                     )}
                   </div>
                   <b>{it.q.name}</b>

@@ -1,22 +1,29 @@
 ---
 /**
- * Not found. Old-site URLs that were deliberately dropped in the rebuild
- * (the 12 former /produk pages, /layanan) land here, so the page points at
- * where that content lives now.
+ * Not found, in the language of the URL that was asked for. Old-site URLs
+ * that were deliberately dropped in the rebuild (the 12 former /produk pages,
+ * /layanan) land here, so the page points at where that content lives now.
  */
 import PageLayout from '../layouts/PageLayout.astro'
+import { langFromUrl, localize } from '../i18n'
+
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: { meta: 'Page not found — Ichibot', desc: 'The page you are looking for does not exist.', title: 'This page does not exist', lede: 'It may have moved when we rebuilt the site. Products and services are now on the homepage, and every article is under Insights.', products: 'Our products', insights: 'Insights', contact: 'Contact us' },
+  id: { meta: 'Halaman tidak ditemukan — Ichibot', desc: 'Halaman yang Anda cari tidak ada.', title: 'Halaman ini tidak ada', lede: 'Mungkin halamannya pindah saat situs kami diperbarui. Produk dan layanan kini ada di beranda, dan semua artikel ada di halaman Artikel.', products: 'Produk kami', insights: 'Artikel', contact: 'Hubungi kami' },
+}[lang]
 ---
 
-<PageLayout title="Page not found — Ichibot" description="The page you are looking for does not exist." cta={false}>
+<PageLayout title={t.meta} description={t.desc} cta={false}>
   <section class="page-head not-found">
     <div class="wrap">
       <p class="nf-code">404</p>
-      <h1>This page does not exist</h1>
-      <p class="lede">It may have moved when we rebuilt the site. Products and services are now on the homepage, and every article is under Insights.</p>
+      <h1>{t.title}</h1>
+      <p class="lede">{t.lede}</p>
       <div class="actions">
-        <a class="btn primary" href="/#products">Our products</a>
-        <a class="btn" href="/blog">Insights</a>
-        <a class="btn" href="/contact">Contact us</a>
+        <a class="btn primary" href={`${localize('/', lang)}#products`}>{t.products}</a>
+        <a class="btn" href={localize('/blog', lang)}>{t.insights}</a>
+        <a class="btn" href={localize('/contact', lang)}>{t.contact}</a>
       </div>
     </div>
   </section>

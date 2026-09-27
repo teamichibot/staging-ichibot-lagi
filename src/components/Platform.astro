@@ -9,6 +9,29 @@
  * built in HTML so they follow the theme; the numbers in them are
  * illustrative, not a client's data. Copy stays plain and descriptive.
  */
+import { langFromUrl } from '../i18n'
+
+// Section copy is translated; the UI mockups stay in English, like the
+// product dashboards they depict.
+const t = {
+  en: {
+    title: 'End-to-end industrial IoT',
+    lede: 'We handle every layer of the system: connecting to your machines and sensors, monitoring them in real time, logging the data, and putting it to work in your other applications.',
+    f1: ['Sensor and data connection', 'Connect PLCs, controllers, power meters, IP cameras and sensors. Every signal becomes a named data point with its source, unit and status.'],
+    f2: ['Real-time monitoring dashboard', 'See live values, trends and alarms for each machine and line, on site or from anywhere.'],
+    f3: ['Data logging and reports', 'Every reading is stored in a database. Browse the history, and get hourly, daily and monthly recaps ready to export for reports and audits.'],
+    f4: ['Integrations: ERP, AI and alerts', 'Put the data to work in other systems: sync records to your ERP or MES, run AI analytics for anomalies and detections, and send notifications by WhatsApp or email.'],
+  },
+  id: {
+    title: 'Industrial IoT dari ujung ke ujung',
+    lede: 'Kami menangani setiap lapisan sistem: menghubungkan mesin dan sensor Anda, memantaunya secara real-time, mencatat datanya, dan memanfaatkannya di aplikasi Anda yang lain.',
+    f1: ['Koneksi sensor dan data', 'Hubungkan PLC, kontroler, power meter, kamera IP, dan sensor. Setiap sinyal menjadi data point bernama lengkap dengan sumber, satuan, dan statusnya.'],
+    f2: ['Dashboard monitoring real-time', 'Lihat nilai live, tren, dan alarm untuk setiap mesin dan lini, di lokasi maupun dari mana saja.'],
+    f3: ['Pencatatan data dan laporan', 'Setiap pembacaan tersimpan di database. Telusuri riwayatnya, dan dapatkan rekap per jam, harian, dan bulanan yang siap diekspor untuk laporan dan audit.'],
+    f4: ['Integrasi: ERP, AI, dan notifikasi', 'Manfaatkan data di sistem lain: sinkronkan catatan ke ERP atau MES, jalankan analisis AI untuk anomali dan deteksi, dan kirim notifikasi lewat WhatsApp atau email.'],
+  },
+}[langFromUrl(Astro.url)]
+
 const protocols = [
   'Modbus RTU', 'Modbus TCP', 'MQTT', 'OPC UA', 'RS-485', 'Ethernet', 'RTSP', 'REST API',
 ]
@@ -54,21 +77,14 @@ const recap = [
   style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)"
 >
   <div class="wrap">
-    <h2>End-to-end industrial IoT</h2>
-    <p class="lede">
-      We handle every layer of the system: connecting to your machines and sensors,
-      monitoring them in real time, logging the data, and putting it to work in your other
-      applications.
-    </p>
+    <h2>{t.title}</h2>
+    <p class="lede">{t.lede}</p>
 
     <div class="features">
       <article class="feature">
         <div class="feature-copy">
-          <h3>Sensor and data connection</h3>
-          <p>
-            Connect PLCs, controllers, power meters, IP cameras and sensors. Every signal
-            becomes a named data point with its source, unit and status.
-          </p>
+          <h3>{t.f1[0]}</h3>
+          <p>{t.f1[1]}</p>
           <div class="chips">{protocols.map((p) => <span>{p}</span>)}</div>
         </div>
         <div class="feature-shot" aria-hidden="true">
@@ -92,11 +108,8 @@ const recap = [
 
       <article class="feature">
         <div class="feature-copy">
-          <h3>Real-time monitoring dashboard</h3>
-          <p>
-            See live values, trends and alarms for each machine and line, on site or from
-            anywhere.
-          </p>
+          <h3>{t.f2[0]}</h3>
+          <p>{t.f2[1]}</p>
         </div>
         <div class="feature-shot" aria-hidden="true">
           <div class="ui">
@@ -131,11 +144,8 @@ const recap = [
 
       <article class="feature">
         <div class="feature-copy">
-          <h3>Data logging and reports</h3>
-          <p>
-            Every reading is stored in a database. Browse the history, and get hourly, daily
-            and monthly recaps ready to export for reports and audits.
-          </p>
+          <h3>{t.f3[0]}</h3>
+          <p>{t.f3[1]}</p>
         </div>
         <div class="feature-shot" aria-hidden="true">
           <div class="ui">
@@ -159,12 +169,8 @@ const recap = [
 
       <article class="feature">
         <div class="feature-copy">
-          <h3>Integrations: ERP, AI and alerts</h3>
-          <p>
-            Put the data to work in other systems: sync records to your ERP or MES, run AI
-            analytics for anomalies and detections, and send notifications by WhatsApp or
-            email.
-          </p>
+          <h3>{t.f4[0]}</h3>
+          <p>{t.f4[1]}</p>
         </div>
         <div class="feature-shot" aria-hidden="true">
           <div class="ui apps">

@@ -1,6 +1,6 @@
 ---
-import PostView from '../../views/Post.astro'
-import { getPost } from '../../lib/blog'
+import PostView from '../../../views/Post.astro'
+import { getPost } from '../../../lib/blog'
 
 const post = await getPost(Astro.params.slug ?? '')
 if (!post) return Astro.rewrite('/404')

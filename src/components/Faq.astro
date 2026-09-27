@@ -1,16 +1,65 @@
 ---
 // Carried over from the approved draft.
+import { langFromUrl } from '../i18n'
+
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: { title: 'Questions we hear often', lede: 'Something else on your mind? Talk to our engineers directly.' },
+  id: { title: 'Pertanyaan yang sering kami dengar', lede: 'Ada pertanyaan lain? Bicara langsung dengan engineer kami.' },
+}[lang]
+const faqs: Record<'en' | 'id', [string, string][]> = {
+  "en": [
+    [
+      "Do we need to replace our existing machines?",
+      "No. Ichibot works with the PLCs, meters and machines you already have, and adds retrofit sensors where data isn't available yet."
+    ],
+    [
+      "Where is our data stored?",
+      "Your choice. Data can stay fully on-premise, go to the cloud, or both. The edge device always keeps a local log."
+    ],
+    [
+      "How long does a typical project take?",
+      "A pilot on one line usually goes live in 2–6 weeks after the site survey, depending on the number of devices and integrations."
+    ],
+    [
+      "Can it integrate with our ERP?",
+      "Yes, through API, direct database connection or MQTT. We map the data together with your IT team during implementation."
+    ],
+    [
+      "What happens when the internet goes down?",
+      "The edge device keeps collecting and logging data locally, and syncs automatically once the connection is back."
+    ]
+  ],
+  "id": [
+    [
+      "Apakah kami perlu mengganti mesin yang sudah ada?",
+      "Tidak. Ichibot bekerja dengan PLC, meter, dan mesin yang sudah Anda miliki, lalu menambahkan sensor retrofit di titik yang datanya belum tersedia."
+    ],
+    [
+      "Di mana data kami disimpan?",
+      "Anda yang menentukan. Data bisa sepenuhnya on-premise, di cloud, atau keduanya. Perangkat edge selalu menyimpan log lokal."
+    ],
+    [
+      "Berapa lama proyek biasanya berjalan?",
+      "Pilot di satu lini biasanya aktif 2–6 minggu setelah survei lokasi, tergantung jumlah perangkat dan integrasinya."
+    ],
+    [
+      "Apakah bisa terintegrasi dengan ERP kami?",
+      "Bisa, melalui API, koneksi database langsung, atau MQTT. Kami memetakan datanya bersama tim IT Anda selama implementasi."
+    ],
+    [
+      "Apa yang terjadi saat internet mati?",
+      "Perangkat edge tetap mengumpulkan dan mencatat data secara lokal, lalu menyinkronkan otomatis begitu koneksi kembali."
+    ]
+  ]
+}
 ---
 
 <section class="faq" style="padding-top:0">
   <div class="wrap">
-    <div><h2>Questions we hear often</h2><p class="lede">Something else on your mind? Talk to our engineers directly.</p></div>
+    <div><h2>{t.title}</h2><p class="lede">{t.lede}</p></div>
     <div>
-      <details><summary>Do we need to replace our existing machines?</summary><p>No. Ichibot works with the PLCs, meters and machines you already have, and adds retrofit sensors where data isn't available yet.</p></details>
-      <details><summary>Where is our data stored?</summary><p>Your choice. Data can stay fully on-premise, go to the cloud, or both. The edge device always keeps a local log.</p></details>
-      <details><summary>How long does a typical project take?</summary><p>A pilot on one line usually goes live in 2–6 weeks after the site survey, depending on the number of devices and integrations.</p></details>
-      <details><summary>Can it integrate with our ERP?</summary><p>Yes, through API, direct database connection or MQTT. We map the data together with your IT team during implementation.</p></details>
-      <details><summary>What happens when the internet goes down?</summary><p>The edge device keeps collecting and logging data locally, and syncs automatically once the connection is back.</p></details>
+      {faqs[lang].map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
     </div>
   </div>
 </section>

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
-import { products } from '../data/products'
+import { productsFor } from '../data/products'
+import { langFromUrl } from '../i18n'
 import { demoLink } from '../lib/contact'
 import { productIcons } from '../data/product-icons'
 import EnergyDashboard from './EnergyDashboard.astro'
@@ -10,6 +11,12 @@ import VisionDashboard from './VisionDashboard.astro'
 import CustomDashboard from './CustomDashboard.astro'
 
 const icons = productIcons
+const lang = langFromUrl(Astro.url)
+const products = productsFor(lang)
+const t = {
+  en: { title: 'Products proven in the field, ready to deploy', lede: 'Each product is based on a system already running at a client site.', tabs: 'Products', demo: 'Request a demo', shot: 'dashboard' },
+  id: { title: 'Produk yang sudah terbukti di lapangan, siap diterapkan', lede: 'Setiap produk berasal dari sistem yang sudah berjalan di lokasi klien.', tabs: 'Produk', demo: 'Minta demo', shot: 'dashboard' },
+}[lang]
 
 /** Same polyline maths as the draft, run at build time instead of in the browser. */
 function sparkPoints(values: number[]) {
@@ -25,15 +32,13 @@ function sparkPoints(values: number[]) {
 
 <section id="products">
   <div class="wrap">
-    <h2>Products proven in the field, ready to deploy</h2>
-    <p class="lede">
-      Each product is based on a system already running at a client site.
-    </p>
+    <h2>{t.title}</h2>
+    <p class="lede">{t.lede}</p>
 
     {/* scroll targets for the navbar's #product-<key> links */}
     {products.map((p) => <span class="tab-anchor" id={`product-${p.key}`} aria-hidden="true" />)}
     <div class="tabs">
-      <div class="tablist" role="tablist" aria-label="Products" id="tablist">
+      <div class="tablist" role="tablist" aria-label={t.tabs} id="tablist">
         {
           products.map((p, i) => (
             <button
@@ -81,7 +86,7 @@ function sparkPoints(values: number[]) {
               <figure class="shot-frame">
                 <Image
                   src={p.screenshot}
-                  alt={`${p.name} dashboard`}
+                  alt={`${p.name} ${t.shot}`}
                   widths={[640, 960, 1280]}
                   sizes="(max-width: 900px) 92vw, 62vw"
                   loading="lazy"
@@ -130,7 +135,7 @@ function sparkPoints(values: number[]) {
                 <h3>{p.name}</h3>
                 <p class="desc">{p.desc}</p>
               </div>
-              <a class="btn primary" href={demoLink(p.name)} target="_blank" rel="noopener">{p.cta ?? 'Request a demo'}</a>
+              <a class="btn primary" href={demoLink(p.name, lang)} target="_blank" rel="noopener">{p.cta ?? t.demo}</a>
             </div>
           </div>
         ))

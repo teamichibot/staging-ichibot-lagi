@@ -1,4 +1,5 @@
 ---
+import { langFromUrl } from '../i18n'
 import { getClientLogos } from '../lib/site-data'
 
 /**
@@ -17,13 +18,14 @@ import { getClientLogos } from '../lib/site-data'
  * wrapping row instead.
  */
 const logos = await getClientLogos()
+const lang = langFromUrl(Astro.url)
 ---
 
 {
   logos.length > 0 && (
     <section class="logos">
       <div class="wrap">
-        <p>Trusted by state-owned enterprises, manufacturers and institutions in Indonesia</p>
+        <p>{lang === 'id' ? 'Dipercaya BUMN, manufaktur, dan institusi di Indonesia' : 'Trusted by state-owned enterprises, manufacturers and institutions in Indonesia'}</p>
       </div>
       <div class="marquee" style={`--n:${logos.length}`}>
         <div class="marquee-track">

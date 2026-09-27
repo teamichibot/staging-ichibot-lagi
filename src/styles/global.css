@@ -1091,3 +1091,9 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .not-found .lede{margin-left:auto;margin-right:auto}
 .nf-code{margin:0 0 .6rem;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums}
 .not-found .actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:2rem}
+
+/* Language switch (EN / ID) in the navbar; visible at every width. */
+.lang-switch{display:inline-flex;align-items:center;height:30px;padding:2px;border:1px solid var(--border2);border-radius:999px;margin-right:.2rem}
+.lang-switch a{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:24px;padding:0 .5rem;border-radius:999px;color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.02em}
+.lang-switch a:hover{color:var(--text)}
+.lang-switch a[aria-current]{background:var(--text);color:var(--bg)}

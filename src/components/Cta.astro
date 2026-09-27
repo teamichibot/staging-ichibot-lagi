@@ -1,11 +1,18 @@
 ---
-import { SURVEY_FORM, whatsappLink } from '../lib/contact'
+import { SURVEY_FORM, whatsappLinkFor } from '../lib/contact'
+import { langFromUrl } from '../i18n'
+
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: { title: 'Tell us about your plant', lede: 'Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.', survey: 'Book a site survey', wa: 'Chat on WhatsApp' },
+  id: { title: 'Ceritakan tentang pabrik Anda', lede: 'Engineer kami akan berkunjung, memetakan mesin dan data Anda, lalu mengusulkan pilot yang sesuai anggaran.', survey: 'Jadwalkan survei lokasi', wa: 'Chat via WhatsApp' },
+}[lang]
 ---
 
 <section class="cta" id="contact">
   <div class="wrap">
-    <h2>Tell us about your plant</h2>
-    <p class="lede">Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.</p>
-    <div class="actions"><a class="btn primary" href={SURVEY_FORM} target="_blank" rel="noopener">Book a site survey</a><a class="btn" href={whatsappLink} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a></div>
+    <h2>{t.title}</h2>
+    <p class="lede">{t.lede}</p>
+    <div class="actions"><a class="btn primary" href={SURVEY_FORM} target="_blank" rel="noopener">{t.survey}</a><a class="btn" href={whatsappLinkFor(lang)} target="_blank" rel="noopener noreferrer">{t.wa}</a></div>
   </div>
 </section>

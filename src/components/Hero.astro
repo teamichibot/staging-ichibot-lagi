@@ -1,5 +1,24 @@
 ---
 import HubCore from './HubCore.astro'
+import { langFromUrl } from '../i18n'
+
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: {
+    lede: "We help Indonesian industries connect every machine with industrial IoT, see what's happening in real time, and act on it, from the shop floor to your ERP.",
+    survey: 'Book a site survey', explore: 'Explore products', tab: 'Data flow',
+    diagram: 'Machines, sensors, cameras and meters send data to the Ichibot Smart System, which delivers it to dashboards, ERP, alerts and AI insights',
+    synced: '✓ Synced', newAlerts: 'new', anomaly: '1 anomaly',
+  },
+  id: {
+    lede: 'Kami membantu industri Indonesia menghubungkan setiap mesin dengan industrial IoT, melihat kondisi secara real-time, dan bertindak cepat, dari lantai produksi hingga ERP Anda.',
+    survey: 'Jadwalkan survei lokasi', explore: 'Lihat produk', tab: 'Alur data',
+    diagram: 'Mesin, sensor, kamera, dan meter mengirim data ke Ichibot Smart System, yang meneruskannya ke dashboard, ERP, peringatan, dan analisis AI',
+    synced: '✓ Tersinkron', newAlerts: 'baru', anomaly: '1 anomali',
+  },
+}[lang]
+/** Rough width of a chip label in the 9.5px chip font, plus padding. */
+const chipW = (text: string) => Math.round(text.length * 5.4 + 14)
 
 /**
  * Hub diagram: sources feed the Ichibot Smart System gateway, which feeds
@@ -47,6 +66,24 @@ const outputs = [
   { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections', short: 'Anomalies' },
 ]
 
+/** Bahasa labels for the diagram nodes, in the same order as above. */
+if (lang === 'id') {
+  const src = [
+    { title: 'PLC/Kontroler', sub: 'Modbus RTU / TCP', short: 'Modbus RTU/TCP' },
+    { title: 'Sensor', sub: 'Suhu, tekanan, getaran', short: 'Suhu, tekanan' },
+    { title: 'Kamera IP', sub: 'Video RTSP', short: 'Video RTSP', live: { text: '4 stream' } },
+    { title: 'Meter energi', sub: 'kWh, kualitas daya', short: 'kWh, kualitas' },
+  ]
+  const out = [
+    { title: 'Dashboard', sub: 'KPI dan tren live', short: 'KPI, tren' },
+    { title: 'ERP / MES', sub: 'Sinkron data otomatis', short: 'Sinkron otomatis' },
+    { title: 'Peringatan', sub: 'WhatsApp, email, sirene', short: 'WhatsApp, email' },
+    { title: 'Analisis AI', sub: 'Anomali, deteksi', short: 'Anomali' },
+  ]
+  src.forEach((o, i) => Object.assign(sources[i], o))
+  out.forEach((o, i) => Object.assign(outputs[i], o))
+}
+
 /**
  * Narrow screens get a vertical version of the same diagram: sources in a 2x2
  * grid on top, the core in the middle, outputs in a 2x2 grid below. Top-row
@@ -88,17 +125,17 @@ const D = (() => {
   <canvas class="hero-bg" aria-hidden="true"></canvas>
   <div class="wrap">
     <h1>Intelligent industrial hub</h1>
-    <p class="lede">We help Indonesian industries connect every machine with industrial IoT, see what's happening in real time, and act on it, from the shop floor to your ERP.</p>
+    <p class="lede">{t.lede}</p>
     <div class="actions">
-      <a class="btn primary" href="#contact">Book a site survey</a>
-      <a class="btn" href="#products">Explore products</a>
+      <a class="btn primary" href="#contact">{t.survey}</a>
+      <a class="btn" href="#products">{t.explore}</a>
     </div>
 
     <div class="stage">
-      <div class="window hub" role="img" aria-label="Machines, sensors, cameras and meters send data to the Ichibot Smart System, which delivers it to dashboards, ERP, alerts and AI insights">
+      <div class="window hub" role="img" aria-label={t.diagram}>
         <div class="window-bar" aria-hidden="true">
           <span class="lights"><b></b><b></b><b></b></span>
-          <span class="win-tab"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" /><circle cx="8" cy="8" r="1.8" /></svg>Data flow<i>×</i></span>
+          <span class="win-tab"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" /><circle cx="8" cy="8" r="1.8" /></svg>{t.tab}<i>×</i></span>
           <span class="win-new">+</span>
         </div>
         <svg id="hubsvg" viewBox="0 42 1000 356">
@@ -137,13 +174,13 @@ const D = (() => {
                 <text class="sub" x={D.outX + 46} y={y + 42}>{n.sub}</text>
                 {n.icon === 'dashboard' && <polyline class="spark" points={D.spark.map(([a, b]) => `${rx - 52 + a} ${y + 12 + b}`).join(' ')} />}
                 {n.icon === 'erp' && (
-                  <g class="chip ok"><rect x={rx - 56} y={y + 13} width="56" height="17" rx="8.5" /><text x={rx - 28} y={y + 25} text-anchor="middle">✓ Synced</text></g>
+                  <g class="chip ok"><rect x={rx - chipW(t.synced)} y={y + 13} width={chipW(t.synced)} height="17" rx="8.5" /><text x={rx - chipW(t.synced) / 2} y={y + 25} text-anchor="middle">{t.synced}</text></g>
                 )}
                 {n.icon === 'alert' && (
-                  <g class="chip warn"><rect x={rx - 44} y={y + 13} width="44" height="17" rx="8.5" /><text x={rx - 22} y={y + 25} text-anchor="middle" data-alerts>2 new</text></g>
+                  <g class="chip warn"><rect x={rx - 44} y={y + 13} width="44" height="17" rx="8.5" /><text x={rx - 22} y={y + 25} text-anchor="middle" data-alerts={t.newAlerts}>2 {t.newAlerts}</text></g>
                 )}
                 {n.icon === 'ai' && (
-                  <g class="chip"><rect x={rx - 64} y={y + 13} width="64" height="17" rx="8.5" /><text x={rx - 32} y={y + 25} text-anchor="middle">1 anomaly</text></g>
+                  <g class="chip"><rect x={rx - chipW(t.anomaly)} y={y + 13} width={chipW(t.anomaly)} height="17" rx="8.5" /><text x={rx - chipW(t.anomaly) / 2} y={y + 25} text-anchor="middle">{t.anomaly}</text></g>
                 )}
               </g>
             )
@@ -315,7 +352,7 @@ const D = (() => {
           const dp = Number(el.dataset.dp)
           el.textContent = v.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }) + (el.dataset.unit ?? '')
         }
-        if (alerts && Math.random() < 0.08) alerts.textContent = `${n = n >= 5 ? 1 : n + 1} new`
+        if (alerts && Math.random() < 0.08) alerts.textContent = `${n = n >= 5 ? 1 : n + 1} ${alerts.dataset.alerts}`
       }
       new IntersectionObserver(([e]) => {
         clearInterval(timer)

@@ -116,3 +116,50 @@ export const products: Product[] = [
     mock: { top: '', metrics: [], line: [] },
   },
 ]
+
+/** Bahasa Indonesia copy, keyed by product; everything not listed is shared. */
+const productsId: Record<Product['key'], Partial<Product>> = {
+  energy: {
+    name: 'Smart energy monitoring',
+    desc: 'Pantau kWh, beban puncak, dan kualitas daya per trafo, panel, dan lini secara real-time.',
+    included: 'Power meter, edge gateway, template dashboard energi',
+    proofLabel: 'Terbukti di',
+    proof: ['Toyota Indonesia: trafo 2 MVA', 'Penerbit Erlangga: gardu listrik'],
+    deploymentTime: 'Aktif dalam [X] minggu',
+  },
+  equip: {
+    name: 'Smart equipment monitoring',
+    desc: 'Pantau tekanan, suhu, getaran, dan status kompresor, pompa, serta kendaraan sebelum terjadi kerusakan.',
+    included: 'Sensor retrofit, integrasi PLC, peringatan kondisi',
+    proofLabel: 'Terbukti di',
+    proof: ['Toyota Indonesia: kompresor Kaeser', 'Pertamina: kemiringan dan pitch kendaraan', 'PT Garam: otomasi pompa utama'],
+    deploymentTime: 'Aktif dalam [X] minggu',
+  },
+  plant: {
+    name: 'Smart plantation system',
+    desc: 'Pemantauan tanah bertenaga surya melalui LoRa untuk perkebunan kelapa sawit luas tanpa listrik atau sinyal.',
+    included: 'Node sensor surya, gateway LoRa, dashboard tanah',
+    proofLabel: 'Pilot berjalan di',
+    proof: ['Perkebunan kelapa sawit, sedang berjalan'],
+  },
+  vision: {
+    name: 'AI Vision Engine',
+    desc: 'Ubah CCTV yang sudah ada menjadi inspektor otomatis untuk kepatuhan APD, zona keselamatan, dan deteksi tumpahan minyak.',
+    included: 'Unit edge AI, model siap pakai, dashboard peringatan',
+    proofLabel: 'Terbukti di',
+    proof: ['Pertamina: deteksi APD', 'Pertamina: deteksi APD dan tumpahan minyak'],
+    deploymentTime: 'Aktif dalam [X] minggu',
+  },
+  custom: {
+    name: 'Custom',
+    desc: 'Diskusikan produk yang dibangun khusus untuk kebutuhan Anda, dari sensor di mesin hingga dashboard yang dipakai tim Anda.',
+    included: 'Survei lokasi, desain sistem, hardware, software, dan integrasi',
+    proofLabel: 'Dibangun untuk',
+    deploymentTime: 'Ditentukan setelah survei lokasi',
+    cta: 'Diskusikan proyek Anda',
+  },
+}
+
+/** The products with their copy in the given language. */
+export const productsFor = (lang: 'en' | 'id'): Product[] =>
+  lang === 'id' ? products.map((p) => ({ ...p, ...productsId[p.key] })) : products

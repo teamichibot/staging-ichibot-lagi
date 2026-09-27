@@ -1,0 +1,122 @@
+---
+/**
+ * All posts, in either language (UI only: the articles themselves are in
+ * Bahasa Indonesia). Category (`?category=`, the old site's parameter, so its links
+ * keep working), search (`?q=`) and page (`?page=`) are read on the server,
+ * so filtering works without JavaScript and every filtered view has a URL.
+ */
+import PageLayout from '../layouts/PageLayout.astro'
+import PostImage from '../components/PostImage.astro'
+import { FALLBACK_IMAGE, formatDate, getAllPosts } from '../lib/blog'
+import { langFromUrl, localize } from '../i18n'
+
+const PAGE_SIZE = 30
+const lang = langFromUrl(Astro.url)
+const base = localize('/blog', lang)
+const t = {
+  en: { title: 'Insights and news', lede: 'Articles on industrial IoT, AI and plant digitalisation from the Ichibot team.', search: 'Search articles', categories: 'Categories', all: 'All', article: 'article', articles: 'articles', in: 'in', matching: 'matching', clear: 'Clear filters', none: 'No articles found.', noneHint: 'Try another keyword or category.', pages: 'Pages', newer: '← Newer', older: 'Older →', page: (a: number, b: number) => `Page ${a} of ${b}`, meta: 'Ichibot Insights', metaAll: 'Insights and news — Ichibot' },
+  id: { title: 'Artikel dan berita', lede: 'Artikel seputar industrial IoT, AI, dan digitalisasi pabrik dari tim Ichibot.', search: 'Cari artikel', categories: 'Kategori', all: 'Semua', article: 'artikel', articles: 'artikel', in: 'di kategori', matching: 'untuk', clear: 'Hapus filter', none: 'Artikel tidak ditemukan.', noneHint: 'Coba kata kunci atau kategori lain.', pages: 'Halaman', newer: '← Lebih baru', older: 'Lebih lama →', page: (a: number, b: number) => `Halaman ${a} dari ${b}`, meta: 'Artikel Ichibot', metaAll: 'Artikel dan berita — Ichibot' },
+}[lang]
+
+const params = Astro.url.searchParams
+const category = params.get('category') ?? ''
+const q = (params.get('q') ?? '').trim()
+const all = await getAllPosts()
+
+// Categories by how many posts they hold, so the busy ones come first.
+const counts = new Map<string, number>()
+for (const p of all) if (p.category) counts.set(p.category, (counts.get(p.category) ?? 0) + 1)
+const categories = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+
+const needle = q.toLowerCase()
+const filtered = all.filter(
+  (p) =>
+    (!category || p.category === category) &&
+    (!needle || p.title.toLowerCase().includes(needle) || p.excerpt.toLowerCase().includes(needle)),
+)
+
+const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+const page = Math.min(pages, Math.max(1, Number.parseInt(params.get('page') ?? '1', 10) || 1))
+const shown = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
+const href = (next: { category?: string; q?: string; page?: number }) => {
+  const u = new URLSearchParams()
+  const c = next.category ?? category
+  const s = next.q ?? q
+  if (c) u.set('category', c)
+  if (s) u.set('q', s)
+  if (next.page && next.page > 1) u.set('page', String(next.page))
+  const qs = u.toString()
+  return qs ? `${base}?${qs}` : base
+}
+
+const title = category ? `${category} — ${t.meta}` : t.metaAll
+---
+
+<PageLayout
+  title={title}
+  description={t.lede}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>{t.title}</h1>
+      <p class="lede">{t.lede}</p>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <form class="blog-search" action={base} method="get" role="search">
+        {category && <input type="hidden" name="category" value={category} />}
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" /><path d="m13 13 4 4" /></svg>
+        <input type="search" name="q" value={q} placeholder={t.search} aria-label={t.search} />
+      </form>
+
+      <nav class="cat-chips" aria-label={t.categories}>
+        <a class="cat-chip" href={href({ category: '' })} aria-current={category ? undefined : 'page'}>
+          {t.all} <span>{all.length}</span>
+        </a>
+        {categories.map(([c, n]) => (
+          <a class="cat-chip" href={href({ category: c })} aria-current={c === category ? 'page' : undefined}>
+            {c} <span>{n}</span>
+          </a>
+        ))}
+      </nav>
+
+      {(category || q) && (
+        <p class="blog-meta">
+          {filtered.length} {filtered.length === 1 ? t.article : t.articles}
+          {category && <> {t.in} <b>{category}</b></>}
+          {q && <> {t.matching} <b>“{q}”</b></>}
+          <a href={base}>{t.clear}</a>
+        </p>
+      )}
+
+      {shown.length === 0 ? (
+        <div class="empty">
+          <p>{t.none}</p>
+          <small>{t.noneHint}</small>
+        </div>
+      ) : (
+        <div class="posts blog-grid">
+          {shown.map((p) => (
+            <a class="post" href={`${base}/${p.slug}`}>
+              <div class="thumb"><PostImage src={p.image || FALLBACK_IMAGE} width={400} height={250} /></div>
+              <small>{[p.category, formatDate(p.date, lang)].filter(Boolean).join(' · ')}</small>
+              <h3>{p.title}</h3>
+              {p.excerpt && <p class="post-excerpt">{p.excerpt}</p>}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {pages > 1 && (
+        <nav class="pager" aria-label={t.pages}>
+          {page > 1 ? <a class="btn sm" href={href({ page: page - 1 })} rel="prev">{t.newer}</a> : <span />}
+          <span class="pager-pos">{t.page(page, pages)}</span>
+          {page < pages ? <a class="btn sm" href={href({ page: page + 1 })} rel="next">{t.older}</a> : <span />}
+        </nav>
+      )}
+    </div>
+  </section>
+</PageLayout>

@@ -53,3 +53,38 @@ export async function sendSurveyRequest(req: SurveyRequest, apiKey: string | und
   })
   if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`)
 }
+
+export type ContactStatus = 'idle' | 'sent' | 'invalid' | 'failed'
+export type ContactResult = { status: ContactStatus; values: SurveyRequest; httpStatus: number }
+
+const EMPTY: SurveyRequest = { name: '', company: '', industry: '', phone: '', email: '', message: '' }
+
+/**
+ * Handles the /contact form for either language's route: a GET shows an
+ * empty form; a POST is validated and mailed. The honeypot field `website`
+ * catches bots, which are told it worked. The route sets `httpStatus`.
+ */
+export async function handleContactForm(request: Request, apiKey: string | undefined): Promise<ContactResult> {
+  if (request.method !== 'POST') return { status: 'idle', values: { ...EMPTY }, httpStatus: 200 }
+  const form = await request.formData()
+  const get = (k: string) => (form.get(k)?.toString() ?? '').trim().slice(0, 4000)
+  const values: SurveyRequest = {
+    name: get('name'),
+    company: get('company'),
+    industry: get('industry'),
+    phone: get('phone'),
+    email: get('email'),
+    message: get('message'),
+  }
+  if (get('website')) return { status: 'sent', values, httpStatus: 200 }
+  if (!values.name || !values.phone || !values.message || (values.email && !/^\S+@\S+\.\S+$/.test(values.email))) {
+    return { status: 'invalid', values, httpStatus: 400 }
+  }
+  try {
+    await sendSurveyRequest(values, apiKey)
+    return { status: 'sent', values, httpStatus: 200 }
+  } catch (err) {
+    console.error('[contact]', err)
+    return { status: 'failed', values, httpStatus: 502 }
+  }
+}
