@@ -1,8 +1,9 @@
 ---
 /**
- * A blog image. Uploads on img.ichibot.id are multi-megabyte originals, so
- * they go through Astro's optimiser (the domain is allowed in astro.config)
- * at the size they are shown; images on other hosts are linked as they are.
+ * A blog image. Uploads on img.ichibot.id are multi-megabyte originals, and
+ * thumbnails from Unsplash and Pinterest arrive far larger than shown, so all
+ * three go through Astro's optimiser (the domains are allowed in astro.config)
+ * at the size they are shown. Images on any other host are linked as they are.
  */
 import { Image } from 'astro:assets'
 
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const { src, width, height, class: className, eager = false } = Astro.props
-const optimise = /^https:\/\/img\.ichibot\.id\//.test(src)
+const optimise = /^https:\/\/(img\.ichibot\.id|images\.unsplash\.com|i\.pinimg\.com)\//.test(src)
 const loading = eager ? 'eager' : 'lazy'
 ---
 

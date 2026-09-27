@@ -3,6 +3,7 @@ import '@fontsource-variable/geist'
 import '../styles/global.css'
 import WhatsAppButton from '../components/WhatsAppButton.astro'
 import { basePath, langFromUrl, localize } from '../i18n'
+import { EMAIL, socials } from '../lib/contact'
 
 interface Props {
   title: string
@@ -19,6 +20,41 @@ const lang = langFromUrl(Astro.url)
 // Every page exists in both languages at the same path, /id-prefixed for Bahasa.
 const base = basePath(Astro.url.pathname)
 const alt = (l: 'en' | 'id') => new URL(localize(base, l), Astro.site).href
+// Pages without their own image share a capture of the homepage hero.
+const shareImage = image ?? new URL(lang === 'id' ? '/og/og-default-id.jpg' : '/og/og-default.jpg', Astro.site).href
+
+/**
+ * Organization and WebSite structured data, on the homepage only. Contact
+ * details are the ones the site already publishes; the street address and
+ * phone are open items in the brief, so they are left out rather than guessed.
+ */
+const home = base === '/'
+const schema = home && {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.ichibot.id/#organization',
+      name: 'Ichibot',
+      legalName: 'PT Gagas Anagata Semesta',
+      url: 'https://www.ichibot.id/',
+      logo: 'https://www.ichibot.id/icon-512.png',
+      email: EMAIL,
+      foundingDate: '2016',
+      address: { '@type': 'PostalAddress', addressLocality: 'Yogyakarta', addressCountry: 'ID' },
+      sameAs: socials.map((s) => s.href),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.ichibot.id/#website',
+      url: 'https://www.ichibot.id/',
+      name: 'Ichibot',
+      inLanguage: ['en', 'id'],
+      publisher: { '@id': 'https://www.ichibot.id/#organization' },
+    },
+  ],
+}
+const skip = lang === 'id' ? 'Lewati ke konten' : 'Skip to content'
 ---
 
 <!doctype html>
@@ -27,6 +63,12 @@ const alt = (l: 'en' | 'id') => new URL(localize(base, l), Astro.site).href
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#FBFBFC" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08090B" media="(prefers-color-scheme: dark)" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="en" href={alt('en')} />
@@ -37,12 +79,17 @@ const alt = (l: 'en' | 'id') => new URL(localize(base, l), Astro.site).href
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={shareImage} />
+    {!image && <meta property="og:image:width" content="1200" />}
+    {!image && <meta property="og:image:height" content="630" />}
+    <meta property="og:site_name" content="Ichibot" />
     <meta name="twitter:card" content="summary_large_image" />
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:image" content={shareImage} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
     <slot name="head" />
   </head>
   <body>
+    <a class="skip-link" href="#main">{skip}</a>
     <slot />
     <WhatsAppButton />
   </body>

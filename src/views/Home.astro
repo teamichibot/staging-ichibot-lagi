@@ -17,18 +17,19 @@ import { langFromUrl } from '../i18n'
 const meta = {
   en: {
     title: 'Ichibot — Intelligent industrial hub | Industrial IoT and AI',
-    description: 'Industrial IoT (Internet of Things) and AI for Indonesian plants: Ichibot connects every machine to real-time data, from the shop floor to your ERP. Running at Pertamina and Toyota Indonesia.',
+    // Kept to 160 characters so search results show it whole.
+    description: 'Industrial IoT and AI for Indonesian plants. Ichibot connects every machine to real-time data, from the shop floor to your ERP. Running at Pertamina and Toyota.',
   },
   id: {
     title: 'Ichibot — Intelligent industrial hub | Industrial IoT dan AI',
-    description: 'Industrial IoT (Internet of Things) dan AI untuk pabrik di Indonesia: Ichibot menghubungkan setiap mesin ke data real-time, dari lantai produksi hingga ERP Anda. Berjalan di Pertamina dan Toyota Indonesia.',
+    description: 'IoT industri dan AI untuk pabrik Indonesia: Ichibot menghubungkan setiap mesin ke data real-time, dari lantai produksi hingga ERP. Dipakai Pertamina dan Toyota.',
   },
 }[langFromUrl(Astro.url)]
 ---
 
 <BaseLayout title={meta.title} description={meta.description}>
   <Nav />
-  <main>
+  <main id="main" tabindex="-1">
     <Hero />
     <Logos />
     <Products />

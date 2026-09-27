@@ -1,27 +1,39 @@
-# Ichibot - IoT & AI untuk Industri Indonesia
+# Ichibot — Intelligent industrial hub
 
-Ichibot membantu perusahaan manufaktur mengadopsi IoT dan AI secara praktis dan terjangkau. Kami mendigitalisasi pabrik tanpa perlu mengganti infrastruktur lama.
+> Ichibot (PT Gagas Anagata Semesta) is an industrial IoT and AI company from Yogyakarta, Indonesia, founded in 2016. It connects the machines, sensors, cameras and meters in a plant to real-time data, from the shop floor to the ERP, working with existing equipment rather than replacing it. The site is in English at https://www.ichibot.id/ and in Bahasa Indonesia at https://www.ichibot.id/id.
 
-## Core Services
-- **IoT System Implementation**: Pemasangan sensor di mesin lama, koneksi ke internet, dan monitoring real-time.
-- **AI Computer Vision**: Deteksi cacat produk otomatis, counting objek, dan early warning berbasis kamera.
-- **AI Decision Support**: Chatbot pintar per use case industri, predictive analytics, dan otomasi keputusan.
-- **Dashboard & Monitoring**: Real-time monitoring equipment, visualisasi data operasional, dan alert system.
-- **Training & Consulting**: Transfer knowledge ke tim klien, project-based training, dan mentoring teknis.
+## Products
 
-## Key Products
-- **Energy Usage Monitoring**: Sistem monitoring konsumsi energi real-time untuk efisiensi biaya listrik.
-- **Equipment Monitoring**: Pemantauan kondisi mesin real-time untuk deteksi anomali.
-- **Maintenance AI Chatbot**: Chatbot AI yang menjawab pertanyaan maintenance dan troubleshooting.
-- **Klenik IoT Dashboard**: Platform monitoring terintegrasi untuk visualisasi data sensor.
+- Smart energy monitoring: kWh, peak load and power quality per transformer, panel and line, in real time. Proven at Toyota Indonesia (2 MVA transformer) and Penerbit Erlangga (electricity substation).
+- Smart equipment monitoring: pressure, temperature, vibration and status of compressors, pumps and vehicles. Proven at Toyota Indonesia (Kaeser compressor), Pertamina (vehicle tilt and pitch) and PT Garam (main pump automation).
+- Smart plantation system: solar-powered soil monitoring over LoRa for oil palm plantations with no grid or signal. Pilot running.
+- AI Vision Engine: existing CCTV turned into automatic inspectors for PPE compliance, safety zones and oil spill detection. Proven at Pertamina.
+- Custom: systems built for a specific purpose, from the sensors on the machines to the dashboard, scoped after a site survey.
 
-## Why Ichibot
-- **Cost-effective**: Sistem independen tanpa keterikatan pada ekosistem brand tertentu.
-- **Praktis**: Dipasang di mesin existing tanpa menghentikan produksi.
-- **Terbukti**: Dipercaya oleh Toyota, Pertamina, BCA, dan perusahaan enterprise lainnya.
-- **Net Zero Friendly**: Mendukung keberlanjutan dengan mengoptimalkan infrastruktur yang sudah ada.
+## What Ichibot delivers
+
+- Sensor and data connection: PLCs, controllers, power meters, IP cameras and sensors over Modbus RTU/TCP, MQTT, OPC UA, RS-485, Ethernet, RTSP and REST.
+- Real-time monitoring dashboards, data logging with hourly, daily and monthly recaps, and integration with ERP/MES, AI analytics and WhatsApp or email alerts.
+- Data can stay on-premise, go to the cloud, or both; the edge device keeps logging when the internet is down.
+
+## Services
+
+- Edge device installation: sensors, gateways, PLC, VFD, panels and wiring, installed and commissioned on site.
+- In-house training: hands-on industrial IoT and dashboard training, as delivered for Toyota Indonesia.
+- Custom system integration: automation and data projects around existing machines.
+- Maintenance and support after go-live.
+
+How a project runs: analysis, site survey, a pilot on one line, then scale up.
+
+## Pages
+
+- [Home](https://www.ichibot.id/): products, platform, case studies, services, FAQ
+- [Insights](https://www.ichibot.id/blog): articles and case studies (articles are written in Bahasa Indonesia)
+- [About](https://www.ichibot.id/about): company history since 2016
+- [Contact](https://www.ichibot.id/contact): request a site survey
+- [Sitemap](https://www.ichibot.id/sitemap.xml)
 
 ## Contact
-- Website: https://www.ichibot.id
+
 - Email: hello@ichibot.id
-- Lokasi: Indonesia
+- Location: Yogyakarta, Indonesia

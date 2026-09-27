@@ -23,7 +23,7 @@ const { cta = true, ...meta } = Astro.props
 <BaseLayout {...meta}>
   <slot name="head" slot="head" />
   <Nav />
-  <main class="page">
+  <main class="page" id="main" tabindex="-1">
     <slot />
   </main>
   {cta && <Cta />}

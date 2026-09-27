@@ -50,7 +50,9 @@ const href = (next: { category?: string; q?: string; page?: number }) => {
   return qs ? `${base}?${qs}` : base
 }
 
-const title = category ? `${category} — ${t.meta}` : t.metaAll
+// Each listing view gets its own title: category, then page number past the first.
+const pageSuffix = page > 1 ? ` · ${t.page(page, pages)}` : ''
+const title = (category ? `${category} — ${t.meta}` : t.metaAll) + pageSuffix
 ---
 
 <PageLayout
@@ -99,11 +101,12 @@ const title = category ? `${category} — ${t.meta}` : t.metaAll
         </div>
       ) : (
         <div class="posts blog-grid">
-          {shown.map((p) => (
+          {shown.map((p, i) => (
             <a class="post" href={`${base}/${p.slug}`}>
-              <div class="thumb"><PostImage src={p.image || FALLBACK_IMAGE} width={400} height={250} /></div>
+              {/* the first row is above the fold: load it straight away */}
+              <div class="thumb"><PostImage src={p.image || FALLBACK_IMAGE} width={400} height={250} eager={i < 3} /></div>
               <small>{[p.category, formatDate(p.date, lang)].filter(Boolean).join(' · ')}</small>
-              <h3>{p.title}</h3>
+              <h2>{p.title}</h2>
               {p.excerpt && <p class="post-excerpt">{p.excerpt}</p>}
             </a>
           ))}
