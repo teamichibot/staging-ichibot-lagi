@@ -522,37 +522,6 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .ed-tariff{border-top:1px solid var(--border);padding-top:6px}
 .ed-tariff span{color:var(--faint);font-weight:500}
 .ed-tariff span:last-child{text-transform:none;letter-spacing:0}
-/* compact energy layout: fits the shared 1040x475 product frame at full width */
-.edash{padding:14px}
-.ed-top{padding:7px 14px;margin-bottom:10px}
-.ed-brand svg{width:22px;height:22px}
-.ed-brand b{font-size:14px}
-.ed-meters{gap:10px}
-.ed-card{padding:11px 12px;gap:8px}
-.ed-card-head b{font-size:13px}
-.ed-ic{width:28px;height:28px}
-.ed-top-row{display:grid;grid-template-columns:.9fr 1.1fr;gap:10px;align-items:center}
-.ed-now{display:flex;flex-direction:column;gap:5px}
-.ed-big b{font-size:30px}
-.ed-big span{font-size:14px}
-.ed-sub{font-size:11px}
-.ed-cap{font-size:8.5px}
-.ed-trend svg{height:40px;padding:4px 10px 2px}
-.ed-trend-head{padding:6px 10px 0;font-size:9px}
-.ed-trend-foot div{padding:5px 10px}
-.ed-trend-foot b{font-size:13px}
-.ed-trend-foot small{font-size:9px}
-.ed-grid{gap:5px}
-.ed-grid div{padding:4px 6px;border-radius:7px}
-.ed-grid small{font-size:9.5px}
-.ed-grid b{font-size:13px}
-.ed-range{padding:7px 10px;gap:5px}
-.ed-range-head b{font-size:9.5px}
-.ed-range-head small,.ed-reading{font-size:9px}
-.ed-range-vals{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px}
-.ed-range-vals small{display:block;color:var(--faint);font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
-.ed-range-vals b{font-size:13px;white-space:nowrap}
-.ed-grid{grid-template-columns:repeat(5,1fr)!important}
 
 /* HTML replica of the compressor dashboard */
 .qdash{background:var(--bg2);padding:18px;font-size:12px;line-height:1.35;color:var(--text);font-variant-numeric:tabular-nums}
@@ -1106,3 +1075,12 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .skip-link{position:absolute;left:1rem;top:-100px;z-index:100;padding:.6rem 1rem;border-radius:999px;background:var(--text);color:var(--bg);font-weight:600;text-decoration:none}
 .skip-link:focus{top:.6rem}
 main:focus{outline:none}
+
+/* Smart energy monitoring: copy stacked on the left, the 16:10 dashboard on
+   the right, like the real screen. Stacks (mockup first) below 900px. */
+.panel.panel-split{grid-template-columns:minmax(0,1fr) minmax(0,2.5fr);align-items:center;gap:clamp(1.5rem,3vw,2.5rem)}
+.panel-split .panel-copy{order:-1;flex-direction:column;align-items:flex-start;justify-content:center;gap:1.4rem}
+.panel-split .panel-text{max-width:none}
+@media (max-width:900px){.panel.panel-split{grid-template-columns:1fr}.panel-split .panel-copy{order:0}}
+/* the energy replica fills its 16:10 frame (1320 x 825) */
+.replica > .edash{min-height:825px}

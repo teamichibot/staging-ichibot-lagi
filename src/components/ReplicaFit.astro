@@ -7,11 +7,13 @@
 interface Props {
   width: number
   label: string
+  /** Frame height / width. Defaults to the shared product frame, 475/1040. */
+  ratio?: number
 }
-const { width, label } = Astro.props
+const { width, label, ratio = 475 / 1040 } = Astro.props
 ---
 
-<div class="replica-fit">
+<div class="replica-fit" data-ratio={ratio}>
   <div class="replica" style={`width:${width}px`} role="img" aria-label={label}>
     <slot />
   </div>
@@ -19,20 +21,21 @@ const { width, label } = Astro.props
 
 <script>
   /**
-   * Every product frame has the same aspect ratio, that of the AI Vision
-   * replica (1040x475), so the copy and the demo button sit at the same height
-   * on every tab. A replica that is taller than the frame is first scaled
+   * Product frames share the AI Vision replica's aspect ratio (1040x475) so
+   * the copy and the demo button sit at the same height on every tab; a
+   * replica can ask for its own (data-ratio), as the energy dashboard does to
+   * keep the real screen's 16:10. A replica that is taller than the frame is first scaled
    * down, but never below 75% of its fit-to-width size so its text stays
    * legible; whatever still overflows is cropped behind a fade, like a
    * window onto a larger screen. A scaled-down replica is centred.
    */
-  const RATIO = 475 / 1040
   const MIN_SHRINK = 0.75
   for (const fit of document.querySelectorAll<HTMLElement>('.replica-fit')) {
     const inner = fit.querySelector<HTMLElement>('.replica')!
+    const ratio = Number(fit.dataset.ratio) || 475 / 1040
     const size = () => {
       const w = fit.clientWidth
-      const h = Math.round(w * RATIO)
+      const h = Math.round(w * ratio)
       const base = Math.min(1, w / inner.offsetWidth)
       const s = Math.max(base * MIN_SHRINK, Math.min(base, h / inner.offsetHeight))
       const left = Math.max(0, (w - inner.offsetWidth * s) / 2)

@@ -61,7 +61,7 @@ function sparkPoints(values: number[]) {
       {
         products.map((p, i) => (
           <div
-            class="panel"
+            class:list={['panel', { 'panel-split': p.key === 'energy' }]}
             role="tabpanel"
             id={`panel-${i}`}
             aria-labelledby={`tab-${i}`}
