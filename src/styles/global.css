@@ -200,15 +200,15 @@ header.nav.menu-open{background:var(--bg)}
 .marquee-list{display:flex;align-items:center;gap:clamp(2.5rem,5vw,4rem);list-style:none;margin:0;padding:0 clamp(1.25rem,2.5vw,2rem)}
 .marquee-list li{flex:none;height:44px;display:grid;place-items:center}
 .marquee-list li.failed{display:none}
-.marquee-list img{max-height:40px;max-width:150px;width:auto;height:auto;object-fit:contain;filter:grayscale(1) opacity(.75);transition:filter .2s}
+.marquee-list img{max-height:40px;max-width:150px;width:auto;height:auto;object-fit:contain;filter:grayscale(1) brightness(.6) contrast(1.3);transition:filter .2s}
 .marquee-list li:hover img{filter:grayscale(0) opacity(1)}
 @keyframes marquee{to{transform:translateX(-50%)}}
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .marquee-list img{filter:grayscale(1) invert(1) opacity(.8)}
-  :root:not([data-theme="light"]) .marquee-list li:hover img{filter:grayscale(1) invert(1) opacity(1)}
+  :root:not([data-theme="light"]) .marquee-list img{filter:grayscale(1) invert(1) brightness(1.7) contrast(1.25)}
+  :root:not([data-theme="light"]) .marquee-list li:hover img{filter:grayscale(1) invert(1) brightness(2) contrast(1.3)}
 }
-:root[data-theme="dark"] .marquee-list img{filter:grayscale(1) invert(1) opacity(.8)}
-:root[data-theme="dark"] .marquee-list li:hover img{filter:grayscale(1) invert(1) opacity(1)}
+:root[data-theme="dark"] .marquee-list img{filter:grayscale(1) invert(1) brightness(1.7) contrast(1.25)}
+:root[data-theme="dark"] .marquee-list li:hover img{filter:grayscale(1) invert(1) brightness(2) contrast(1.3)}
 @media (prefers-reduced-motion:reduce){
   .marquee{-webkit-mask-image:none;mask-image:none}
   .marquee-track{animation:none;width:auto;justify-content:center}

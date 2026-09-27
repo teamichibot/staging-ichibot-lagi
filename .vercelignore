@@ -1,0 +1,6 @@
+.env
+.env.*
+reference/
+scripts/
+.astro/
+dist/
