@@ -31,7 +31,7 @@ Linear / Vercel polish + Stripe-style explanatory diagrams. Ichibot identity via
 Rules: 1px borders, radius 10–16px, pill buttons, subtle grid background in hero, radial amber glow behind hero visual and CTA. One orchestrated page-load animation only; respect `prefers-reduced-motion`. No all-caps labels, no gradient decorations beyond the hero headline and glows.
 
 ## Page structure (home)
-1. **Hero** — chip "Running at Pertamina and Toyota Indonesia", H1 "Intelligent industrial hub", tagline, CTAs (Book a site survey / Explore products), animated hub diagram in a window frame (sources → Ichibot Edge → dashboard, ERP/MES, alerts, AI insights).
+1. **Hero** — chip "Running at Pertamina and Toyota Indonesia", H1 "Intelligent industrial hub", tagline, CTAs (Book a site survey / Explore products), animated hub diagram in a window frame (sources → Ichibot Smart System → dashboard, ERP/MES, alerts, AI insights).
 2. **Client logos** — Pertamina, Toyota, Citra Borneo Utama, Erlangga, PT Garam (monochrome SVG).
 3. **Products** — horizontal browser-style tabs over one panel, 4 products from the `products` collection. Each: name, description, what's included, "Proven at" client list, deployment time, dashboard mockup/screenshot.
    - Smart energy monitoring — Toyota (2 MVA transformer), Erlangga (substation)

@@ -89,7 +89,7 @@ export const products: Product[] = [
   {
     key: 'vision',
     name: 'AI Vision Engine',
-    desc: 'Turn existing CCTV into automatic inspectors for PPE compliance, safety zones and spill detection.',
+    desc: 'Turn existing CCTV into automatic inspectors for PPE compliance, safety zones and oil spill detection.',
     included: 'Edge AI unit, pre-trained models, alert dashboard',
     proofLabel: 'Proven at',
     proof: ['Pertamina: PPE detection', 'Pertamina: PPE and oil spill detection'],
