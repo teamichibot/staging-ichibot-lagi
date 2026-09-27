@@ -14,6 +14,26 @@ const cards = studies.map((s) => {
   return { ...s, client: clientFor(s.title, logos), tag: tagFor(text) }
 })
 
+/**
+ * Sample testimonials, slotted in after every second case study. They are
+ * written placeholders, so they are attributed to a role and a sector, never
+ * to a named client, and carry a visible Sample badge. Replace with cleared
+ * quotes (and drop `sample`) before launch.
+ */
+const quotes = [
+  { quote: 'We finally see what every compressor is doing before it trips, not after the line stops.', name: 'Maintenance Manager', role: 'Automotive manufacturer', sample: true },
+  { quote: 'The weighbridge now writes straight into our ERP. Nobody retypes a ticket any more.', name: 'Operations Head', role: 'Agribusiness group', sample: true },
+  { quote: 'They clipped sensors onto equipment older than half our team, and it just started reporting.', name: 'Plant Engineer', role: 'State-owned enterprise', sample: true },
+  { quote: 'The pilot ran on one line for a month. That was enough to approve the rest of the site.', name: 'Engineering Lead', role: 'Manufacturing plant', sample: true },
+]
+type Item = { kind: 'case'; c: (typeof cards)[number]; i: number } | { kind: 'quote'; q: (typeof quotes)[number] }
+const items: Item[] = []
+cards.forEach((c, i) => {
+  items.push({ kind: 'case', c, i })
+  const q = quotes[Math.floor(i / 2)]
+  if (i % 2 === 1 && q && i < cards.length - 1) items.push({ kind: 'quote', q })
+})
+
 ---
 
 <section id="cases">
@@ -38,25 +58,36 @@ const cards = studies.map((s) => {
         <p class="lede">Case studies are temporarily unavailable.</p>
       ) : (
         <div class="carousel" tabindex="0" role="region" aria-label="Case studies">
-          {cards.map((c, i) => (
+          {items.map((it) =>
+            it.kind === 'quote' ? (
+              <figure class="case-quote">
+                {it.q.sample && <span class="sample">Sample</span>}
+                <blockquote>“{it.q.quote}”</blockquote>
+                <figcaption>
+                  <span class="avatar" aria-hidden="true" />
+                  <span><b>{it.q.name}</b><small>{it.q.role}</small></span>
+                </figcaption>
+              </figure>
+            ) : (
             <article class="case-card">
               <div class="case-photo">
-                <Image src={c.image} alt="" width={560} height={350} densities={[1, 2]} loading={i < 4 ? 'eager' : 'lazy'} inferSize={false} />
+                <Image src={it.c.image} alt="" width={560} height={350} densities={[1, 2]} loading={it.i < 4 ? 'eager' : 'lazy'} inferSize={false} />
               </div>
               <div class="case-meta">
-                {c.client && (
-                  <img class="case-logo" src={`/client-logo/${encodeURIComponent(c.client.id)}`} alt={c.client.name} loading="lazy" />
+                {it.c.client && (
+                  <img class="case-logo" src={`/client-logo/${encodeURIComponent(it.c.client.id)}`} alt={it.c.client.name} loading="lazy" />
                 )}
-                {c.tag && (
+                {it.c.tag && (
                   <span class="case-tag">
-                    <svg viewBox="0 0 16 16" aria-hidden="true" set:html={tagIcons[c.tag.icon]} />
-                    {c.tag.label}
+                    <svg viewBox="0 0 16 16" aria-hidden="true" set:html={tagIcons[it.c.tag.icon]} />
+                    {it.c.tag.label}
                   </span>
                 )}
               </div>
-              <h3>{c.title}</h3>
+              <h3>{it.c.title}</h3>
             </article>
-          ))}
+          )
+          )}
         </div>
       )
     }
@@ -72,7 +103,7 @@ const cards = studies.map((s) => {
     if (track && nav) {
       const [prev, next] = Array.from(nav.querySelectorAll<HTMLButtonElement>('.car-btn'))
       const stepSize = () => {
-        const card = track.querySelector<HTMLElement>('.case-card')
+        const card = track.querySelector<HTMLElement>('.case-card, .case-quote')
         return card ? card.offsetWidth + parseFloat(getComputedStyle(track).columnGap || '0') : track.clientWidth
       }
       const sync = () => {
