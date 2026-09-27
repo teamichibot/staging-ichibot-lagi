@@ -173,6 +173,8 @@ header.nav.menu-open{background:var(--bg)}
 .omnibox svg{flex:none;width:12px;height:12px;fill:none;stroke:var(--faint);stroke-width:1.5}
 @media (max-width:600px){.window-toolbar{display:none}.win-tab{min-width:0}}
 .hub #hubsvg{display:block;width:100%;height:auto}
+.hub #hubsvg-v{display:none;width:100%;height:auto;padding:.4rem .2rem .8rem}
+@media (max-width:640px){.hub #hubsvg{display:none}.hub #hubsvg-v{display:block}}
 .hub .node rect{fill:var(--bg2);stroke:var(--border2)}
 .hub .node text{fill:var(--text);font:500 13px "Geist Variable",sans-serif}
 .hub .node .sub{fill:var(--faint);font-size:10.5px}

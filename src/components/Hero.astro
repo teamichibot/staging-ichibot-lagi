@@ -31,18 +31,39 @@ const icons = {
 
 /** Left column feeds the system; right column is what it feeds. */
 const sources = [
-  { y: 70, icon: 'plc', title: 'PLC/Controllers', sub: 'Modbus RTU / TCP' },
-  { y: 155, icon: 'sensor', title: 'Sensors', sub: 'Temp, pressure, vibration' },
-  { y: 240, icon: 'camera', title: 'IP cameras', sub: 'RTSP video' },
-  { y: 325, icon: 'meter', title: 'Energy meters', sub: 'kWh, power quality' },
+  { y: 70, icon: 'plc', title: 'PLC/Controllers', sub: 'Modbus RTU / TCP', short: 'Modbus RTU/TCP' },
+  { y: 155, icon: 'sensor', title: 'Sensors', sub: 'Temp, pressure, vibration', short: 'Temp, pressure' },
+  { y: 240, icon: 'camera', title: 'IP cameras', sub: 'RTSP video', short: 'RTSP video' },
+  { y: 325, icon: 'meter', title: 'Energy meters', sub: 'kWh, power quality', short: 'kWh, quality' },
 ]
 
 const outputs = [
-  { y: 70, icon: 'dashboard', title: 'Dashboard', sub: 'Live KPIs and trends' },
-  { y: 155, icon: 'erp', title: 'ERP / MES', sub: 'Automatic data sync' },
-  { y: 240, icon: 'alert', title: 'Alerts', sub: 'WhatsApp, email, siren' },
-  { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections' },
+  { y: 70, icon: 'dashboard', title: 'Dashboard', sub: 'Live KPIs and trends', short: 'KPIs, trends' },
+  { y: 155, icon: 'erp', title: 'ERP / MES', sub: 'Automatic data sync', short: 'Auto data sync' },
+  { y: 240, icon: 'alert', title: 'Alerts', sub: 'WhatsApp, email, siren', short: 'WhatsApp, email' },
+  { y: 325, icon: 'ai', title: 'AI insights', sub: 'Anomalies, detections', short: 'Anomalies' },
 ]
+
+/**
+ * Narrow screens get a vertical version of the same diagram: sources in a 2x2
+ * grid on top, the core in the middle, outputs in a 2x2 grid below. Top-row
+ * sources and bottom-row outputs wire round the outside edges so no wire
+ * crosses a node.
+ */
+const V = { w: 150, h: 50, cols: [24, 186], srcRows: [36, 98], outRows: [392, 454] }
+const vIn = [
+  'M24 61 C6 61 6 190 135 210',
+  'M336 61 C354 61 354 190 225 210',
+  'M99 148 C99 180 160 180 160 210',
+  'M261 148 C261 180 200 180 200 210',
+]
+const vOut = [
+  'M160 330 C160 360 99 360 99 392',
+  'M200 330 C200 360 261 360 261 392',
+  'M135 330 C6 350 6 479 24 479',
+  'M225 330 C354 350 354 479 336 479',
+]
+const vPos = (i: number, rows: number[]) => ({ x: V.cols[i % 2], y: rows[Math.floor(i / 2)] })
 ---
 
 <section class="hero">
@@ -105,7 +126,30 @@ const outputs = [
               <text class="sub" x="828" y={n.y + 38}>{n.sub}</text>
             </g>
           ))}
-          <g id="pulses"></g>
+          <g class="pulses" data-wires="i1 i2 i3 i4 o1 o2 o3 o4"></g>
+        </svg>
+        <svg id="hubsvg-v" viewBox="0 0 360 536">
+          <text class="col" x="180" y="22" text-anchor="middle">Shop floor</text>
+          <text class="col" x="180" y="526" text-anchor="middle">Decisions</text>
+          <g>
+            {vIn.map((d, i) => <path id={`vi${i + 1}`} class="wire" d={d} />)}
+            {vOut.map((d, i) => <path id={`vo${i + 1}`} class="wire" d={d} />)}
+          </g>
+          {[...sources.map((n, i) => ({ n, ...vPos(i, V.srcRows) })), ...outputs.map((n, i) => ({ n, ...vPos(i, V.outRows) }))].map(({ n, x, y }) => (
+            <g class="node">
+              <rect x={x} y={y} width={V.w} height={V.h} rx="10" />
+              <g class="ic" transform={`translate(${x + 12} ${y + 17})`} set:html={icons[n.icon as keyof typeof icons]} />
+              <text x={x + 36} y={y + 22}>{n.title}</text>
+              <text class="sub" x={x + 36} y={y + 38}>{n.short}</text>
+            </g>
+          ))}
+          <rect class="ring" x="97" y="202" width="166" height="136" rx="20"><animate attributeName="opacity" values=".6;.15;.6" dur="3s" repeatCount="indefinite"/></rect>
+          <g class="core"><rect class="bg" x="105" y="210" width="150" height="120" rx="16"/>
+            <rect x="119" y="224" width="12" height="12" rx="3" fill="var(--accent)"/>
+            <text x="180" y="268" text-anchor="middle">Ichibot</text>
+            <text x="180" y="289" text-anchor="middle">Smart System</text>
+            <text class="sub" x="180" y="311" text-anchor="middle">Collect, log, run AI</text></g>
+          <g class="pulses" data-wires="vi1 vi2 vi3 vi4 vo1 vo2 vo3 vo4"></g>
         </svg>
       </div>
     </div>
@@ -206,27 +250,34 @@ const outputs = [
   }
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const group = document.getElementById('pulses')
-  const svg = document.getElementById('hubsvg') as SVGSVGElement | null
   const NS = 'http://www.w3.org/2000/svg'
 
-  if (group && svg) {
-    for (const [index, id] of ['i1', 'i2', 'i3', 'i4', 'o1', 'o2', 'o3', 'o4'].entries()) {
+  // Two pulses ride each wire, in both the wide and the narrow diagram. A dot
+  // stays hidden until its first run starts, so it never sits at the origin.
+  for (const group of document.querySelectorAll<SVGGElement>('.hub .pulses')) {
+    const svg = group.ownerSVGElement!
+    for (const [index, id] of group.dataset.wires!.split(' ').entries()) {
+      const out = index >= 4
       for (const offset of [0, 1]) {
         const dot = document.createElementNS(NS, 'circle')
         dot.setAttribute('r', '3.5')
-        dot.setAttribute('class', 'pulse' + (id.startsWith('o') ? ' out' : ''))
+        dot.setAttribute('class', 'pulse' + (out ? ' out' : ''))
+        dot.setAttribute('visibility', 'hidden')
+        const delay = ((index % 4) * 0.55 + (out ? 1.3 : 0) + offset * 1.3).toFixed(2) + 's'
+
+        const show = document.createElementNS(NS, 'set')
+        show.setAttribute('attributeName', 'visibility')
+        show.setAttribute('to', 'visible')
+        show.setAttribute('begin', delay)
 
         const motion = document.createElementNS(NS, 'animateMotion')
         motion.setAttribute('dur', '2.6s')
         motion.setAttribute('repeatCount', 'indefinite')
-        const delay = (index % 4) * 0.55 + (id.startsWith('o') ? 1.3 : 0) + offset * 1.3
-        motion.setAttribute('begin', delay.toFixed(2) + 's')
-
+        motion.setAttribute('begin', delay)
         const path = document.createElementNS(NS, 'mpath')
         path.setAttribute('href', '#' + id)
         motion.appendChild(path)
-        dot.appendChild(motion)
+        dot.append(show, motion)
         group.appendChild(dot)
       }
     }
