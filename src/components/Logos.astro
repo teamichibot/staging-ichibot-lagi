@@ -1,53 +1,54 @@
 ---
-import { Image } from 'astro:assets'
-import pertamina from '../../public/logos/clients/pertamina.png'
-import toyota from '../../public/logos/clients/toyota.png'
-import cbu from '../../public/logos/clients/citra-borneo-utama.png'
-import erlangga from '../../public/logos/clients/erlangga.png'
-import garam from '../../public/logos/clients/pt-garam.png'
+import { getClientLogos } from '../lib/site-data'
 
 /**
- * Real logo files, served from our own origin. The source records hotlink four
- * of these from Wikimedia and the clients' own sites, which breaks the moment
- * one of them reorganises or blocks hotlinking.
+ * Client logos, read live from Supabase (`site_data.clients.industry`), the
+ * list managed in the admin panel under Logo Klien, so adding or reordering a
+ * client there changes this row without a deploy.
  *
- * They are shown in grayscale, not as flat silhouettes, so the tonal detail
- * inside each mark survives (a flat fill turned Citra Borneo Utama's leaf-in-
- * a-drop into a plain water drop). On dark backgrounds most of them are
- * inverted so their dark wordmarks stay readable; `lightMark` logos are
- * already light-toned and are only brightened, since inverting would turn
- * them dark.
- *
- * `height` is tuned per logo rather than shared: normalising on height alone
- * leaves the wide wordmarks shouting and the square marks whispering.
+ * The logos come from many hosts in many colours, so they get one treatment:
+ * grayscale in light mode, grayscale-inverted in dark mode (a white JPG
+ * background inverts to black and disappears into the page). They run as a
+ * marquee: the list is rendered twice and the track slides by exactly one copy,
+ * so the loop is seamless. Hover pauses it; reduced motion shows a static,
+ * wrapping row instead.
  */
-const clients = [
-  { name: 'Pertamina', src: pertamina, height: 30 },
-  { name: 'Toyota', src: toyota, height: 22 },
-  { name: 'Citra Borneo Utama', src: cbu, height: 38, lightMark: true },
-  { name: 'Penerbit Erlangga', src: erlangga, height: 30 },
-  { name: 'PT Garam', src: garam, height: 40 },
-]
+const logos = await getClientLogos()
 ---
 
-<section class="logos">
-  <div class="wrap">
-    <p>Trusted by state-owned enterprises and global manufacturers in Indonesia</p>
-    <div class="logo-row">
-      {
-        clients.map((c) => (
-          <Image
-            src={c.src}
-            alt={c.name}
-            height={c.height * 2}
-            width={0}
-            densities={[1, 2]}
-            class:list={{ 'light-mark': c.lightMark }}
-            style={`height:${c.height}px`}
-            loading="lazy"
-          />
-        ))
-      }
-    </div>
-  </div>
-</section>
+{
+  logos.length > 0 && (
+    <section class="logos">
+      <div class="wrap">
+        <p>Trusted by state-owned enterprises, manufacturers and institutions in Indonesia</p>
+      </div>
+      <div class="marquee" style={`--n:${logos.length}`}>
+        <div class="marquee-track">
+          {[0, 1].map((copy) => (
+            <ul class="marquee-list" aria-hidden={copy === 1 ? 'true' : undefined}>
+              {logos.map((c) => (
+                <li>
+                  <img src={c.logo} alt={copy === 0 ? c.name : ''} loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  // Some client sites block hotlinking; drop a logo that fails to load (in
+  // both copies of the marquee) rather than show a broken image.
+  for (const img of document.querySelectorAll<HTMLImageElement>('.marquee-list img')) {
+    const drop = () => {
+      const i = [...img.closest('ul')!.children].indexOf(img.closest('li')!)
+      document.querySelectorAll('.marquee-list').forEach((ul) => ul.children[i]?.classList.add('failed'))
+    }
+    if (img.complete && img.naturalWidth === 0) drop()
+    else img.addEventListener('error', drop)
+  }
+</script>
+

@@ -1,14 +1,36 @@
 ---
-// Carried over from the approved draft.
+import { getLatestPosts } from '../lib/site-data'
+
+/**
+ * The three latest posts from Supabase `blog_posts`, the table the admin blog
+ * editor writes to. v2 has no /blog pages yet (phase 3), so cards open the
+ * article on the current site. Change BLOG_BASE to '' once /blog/[slug]
+ * exists here.
+ */
+const BLOG_BASE = 'https://www.ichibot.id'
+const posts = await getLatestPosts(3)
+const fmt = (d: string) =>
+  new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 ---
 
-<section style="padding-top:0">
-  <div class="wrap">
-    <div class="head-row"><h2>Insights and news</h2><a class="btn sm" href="#">All articles</a></div>
-    <div class="posts">
-      <a class="post" href="#"><div class="thumb"></div><small>Guide, 5 min read</small><h3>How AI turns existing CCTV into a safety inspector</h3></a>
-      <a class="post" href="#"><div class="thumb"></div><small>Case study, 4 min read</small><h3>Connecting a weighbridge to ERP: what changed on the ground</h3></a>
-      <a class="post" href="#"><div class="thumb"></div><small>News</small><h3>Ichibot launches its edge computer for Indonesian industry</h3></a>
-    </div>
-  </div>
-</section>
+{
+  posts.length > 0 && (
+    <section style="padding-top:0">
+      <div class="wrap">
+        <div class="head-row">
+          <h2>Insights and news</h2>
+          <a class="btn sm" href={`${BLOG_BASE}/blog`}>All articles</a>
+        </div>
+        <div class="posts">
+          {posts.map((p) => (
+            <a class="post" href={`${BLOG_BASE}/blog/${p.slug}`}>
+              <div class="thumb">{p.image && <img src={p.image} alt="" loading="lazy" decoding="async" />}</div>
+              <small>{[p.category, p.date && fmt(p.date)].filter(Boolean).join(' · ')}</small>
+              <h3>{p.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
