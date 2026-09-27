@@ -6,13 +6,13 @@ const lang = langFromUrl(Astro.url)
 const t = {
   en: {
     lede: "We help Indonesian industries connect every machine with industrial IoT, see what's happening in real time, and act on it, from the shop floor to your ERP.",
-    survey: 'Book a site survey', explore: 'Explore products', tab: 'Data flow',
+    survey: 'Book a site survey', explore: 'Explore products',
     diagram: 'Machines, sensors, cameras and meters send data to the Ichibot Smart System, which delivers it to dashboards, ERP, alerts and AI insights',
     synced: '✓ Synced', newAlerts: 'new', anomaly: '1 anomaly',
   },
   id: {
     lede: 'Kami membantu industri Indonesia menghubungkan setiap mesin dengan industrial IoT, melihat kondisi secara real-time, dan bertindak cepat, dari lantai produksi hingga ERP Anda.',
-    survey: 'Jadwalkan survei lokasi', explore: 'Lihat produk', tab: 'Alur data',
+    survey: 'Jadwalkan survei lokasi', explore: 'Lihat produk',
     diagram: 'Mesin, sensor, kamera, dan meter mengirim data ke Ichibot Smart System, yang meneruskannya ke dashboard, ERP, peringatan, dan analisis AI',
     synced: '✓ Tersinkron', newAlerts: 'baru', anomaly: '1 anomali',
   },
@@ -132,12 +132,8 @@ const D = (() => {
     </div>
 
     <div class="stage">
-      <div class="window hub" role="img" aria-label={t.diagram}>
-        <div class="window-bar" aria-hidden="true">
-          <span class="lights"><b></b><b></b><b></b></span>
-          <span class="win-tab"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" /><circle cx="8" cy="8" r="1.8" /></svg>{t.tab}<i>×</i></span>
-          <span class="win-new">+</span>
-        </div>
+      {/* the diagram sits straight on the hero, over its glow: no window frame */}
+      <div class="hub" role="img" aria-label={t.diagram}>
         <svg id="hubsvg" viewBox="0 42 1000 356">
           <defs>
             <linearGradient id="dev-metal" x1="0" y1="0" x2="0" y2="1">

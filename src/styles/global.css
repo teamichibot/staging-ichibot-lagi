@@ -151,25 +151,6 @@ header.nav.menu-open{background:var(--bg)}
 .hero .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:.7rem;margin-top:2.2rem}
 .stage{position:relative;margin-top:clamp(3rem,7vw,5rem)}
 .stage::before{content:"";position:absolute;left:50%;top:40%;width:80%;height:70%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--glow),transparent);filter:blur(30px);pointer-events:none}
-.window{position:relative;background:var(--panel);border:1px solid var(--border2);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;text-align:left}
-/* Chrome-style window chrome, matching the product tabs: a strip in the frame
-   colour and one selected tab whose bottom corners flare into the content below.
-   Decorative, so hidden from assistive tech. */
-.window{--strip:var(--bg2)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .window{--strip:var(--bg)}}
-:root[data-theme="dark"] .window{--strip:var(--bg)}
-.window-bar{display:flex;align-items:flex-end;gap:.5rem;height:42px;padding:0 .8rem;background:var(--strip);font-size:.78rem;color:var(--muted)}
-.window-bar .lights{display:flex;gap:.4rem;align-self:center;margin-right:.6rem}
-.window-bar .lights b{width:10px;height:10px;border-radius:50%;background:var(--border2)}
-.win-tab{--flare:9px;position:relative;display:flex;white-space:nowrap;align-items:center;gap:.5rem;height:32px;min-width:180px;padding:0 .7rem 0 .8rem;
-  background:var(--panel);color:var(--text);border-radius:9px 9px 0 0}
-.win-tab::before,.win-tab::after{content:"";position:absolute;bottom:0;width:var(--flare);height:var(--flare)}
-.win-tab::before{left:calc(-1 * var(--flare));background:radial-gradient(circle at 0 0,transparent calc(var(--flare) - .5px),var(--panel) var(--flare))}
-.win-tab::after{right:calc(-1 * var(--flare));background:radial-gradient(circle at 100% 0,transparent calc(var(--flare) - .5px),var(--panel) var(--flare))}
-.win-tab svg{flex:none;width:13px;height:13px;fill:none;stroke:var(--accent);stroke-width:1.6}
-.win-tab i{margin-left:auto;font-style:normal;color:var(--faint);font-size:.9rem;line-height:1}
-.win-new{align-self:center;color:var(--faint);font-size:1rem;margin-left:.4rem}
-@media (max-width:600px){.win-tab{min-width:0}}
 .hub #hubsvg{display:block;width:100%;height:auto}
 .hub #hubsvg-v{display:none;width:100%;height:auto;padding:.4rem .2rem .8rem}
 @media (max-width:640px){.hub #hubsvg{display:none}.hub #hubsvg-v{display:block}}
