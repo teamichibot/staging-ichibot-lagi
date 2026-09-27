@@ -7,7 +7,8 @@ import { langFromUrl, localize } from '../i18n'
 
 /**
  * Cards follow the Insights layout: a rounded photo, then the client's logo
- * and the product or service the project shows, then the title. Three to a view on desktop.
+ * and the product or service the project shows, then the title. Each case
+ * card links to its article; the sample quotes do not link anywhere. Three to a view on desktop.
  */
 const lang = langFromUrl(Astro.url)
 const t = {
@@ -97,7 +98,7 @@ cards.forEach((c, i) => {
                 </figcaption>
               </figure>
             ) : (
-            <article class="case-card">
+            <a class="case-card" href={`${localize('/blog', lang)}/${it.c.slug}`}>
               <div class="case-photo">
                 <Image src={it.c.image} alt="" width={560} height={350} densities={[1, 2]} loading={it.i < 4 ? 'eager' : 'lazy'} inferSize={false} />
               </div>
@@ -113,7 +114,7 @@ cards.forEach((c, i) => {
                 )}
               </div>
               <h3>{it.c.title}</h3>
-            </article>
+            </a>
           )
           )}
         </div>

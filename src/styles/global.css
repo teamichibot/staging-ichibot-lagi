@@ -413,6 +413,10 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .case-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .case-card:hover .case-photo img{transform:scale(1.03)}
+/* case cards are links to their article */
+a.case-card{display:block;color:inherit;text-decoration:none;border-radius:12px}
+a.case-card:hover h3{color:var(--accent)}
+a.case-card:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 .case-meta{display:flex;align-items:center;gap:.8rem;min-height:26px;flex-wrap:wrap;margin-top:1rem}
 .case-logo{height:22px;width:auto;max-width:100px;object-fit:contain;filter:grayscale(1) brightness(.55) contrast(1.3)}
 .case-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.76rem;font-weight:500;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:.22rem .6rem}
