@@ -1,0 +1,31 @@
+---
+/**
+ * Shell for every page other than the homepage: nav, the page, then the
+ * "Tell us about your plant" CTA and the footer. `cta={false}` drops the CTA
+ * on pages that are themselves the contact route.
+ */
+import BaseLayout from './BaseLayout.astro'
+import Nav from '../components/Nav.astro'
+import Cta from '../components/Cta.astro'
+import Footer from '../components/Footer.astro'
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+  type?: 'website' | 'article'
+  cta?: boolean
+}
+
+const { cta = true, ...meta } = Astro.props
+---
+
+<BaseLayout {...meta}>
+  <slot name="head" slot="head" />
+  <Nav />
+  <main class="page">
+    <slot />
+  </main>
+  {cta && <Cta />}
+  <Footer />
+</BaseLayout>

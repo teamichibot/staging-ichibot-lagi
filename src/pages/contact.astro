@@ -1,0 +1,120 @@
+---
+/**
+ * Site survey request, with the fields the brief lists (name, company,
+ * industry, phone/WhatsApp, message) plus an optional email to reply to.
+ * The form posts back to this page, which mails it through Resend (see
+ * lib/contact-mail.ts). Works without JavaScript.
+ */
+import PageLayout from '../layouts/PageLayout.astro'
+import { EMAIL, SURVEY_FORM, WHATSAPP_NUMBER, whatsappLink } from '../lib/contact'
+import { sendSurveyRequest, type SurveyRequest } from '../lib/contact-mail'
+
+const industries = [
+  'Oil, gas and energy',
+  'Automotive and manufacturing',
+  'Agribusiness and plantation',
+  'Printing and publishing',
+  'Port and marine',
+  'Salt and mining',
+  'Government or education',
+  'Other',
+]
+
+let values: SurveyRequest = { name: '', company: '', industry: '', phone: '', email: '', message: '' }
+let status: 'idle' | 'sent' | 'invalid' | 'failed' = 'idle'
+
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData()
+  const get = (k: string) => (form.get(k)?.toString() ?? '').trim().slice(0, 4000)
+  values = {
+    name: get('name'),
+    company: get('company'),
+    industry: get('industry'),
+    phone: get('phone'),
+    email: get('email'),
+    message: get('message'),
+  }
+
+  if (get('website')) {
+    // Honeypot filled in: a bot. Pretend it worked.
+    status = 'sent'
+  } else if (!values.name || !values.phone || !values.message || (values.email && !/^\S+@\S+\.\S+$/.test(values.email))) {
+    status = 'invalid'
+    Astro.response.status = 400
+  } else {
+    try {
+      await sendSurveyRequest(values, import.meta.env.RESEND_API_KEY)
+      status = 'sent'
+    } catch (err) {
+      console.error('[contact]', err)
+      status = 'failed'
+      Astro.response.status = 502
+    }
+  }
+}
+
+const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
+---
+
+<PageLayout
+  title="Contact — Ichibot"
+  description="Book a site survey: tell us about your plant and Ichibot's engineers will get back to you."
+  cta={false}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>Tell us about your plant</h1>
+      <p class="lede">Our engineers will visit, map your machines and data, and propose a pilot that fits your budget.</p>
+    </div>
+  </section>
+
+  <section class="page-body" id="contact-form">
+    <div class="wrap contact">
+      <div class="contact-card">
+        {status === 'sent' ? (
+          <div class="contact-done" role="status">
+            <h2>Thank you</h2>
+            <p>Your request has reached our team. We will get back to you shortly.</p>
+            <a class="btn sm" href="/">Back to home</a>
+          </div>
+        ) : (
+          <form method="post" action="/contact#contact-form">
+            {status === 'invalid' && <p class="form-error" role="alert">Please fill in your name, phone or WhatsApp number and message, and check the email address.</p>}
+            {status === 'failed' && (
+              <p class="form-error" role="alert">
+                Your message could not be sent. Please try again, or <a href={whatsappLink} target="_blank" rel="noopener">message us on WhatsApp</a>.
+              </p>
+            )}
+            <div class="form-grid">
+              <label><span>Name <em aria-hidden="true">*</em></span><input name="name" required autocomplete="name" value={values.name} /></label>
+              <label><span>Company</span><input name="company" autocomplete="organization" value={values.company} /></label>
+              <label>
+                <span>Industry</span>
+                <select name="industry">
+                  <option value="">Select</option>
+                  {industries.map((i) => <option selected={values.industry === i}>{i}</option>)}
+                </select>
+              </label>
+              <label><span>Phone or WhatsApp <em aria-hidden="true">*</em></span><input name="phone" type="tel" required autocomplete="tel" value={values.phone} /></label>
+              <label class="span"><span>Email</span><input name="email" type="email" autocomplete="email" value={values.email} /></label>
+              <label class="span"><span>Message <em aria-hidden="true">*</em></span><textarea name="message" rows="5" required placeholder="Which machines or processes do you want to monitor?">{values.message}</textarea></label>
+              <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <button class="btn primary" type="submit">Send request</button>
+          </form>
+        )}
+      </div>
+
+      <aside class="contact-side">
+        <h2>Direct contact</h2>
+        <ul>
+          <li><small>Email</small><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          <li><small>WhatsApp</small><a href={whatsappLink} target="_blank" rel="noopener">{waDisplay}</a></li>
+          <li><small>Project form</small><a href={SURVEY_FORM} target="_blank" rel="noopener">Industrial project form</a></li>
+        </ul>
+        <p>PT Gagas Anagata Semesta, Yogyakarta, Indonesia.</p>
+      </aside>
+    </div>
+  </section>
+</PageLayout>

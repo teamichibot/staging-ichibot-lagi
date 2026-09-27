@@ -6,9 +6,13 @@ import WhatsAppButton from '../components/WhatsAppButton.astro'
 interface Props {
   title: string
   description: string
+  /** Absolute URL of the share image (Open Graph / Twitter). */
+  image?: string
+  /** Open Graph type: 'website' for pages, 'article' for blog posts. */
+  type?: 'website' | 'article'
 }
 
-const { title, description } = Astro.props
+const { title, description, image, type = 'website' } = Astro.props
 const canonical = new URL(Astro.url.pathname, Astro.site)
 ---
 
@@ -20,11 +24,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site)
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content="summary_large_image" />
+    {image && <meta name="twitter:image" content={image} />}
+    <slot name="head" />
   </head>
   <body>
     <slot />

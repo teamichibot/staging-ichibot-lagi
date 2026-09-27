@@ -8,10 +8,15 @@
 import { products } from '../data/products'
 import { productIcons } from '../data/product-icons'
 
+// Section anchors live on the homepage; other pages link back to them.
+const home = Astro.url.pathname === '/' ? '' : '/'
+// The CTA scrolls to the survey section on pages that have one (all but /contact).
+const contactHref = Astro.url.pathname === '/contact' ? '#contact-form' : '#contact'
 const links = [
-  { href: '#platform', label: 'How it works' },
-  { href: '#cases', label: 'Case studies' },
-  { href: '#services', label: 'Services' },
+  { href: `${home}#platform`, label: 'How it works' },
+  { href: `${home}#cases`, label: 'Case studies' },
+  { href: `${home}#services`, label: 'Services' },
+  { href: '/blog', label: 'Insights' },
 ]
 ---
 
@@ -29,7 +34,7 @@ const links = [
           <ul>
             {products.map((p) => (
               <li>
-                <a href={`#product-${p.key}`}>
+                <a href={`${home}#product-${p.key}`}>
                   <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
                   <span>
                     <b>{p.name}</b>
@@ -39,14 +44,14 @@ const links = [
               </li>
             ))}
           </ul>
-          <a class="nav-panel-all" href="#products">See all products →</a>
+          <a class="nav-panel-all" href={`${home}#products`}>See all products →</a>
         </div>
       </div>
-      {links.map((l) => <a href={l.href} data-section={l.href.slice(1)}>{l.label}</a>)}
+      {links.map((l) => <a href={l.href} data-section={l.href.split('#')[1]} aria-current={l.href === '/blog' && Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>{l.label}</a>)}
     </nav>
 
     <div class="nav-end">
-      <a class="btn primary sm nav-cta" href="#contact">Book a site survey</a>
+      <a class="btn primary sm nav-cta" href={contactHref}>Book a site survey</a>
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label="Open menu">
         <span></span><span></span>
       </button>
@@ -59,7 +64,7 @@ const links = [
       <ul>
         {products.map((p) => (
           <li>
-            <a href={`#product-${p.key}`}>
+            <a href={`${home}#product-${p.key}`}>
               <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
               {p.name}
             </a>
@@ -70,7 +75,7 @@ const links = [
       <ul>
         {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
       </ul>
-      <a class="btn primary" href="#contact">Book a site survey</a>
+      <a class="btn primary" href={contactHref}>Book a site survey</a>
     </div>
   </div>
 </header>

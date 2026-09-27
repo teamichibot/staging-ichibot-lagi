@@ -1,0 +1,26 @@
+---
+/**
+ * A blog image. Uploads on img.ichibot.id are multi-megabyte originals, so
+ * they go through Astro's optimiser (the domain is allowed in astro.config)
+ * at the size they are shown; images on other hosts are linked as they are.
+ */
+import { Image } from 'astro:assets'
+
+interface Props {
+  src: string
+  width: number
+  height: number
+  class?: string
+  eager?: boolean
+}
+
+const { src, width, height, class: className, eager = false } = Astro.props
+const optimise = /^https:\/\/img\.ichibot\.id\//.test(src)
+const loading = eager ? 'eager' : 'lazy'
+---
+
+{optimise ? (
+  <Image src={src} alt="" width={width} height={height} densities={[1, 2]} loading={loading} inferSize={false} class={className} />
+) : (
+  <img src={src} alt="" width={width} height={height} loading={loading} decoding="async" class={className} />
+)}

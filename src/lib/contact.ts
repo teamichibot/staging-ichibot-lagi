@@ -14,7 +14,6 @@ export const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURICo
 /** From the old site's footer and CTA (branch main: lib/translations.ts, CTASection.tsx). */
 export const EMAIL = 'hello@ichibot.id'
 export const SURVEY_FORM = 'https://ichibot.fillout.com/proyekindustri'
-export const OLD_SITE = 'https://www.ichibot.id'
 export const socials = [
   { label: 'Instagram', href: 'https://www.instagram.com/ichibot.id/' },
   { label: 'TikTok', href: 'https://www.tiktok.com/@ichibot.id' },

@@ -1,0 +1,95 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro'
+import { FALLBACK_IMAGE, formatDate, getAllPosts, getPost } from '../../lib/blog'
+import { renderMarkdown, videoEmbed } from '../../lib/markdown'
+import PostImage from '../../components/PostImage.astro'
+
+const post = await getPost(Astro.params.slug ?? '')
+if (!post) return Astro.rewrite('/404')
+
+const html = renderMarkdown(post.content)
+const video = post.videoUrl ? videoEmbed(post.videoUrl) : null
+
+// Three more posts, same category first.
+const others = (await getAllPosts()).filter((p) => p.slug !== post.slug)
+const related = [
+  ...others.filter((p) => p.category === post.category),
+  ...others.filter((p) => p.category !== post.category),
+].slice(0, 3)
+
+const url = new URL(`/blog/${post.slug}`, Astro.site).href
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.excerpt,
+  datePublished: post.date || undefined,
+  image: post.image || undefined,
+  url,
+  mainEntityOfPage: url,
+  author: { '@type': 'Organization', name: 'Ichibot' },
+  publisher: { '@type': 'Organization', name: 'PT Gagas Anagata Semesta (Ichibot)', url: 'https://www.ichibot.id' },
+}
+---
+
+<PageLayout
+  title={`${post.title} — Ichibot`}
+  description={post.excerpt || post.title}
+  image={post.image || undefined}
+  type="article"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+
+  <article lang="id">
+    <header class="page-head article-head">
+      <div class="wrap narrow">
+        <a class="back" href="/blog">← All articles</a>
+        <p class="article-meta">
+          {post.category && <a href={`/blog?category=${encodeURIComponent(post.category)}`}>{post.category}</a>}
+          {post.date && <time datetime={post.date}>{formatDate(post.date)}</time>}
+        </p>
+        <h1>{post.title}</h1>
+        {post.excerpt && <p class="lede">{post.excerpt}</p>}
+      </div>
+    </header>
+
+    {post.image && (
+      <div class="wrap">
+        <PostImage class="article-cover" src={post.image} width={1100} height={550} eager />
+      </div>
+    )}
+
+    <div class="wrap narrow">
+      <div class="prose" set:html={html} />
+
+      {video && (
+        <div class="article-video">
+          <h2>Related video</h2>
+          <div class:list={['embed', { portrait: video.portrait }]}>
+            <iframe src={video.src} title={`Video: ${post.title}`} loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen />
+          </div>
+        </div>
+      )}
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="related">
+      <div class="wrap">
+        <div class="head-row">
+          <h2>More articles</h2>
+          <a class="btn sm" href="/blog">All articles</a>
+        </div>
+        <div class="posts">
+          {related.map((p) => (
+            <a class="post" href={`/blog/${p.slug}`}>
+              <div class="thumb"><PostImage src={p.image || FALLBACK_IMAGE} width={400} height={250} /></div>
+              <small>{[p.category, formatDate(p.date)].filter(Boolean).join(' · ')}</small>
+              <h3>{p.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</PageLayout>

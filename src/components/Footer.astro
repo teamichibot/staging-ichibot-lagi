@@ -1,11 +1,11 @@
 ---
-import { EMAIL, OLD_SITE, WHATSAPP_NUMBER, socials, whatsappLink } from '../lib/contact'
+import { EMAIL, WHATSAPP_NUMBER, socials, whatsappLink } from '../lib/contact'
 
 /**
- * Contact details, social links and the About, Insights, Internship and
- * ecosystem URLs are the ones the current site uses. About and Insights point
- * at pages on www.ichibot.id until v2 has its own.
+ * Contact details, social links and the Internship and ecosystem URLs are the
+ * ones the old site used. Section anchors live on the homepage.
  */
+const home = Astro.url.pathname === '/' ? '' : '/'
 const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
 const ext = { target: '_blank', rel: 'noopener' }
 ---
@@ -24,19 +24,19 @@ const ext = { target: '_blank', rel: 'noopener' }
       <div>
         <h4>Products</h4>
         <ul>
-          <li><a href="#product-energy">Smart energy monitoring</a></li>
-          <li><a href="#product-equip">Smart equipment monitoring</a></li>
-          <li><a href="#product-plant">Smart plantation system</a></li>
-          <li><a href="#product-vision">AI Vision Engine</a></li>
-          <li><a href="#product-custom">Custom</a></li>
+          <li><a href={`${home}#product-energy`}>Smart energy monitoring</a></li>
+          <li><a href={`${home}#product-equip`}>Smart equipment monitoring</a></li>
+          <li><a href={`${home}#product-plant`}>Smart plantation system</a></li>
+          <li><a href={`${home}#product-vision`}>AI Vision Engine</a></li>
+          <li><a href={`${home}#product-custom`}>Custom</a></li>
         </ul>
       </div>
       <div>
         <h4>Company</h4>
         <ul>
-          <li><a href={`${OLD_SITE}/about`}>About</a></li>
-          <li><a href="#cases">Case studies</a></li>
-          <li><a href={`${OLD_SITE}/blog`}>Insights</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href={`${home}#cases`}>Case studies</a></li>
+          <li><a href="/blog">Insights</a></li>
           <li><a href="https://internship.ichibot.id" {...ext}>Internship</a></li>
         </ul>
       </div>
@@ -45,8 +45,8 @@ const ext = { target: '_blank', rel: 'noopener' }
         <ul>
           <li><a href="https://www.store.ichibot.id" {...ext}>Ichibot Store</a></li>
           <li><a href="https://robotics.ichibot.id" {...ext}>Ichibot Robotics</a></li>
-          <li><a href="#services">Training</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href={`${home}#services`}>Training</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
     </div>
