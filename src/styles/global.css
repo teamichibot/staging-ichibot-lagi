@@ -389,15 +389,18 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .carousel:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:18px}
 .case-card,.case-quote{--case-gap:1.2rem;flex:none;scroll-snap-align:start;
   width:calc((min(1160px,100vw) - 2 * clamp(1.1rem,4vw,2rem) - 2 * var(--case-gap)) / 3)}
-/* sample testimonial slotted between case studies: same width, a quiet panel */
-.case-quote{margin:0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.6rem 1.5rem;display:flex;flex-direction:column}
-.case-quote .sample{align-self:flex-start;margin-bottom:1.2rem;font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--draft);
+/* sample testimonial slotted between case studies: built like a case card,
+   the quote in a box the size of the photo, the attribution underneath */
+.case-quote{margin:0}
+.quote-box{position:relative;aspect-ratio:16/10;border-radius:12px;border:1px solid var(--border2);background:var(--bg2);
+  padding:1.4rem 1.5rem;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.quote-box::before{content:"“";position:absolute;top:-.6rem;right:1rem;font-size:7rem;line-height:1;color:var(--accent);opacity:.18;font-family:Georgia,serif}
+.case-quote .sample{position:absolute;top:1rem;left:1.5rem;font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--draft);
   border:1px solid color-mix(in srgb,var(--draft) 35%,transparent);border-radius:999px;padding:.2rem .55rem}
-.case-quote blockquote{margin:0;font-size:1.12rem;line-height:1.5;letter-spacing:-.012em}
-.case-quote figcaption{display:flex;align-items:center;gap:.8rem;margin-top:auto;padding-top:1.6rem}
-.case-quote .avatar{width:38px;height:38px;border-radius:50%;flex:none;background:var(--border2);border:1px solid var(--border)}
-.case-quote b{display:block;font-size:.92rem;font-weight:600}
-.case-quote small{display:block;color:var(--faint);font-size:.82rem;margin-top:.1rem}
+.case-quote blockquote{margin:1rem 0 0;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.45;letter-spacing:-.012em;font-weight:500}
+.case-quote figcaption b{display:block;margin-top:.7rem;font-size:1.05rem;font-weight:600}
+.case-quote figcaption small{display:block;color:var(--muted);font-size:.9rem;margin-top:.15rem}
+.logo-slot{display:inline-flex;align-items:center;height:26px;padding:0 .6rem;border:1px dashed var(--border2);border-radius:6px;color:var(--faint);font-size:.72rem}
 .case-photo{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:12px;border:1px solid var(--border2);background:var(--bg2)}
 .case-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   transition:transform .6s cubic-bezier(.2,.7,.2,1)}

@@ -18,9 +18,12 @@ const cards = studies.map((s) => {
  * Sample testimonials, slotted in after every second case study. They are
  * written placeholders, so they are attributed to a role and a sector, never
  * to a named client, and carry a visible Sample badge. Replace with cleared
- * quotes (and drop `sample`) before launch.
+ * quotes (and drop `sample`) before launch. A real quote sets `clientId`
+ * (the id in Admin → Logo Klien) and gets that client's logo; a sample shows
+ * a placeholder, since a real logo beside an invented quote would read as an
+ * endorsement the client never gave.
  */
-const quotes = [
+const quotes: { quote: string; name: string; role: string; sample?: boolean; clientId?: string }[] = [
   { quote: 'We finally see what every compressor is doing before it trips, not after the line stops.', name: 'Maintenance Manager', role: 'Automotive manufacturer', sample: true },
   { quote: 'The weighbridge now writes straight into our ERP. Nobody retypes a ticket any more.', name: 'Operations Head', role: 'Agribusiness group', sample: true },
   { quote: 'They clipped sensors onto equipment older than half our team, and it just started reporting.', name: 'Plant Engineer', role: 'State-owned enterprise', sample: true },
@@ -61,11 +64,20 @@ cards.forEach((c, i) => {
           {items.map((it) =>
             it.kind === 'quote' ? (
               <figure class="case-quote">
-                {it.q.sample && <span class="sample">Sample</span>}
-                <blockquote>“{it.q.quote}”</blockquote>
+                <div class="quote-box">
+                  {it.q.sample && <span class="sample">Sample</span>}
+                  <blockquote>“{it.q.quote}”</blockquote>
+                </div>
                 <figcaption>
-                  <span class="avatar" aria-hidden="true" />
-                  <span><b>{it.q.name}</b><small>{it.q.role}</small></span>
+                  <div class="case-meta">
+                    {it.q.clientId ? (
+                      <img class="case-logo" src={`/client-logo/${encodeURIComponent(it.q.clientId)}`} alt="" loading="lazy" />
+                    ) : (
+                      <span class="logo-slot">Client logo</span>
+                    )}
+                  </div>
+                  <b>{it.q.name}</b>
+                  <small>{it.q.role}</small>
                 </figcaption>
               </figure>
             ) : (
