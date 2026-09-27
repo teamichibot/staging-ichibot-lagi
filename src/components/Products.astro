@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { products } from '../data/products'
+import { demoLink } from '../lib/contact'
 import { productIcons } from '../data/product-icons'
 import EnergyDashboard from './EnergyDashboard.astro'
 import EquipmentDashboard from './EquipmentDashboard.astro'
@@ -126,7 +127,7 @@ function sparkPoints(values: number[]) {
                 <h3>{p.name}</h3>
                 <p class="desc">{p.desc}</p>
               </div>
-              <a class="btn primary" href="#contact">Request a demo</a>
+              <a class="btn primary" href={demoLink(p.name)} target="_blank" rel="noopener">Request a demo</a>
             </div>
           </div>
         ))

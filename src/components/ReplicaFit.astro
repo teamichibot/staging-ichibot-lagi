@@ -18,12 +18,27 @@ const { width, label } = Astro.props
 </div>
 
 <script>
+  /**
+   * Every product frame has the same aspect ratio, that of the AI Vision
+   * replica (1040x475), so the copy and the demo button sit at the same height
+   * on every tab. A replica that is taller than the frame is first scaled
+   * down, but never below 75% of its fit-to-width size so its text stays
+   * legible; whatever still overflows is cropped behind a fade, like a
+   * window onto a larger screen. A scaled-down replica is centred.
+   */
+  const RATIO = 475 / 1040
+  const MIN_SHRINK = 0.75
   for (const fit of document.querySelectorAll<HTMLElement>('.replica-fit')) {
     const inner = fit.querySelector<HTMLElement>('.replica')!
     const size = () => {
-      const s = Math.min(1, fit.clientWidth / inner.offsetWidth)
-      inner.style.transform = `scale(${s})`
-      fit.style.height = `${inner.offsetHeight * s}px`
+      const w = fit.clientWidth
+      const h = Math.round(w * RATIO)
+      const base = Math.min(1, w / inner.offsetWidth)
+      const s = Math.max(base * MIN_SHRINK, Math.min(base, h / inner.offsetHeight))
+      const left = Math.max(0, (w - inner.offsetWidth * s) / 2)
+      inner.style.transform = `translateX(${left}px) scale(${s})`
+      fit.style.height = `${h}px`
+      fit.classList.toggle('cropped', inner.offsetHeight * s > h + 1)
     }
     new ResizeObserver(size).observe(fit)
     new ResizeObserver(size).observe(inner)

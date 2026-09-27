@@ -20,3 +20,7 @@ export const socials = [
   { label: 'TikTok', href: 'https://www.tiktok.com/@ichibot.id' },
   { label: 'YouTube', href: 'https://www.youtube.com/@ichibot_id' },
 ]
+
+/** WhatsApp link whose opening message names the product the visitor asked about. */
+export const demoLink = (product: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello Ichibot, I would like to request a demo of ${product}.`)}`
