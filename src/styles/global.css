@@ -386,17 +386,11 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .carousel:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:18px}
 .case-card{flex:none;width:min(796px,86vw);scroll-snap-align:start;border-radius:18px;overflow:hidden;
   border:1px solid var(--border2);background:var(--panel);display:flex;flex-direction:column}
-/* A: one grade for every photo, muted and pulled toward the accent; hover shows the original */
+/* A: one grade for every photo, grayscale; hover shows the original */
 .case-photo{position:relative;aspect-ratio:796/330;overflow:hidden;background:var(--bg2);isolation:isolate}
 .case-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:saturate(.35) contrast(1.08) brightness(.88);transition:filter .45s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
-.case-photo::after{content:"";position:absolute;inset:0;pointer-events:none;transition:opacity .45s ease;
-  background:linear-gradient(180deg,transparent 45%,color-mix(in srgb,var(--panel) 70%,transparent)),
-    color-mix(in srgb,var(--accent) 28%,transparent);mix-blend-mode:normal}
-.case-photo::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--accent);mix-blend-mode:color;opacity:.18;transition:opacity .45s ease}
+  filter:grayscale(1) contrast(1.08) brightness(.92);transition:filter .45s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
 .case-card:hover .case-photo img{filter:none;transform:scale(1.02)}
-.case-card:hover .case-photo::after{opacity:.15}
-.case-card:hover .case-photo::before{opacity:0}
 /* B: an info panel in the page's own language */
 .case-info{padding:1.1rem 1.3rem 1.3rem;display:flex;flex-direction:column;gap:.55rem}
 .case-meta{display:flex;align-items:center;gap:.8rem;min-height:28px;flex-wrap:wrap}
@@ -408,7 +402,7 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .case-info p{color:var(--muted);font-size:.9rem;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .case-logo{filter:grayscale(1) invert(1) brightness(1.7) contrast(1.25)}}
 :root[data-theme="dark"] .case-logo{filter:grayscale(1) invert(1) brightness(1.7) contrast(1.25)}
-@media (prefers-reduced-motion:reduce){.case-photo img,.case-photo::after,.case-photo::before{transition:none}.case-card:hover .case-photo img{transform:none}}
+@media (prefers-reduced-motion:reduce){.case-photo img{transition:none}.case-card:hover .case-photo img{transform:none}}
 @media (max-width:620px){.case-info{padding:1rem 1.1rem 1.15rem}}
 
 /* a real product screenshot, framed rather than mocked up */
