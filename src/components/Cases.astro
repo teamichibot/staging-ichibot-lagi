@@ -1,8 +1,20 @@
 ---
 import { Image } from 'astro:assets'
 import { getCaseStudies } from '../lib/case-studies'
+import { getClientLogos } from '../lib/site-data'
+import { clientFor, tagFor, tagIcons } from '../lib/case-tags'
 
-const studies = await getCaseStudies(9)
+/**
+ * Each card: a colour-graded photo (one treatment for every picture, so a set
+ * of site photos taken in different light reads as one series; hover shows the
+ * original), then an info panel in the page's own style with the client's
+ * logo, the product or service the project shows, the title and one line.
+ */
+const [studies, logos] = await Promise.all([getCaseStudies(9), getClientLogos()])
+const cards = studies.map((s) => {
+  const text = `${s.title} ${s.excerpt ?? ''}`
+  return { ...s, client: clientFor(s.title, logos), tag: tagFor(text) }
+})
 
 ---
 
@@ -28,20 +40,25 @@ const studies = await getCaseStudies(9)
         <p class="lede">Case studies are temporarily unavailable.</p>
       ) : (
         <div class="carousel" tabindex="0" role="region" aria-label="Case studies">
-          {studies.map((study) => (
+          {cards.map((c) => (
             <article class="case-card">
-              <Image
-                src={study.image}
-                alt=""
-                width={796}
-                height={458}
-                densities={[1, 2]}
-                loading="lazy"
-                inferSize={false}
-              />
-              <div class="case-copy">
-                <h3>{study.title}</h3>
-                {study.excerpt && <p>{study.excerpt}</p>}
+              <div class="case-photo">
+                <Image src={c.image} alt="" width={796} height={330} densities={[1, 2]} loading="lazy" inferSize={false} />
+              </div>
+              <div class="case-info">
+                <div class="case-meta">
+                  {c.client && (
+                    <img class="case-logo" src={c.client.logo} alt={c.client.name} loading="lazy" referrerpolicy="no-referrer" />
+                  )}
+                  {c.tag && (
+                    <span class="case-tag">
+                      <svg viewBox="0 0 16 16" aria-hidden="true" set:html={tagIcons[c.tag.icon]} />
+                      {c.tag.label}
+                    </span>
+                  )}
+                </div>
+                <h3>{c.title}</h3>
+                {c.excerpt && <p>{c.excerpt}</p>}
               </div>
             </article>
           ))}
