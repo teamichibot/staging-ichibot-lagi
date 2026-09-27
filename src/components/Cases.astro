@@ -5,10 +5,8 @@ import { getClientLogos } from '../lib/site-data'
 import { clientFor, tagFor, tagIcons } from '../lib/case-tags'
 
 /**
- * Cards follow the Insights layout: a rounded grayscale photo (one treatment
- * for every picture, so site photos shot in different light read as one
- * series; hover shows the original), then the client's logo and the product
- * or service the project shows, then the title. Three to a view on desktop.
+ * Cards follow the Insights layout: a rounded photo, then the client's logo
+ * and the product or service the project shows, then the title. Three to a view on desktop.
  */
 const [studies, logos] = await Promise.all([getCaseStudies(9), getClientLogos()])
 const cards = studies.map((s) => {
