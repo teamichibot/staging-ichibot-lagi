@@ -1084,3 +1084,13 @@ main:focus{outline:none}
 @media (max-width:900px){.panel.panel-split{grid-template-columns:1fr}.panel-split .panel-copy{order:0}}
 /* the energy replica fills its 16:10 frame (1320 x 825) */
 .replica > .edash{min-height:825px}
+/* The energy dashboard gets the platform mockups' glow: a dark rounded frame,
+   a blurred accent light behind the screen, and the screen itself with an
+   accent-tinted top edge, open at the bottom like a window onto it. */
+.panel-split .shot-frame.replica-frame{position:relative;border-radius:28px;background:var(--bg);border:1px solid var(--border);
+  padding:clamp(1.1rem,2.8vw,2.2rem) clamp(.9rem,2.4vw,1.9rem) 0;overflow:hidden;isolation:isolate}
+.panel-split .shot-frame.replica-frame::before{content:"";position:absolute;inset:18% 8% -10%;z-index:-1;border-radius:40px;
+  background:radial-gradient(60% 55% at 50% 30%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 72%);filter:blur(34px);opacity:.55}
+.panel-split .replica-fit{border:1px solid var(--border2);border-bottom:0;border-radius:14px 14px 0 0;overflow:hidden;
+  box-shadow:0 -1px 0 color-mix(in srgb,var(--accent) 30%,transparent),0 0 48px -12px color-mix(in srgb,var(--accent) 40%,transparent)}
+@media (max-width:640px){.panel-split .shot-frame.replica-frame{border-radius:20px}}
