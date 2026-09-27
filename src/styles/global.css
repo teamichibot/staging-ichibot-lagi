@@ -179,13 +179,43 @@ header.nav.menu-open{background:var(--bg)}
 .hub .node text{fill:var(--text);font:500 13px "Geist Variable",sans-serif}
 .hub .node .sub{fill:var(--faint);font-size:10.5px}
 .hub .wire{fill:none;stroke:var(--border2);stroke-width:1.5}
-.hub .core rect.bg{fill:var(--text)}
-.hub .core text{fill:var(--bg);font:650 15px "Geist Variable",sans-serif}
-.hub .core .sub{fill:var(--bg);opacity:.6;font-size:10.5px;font-weight:400}
-.hub .ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.6}
 .hub .pulse{fill:var(--accent)}
 .hub .pulse.out{fill:var(--live);opacity:.5}
 .hub .col{fill:var(--faint);font:500 11px "Geist Variable",sans-serif;letter-spacing:.02em}
+/* hub nodes: live readouts */
+.hub .node .live{fill:var(--accent);font:600 12px "Geist Variable",sans-serif;font-variant-numeric:tabular-nums}
+.hub .live-dot{fill:#22c55e;animation:hub-blink 2.4s ease-in-out infinite}
+.hub .spark{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.hub .chip rect{fill:var(--accent-soft);stroke:none}
+.hub .chip text{fill:var(--accent);font:600 9.5px "Geist Variable",sans-serif}
+.hub .chip.warn rect{fill:color-mix(in srgb,var(--draft) 16%,transparent)}
+.hub .chip.warn text{fill:var(--draft)}
+.hub .proto rect{fill:var(--panel);stroke:var(--border2)}
+.hub .proto text{fill:var(--muted);font:500 9px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em}
+/* hub core: the edge gateway, dark hardware in both themes */
+.hub .dev-ring{fill:none;stroke:var(--accent);stroke-width:1.2;opacity:.35;animation:hub-ring 3s ease-in-out infinite}
+.hub .dev-body{fill:url(#dev-metal);stroke:#323946;stroke-width:1.2}
+#hubsvg-v .dev-body{fill:#171a21}
+.hub .dev-face{fill:none;stroke:rgba(255,255,255,.05)}
+.hub .dev-screw circle{fill:#2a303b;stroke:#3a414d}
+.hub .dev-screw path{stroke:#11141a;stroke-width:1}
+.hub .dev-port{fill:#0d0f13;stroke:#3a414d}
+.hub .dev-tag{fill:#8b93a1;font:600 8.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em}
+.hub .dev-name{fill:#f2f3f5;font:650 16px "Geist Variable",sans-serif;letter-spacing:-.01em}
+.hub .dev-sub{fill:#8b93a1;font:400 10.5px "Geist Variable",sans-serif}
+.hub .dev-rule{stroke:rgba(255,255,255,.08)}
+.hub .dev-k{fill:#6b7380;font:600 8px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em}
+.hub .dev-v{fill:#e7e9ec;font:600 15px "Geist Variable",sans-serif;font-variant-numeric:tabular-nums}
+.hub .dev-vent{stroke:#2c323c;stroke-width:2.4;stroke-linecap:round}
+.hub .dev-led circle{fill:#1d222a}
+.hub .dev-led text{fill:#6b7380;font:600 7px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em}
+.hub .led-pwr circle{fill:#22c55e;filter:drop-shadow(0 0 3px #22c55e)}
+.hub .led-net circle{fill:#38bdf8;filter:drop-shadow(0 0 3px #38bdf8);animation:hub-blink .9s steps(2) infinite}
+.hub .led-run circle{fill:#22c55e;filter:drop-shadow(0 0 3px #22c55e);animation:hub-blink 1.8s ease-in-out infinite}
+.hub .led-ai circle{fill:#f59e0b;filter:drop-shadow(0 0 3px #f59e0b);animation:hub-blink 2.6s steps(3) infinite}
+@keyframes hub-blink{50%{opacity:.25}}
+@keyframes hub-ring{50%{opacity:.1}}
+@media (prefers-reduced-motion:reduce){.hub .live-dot,.hub .dev-ring,.hub .dev-led circle{animation:none}}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 .hero h1,.hero .lede,.hero .actions,.stage{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
 .hero h1{animation-delay:.06s}.hero .lede{animation-delay:.14s}.hero .actions{animation-delay:.22s}.stage{animation-delay:.34s}
