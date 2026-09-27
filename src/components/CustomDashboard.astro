@@ -1,0 +1,80 @@
+---
+/**
+ * The Custom tab's picture: a dashboard builder with an empty project, so the
+ * message is "this gets designed around you". Widget palette on the left, a
+ * dotted canvas with placeholder widgets and one being dragged into an empty
+ * slot, and the data sources to connect on the right. Same 1040x475 frame as
+ * the product replicas. The drag loops; it holds still under reduced motion.
+ */
+import ReplicaFit from './ReplicaFit.astro'
+
+const ic: Record<string, string> = {
+  gauge: '<path d="M2.5 11a5.5 5.5 0 0 1 11 0"/><path d="M8 11l2.6-3"/>',
+  trend: '<path d="M1.8 12l3.6-4 3 2.4 5.8-6.2"/><path d="M1.8 14.2h12.4"/>',
+  kpi: '<rect x="2" y="3" width="12" height="10" rx="1.6"/><path d="M5 9.5h2.5M5 6.5h6"/>',
+  table: '<rect x="2" y="2.5" width="12" height="11" rx="1.4"/><path d="M2 6h12M2 9.5h12M6.5 2.5v11"/>',
+  camera: '<rect x="1.6" y="4.2" width="9.4" height="7.6" rx="1.6"/><path d="M11 7.2l3.4-2.2v6l-3.4-2.2z"/>',
+  map: '<path d="M8 14.4s4.6-4.3 4.6-7.6a4.6 4.6 0 0 0-9.2 0c0 3.3 4.6 7.6 4.6 7.6z"/><circle cx="8" cy="6.8" r="1.6"/>',
+  alert: '<path d="M4.2 6.8a3.8 3.8 0 0 1 7.6 0c0 2.9 1.1 4 1.1 4H3.1s1.1-1.1 1.1-4z"/><path d="M6.7 13a1.5 1.5 0 0 0 2.6 0"/>',
+  erp: '<ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4"/><path d="M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>',
+}
+const widgets = [
+  ['gauge', 'Gauge'], ['trend', 'Trend chart'], ['kpi', 'KPI card'], ['table', 'Data table'],
+  ['camera', 'Camera feed'], ['map', 'Site map'], ['alert', 'Alert rule'], ['erp', 'ERP / MES sync'],
+]
+const sources = [
+  ['PLC / controller', 'Modbus RTU / TCP'],
+  ['Sensors', 'MQTT · LoRa'],
+  ['IP camera', 'RTSP'],
+  ['Energy meter', 'Modbus TCP'],
+]
+---
+
+<ReplicaFit width={1040} label="A dashboard builder for a custom project: a widget palette, a canvas with placeholder widgets and one being dragged in, and data sources to connect">
+  <div class="cdash">
+    <header class="cd-top">
+      <span class="cd-title"><b>New project</b><small>Untitled dashboard</small></span>
+      <span class="cd-draft">Draft</span>
+      <span class="cd-btn ghost">Preview</span>
+      <span class="cd-btn">Talk to an engineer</span>
+    </header>
+
+    <div class="cd-body">
+      <aside class="cd-palette">
+        <small>Widgets</small>
+        {widgets.map(([k, label]) => (
+          <span class="cd-widget"><svg viewBox="0 0 16 16" set:html={ic[k]} />{label}</span>
+        ))}
+      </aside>
+
+      <div class="cd-canvas">
+        <div class="cd-grid">
+          <div class="cd-tile kpi"><small>Your KPI</small><b>—</b><i></i></div>
+          <div class="cd-tile kpi"><small>Your KPI</small><b>—</b><i></i></div>
+          <div class="cd-tile gauge">
+            <small>Your gauge</small>
+            <svg viewBox="0 0 120 70"><path class="track" d="M14 62a46 46 0 0 1 92 0" /><path class="val" d="M14 62a46 46 0 0 1 60-43" /></svg>
+          </div>
+          <div class="cd-tile trend">
+            <small>Your trend</small>
+            <svg viewBox="0 0 300 70" preserveAspectRatio="none"><path d="M0 55 C40 50 60 30 100 36 S170 58 210 30 S270 18 300 24" /></svg>
+          </div>
+          <div class="cd-tile drop"><span>+ Drop a widget</span></div>
+          <div class="cd-tile table">
+            <small>Your table</small>
+            {[0, 1, 2].map(() => <p><i></i><i></i><i></i></p>)}
+          </div>
+        </div>
+        <span class="cd-ghost" aria-hidden="true"><svg viewBox="0 0 16 16" set:html={ic.camera} />Camera feed</span>
+      </div>
+
+      <aside class="cd-sources">
+        <small>Data sources</small>
+        {sources.map(([name, proto]) => (
+          <span class="cd-source"><i></i><span><b>{name}</b><em>{proto}</em></span></span>
+        ))}
+        <span class="cd-source add">+ Add your source</span>
+      </aside>
+    </div>
+  </div>
+</ReplicaFit>

@@ -735,6 +735,55 @@ footer.site{border-top:1px solid var(--border);padding:3.5rem 0 2rem;font-size:.
 .pd-minor em{display:none}
 .pd-foot{padding-top:4px;font-size:9.5px}
 
+/* Custom tab: a dashboard builder with an empty project */
+.cdash{background:var(--bg2);padding:12px 14px;font-size:12px;line-height:1.35;color:var(--text);display:flex;flex-direction:column;gap:10px}
+.cdash svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cd-top{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:8px 14px}
+.cd-title{margin-right:auto}
+.cd-title b{display:block;font-size:14px;font-weight:600}
+.cd-title small{color:var(--muted);font-size:10.5px}
+.cd-draft{font-size:10px;font-weight:600;color:var(--draft);border:1px solid color-mix(in srgb,var(--draft) 40%,transparent);border-radius:999px;padding:2px 9px}
+.cd-btn{border-radius:8px;padding:6px 12px;font-weight:600;background:var(--accent);color:var(--on-accent)}
+.cd-btn.ghost{background:none;color:var(--muted);border:1px solid var(--border2);font-weight:500}
+.cd-body{flex:1;display:grid;grid-template-columns:170px 1fr 190px;gap:10px;min-height:0}
+.cd-palette,.cd-sources{background:var(--panel);border:1px solid var(--border2);border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;gap:5px}
+.cd-palette>small,.cd-sources>small{color:var(--faint);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.cd-widget{display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);font-size:11.5px}
+.cd-widget svg{width:14px;height:14px;color:var(--accent);flex:none}
+.cd-canvas{position:relative;border-radius:12px;border:1px solid var(--border2);padding:12px;
+  background:radial-gradient(circle,var(--border2) 1px,transparent 1.2px) 0 0/16px 16px,var(--panel)}
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:74px 1fr 1fr;gap:10px;height:100%}
+.cd-tile{border:1px solid var(--border2);border-radius:10px;background:var(--bg2);padding:9px 11px;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.cd-tile small{color:var(--faint);font-size:10px}
+.cd-tile.kpi b{font-size:20px;color:var(--faint)}
+.cd-tile.kpi i{height:5px;border-radius:9px;background:var(--border2);width:60%}
+.cd-tile.gauge{grid-column:span 2;grid-row:span 1}
+.cd-tile.gauge svg{height:44px;align-self:center}
+.cd-tile.gauge .track{stroke:var(--border2);stroke-width:8}
+.cd-tile.gauge .val{stroke:var(--accent);stroke-width:8;opacity:.55}
+.cd-tile.trend{grid-column:span 3}
+.cd-tile.trend svg{flex:1;width:100%;color:var(--accent);opacity:.6}
+.cd-tile.trend path{stroke-width:2;stroke-dasharray:6 5;vector-effect:non-scaling-stroke}
+.cd-tile.drop{border:1.5px dashed color-mix(in srgb,var(--accent) 55%,transparent);background:var(--accent-soft);align-items:center;justify-content:center;color:var(--accent);font-weight:600;font-size:11px}
+.cd-tile.table{grid-column:span 4}
+.cd-tile.table p{display:grid;grid-template-columns:1.2fr 2fr 1fr;gap:10px;margin:3px 0 0}
+.cd-tile.table p i{height:6px;border-radius:9px;background:var(--border2)}
+.cd-ghost{position:absolute;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:var(--panel);border:1px solid var(--accent);
+  color:var(--text);font-size:11.5px;box-shadow:0 10px 24px -8px rgba(0,0,0,.45);pointer-events:none;left:-120px;top:150px;opacity:0;
+  animation:cd-drag 5s cubic-bezier(.5,0,.3,1) infinite}
+.cd-ghost svg{width:14px;height:14px;color:var(--accent)}
+.cdash{height:475px}
+.cd-body{min-height:0}
+.cd-canvas{min-height:0;overflow:hidden}
+.cd-grid{grid-template-rows:70px minmax(0,1fr) minmax(0,1fr)}
+@keyframes cd-drag{0%{left:-150px;top:150px;opacity:0}12%{opacity:1}55%{left:62%;top:44%;opacity:1}70%{left:62%;top:44%;opacity:0}100%{opacity:0}}
+.cd-source{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:var(--bg2)}
+.cd-source i{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
+.cd-source b{display:block;font-size:11.5px;font-weight:500}
+.cd-source em{display:block;font-style:normal;color:var(--faint);font-size:10px}
+.cd-source.add{border-style:dashed;color:var(--accent);justify-content:center;font-weight:600;font-size:11px;background:none}
+@media (prefers-reduced-motion:reduce){.cd-ghost{animation:none;opacity:1;left:62%;top:44%}}
+
 /* AI Vision Engine demo: footage with detections drawn from JSON. The video
    area is always dark, whatever the site theme. */
 .vdash{background:var(--bg2);padding:16px;font-size:12px;line-height:1.35;color:var(--text);font-variant-numeric:tabular-nums}

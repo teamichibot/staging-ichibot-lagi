@@ -23,4 +23,8 @@ export const socials = [
 
 /** WhatsApp link whose opening message names the product the visitor asked about. */
 export const demoLink = (product: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hello Ichibot, I would like to request a demo of ${product}.`)}`
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    product === 'Custom'
+      ? 'Hello Ichibot, I would like to discuss a custom system for our plant.'
+      : `Hello Ichibot, I would like to request a demo of ${product}.`,
+  )}`

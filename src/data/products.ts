@@ -9,7 +9,7 @@
  * rather than guessed, because it is a promise made to a customer.
  */
 export type Product = {
-  key: 'energy' | 'vision' | 'equip' | 'plant'
+  key: 'energy' | 'vision' | 'equip' | 'plant' | 'custom'
   name: string
   desc: string
   included: string
@@ -27,7 +27,9 @@ export type Product = {
    * A dashboard rebuilt in HTML instead of a screenshot: crisp at any size and
    * follows the site theme. Takes precedence over `screenshot`.
    */
-  replica?: 'energy' | 'equipment' | 'plantation' | 'vision'
+  replica?: 'energy' | 'equipment' | 'plantation' | 'vision' | 'custom'
+  /** Label for the panel's WhatsApp button; defaults to Request a demo. */
+  cta?: string
   /** Illustrative fallback, used only until a real screenshot exists. */
   mock: {
     top: string
@@ -100,5 +102,17 @@ export const products: Product[] = [
       metrics: [['97%', 'PPE compliance'], ['2', 'Violations today'], ['12', 'Cameras']],
       line: [20, 22, 18, 24, 20, 26, 22, 18, 20, 16, 22, 18],
     },
+  },
+  {
+    key: 'custom',
+    name: 'Custom',
+    desc: 'Discuss a product built for your specific purpose, from the sensors on your machines to the dashboard your team uses.',
+    included: 'Site survey, system design, hardware, software and integration',
+    proofLabel: 'Built for',
+    proof: [],
+    deploymentTime: 'Scoped after the site survey',
+    replica: 'custom',
+    cta: 'Discuss your project',
+    mock: { top: '', metrics: [], line: [] },
   },
 ]
