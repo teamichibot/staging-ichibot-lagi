@@ -1049,3 +1049,47 @@ main:focus{outline:none}
   background:radial-gradient(60% 55% at 50% 40%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 72%);filter:blur(34px);opacity:.55}
 .panel-split .replica-fit{border:1px solid var(--border2);border-radius:14px;overflow:hidden;
   box-shadow:0 -1px 0 color-mix(in srgb,var(--accent) 30%,transparent),0 0 48px -12px color-mix(in srgb,var(--accent) 40%,transparent)}
+
+/* plantation replica: four node cards on the left, the estate map on the right */
+.pd-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex:1;min-height:0}
+.pd-body .pd-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}
+/* padding:0 overrides the site-wide section padding */
+.pd-map{position:relative;display:flex;flex-direction:column;padding:0;background:var(--panel);border:1px solid var(--border2);border-radius:12px;overflow:hidden;min-height:0}
+.pd-map-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border)}
+.pd-map-head b{display:block;font-size:13px}
+.pd-map-head small{display:block;color:var(--muted);font-size:10.5px;margin-top:1px}
+.pd-map-legend{display:flex;gap:9px;font-size:10px;color:var(--muted)}
+.pd-map-legend em{font-style:normal;display:flex;align-items:center;gap:4px}
+.pd-map-legend em::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pd-map-legend .online::before{background:#22c55e}.pd-map-legend .delayed::before{background:#f59e0b}
+.pd-map-legend .offline::before{background:#9ca3af}.pd-map-legend .dry::before{background:#f97316;box-shadow:0 0 0 2px rgba(249,115,22,.3)}
+/* the map fills the height the cards give the row rather than setting it:
+   a definite 0px basis, since 0% against an indefinite height counts as content */
+.pd-map-svg{display:block;width:100%;flex:1 1 0px;min-height:0}
+.pd-map-land{fill:color-mix(in srgb,var(--sp) 7%,var(--bg2))}
+.pd-map-river{fill:none;stroke:rgba(56,189,248,.45);stroke-width:14;stroke-linecap:round}
+.pd-map-road{fill:none;stroke:color-mix(in srgb,var(--text) 22%,transparent);stroke-width:5;stroke-linecap:round}
+.pd-map-road.minor{stroke-width:3;stroke-dasharray:1 7}
+.pd-map-block polygon{fill:color-mix(in srgb,var(--sp) 16%,transparent);stroke:color-mix(in srgb,var(--sp) 45%,transparent);stroke-width:1}
+.pd-map-block polygon.palms{fill:url(#pd-palms);stroke:none}
+#pd-palms circle{fill:color-mix(in srgb,var(--sp) 42%,transparent)}
+.pd-map-block text{fill:var(--muted);font:600 9.5px "Geist Variable",sans-serif}
+.pd-map-range{fill:rgba(56,189,248,.05);stroke:rgba(56,189,248,.45);stroke-width:1;stroke-dasharray:4 5}
+.pd-map-gw circle{fill:var(--panel);stroke:var(--accent);stroke-width:1.6}
+.pd-map-gw path{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round}
+.pd-map-gw .tag rect{fill:var(--panel);stroke:color-mix(in srgb,var(--accent) 50%,transparent)}
+.pd-map-gw .tag text{fill:var(--accent);font:600 9.5px "Geist Variable",sans-serif}
+.pd-map-pin .dot{stroke:var(--panel);stroke-width:2.5;fill:#22c55e}
+.pd-map-pin.delayed .dot{fill:#f59e0b}.pd-map-pin.offline .dot{fill:#9ca3af}.pd-map-pin.dry .dot{fill:#f97316}
+.pd-map-pin .pulse{fill:rgba(249,115,22,.35);animation:pd-map-pulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pd-map-pulse{from{transform:scale(.8);opacity:.9}to{transform:scale(2.4);opacity:0}}
+.pd-map-pin .tag rect{fill:var(--panel);stroke:var(--border2)}
+.pd-map-pin .tag text{fill:var(--text);font:600 9.5px "Geist Variable",sans-serif}
+.pd-map-pin.offline .tag text{fill:var(--muted)}
+.pd-map-north path{fill:var(--muted)}.pd-map-north text,.pd-map-scale text{fill:var(--muted);font:600 9px "Geist Variable",sans-serif}
+.pd-map-scale path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.pd-map-inset rect{fill:var(--panel);stroke:var(--border2)}
+.pd-map-inset path{fill:color-mix(in srgb,var(--sp) 30%,var(--bg2));stroke:color-mix(in srgb,var(--sp) 60%,transparent);stroke-width:.8}
+.pd-map-inset circle{fill:#f97316;stroke:var(--panel);stroke-width:1.2}
+.pd-map-inset text{fill:var(--muted);font:600 8.5px "Geist Variable",sans-serif}
+@media (prefers-reduced-motion:reduce){.pd-map-pin .pulse{animation:none;opacity:.5}}

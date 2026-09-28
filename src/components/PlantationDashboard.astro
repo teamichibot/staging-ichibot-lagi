@@ -2,8 +2,10 @@
 /**
  * An HTML replica of the Smart Plantation System (SPS) dashboard, used in
  * place of the screenshot on the Smart plantation system product. Sidebar,
- * fleet summary, filters and eight soil-sensor node cards. Readings are
- * illustrative and name no client or estate.
+ * fleet summary, filters, four soil-sensor node cards (one of each state) and
+ * an estate map of an oil palm plantation in Kalimantan with every node and
+ * the LoRa gateway pinned. Readings and the estate layout are illustrative
+ * and name no client or estate.
  *
  * The green sidebar is SPS's own identity and stays green in both themes;
  * everything else follows the site tokens. Laid out at a fixed width inside
@@ -62,6 +64,46 @@ const nodes: Node[] = [
 const count = (s: Node['status']) => nodes.filter((n) => n.status === s).length
 const LOW_MOISTURE = 25
 
+/** Cards shown beside the map: one online, the dry alert, the delayed and the offline node. */
+const CARDS = [0, 2, 5, 7]
+
+/**
+ * Estate map, drawn in its own 480 x 440 space (the shape the map area has
+ * beside the cards): eight blocks in two columns
+ * either side of the main road, a river along the west edge, each node pinned
+ * in its block, and the gateway with its LoRa range. The inset outlines
+ * Borneo (a simplified coastline) with the estate marked in Kalimantan.
+ */
+const MAP = { w: 480, h: 440 }
+/** The layout below was drawn 540 tall; this packs it into 440, keeping x. */
+const sy = (y: number) => Math.round(28 + (y - 70) * 0.8)
+const squash = (pts: string) => pts.split(' ').map((p) => { const [x, y] = p.split(',').map(Number); return `${x},${sy(y)}` }).join(' ')
+const blocks = [
+  { id: 'A', pts: '96,86 222,78 226,176 100,186' },
+  { id: 'B', pts: '258,76 404,70 410,168 262,174' },
+  { id: 'C', pts: '100,200 226,190 230,290 104,298' },
+  { id: 'D', pts: '262,188 412,182 416,282 266,288' },
+  { id: 'E', pts: '104,312 230,304 234,402 108,410' },
+  { id: 'F', pts: '266,302 418,296 420,394 270,400' },
+  { id: 'G', pts: '108,424 234,416 236,500 112,506' },
+  { id: 'H', pts: '270,414 420,408 422,496 272,502' },
+].map((b) => ({ ...b, pts: squash(b.pts) }))
+const blockLabel = (pts: string) => pts.split(' ')[0].split(',').map(Number)
+const pins = [
+  [150, 128], [320, 118], [176, 244], [352, 232], [158, 356], [330, 348], [182, 460], [346, 452],
+].map(([x, y]) => [x, sy(y)])
+const gateway = { x: 246, y: sy(296), r: 172 }
+const borneo = [
+  [116.8, 6.9], [118.1, 5.8], [118.9, 5.0], [117.9, 4.3], [117.6, 3.4], [118.0, 2.0], [119.0, 1.0], [117.5, 0.1],
+  [117.3, -0.5], [116.8, -1.3], [116.2, -1.9], [116.3, -3.0], [116.0, -3.9], [114.6, -4.1], [114.6, -3.4], [113.9, -3.2],
+  [112.6, -3.4], [111.7, -3.0], [110.2, -2.5], [110.0, -1.8], [109.3, 0.0], [108.9, 0.9], [109.6, 2.0], [110.3, 1.6],
+  [111.4, 2.5], [111.8, 2.9], [113.0, 3.2], [114.0, 4.4], [114.9, 5.0], [115.2, 5.3], [116.1, 6.0],
+]
+const INSET = { w: 92, h: 98, lon0: 108.6, lat0: 7.2, k: 6.4 }
+const proj = ([lon, lat]: number[]) => [((lon - INSET.lon0) * INSET.k).toFixed(1), ((INSET.lat0 - lat) * INSET.k).toFixed(1)]
+const borneoPath = 'M' + borneo.map((c) => proj(c).join(',')).join('L') + 'Z'
+const estateOnInset = proj([113.4, -1.9])
+
 const agoText = (s: number) => (s < 60 ? `${s} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : `${Math.round(s / 3600)} h ago`)
 
 const menu = [
@@ -71,7 +113,7 @@ const menu = [
 ]
 ---
 
-<ReplicaFit width={W} ratio={10 / 16} label="Smart plantation dashboard with eight solar-powered soil sensor nodes showing moisture, temperature, EC, pH, salinity and NPK">
+<ReplicaFit width={W} ratio={10 / 16} label="Smart plantation dashboard: solar-powered soil sensor nodes showing moisture, temperature, EC, pH, salinity and NPK, beside an estate map of an oil palm plantation in Kalimantan with each node and the LoRa gateway pinned">
   <div class="pdash">
     <aside class="pd-side">
       <div class="pd-logo">
@@ -111,8 +153,10 @@ const menu = [
         <span class="pd-live"><i></i>Realtime</span>
       </div>
 
+      <div class="pd-body">
       <div class="pd-grid">
         {nodes.map((n, i) => {
+          if (!CARDS.includes(i)) return null
           const off = n.status === 'offline'
           const dry = n.moisture !== undefined && n.moisture < LOW_MOISTURE
           const mVals = off ? [] : spark(11 + i * 7, n.moisture!, 15, 60)
@@ -168,6 +212,74 @@ const menu = [
             </section>
           )
         })}
+      </div>
+
+      <section class="pd-map">
+        <div class="pd-map-head">
+          <span><b>Estate map</b><small>Kalimantan · {nodes.length} nodes · 1 LoRa gateway</small></span>
+          <span class="pd-map-legend">
+            <em class="online">Online</em><em class="delayed">Delayed</em><em class="offline">Offline</em><em class="dry">Alert</em>
+          </span>
+        </div>
+        <svg class="pd-map-svg" viewBox={`0 0 ${MAP.w} ${MAP.h}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <pattern id="pd-palms" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-3)">
+              <circle cx="4" cy="4" r="2.1" /><circle cx="11" cy="11" r="2.1" />
+            </pattern>
+          </defs>
+          <rect class="pd-map-land" width={MAP.w} height={MAP.h} />
+          <path class="pd-map-river" d={`M58 -10 C 30 ${sy(90)}, 84 ${sy(160)}, 52 ${sy(250)} S 40 ${sy(420)}, 70 ${MAP.h + 10}`} />
+          <path class="pd-map-road" d={`M244 ${sy(60)} L 248 ${sy(520)}`} />
+          <path class="pd-map-road minor" d={`M92 ${sy(296)} L 424 ${sy(288)}`} />
+          {blocks.map((b) => {
+            const [lx, ly] = blockLabel(b.pts)
+            return (
+              <g class="pd-map-block">
+                <polygon points={b.pts} />
+                <polygon class="palms" points={b.pts} />
+                <text x={lx + 8} y={ly + 16}>Block {b.id}</text>
+              </g>
+            )
+          })}
+          <circle class="pd-map-range" cx={gateway.x} cy={gateway.y} r={gateway.r} />
+          <g class="pd-map-gw" transform={`translate(${gateway.x} ${gateway.y})`}>
+            <circle r="13" />
+            <path d="M0 -6 L-4 6 M0 -6 L4 6 M-2.6 2 H2.6 M-6 -9 A7 7 0 0 0 -6 -3 M6 -9 A7 7 0 0 1 6 -3" />
+            <g class="tag" transform="translate(-38 18)">
+              <rect width="76" height="18" rx="5" />
+              <text x="38" y="12.5" text-anchor="middle">LoRa gateway</text>
+            </g>
+          </g>
+          {nodes.map((n, i) => {
+            const [x, y] = pins[i]
+            const dry = n.moisture !== undefined && n.moisture < LOW_MOISTURE
+            return (
+              <g class:list={['pd-map-pin', n.status, { dry }]} transform={`translate(${x} ${y})`}>
+                {dry && <circle class="pulse" r="9" />}
+                <circle class="dot" r="6.5" />
+                <g class="tag" transform="translate(11 -9)">
+                  <rect width="52" height="18" rx="5" />
+                  <text x="26" y="12.5" text-anchor="middle">{n.name}</text>
+                </g>
+              </g>
+            )
+          })}
+          <g class="pd-map-north" transform={`translate(${MAP.w - 30} 36)`}>
+            <path d="M0 -12 L6 6 L0 2 L-6 6 Z" /><text y="20" text-anchor="middle">N</text>
+          </g>
+          <g class="pd-map-scale" transform={`translate(${MAP.w - 100} ${MAP.h - 16})`}>
+            <path d="M0 0 H80 M0 -4 V4 M80 -4 V4" /><text x="40" y="-7" text-anchor="middle">500 m</text>
+          </g>
+          <g class="pd-map-inset" transform={`translate(12 ${MAP.h - INSET.h - 12})`}>
+            <rect width={INSET.w} height={INSET.h} rx="8" />
+            <g transform="translate(12 6)">
+              <path d={borneoPath} />
+              <circle cx={estateOnInset[0]} cy={estateOnInset[1]} r="3.4" />
+            </g>
+            <text x={INSET.w / 2} y={INSET.h - 7} text-anchor="middle">Kalimantan</text>
+          </g>
+        </svg>
+      </section>
       </div>
     </div>
   </div>
