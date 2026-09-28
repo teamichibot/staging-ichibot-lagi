@@ -15,16 +15,15 @@ import { langFromUrl } from '../i18n'
 // product dashboards they depict.
 const t = {
   en: {
-    title: 'End-to-end industrial IoT',
-    lede: 'We handle every layer of the system: connecting to your machines and sensors, monitoring them in real time, logging the data, and putting it to work in your other applications.',
+    // One statement sentence, no separate lede.
+    title: 'End-to-end industrial IoT, from connecting your machines and sensors to real-time monitoring, data logs and the systems you already use.',
     f1: ['Sensor and data connection', 'Connect PLCs, controllers, power meters, IP cameras and sensors. Every signal becomes a named data point with its source, unit and status.'],
     f2: ['Real-time monitoring dashboard', 'See live values, trends and alarms for each machine and line, on site or from anywhere.'],
     f3: ['Data logging and reports', 'Every reading is stored in a database. Browse the history, and get hourly, daily and monthly recaps ready to export for reports and audits.'],
     f4: ['Integrations: ERP, AI and alerts', 'Put the data to work in other systems: sync records to your ERP or MES, run AI analytics for anomalies and detections, and send notifications by WhatsApp or email.'],
   },
   id: {
-    title: 'Industrial IoT dari ujung ke ujung',
-    lede: 'Kami menangani setiap lapisan sistem: menghubungkan mesin dan sensor Anda, memantaunya secara real-time, mencatat datanya, dan memanfaatkannya di aplikasi Anda yang lain.',
+    title: 'Industrial IoT dari ujung ke ujung, dari koneksi mesin dan sensor hingga monitoring real-time, log data, dan sistem yang sudah Anda pakai.',
     f1: ['Koneksi sensor dan data', 'Hubungkan PLC, kontroler, power meter, kamera IP, dan sensor. Setiap sinyal menjadi data point bernama lengkap dengan sumber, satuan, dan statusnya.'],
     f2: ['Dashboard monitoring real-time', 'Lihat nilai live, tren, dan alarm untuk setiap mesin dan lini, di lokasi maupun dari mana saja.'],
     f3: ['Pencatatan data dan laporan', 'Setiap pembacaan tersimpan di database. Telusuri riwayatnya, dan dapatkan rekap per jam, harian, dan bulanan yang siap diekspor untuk laporan dan audit.'],
@@ -77,8 +76,7 @@ const recap = [
   style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)"
 >
   <div class="wrap">
-    <h2>{t.title}</h2>
-    <p class="lede">{t.lede}</p>
+    <h2 class="statement">{t.title}</h2>
 
     <div class="features">
       <article class="feature">
