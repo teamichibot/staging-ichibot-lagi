@@ -215,9 +215,9 @@ const D = (() => {
    * prefers-reduced-motion the waves hold still and the pointer highlight
    * snaps to position instead of easing.
    *
-   * On first load the dots draw a map of Indonesia: the islands light up in
-   * the accent colour, sweeping west to east, hold, then dissolve into the
-   * waves. The hero's centre mask opens for it (the .intro class) and closes
+   * On first load the dots draw a map of Indonesia, quietly: the island dots
+   * are the usual dot colour, a little brighter than the rest, coming in west
+   * to east, holding, then slowly dissolving into the waves (about 8 s). The hero's centre mask opens for it (the .intro class) and closes
    * again as the map fades. Coastlines are simplified; at a 16px dot pitch
    * that is all the detail the grid can show. Skipped under reduced motion.
    */
@@ -290,11 +290,13 @@ const D = (() => {
           }
         }
       }
+      /** Intro timing, in seconds: west-to-east reveal, hold, slow dissolve. */
+      const HOLD_UNTIL = 4, FADE = 4, INTRO_END = HOLD_UNTIL + FADE
       /** 0..1: how much of the map a dot at x shows at time s (seconds since the intro began). */
       const mapAt = (s: number, x: number) => {
-        if (s < 0 || s > 4.3) return 0
-        const reveal = Math.min(1, Math.max(0, (s - 0.15 - (x / w) * 0.8) / 0.35))
-        const fade = s < 2.8 ? 1 : Math.max(0, 1 - (s - 2.8) / 1.5)
+        if (s < 0 || s > INTRO_END) return 0
+        const reveal = Math.min(1, Math.max(0, (s - 0.2 - (x / w) * 0.9) / 0.7))
+        const fade = s < HOLD_UNTIL ? 1 : Math.max(0, 1 - (s - HOLD_UNTIL) / FADE)
         const e = reveal * fade
         return e * e * (3 - 2 * e)
       }
@@ -319,7 +321,7 @@ const D = (() => {
         ctx.clearRect(0, 0, w, h)
         const s = t / 1000
         const si = t0 < 0 ? -1 : (t - t0) / 1000
-        const intro = si >= 0 && si <= 4.3
+        const intro = si >= 0 && si <= INTRO_END
         for (let y = GAP / 2; y < h; y += GAP) {
           for (let x = GAP / 2; x < w; x += GAP) {
             // two broad, slow waves: one sweeping across, one rippling out from the right
@@ -329,8 +331,8 @@ const D = (() => {
             const k = v * v
             const near = on > 0.01 ? Math.max(0, 1 - Math.hypot(x - px, y - py) / REACH) : 0
             const f = near * near * on
-            // sea dots step back while the map is up
-            const dim = intro ? 1 - 0.7 * mapAt(si, w * 0.5) : 1
+            // sea dots step back a little while the map is up
+            const dim = intro ? 1 - 0.4 * mapAt(si, w * 0.5) : 1
             ctx.globalAlpha = Math.min(1, (0.1 + k * 0.45 * (1 - f) + f * 0.85) * dim)
             ctx.fillStyle = f > 0.12 || (v > 0.8 && on < 0.5) ? accent : faint
             ctx.beginPath()
@@ -344,10 +346,11 @@ const D = (() => {
           for (const [x, y] of landDots) {
             const m = mapAt(si, x)
             if (m < 0.001) continue
-            ctx.globalAlpha = 0.1 + m * 0.85
-            ctx.fillStyle = m > 0.3 ? accent : faint
+            // the usual dot colour, about as bright as a wave crest
+            ctx.globalAlpha = 0.12 + m * 0.6
+            ctx.fillStyle = faint
             ctx.beginPath()
-            ctx.arc(x, y, (fine ? 0.5 + m * 0.9 : 0.8 + m * 1.2), 0, Math.PI * 2)
+            ctx.arc(x, y, (fine ? 0.5 + m * 0.6 : 0.8 + m * 0.8), 0, Math.PI * 2)
             ctx.fill()
           }
         }
@@ -357,7 +360,7 @@ const D = (() => {
           t0 = t
           // open the hero's centre mask for the map, close it as the map dissolves
           canvas.classList.add('intro')
-          setTimeout(() => canvas.classList.remove('intro'), 2800)
+          setTimeout(() => canvas.classList.remove('intro'), HOLD_UNTIL * 1000)
         }
         px += (tx - px) * 0.14
         py += (ty - py) * 0.14

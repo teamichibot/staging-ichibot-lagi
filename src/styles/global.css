@@ -160,9 +160,9 @@ header.nav.menu-open{background:var(--bg)}
 /* The centre mask's darkness is an animatable number so it can open for the
    Indonesia map on first load (.intro) and ease back as the map dissolves. */
 @property --hole-a{syntax:"<number>";inherits:false;initial-value:.12}
-.hero-bg{--hole-a:.12;transition:--hole-a 1.4s ease}
+.hero-bg{--hole-a:.12;transition:--hole-a 4s ease}
 @media (max-width:700px){.hero-bg{--hole-a:.08}}
-.hero-bg.intro{--hole-a:1;transition-duration:.5s}
+.hero-bg.intro{--hole-a:1;transition-duration:1.2s}
 .hero .wrap{position:relative;text-align:center}
 .hero h1{font-size:clamp(2.8rem,8.5vw,6rem);font-weight:650;line-height:.98;letter-spacing:-.045em;margin:1.4rem auto 0;max-width:12ch;
   background:linear-gradient(180deg,var(--h1a) 30%,var(--h1b));-webkit-background-clip:text;background-clip:text;color:transparent}
