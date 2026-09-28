@@ -104,20 +104,33 @@ header.nav.scrolled{box-shadow:0 8px 24px -16px rgba(0,0,0,.35)}
 .nav-links>a:hover,.nav-drop-btn:hover,.nav-drop:hover .nav-drop-btn,.nav-drop-btn[aria-expanded="true"]{color:var(--text)}
 .nav-links [aria-current]{color:var(--text)}
 .nav-links [aria-current]::after{content:"";position:absolute;left:0;right:0;bottom:14px;height:2px;border-radius:2px;background:var(--accent)}
+/* the Products pill is 36px tall, not the bar's 60px: its marker sits just under it */
+.nav-drop-btn[aria-current]::after{left:.85rem;right:.85rem;bottom:-2px}
 .nav-drop-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;transition:transform .2s}
-.nav-drop{position:relative}
-.nav-panel{position:absolute;top:calc(100% - 6px);left:-1.2rem;width:420px;padding:.5rem;border-radius:14px;background:var(--panel);border:1px solid var(--border2);
-  box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s}
+/* Products opens a full-width panel joined to the bar (same background, the
+   bar turns solid while it is open, rounded bottom corners). The drop area is
+   as tall as the bar so the pointer can travel from the button to the panel. */
+.nav-drop{display:flex;align-items:center;height:60px}
+.nav-drop-btn{height:36px;padding:0 .85rem;margin:0 -.85rem;border-radius:999px;transition:color .15s,background-color .15s}
+.nav-drop:hover:not(.picked) .nav-drop-btn,.nav-drop-btn[aria-expanded="true"]{background:var(--bg2);color:var(--text)}
+.nav-panel{position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);border-radius:0 0 24px 24px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s}
 .nav-drop:hover:not(.picked) .nav-panel,.nav-drop-btn[aria-expanded="true"]+.nav-panel{opacity:1;visibility:visible;transform:none}
 .nav-drop:hover:not(.picked) .nav-drop-btn svg,.nav-drop-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-.nav-panel ul{list-style:none;margin:0;padding:0}
-.nav-panel li a{display:flex;gap:.8rem;align-items:flex-start;padding:.65rem .7rem;border-radius:10px;text-decoration:none;color:var(--text)}
+header.nav:has(.nav-drop:hover:not(.picked)),header.nav:has(.nav-drop-btn[aria-expanded="true"]){background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
+.nav-panel-inner{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);padding-top:2.2rem;padding-bottom:2.6rem}
+.nav-panel-intro{padding-right:2.5rem}
+.nav-panel-title{margin:0;font-size:1.7rem;font-weight:600;line-height:1.1;letter-spacing:-.03em;color:var(--text);max-width:14ch}
+.nav-panel-all{display:inline-flex;align-items:center;height:40px;margin-top:1.4rem;padding:0 1.1rem;border-radius:999px;background:var(--bg2);
+  color:var(--text);font-size:.9rem;font-weight:500;text-decoration:none;transition:background-color .15s}
+.nav-panel-all:hover{background:color-mix(in srgb,var(--bg2) 60%,var(--border2))}
+.nav-panel-list{padding-left:2.5rem;border-left:1px solid var(--border)}
+.nav-panel-list small{display:block;color:var(--muted);font-size:.85rem;margin:.3rem 0 .8rem}
+.nav-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:.15rem;max-width:380px}
+.nav-panel li a{display:flex;align-items:center;gap:.8rem;padding:.55rem .7rem;margin-left:-.7rem;border-radius:10px;text-decoration:none;color:var(--text);font-size:1.02rem}
 .nav-panel li a:hover,.nav-panel li a:focus-visible{background:var(--bg2)}
 .nav-ic{width:30px;height:30px;flex:none;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
 .nav-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
-.nav-panel b{display:flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:600}
-.nav-panel small{display:block;color:var(--muted);font-size:.8rem;line-height:1.4;margin-top:.1rem}
-.nav-panel-all{display:block;margin-top:.3rem;padding:.6rem .7rem;border-top:1px solid var(--border);font-size:.84rem;color:var(--accent);text-decoration:none}
 .nav-end{display:flex;align-items:center;gap:.6rem}
 .nav-toggle{display:none;width:38px;height:38px;border-radius:10px;border:1px solid var(--border2);background:var(--panel);cursor:pointer;position:relative}
 .nav-toggle span{position:absolute;left:11px;right:11px;height:1.6px;border-radius:2px;background:var(--text);transition:transform .2s,top .2s}
