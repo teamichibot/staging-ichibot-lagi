@@ -1099,3 +1099,7 @@ main:focus{outline:none}
 .pd-map-inset circle{fill:#f97316;stroke:var(--panel);stroke-width:1.2}
 .pd-map-inset text{fill:var(--muted);font:600 8.5px "Geist Variable",sans-serif}
 @media (prefers-reduced-motion:reduce){.pd-map-pin .pulse{animation:none;opacity:.5}}
+
+/* a reading just logged in the platform mockup's table */
+@keyframes log-in{from{background:color-mix(in srgb,var(--accent) 16%,transparent)}to{background:transparent}}
+.log tr.fresh td{animation:log-in 1.4s ease-out}

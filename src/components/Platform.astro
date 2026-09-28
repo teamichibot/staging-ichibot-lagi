@@ -37,13 +37,13 @@ const protocols = [
 
 /** 1 — data points, as the connection list shows them */
 const points = [
-  { name: 'Main panel · Active power', src: 'PM-01 · Modbus TCP · 40001', value: '412.6', unit: 'kW', state: 'ok' },
-  { name: 'Main panel · Power factor', src: 'PM-01 · Modbus TCP · 40011', value: '0.97', unit: '', state: 'ok' },
-  { name: 'Compressor ES300 · Pressure', src: 'PLC-02 · Modbus RTU · 30005', value: '7.2', unit: 'bar', state: 'ok' },
-  { name: 'Compressor ES300 · Temperature', src: 'PLC-02 · Modbus RTU · 30007', value: '82.4', unit: '°C', state: 'warn' },
-  { name: 'Pump P1 · Vibration', src: 'VIB-03 · MQTT · pump/p1/vib', value: '2.1', unit: 'mm/s', state: 'ok' },
-  { name: 'Gate 3 · PPE compliance', src: 'CAM-07 · RTSP · edge model', value: '97', unit: '%', state: 'ok' },
-  { name: 'Soil node A-12 · Moisture', src: 'LoRa-12 · MQTT · soil/a12', value: '32', unit: '%', state: 'stale' },
+  { name: 'Main panel · Active power', src: 'PM-01 · Modbus TCP · 40001', value: '412.6', unit: 'kW', step: 3.2, state: 'ok' },
+  { name: 'Main panel · Power factor', src: 'PM-01 · Modbus TCP · 40011', value: '0.97', unit: '', step: 0.01, state: 'ok' },
+  { name: 'Compressor ES300 · Pressure', src: 'PLC-02 · Modbus RTU · 30005', value: '7.2', unit: 'bar', step: 0.05, state: 'ok' },
+  { name: 'Compressor ES300 · Temperature', src: 'PLC-02 · Modbus RTU · 30007', value: '82.4', unit: '°C', step: 0.3, state: 'warn' },
+  { name: 'Pump P1 · Vibration', src: 'VIB-03 · MQTT · pump/p1/vib', value: '2.1', unit: 'mm/s', step: 0.08, state: 'ok' },
+  { name: 'Gate 3 · PPE compliance', src: 'CAM-07 · RTSP · edge model', value: '97', unit: '%', step: 1, state: 'ok' },
+  { name: 'Soil node A-12 · Moisture', src: 'LoRa-12 · MQTT · soil/a12', value: '32', unit: '%', step: 0, state: 'stale' },
 ]
 
 /** 2 — a pressure trend for the dashboard mockup, drawn at build time */
@@ -96,7 +96,10 @@ const recap = [
                 <li>
                   <i class:list={['dot', p.state]} />
                   <span class="pt"><b>{p.name}</b><small>{p.src}</small></span>
-                  <span class:list={['val', p.state]}>{p.value}<small>{p.unit}</small></span>
+                  <span class:list={['val', p.state]}>
+                    {p.state === 'stale' ? p.value : <span data-live={p.value} data-step={p.step} data-dp={p.value.split('.')[1]?.length ?? 0}>{p.value}</span>}
+                    <small>{p.unit}</small>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -122,7 +125,7 @@ const recap = [
             </div>
             <div class="chart">
               <div class="chart-head"><span>Pressure, last 24 hours</span><span>limit 7.6 bar</span></div>
-              <svg viewBox={`0 0 ${TW} ${TH}`} preserveAspectRatio="none">
+              <svg viewBox={`0 0 ${TW} ${TH}`} preserveAspectRatio="none" data-trend={trend.join(',')} data-w={TW} data-h={TH} data-lo="6.6" data-hi="7.8">
                 <defs>
                   <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stop-color="var(--accent)" stop-opacity=".28" />
@@ -152,15 +155,15 @@ const recap = [
               <span class="export">Export CSV</span>
             </div>
             <div class="recap">
-              {recap.map(([label, value]) => <div><small>{label}</small><b>{value}</b></div>)}
+              {recap.map(([label, value], i) => <div><small>{label}</small><b data-recap={i === 0 ? value.replace(/[^0-9]/g, '') : undefined}>{value}</b></div>)}
             </div>
             <table class="log">
               <thead><tr><th>Timestamp</th><th>Data point</th><th>Value</th></tr></thead>
-              <tbody>
+              <tbody data-log>
                 {logRows.map(([t, name, value]) => <tr><td>{t}</td><td>{name}</td><td>{value}</td></tr>)}
               </tbody>
             </table>
-            <div class="log-foot">Showing 7 of 1,284,560 rows</div>
+            <div class="log-foot">Showing 7 of <span data-rows="1284560">1,284,560</span> rows</div>
           </div>
         </div>
       </article>
@@ -177,24 +180,24 @@ const recap = [
               <div class="app-body">
                 <small>ERP / MES</small>
                 <b>Weighing record synced</b>
-                <span>WB-0927-0142 · 28,460 kg · Truck B 9123 KT</span>
+                <span data-erp="142">WB-0927-0142 · 28,460 kg · Truck B 9123 KT</span>
               </div>
-              <span class="badge ok">Synced 09:41</span>
+              <span class="badge ok">Synced <span data-now>09:41</span></span>
             </div>
             <div class="app">
               <span class="app-ic"><svg viewBox="0 0 16 16"><path d="M6.6 2.2 7.8 5.4 11 6.6 7.8 7.8 6.6 11 5.4 7.8 2.2 6.6 5.4 5.4z" /><path d="M11.6 10.2l.7 1.5 1.5.7-1.5.7-.7 1.5-.7-1.5-1.5-.7 1.5-.7z" /></svg></span>
               <div class="app-body">
                 <small>AI analytics</small>
                 <b>Anomaly detected</b>
-                <span>Pump P1 vibration 38% above its normal pattern</span>
+                <span>Pump P1 vibration <span data-live="38" data-step="3" data-dp="0">38</span>% above its normal pattern</span>
               </div>
-              <span class="badge">Score 0.91</span>
+              <span class="badge">Score <span data-live="0.91" data-step="0.02" data-dp="2">0.91</span></span>
             </div>
             <div class="app">
               <span class="app-ic"><svg viewBox="0 0 16 16"><path d="M4.2 6.8a3.8 3.8 0 0 1 7.6 0c0 2.9 1.1 4 1.1 4H3.1s1.1-1.1 1.1-4z" /><path d="M6.7 13a1.5 1.5 0 0 0 2.6 0" /></svg></span>
               <div class="app-body">
                 <small>Notification · WhatsApp</small>
-                <p class="bubble">⚠ Compressor ES300 temperature 82.4 °C, above the 80 °C limit.<time>09:42</time></p>
+                <p class="bubble">⚠ Compressor ES300 temperature <span data-live="82.4" data-step="0.3" data-dp="1">82.4</span> °C, above the 80 °C limit.<time data-now>09:42</time></p>
                 <span>Sent to Maintenance team</span>
               </div>
             </div>
@@ -206,23 +209,110 @@ const recap = [
 </section>
 
 <script>
-  // Nudge the dashboard mockup's KPI values so it reads as live. Skipped under
-  // prefers-reduced-motion, and only runs while the section is on screen.
+  /**
+   * Keeps the platform mockups live while the section is on screen: data
+   * point and KPI values drift, the pressure trend scrolls, new readings are
+   * logged at the top of the table (the row count and today's energy climb),
+   * weighing records sync to the ERP with the clock, and the AI score moves.
+   * Values stay in plausible bands; nothing runs under reduced motion.
+   */
   {
-    const values = Array.from(document.querySelectorAll<HTMLElement>('.feature [data-live]'))
-    if (values.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let timer = 0
-      const tick = () => {
-        for (const el of values) {
-          const base = Number(el.dataset.live)
-          const step = Number(el.dataset.step)
-          el.textContent = (base + (Math.random() - 0.5) * 2 * step).toFixed(Number(el.dataset.dp))
-        }
+    const root = document.getElementById('platform')
+    if (root && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const q = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)
+      const live = Array.from(root.querySelectorAll<HTMLElement>('[data-live]'))
+      const fmt = (n: number, dp = 0) => n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp })
+      const pad = (n: number) => String(n).padStart(2, '0')
+      const hm = (d: Date) => `${pad(d.getHours())}:${pad(d.getMinutes())}`
+      const stamp = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${hm(d)}:${pad(d.getSeconds())}`
+
+      // pressure trend: drop the oldest point, add one near the last
+      const trendSvg = q<SVGSVGElement>('[data-trend]')
+      const trend = trendSvg ? trendSvg.dataset.trend!.split(',').map(Number) : []
+      const drawTrend = () => {
+        if (!trendSvg) return
+        const W = Number(trendSvg.dataset.w), H = Number(trendSvg.dataset.h)
+        const lo = Number(trendSvg.dataset.lo), hi = Number(trendSvg.dataset.hi)
+        const pts = trend.map((v, i) => `${((i / (trend.length - 1)) * W).toFixed(1)},${(H - ((v - lo) / (hi - lo)) * H).toFixed(1)}`).join(' ')
+        trendSvg.querySelector('polyline')!.setAttribute('points', pts)
+        trendSvg.querySelector('polygon')!.setAttribute('points', `0,${H} ${pts} ${W},${H}`)
       }
+
+      // log: readings to append, cycling, each drifting around its base
+      const feed: [string, number, number, number, string][] = [
+        ['Compressor ES300 · Temperature', 82.4, 0.3, 1, '°C'],
+        ['Compressor ES300 · Pressure', 7.2, 0.05, 1, 'bar'],
+        ['Main panel · Active power', 412.6, 3.2, 1, 'kW'],
+        ['Main panel · Power factor', 0.97, 0.01, 2, ''],
+        ['Pump P1 · Vibration', 2.1, 0.08, 1, 'mm/s'],
+      ]
+      let feedAt = 0
+      const tbody = q('[data-log]')
+      const rowsEl = q('[data-rows]')
+      const recapEl = q('[data-recap]')
+      let rows = Number(rowsEl?.dataset.rows ?? 0)
+      let energy = Number(recapEl?.dataset.recap ?? 0)
+      const logReading = () => {
+        if (!tbody) return
+        const [name, base, step, dp, unit] = feed[feedAt++ % feed.length]
+        const v = base + (Math.random() - 0.5) * 2 * step
+        const tr = document.createElement('tr')
+        tr.className = 'fresh'
+        tr.innerHTML = `<td>${stamp(new Date())}</td><td>${name}</td><td>${fmt(v, dp)}${unit ? ' ' + unit : ''}</td>`
+        tbody.prepend(tr)
+        tbody.lastElementChild?.remove()
+        rows += 1
+        if (rowsEl) rowsEl.textContent = fmt(rows)
+        energy += 1 + Math.round(Math.random() * 2)
+        if (recapEl) recapEl.textContent = `${fmt(energy)} kWh`
+      }
+
+      // ERP: a new weighing record every few ticks
+      const erpEl = q('[data-erp]')
+      let record = Number(erpEl?.dataset.erp ?? 0)
+      const trucks = ['B 9123 KT', 'KT 8841 AB', 'B 9507 KT', 'KT 8120 CD', 'DA 8315 LM']
+      const syncErp = () => {
+        if (!erpEl) return
+        const d = new Date()
+        record += 1
+        const kg = 18000 + Math.round(Math.random() * 140) * 100
+        erpEl.textContent = `WB-${pad(d.getMonth() + 1)}${pad(d.getDate())}-${String(record).padStart(4, '0')} · ${fmt(kg)} kg · Truck ${trucks[record % trucks.length]}`
+      }
+      const clocks = Array.from(root.querySelectorAll<HTMLElement>('[data-now]'))
+
+      // Start from now: re-date the rows rendered on the server (a few seconds
+      // apart, newest first) and set the clocks, so nothing jumps on the first tick.
+      {
+        const now = Date.now()
+        tbody?.querySelectorAll('tr').forEach((tr, i) => {
+          tr.cells[0].textContent = stamp(new Date(now - (i + 1) * 2500))
+        })
+        for (const c of clocks) c.textContent = hm(new Date(now))
+      }
+
+      let n = 0
+      const tick = () => {
+        for (const el of live) {
+          const base = Number(el.dataset.live), step = Number(el.dataset.step)
+          if (step) el.textContent = fmt(base + (Math.random() - 0.5) * 2 * step, Number(el.dataset.dp))
+        }
+        if (trend.length) {
+          const last = trend[trend.length - 1]
+          trend.shift()
+          trend.push(Math.min(7.5, Math.max(6.85, last + (Math.random() - 0.5) * 0.18)))
+          drawTrend()
+        }
+        logReading()
+        if (n % 3 === 0) syncErp()
+        for (const c of clocks) c.textContent = hm(new Date())
+        n += 1
+      }
+
+      let timer = 0
       new IntersectionObserver(([e]) => {
         clearInterval(timer)
-        if (e.isIntersecting) timer = window.setInterval(tick, 1500)
-      }).observe(values[0].closest('.feature')!)
+        if (e.isIntersecting) timer = window.setInterval(tick, 1600)
+      }).observe(root)
     }
   }
 </script>
