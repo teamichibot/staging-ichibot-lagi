@@ -13,8 +13,8 @@ const lang = langFromUrl(Astro.url)
 const page = basePath(Astro.url.pathname)
 const products = productsFor(lang)
 const t = {
-  en: { products: 'Products', all: 'See all products →', how: 'How it works', cases: 'Case studies', services: 'Services', insights: 'Insights', cta: 'Book a site survey', company: 'Company', open: 'Open menu', close: 'Close menu', home: 'Ichibot home', main: 'Main', language: 'Language' },
-  id: { products: 'Produk', all: 'Lihat semua produk →', how: 'Cara kerja', cases: 'Studi kasus', services: 'Layanan', insights: 'Artikel', cta: 'Jadwalkan survei lokasi', company: 'Perusahaan', open: 'Buka menu', close: 'Tutup menu', home: 'Beranda Ichibot', main: 'Utama', language: 'Bahasa' },
+  en: { products: 'Products', all: 'See all products →', explore: 'Explore products proven in the field', overview: 'See all products', how: 'How it works', cases: 'Case studies', services: 'Services', insights: 'Insights', cta: 'Book a site survey', company: 'Company', open: 'Open menu', close: 'Close menu', home: 'Ichibot home', main: 'Main', language: 'Language' },
+  id: { products: 'Produk', all: 'Lihat semua produk →', explore: 'Jelajahi produk yang sudah terbukti di lapangan', overview: 'Lihat semua produk', how: 'Cara kerja', cases: 'Studi kasus', services: 'Layanan', insights: 'Artikel', cta: 'Jadwalkan survei lokasi', company: 'Perusahaan', open: 'Buka menu', close: 'Tutup menu', home: 'Beranda Ichibot', main: 'Utama', language: 'Bahasa' },
 }[lang]
 
 // Section anchors live on the homepage; other pages link back to it.
@@ -46,21 +46,28 @@ const switchHref = (l: Lang) => localize(page, l) + Astro.url.search
           {t.products}
           <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" /></svg>
         </button>
+        {/* full-width panel that joins the bar: intro and overview link on the
+            left, the products on the right */}
         <div class="nav-panel" id="nav-products">
-          <ul>
-            {products.map((p) => (
-              <li>
-                <a href={`${home}#product-${p.key}`}>
-                  <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
-                  <span>
-                    <b>{p.name}</b>
-                    <small>{p.desc}</small>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a class="nav-panel-all" href={`${home}#products`}>{t.all}</a>
+          <div class="wrap nav-panel-inner">
+            <div class="nav-panel-intro">
+              <p class="nav-panel-title">{t.explore}</p>
+              <a class="nav-panel-all" href={`${home}#products`}>{t.overview}</a>
+            </div>
+            <div class="nav-panel-list">
+              <small>{t.products}</small>
+              <ul>
+                {products.map((p) => (
+                  <li>
+                    <a href={`${home}#product-${p.key}`}>
+                      <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
+                      {p.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       {links.map((l) => <a href={l.href} data-section={l.href.split('#')[1]} aria-current={l.href === blog && page.startsWith('/blog') ? 'page' : undefined}>{l.label}</a>)}
