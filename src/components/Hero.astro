@@ -214,6 +214,12 @@ const D = (() => {
    * follows the theme; it pauses off-screen and in hidden tabs. Under
    * prefers-reduced-motion the waves hold still and the pointer highlight
    * snaps to position instead of easing.
+   *
+   * On first load the dots draw a map of Indonesia: the islands light up in
+   * the accent colour, sweeping west to east, hold, then dissolve into the
+   * waves. The hero's centre mask opens for it (the .intro class) and closes
+   * again as the map fades. Coastlines are simplified; at a 16px dot pitch
+   * that is all the detail the grid can show. Skipped under reduced motion.
    */
   {
     const canvas = document.querySelector<HTMLCanvasElement>('.hero-bg')
@@ -223,6 +229,75 @@ const D = (() => {
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches
       const REACH = 150
       let w = 0, h = 0, faint = '', accent = '', running = false, visible = true, frame = 0
+      let t0 = -1
+      /** land dots: [x, y] on their own grid (the page grid on desktop, a finer one on phones) */
+      let landDots: number[][] = []
+      /** Main islands of Indonesia as [lon, lat] rings (Kalimantan and Papua: the Indonesian parts). */
+      const ISLANDS: number[][][] = [
+        // Sumatra
+        [[95.3,5.6],[97.5,5.2],[98.7,3.8],[100.4,2.2],[101.4,1.7],[102.2,1.0],[103.4,0.4],[103.8,-1.0],[104.8,-2.2],[106.0,-3.2],[105.9,-5.8],[105.0,-5.9],[104.0,-5.0],[102.3,-3.9],[100.9,-2.0],[100.4,-0.9],[99.2,0.4],[98.6,1.7],[97.3,2.9],[96.0,4.1],[95.2,5.2]],
+        [[105.1,-1.6],[106.1,-1.7],[106.8,-3.0],[106.0,-3.2],[105.6,-2.5]], // Bangka
+        [[107.6,-2.6],[108.3,-2.8],[108.2,-3.2],[107.6,-3.2]], // Belitung
+        // Java, Madura
+        [[105.2,-6.7],[106.0,-5.9],[107.0,-6.0],[108.3,-6.2],[110.4,-6.9],[111.5,-6.6],[112.7,-6.9],[114.4,-7.8],[114.5,-8.7],[113.0,-8.3],[111.0,-8.2],[109.0,-7.7],[107.4,-7.5],[106.4,-7.4],[105.5,-6.9]],
+        [[112.7,-7.0],[114.1,-6.9],[113.9,-7.2],[112.8,-7.2]],
+        // Bali and Nusa Tenggara
+        [[114.4,-8.1],[115.2,-8.1],[115.7,-8.4],[115.2,-8.8],[114.5,-8.4]],
+        [[115.9,-8.3],[116.7,-8.3],[116.5,-8.9],[116.0,-8.8]],
+        [[116.8,-8.3],[118.2,-8.1],[119.2,-8.4],[118.8,-8.8],[117.2,-9.0]],
+        [[119.8,-8.4],[121.5,-8.3],[123.0,-8.1],[122.8,-8.7],[120.5,-8.8]],
+        [[119.0,-9.4],[120.2,-9.4],[120.8,-10.2],[119.8,-10.0]],
+        [[123.5,-10.2],[124.4,-9.4],[125.1,-9.1],[124.9,-9.5],[124.0,-10.0]],
+        // Kalimantan
+        [[109.6,2.0],[111.0,1.2],[112.5,1.5],[113.5,1.3],[114.6,2.0],[115.5,3.3],[115.9,4.3],[117.6,4.2],[117.6,3.4],[118.0,2.0],[119.0,1.0],[117.5,0.1],[117.3,-0.5],[116.8,-1.3],[116.2,-1.9],[116.3,-3.0],[116.0,-3.9],[114.6,-4.1],[114.6,-3.4],[113.9,-3.2],[112.6,-3.4],[111.7,-3.0],[110.2,-2.5],[110.0,-1.8],[109.3,0.0],[108.9,0.9]],
+        // Sulawesi
+        [[119.4,-5.6],[119.6,-3.5],[118.8,-2.8],[119.3,-1.0],[119.8,0.5],[120.1,0.7],[121.0,1.3],[122.8,1.0],[124.4,1.3],[125.2,1.5],[124.9,1.0],[123.5,0.4],[121.5,0.5],[120.6,0.4],[120.3,-0.9],[121.6,-0.9],[123.4,-0.8],[122.6,-1.3],[121.3,-1.6],[121.9,-2.8],[122.9,-4.1],[122.7,-5.4],[121.9,-4.9],[121.4,-4.0],[120.9,-2.7],[120.4,-3.5],[120.4,-5.5]],
+        // Maluku: Halmahera, Seram, Buru
+        [[127.4,2.0],[128.0,1.0],[128.7,1.2],[128.2,0.3],[128.9,-0.8],[127.6,-0.6],[127.5,0.8]],
+        [[128.0,-2.9],[130.0,-2.9],[130.8,-3.8],[128.5,-3.6]],
+        [[126.0,-3.1],[127.2,-3.3],[126.9,-3.8],[126.1,-3.7]],
+        // Papua
+        [[131.0,-1.2],[132.5,-0.4],[134.1,-0.9],[134.0,-2.2],[135.5,-3.3],[137.0,-1.6],[138.9,-1.6],[140.7,-2.5],[141.0,-2.6],[141.0,-9.1],[140.0,-8.1],[138.9,-8.3],[137.6,-5.5],[136.0,-4.6],[134.3,-3.9],[132.8,-4.0],[132.0,-2.9],[133.3,-2.3],[132.0,-2.2],[131.0,-1.5]],
+      ]
+      const inRing = (x: number, y: number, ring: number[][]) => {
+        let inside = false
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const [xi, yi] = ring[i], [xj, yj] = ring[j]
+          if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+        }
+        return inside
+      }
+      /**
+       * The dots that fall on land, for a map fitted across the upper hero. On
+       * desktop they sit on the page's 16px grid; below 700px that grid is too
+       * coarse to draw islands, so the map gets a finer 7px grid of its own.
+       */
+      let landGap = GAP
+      const buildLand = () => {
+        landGap = w < 700 ? 7 : GAP
+        landDots = []
+        const LON0 = 94.6, LON1 = 141.4, LAT0 = 6.4, LAT1 = -11.2
+        const mw = Math.min(w * (w < 700 ? 0.96 : 0.92), 1320)
+        const k = mw / (LON1 - LON0)
+        const ox = (w - mw) / 2
+        const oy = Math.min(h, 900) * (w < 700 ? 0.2 : 0.37) - ((LAT0 - LAT1) * k) / 2
+        for (let y = landGap / 2; y < h; y += landGap) {
+          for (let x = landGap / 2; x < w; x += landGap) {
+            const lon = LON0 + (x - ox) / k
+            const lat = LAT0 - (y - oy) / k
+            if (lon < LON0 || lon > LON1 || lat > LAT0 || lat < LAT1) continue
+            if (ISLANDS.some((ring) => inRing(lon, lat, ring))) landDots.push([x, y])
+          }
+        }
+      }
+      /** 0..1: how much of the map a dot at x shows at time s (seconds since the intro began). */
+      const mapAt = (s: number, x: number) => {
+        if (s < 0 || s > 4.3) return 0
+        const reveal = Math.min(1, Math.max(0, (s - 0.15 - (x / w) * 0.8) / 0.35))
+        const fade = s < 2.8 ? 1 : Math.max(0, 1 - (s - 2.8) / 1.5)
+        const e = reveal * fade
+        return e * e * (3 - 2 * e)
+      }
       // pointer: target position and presence, and the eased values drawn
       let tx = 0, ty = 0, tOn = 0, px = 0, py = 0, on = 0
 
@@ -238,10 +313,13 @@ const D = (() => {
         canvas.width = w * dpr
         canvas.height = h * dpr
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+        buildLand()
       }
       const draw = (t: number) => {
         ctx.clearRect(0, 0, w, h)
         const s = t / 1000
+        const si = t0 < 0 ? -1 : (t - t0) / 1000
+        const intro = si >= 0 && si <= 4.3
         for (let y = GAP / 2; y < h; y += GAP) {
           for (let x = GAP / 2; x < w; x += GAP) {
             // two broad, slow waves: one sweeping across, one rippling out from the right
@@ -251,15 +329,36 @@ const D = (() => {
             const k = v * v
             const near = on > 0.01 ? Math.max(0, 1 - Math.hypot(x - px, y - py) / REACH) : 0
             const f = near * near * on
-            ctx.globalAlpha = Math.min(1, 0.1 + k * 0.45 * (1 - f) + f * 0.85)
+            // sea dots step back while the map is up
+            const dim = intro ? 1 - 0.7 * mapAt(si, w * 0.5) : 1
+            ctx.globalAlpha = Math.min(1, (0.1 + k * 0.45 * (1 - f) + f * 0.85) * dim)
             ctx.fillStyle = f > 0.12 || (v > 0.8 && on < 0.5) ? accent : faint
             ctx.beginPath()
             ctx.arc(x, y, 0.7 + k * 0.9 + f * 1.4, 0, Math.PI * 2)
             ctx.fill()
           }
         }
+        // the Indonesia map, over the dimmed grid
+        if (intro) {
+          const fine = landGap < GAP
+          for (const [x, y] of landDots) {
+            const m = mapAt(si, x)
+            if (m < 0.001) continue
+            ctx.globalAlpha = 0.1 + m * 0.85
+            ctx.fillStyle = m > 0.3 ? accent : faint
+            ctx.beginPath()
+            ctx.arc(x, y, (fine ? 0.5 + m * 0.9 : 0.8 + m * 1.2), 0, Math.PI * 2)
+            ctx.fill()
+          }
+        }
       }
       const loop = (t: number) => {
+        if (t0 < 0 && !still) {
+          t0 = t
+          // open the hero's centre mask for the map, close it as the map dissolves
+          canvas.classList.add('intro')
+          setTimeout(() => canvas.classList.remove('intro'), 2800)
+        }
         px += (tx - px) * 0.14
         py += (ty - py) * 0.14
         on += (tOn - on) * 0.08

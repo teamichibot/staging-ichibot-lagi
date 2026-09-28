@@ -153,10 +153,16 @@ header.nav.menu-open{background:var(--bg)}
 .hero-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
   /* fades out top and bottom, and quiets the dots behind the headline and lede */
   --fade:linear-gradient(180deg,transparent 0,#000 18%,#000 55%,transparent 88%);
-  --hole:radial-gradient(ellipse 34% 30% at 50% 38%,rgba(0,0,0,.12) 40%,#000 100%);
+  --hole:radial-gradient(ellipse 34% 30% at 50% 38%,rgba(0,0,0,var(--hole-a)) 40%,#000 100%);
   mask-image:var(--fade),var(--hole);mask-composite:intersect;
   -webkit-mask-image:var(--fade),var(--hole);-webkit-mask-composite:source-in}
-@media (max-width:700px){.hero-bg{--hole:radial-gradient(ellipse 75% 32% at 50% 36%,rgba(0,0,0,.08) 55%,#000 100%)}}
+@media (max-width:700px){.hero-bg{--hole-a:.08;--hole:radial-gradient(ellipse 75% 32% at 50% 36%,rgba(0,0,0,var(--hole-a)) 55%,#000 100%)}}
+/* The centre mask's darkness is an animatable number so it can open for the
+   Indonesia map on first load (.intro) and ease back as the map dissolves. */
+@property --hole-a{syntax:"<number>";inherits:false;initial-value:.12}
+.hero-bg{--hole-a:.12;transition:--hole-a 1.4s ease}
+@media (max-width:700px){.hero-bg{--hole-a:.08}}
+.hero-bg.intro{--hole-a:1;transition-duration:.5s}
 .hero .wrap{position:relative;text-align:center}
 .hero h1{font-size:clamp(2.8rem,8.5vw,6rem);font-weight:650;line-height:.98;letter-spacing:-.045em;margin:1.4rem auto 0;max-width:12ch;
   background:linear-gradient(180deg,var(--h1a) 30%,var(--h1b));-webkit-background-clip:text;background-clip:text;color:transparent}
