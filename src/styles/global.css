@@ -328,7 +328,8 @@ header.nav.menu-open{background:var(--bg)}
 .post small{display:block;color:var(--faint);margin-top:.9rem;font-size:.82rem}
 .post :is(h2,h3){margin-top:.3rem;line-height:1.35}
 /* On /blog the card titles are h2 (they follow the page h1); same look as the h3 cards elsewhere. */
-.post h2{font-size:1.05rem;font-weight:600;letter-spacing:-.01em;max-width:none}
+/* specific enough to beat .page .page-body h2, the inner pages' section titles */
+.posts .post h2,.page .posts .post h2{font-size:1.05rem;font-weight:600;letter-spacing:-.01em;line-height:1.35;max-width:none}
 @media (max-width:820px){.posts{grid-template-columns:1fr}}
 
 /* faq */
