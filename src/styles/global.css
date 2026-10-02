@@ -789,38 +789,42 @@ a.case-card:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 /* floating WhatsApp button — the accent rather than WhatsApp's green, because
    this page runs on a single accent colour and the glyph already carries the
    recognition. Sits above the iOS home indicator, not flush to the edge. */
-.wa-dock{position:fixed;z-index:40;right:clamp(1rem,3vw,1.75rem);
+/* WhatsApp green once open: the deep shade under white text (5:1), the
+   brand green on the round button */
+.wa-dock{--wa-deep:#15803D;--wa-green:#25D366;position:fixed;z-index:40;right:clamp(1rem,3vw,1.75rem);
   bottom:calc(clamp(1rem,3vw,1.75rem) + env(safe-area-inset-bottom,0px))}
 .wa-float{display:flex;align-items:center;text-decoration:none;color:var(--text)}
 .wa-ic{position:relative;z-index:1;flex:none;width:54px;height:54px;border-radius:50%;
   display:grid;place-items:center;background:var(--accent);color:var(--on-accent);
   box-shadow:0 6px 20px -6px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06);
-  transition:transform .18s cubic-bezier(.2,.7,.2,1),filter .18s}
+  transition:transform .18s cubic-bezier(.2,.7,.2,1),filter .18s,background-color .35s,color .35s}
 .wa-ic svg{width:28px;height:28px;fill:currentColor}
 .wa-float:hover .wa-ic{transform:translateY(-2px);filter:brightness(1.08)}
 .wa-float:active .wa-ic{transform:translateY(0)}
 /* the card grows out from under the round button: its column animates from 0fr
    to 1fr, so the width follows the text instead of a guessed pixel value */
 .wa-msg{display:grid;grid-template-columns:0fr;margin-right:-27px;opacity:0;
-  background:var(--panel);border:1px solid var(--border);border-radius:999px;
+  background:var(--wa-deep);border-radius:999px;color:#fff;
   box-shadow:0 10px 30px -10px rgba(0,0,0,.35);
   transition:grid-template-columns .5s cubic-bezier(.2,.7,.2,1),opacity .25s}
 .wa-msg-in{min-width:0;overflow:hidden;display:flex;align-items:center;gap:10px;
   padding:7px 38px 7px 7px;white-space:nowrap}
 .wa-avatar{position:relative;flex:none;width:40px;height:40px;border-radius:50%;
-  background:var(--bg2);border:1px solid var(--border);display:grid;place-items:center}
-.wa-avatar img{width:26px;height:26px}
-.wa-avatar::after{content:"";position:absolute;right:0;bottom:0;width:10px;height:10px;
-  border-radius:50%;background:var(--live);box-shadow:0 0 0 2px var(--panel)}
+  box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+.wa-avatar img{width:40px;height:40px;border-radius:50%;display:block}
+.wa-avatar::after{content:"";position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;
+  border-radius:50%;background:var(--wa-green);box-shadow:0 0 0 2px var(--wa-deep)}
 .wa-text{display:grid;line-height:1.3;font-size:.8125rem;
   opacity:0;transform:translateX(8px);transition:opacity .3s,transform .4s cubic-bezier(.2,.7,.2,1)}
 .wa-text b{font-weight:600}
-.wa-text span{color:var(--muted)}
+.wa-text span{color:rgba(255,255,255,.88)}
 .wa-dock.open .wa-msg{grid-template-columns:1fr;opacity:1}
+.wa-dock.open .wa-ic{background:var(--wa-green);color:#fff}
 .wa-dock.open .wa-text{opacity:1;transform:none;transition-delay:.18s}
 @media (hover:hover){
   .wa-dock:hover .wa-msg,.wa-float:focus-visible .wa-msg{grid-template-columns:1fr;opacity:1}
   .wa-dock:hover .wa-text,.wa-float:focus-visible .wa-text{opacity:1;transform:none;transition-delay:.18s}
+  .wa-dock:hover .wa-ic,.wa-float:focus-visible .wa-ic{background:var(--wa-green);color:#fff}
 }
 .wa-close{position:absolute;top:-8px;left:-8px;width:22px;height:22px;border-radius:50%;
   display:grid;place-items:center;padding:0;cursor:pointer;

@@ -13,14 +13,14 @@ const t = {
   Floating WhatsApp button. A few seconds after the first page of a visit it
   slides open into a small card (avatar, name, one-line invitation), then
   folds back into the round button; on devices with a pointer it also opens on
-  hover. The avatar is the Ichibot mark until the team supplies a photo of the
-  person who answers the chat — no stock face standing in for a real one.
+  hover. Opening turns it WhatsApp green; closed, it keeps the site accent.
+  The avatar is the customer service portrait Ichibot supplied.
 */}
 <div class="wa-dock" data-wa>
   <a class="wa-float" href={whatsappLinkFor(lang)} target="_blank" rel="noopener noreferrer" aria-label={t.label}>
     <span class="wa-msg" aria-hidden="true">
       <span class="wa-msg-in">
-        <span class="wa-avatar"><img src="/favicon.svg" alt="" width="40" height="40" /></span>
+        <span class="wa-avatar"><img src="/media/cs/avatar.webp" alt="" width="40" height="40" /></span>
         <span class="wa-text">
           <b>{t.name}</b>
           <span>{t.cta}</span>
