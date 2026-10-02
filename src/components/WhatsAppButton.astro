@@ -10,9 +10,9 @@ const t = {
 ---
 
 {/*
-  Floating WhatsApp button. A few seconds after the first page of a visit it
-  slides open into a small card (avatar, name, one-line invitation), then
-  folds back into the round button; on devices with a pointer it also opens on
+  Floating WhatsApp button. Once per visit, when the visitor has scrolled past
+  the first screen (or after 20 s), it slides open into a small card (avatar,
+  name, one-line invitation), then folds back into the round button; on devices with a pointer it also opens on
   hover. Opening turns it WhatsApp green; closed, it keeps the site accent.
   The avatar is the customer service portrait Ichibot supplied.
 */}
@@ -51,12 +51,24 @@ const t = {
     const close = () => { dock.classList.remove('open'); clearTimeout(timer) }
     dock.querySelector('.wa-close')?.addEventListener('click', () => { close(); mark() })
     dock.querySelector('.wa-float')?.addEventListener('click', mark)
-    if (!seen) {
-      setTimeout(() => {
+    // Open once the visitor is reading, not the moment the page lands: after
+    // scrolling past the first screen, or 20 s on the page, whichever comes
+    // first. Not on the contact page, which already is the call to action.
+    const onContact = /\/contact\/?$/.test(location.pathname)
+    if (!seen && !onContact) {
+      let fired = false
+      const open = () => {
+        if (fired) return
+        fired = true
+        removeEventListener('scroll', onScroll, true)
+        clearTimeout(fallback)
         dock.classList.add('open')
         mark()
         timer = window.setTimeout(close, 8000)
-      }, 3500)
+      }
+      const onScroll = () => { if (Math.max(scrollY, document.body.scrollTop) > innerHeight * 0.9) open() }
+      addEventListener('scroll', onScroll, { passive: true, capture: true })
+      const fallback = setTimeout(open, 20000)
     }
   }
 </script>
