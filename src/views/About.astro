@@ -6,7 +6,7 @@
  * there is no fallback and the section is hidden when the admin has none.
  */
 import PageLayout from '../layouts/PageLayout.astro'
-import { langFromUrl } from '../i18n'
+import { langFromUrl, localize } from '../i18n'
 import { readSiteData } from '../lib/site-data'
 
 type TeamMember = { name: string; role: string; bio: string; image: string }
@@ -86,7 +86,7 @@ const id: typeof en = {
 const c = lang === 'id' ? id : en
 ---
 
-<PageLayout title={c.meta.title} description={c.meta.description}>
+<PageLayout title={c.meta.title} description={c.meta.description} breadcrumbs={[{ name: c.meta.title.split(' — ')[0], path: localize('/about', lang) }]}>
   <section class="page-head">
     <div class="wrap">
       <h1>{c.h1}</h1>

@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getAllPosts } from '../lib/blog'
 import { localize } from '../i18n'
+import { products } from '../data/products'
 
 /**
  * The site's pages and every blog post, in both languages, with hreflang
@@ -23,6 +24,7 @@ export const GET: APIRoute = async ({ site }) => {
   }
   const urls = [
     ...['/', '/about', '/contact', '/blog'].map((p) => entry(p)),
+    ...products.map((p) => entry(`/products/${p.slug}`)),
     ...posts.map((p) => entry(`/blog/${p.slug}`, p.date)),
   ]
   return new Response(

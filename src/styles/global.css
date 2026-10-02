@@ -1053,10 +1053,10 @@ main:focus{outline:none}
 /* Product dashboards get the platform mockups' glow, without a frame: a
    blurred accent light behind the screen, and the screen with an
    accent-tinted edge and soft glow. */
-.panel-split .shot-frame.replica-frame{position:relative;min-width:0;background:none;border:0;border-radius:0;padding:0;overflow:visible;isolation:isolate}
-.panel-split .shot-frame.replica-frame::before{content:"";position:absolute;inset:10% 6% -6%;z-index:-1;border-radius:40px;
+.panel-split .shot-frame.replica-frame,.product-shot.replica-frame{position:relative;min-width:0;background:none;border:0;border-radius:0;padding:0;overflow:visible;isolation:isolate}
+.panel-split .shot-frame.replica-frame::before,.product-shot.replica-frame::before{content:"";position:absolute;inset:10% 6% -6%;z-index:-1;border-radius:40px;
   background:radial-gradient(60% 55% at 50% 40%,color-mix(in srgb,var(--accent) 45%,transparent),transparent 72%);filter:blur(34px);opacity:.55}
-.panel-split .replica-fit{border:1px solid var(--border2);border-radius:14px;overflow:hidden;
+.panel-split .replica-fit,.product-shot .replica-fit{border:1px solid var(--border2);border-radius:14px;overflow:hidden;
   box-shadow:0 -1px 0 color-mix(in srgb,var(--accent) 30%,transparent),0 0 48px -12px color-mix(in srgb,var(--accent) 40%,transparent)}
 
 /* plantation replica: four node cards on the left, the estate map on the right */
@@ -1106,3 +1106,26 @@ main:focus{outline:none}
 /* a reading just logged in the platform mockup's table */
 @keyframes log-in{from{background:color-mix(in srgb,var(--accent) 16%,transparent)}to{background:transparent}}
 .log tr.fresh td{animation:log-in 1.4s ease-out}
+
+/* product pages */
+.product-kicker{display:flex;align-items:center;gap:.55rem;margin:0 0 .9rem;color:var(--muted);font-size:.9rem;font-weight:500}
+.product-head .actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.8rem}
+.product-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.2rem 3rem}
+.product-facts h2{font-size:1.15rem!important;font-weight:600;max-width:none;margin-bottom:.8rem}
+.product-list{margin:0;padding-left:1.1rem;list-style:disc;color:var(--muted);line-height:1.7}
+.product-list li::marker{color:var(--accent)}
+.product-note{margin:0;color:var(--muted);line-height:1.6}
+.placeholder{margin:0;padding:.9rem 1rem;border:1px dashed color-mix(in srgb,var(--draft) 55%,transparent);border-radius:10px;color:var(--muted);font-size:.92rem;line-height:1.55}
+.placeholder b{display:block;margin-bottom:.2rem;color:var(--draft);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.product-steps{list-style:none;padding:0;margin-top:2rem}
+@media (max-width:760px){.product-facts{grid-template-columns:1fr}}
+.panel-more{display:inline-block;margin-top:.9rem;color:var(--accent);font-size:.92rem;font-weight:550;text-decoration:none}
+.panel-more:hover{text-decoration:underline;text-underline-offset:3px}
+/* case study → product link at the foot of an article */
+.related-product{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem;margin-top:3rem;padding:1.1rem 1.2rem;border:1px solid var(--border2);border-radius:14px;background:var(--panel);text-decoration:none;color:var(--text)}
+.related-product:hover{border-color:var(--accent)}
+.related-product small{display:block;color:var(--muted);font-size:.8rem}
+.related-product b{display:block;font-size:1.05rem;margin-top:.1rem}
+.related-product em{display:block;font-style:normal;color:var(--muted);font-size:.9rem;margin-top:.25rem;line-height:1.5}
+.related-product-go{color:var(--accent);font-weight:550;font-size:.9rem;white-space:nowrap}
+@media (max-width:600px){.related-product{grid-template-columns:auto 1fr}.related-product-go{grid-column:2}}

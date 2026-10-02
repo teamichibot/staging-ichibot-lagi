@@ -15,6 +15,7 @@ interface Props {
   image?: string
   type?: 'website' | 'article'
   cta?: boolean
+  breadcrumbs?: { name: string; path: string }[]
 }
 
 const { cta = true, ...meta } = Astro.props

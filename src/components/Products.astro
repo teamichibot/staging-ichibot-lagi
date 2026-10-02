@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { productsFor } from '../data/products'
-import { langFromUrl } from '../i18n'
+import { langFromUrl, localize } from '../i18n'
 import { demoLink } from '../lib/contact'
 import { productIcons } from '../data/product-icons'
 import EnergyDashboard from './EnergyDashboard.astro'
@@ -14,8 +14,8 @@ const icons = productIcons
 const lang = langFromUrl(Astro.url)
 const products = productsFor(lang)
 const t = {
-  en: { title: 'Products proven in the field, ready to deploy', lede: 'Each product is based on a system already running at a client site.', tabs: 'Products', demo: 'Request a demo', shot: 'dashboard' },
-  id: { title: 'Produk yang sudah terbukti di lapangan, siap diterapkan', lede: 'Setiap produk berasal dari sistem yang sudah berjalan di lokasi klien.', tabs: 'Produk', demo: 'Minta demo', shot: 'dashboard' },
+  en: { title: 'Products proven in the field, ready to deploy', lede: 'Each product is based on a system already running at a client site.', tabs: 'Products', demo: 'Request a demo', shot: 'dashboard', more: 'Learn more →' },
+  id: { title: 'Produk yang sudah terbukti di lapangan, siap diterapkan', lede: 'Setiap produk berasal dari sistem yang sudah berjalan di lokasi klien.', tabs: 'Produk', demo: 'Minta demo', shot: 'dashboard', more: 'Selengkapnya →' },
 }[lang]
 
 /** Same polyline maths as the draft, run at build time instead of in the browser. */
@@ -134,6 +134,7 @@ function sparkPoints(values: number[]) {
               <div class="panel-text">
                 <h3>{p.name}</h3>
                 <p class="desc">{p.desc}</p>
+                <a class="panel-more" href={localize(`/products/${p.slug}`, lang)}>{t.more}</a>
               </div>
               <a class="btn primary" href={demoLink(p.name, lang)} target="_blank" rel="noopener">{p.cta ?? t.demo}</a>
             </div>

@@ -1,7 +1,7 @@
 ---
 /**
  * Site navbar. Desktop: a Products dropdown listing each product (links open
- * that product's tab via #product-<key>), plain section links, and the survey
+ * that product's page, /products/<slug>), plain section links, and the survey
  * CTA; the link for the section in view is marked. Below 880px the links fold
  * into a menu panel behind a toggle button.
  */
@@ -59,7 +59,7 @@ const switchHref = (l: Lang) => localize(page, l) + Astro.url.search
               <ul>
                 {products.map((p) => (
                   <li>
-                    <a href={`${home}#product-${p.key}`}>
+                    <a href={localize(`/products/${p.slug}`, lang)}>
                       <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
                       {p.name}
                     </a>
@@ -92,7 +92,7 @@ const switchHref = (l: Lang) => localize(page, l) + Astro.url.search
       <ul>
         {products.map((p) => (
           <li>
-            <a href={`${home}#product-${p.key}`}>
+            <a href={localize(`/products/${p.slug}`, lang)}>
               <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>
               {p.name}
             </a>

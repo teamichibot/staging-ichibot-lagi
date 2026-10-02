@@ -1,0 +1,160 @@
+---
+/**
+ * A product's own page, in either language. What the site already knows is
+ * shown (description, what's included, where it is proven, the dashboard,
+ * how a project runs, related case studies). What the brief lists as open
+ * items to come from Ichibot (the problem in the client's words, results and
+ * metrics, who it is for, deployment time) is a visible <Placeholder>, never a
+ * guess. The route looks the product up and passes it in.
+ */
+import PageLayout from '../layouts/PageLayout.astro'
+import Placeholder from '../components/Placeholder.astro'
+import PostImage from '../components/PostImage.astro'
+import EnergyDashboard from '../components/EnergyDashboard.astro'
+import EquipmentDashboard from '../components/EquipmentDashboard.astro'
+import PlantationDashboard from '../components/PlantationDashboard.astro'
+import VisionDashboard from '../components/VisionDashboard.astro'
+import CustomDashboard from '../components/CustomDashboard.astro'
+import type { Product } from '../data/products'
+import { productIcons } from '../data/product-icons'
+import { processSteps } from '../data/process'
+import { caseStudiesFor } from '../lib/case-studies'
+import { formatDate } from '../lib/blog'
+import { demoLink } from '../lib/contact'
+import { langFromUrl, localize } from '../i18n'
+
+interface Props {
+  product: Product
+}
+
+const { product: p } = Astro.props
+const lang = langFromUrl(Astro.url)
+const t = {
+  en: {
+    back: '← All products', demo: 'Request a demo', survey: 'Book a site survey', products: 'Products',
+    included: "What's included", proven: p.proofLabel, problem: 'The problem it solves', results: 'Results', who: "Who it's for",
+    how: 'How a project runs', time: 'Deployment time', cases: 'Related case studies', allCases: 'All case studies',
+    phProblem: 'The operational problem this product solves, in the words of the teams who use it.',
+    phResults: 'Measured results from deployments: before and after figures, with the client’s permission.',
+    phWho: 'The plants, roles and situations this product fits best.',
+    phTime: 'Typical time from site survey to go-live.',
+    builtFor: 'Each custom system is scoped for one client after a site survey.',
+    metaSuffix: 'Ichibot',
+  },
+  id: {
+    back: '← Semua produk', demo: 'Minta demo', survey: 'Jadwalkan survei lokasi', products: 'Produk',
+    included: 'Yang termasuk', proven: p.proofLabel, problem: 'Masalah yang diselesaikan', results: 'Hasil', who: 'Untuk siapa',
+    how: 'Bagaimana proyek berjalan', time: 'Waktu implementasi', cases: 'Studi kasus terkait', allCases: 'Semua studi kasus',
+    phProblem: 'Masalah operasional yang diselesaikan produk ini, dalam kata-kata tim yang memakainya.',
+    phResults: 'Hasil terukur dari penerapan: angka sebelum dan sesudah, dengan izin klien.',
+    phWho: 'Jenis pabrik, peran, dan situasi yang paling cocok untuk produk ini.',
+    phTime: 'Waktu umum dari survei lokasi hingga sistem berjalan.',
+    builtFor: 'Setiap sistem custom dirancang untuk satu klien setelah survei lokasi.',
+    metaSuffix: 'Ichibot',
+  },
+}[lang]
+
+const included = p.included.split(/,\s*|\s+and\s+|\s+dan\s+/).filter(Boolean).map((i) => i[0].toUpperCase() + i.slice(1))
+const deploymentKnown = !/\[X\]/.test(p.deploymentTime)
+const cases = await caseStudiesFor(p.key, 3)
+const blog = localize('/blog', lang)
+const url = new URL(localize(`/products/${p.slug}`, lang), Astro.site).href
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: p.name,
+  description: p.desc,
+  serviceType: 'Industrial IoT',
+  url,
+  areaServed: { '@type': 'Country', name: 'Indonesia' },
+  provider: { '@id': 'https://www.ichibot.id/#organization', '@type': 'Organization', name: 'Ichibot', url: 'https://www.ichibot.id/' },
+}
+---
+
+<PageLayout
+  title={`${p.name} — ${t.metaSuffix}`}
+  description={p.desc}
+  breadcrumbs={[{ name: t.products, path: `${localize('/', lang)}#products` }, { name: p.name, path: localize(`/products/${p.slug}`, lang) }]}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+
+  <section class="page-head product-head">
+    <div class="wrap">
+      <a class="back" href={`${localize('/', lang)}#products`}>{t.back}</a>
+      <p class="product-kicker"><span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[p.key]} /></span>{t.products}</p>
+      <h1>{p.name}</h1>
+      <p class="lede">{p.desc}</p>
+      <div class="actions">
+        <a class="btn primary" href={demoLink(p.name, lang)} target="_blank" rel="noopener">{p.cta ?? t.demo}</a>
+        <a class="btn" href={localize('/contact', lang)}>{t.survey}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <figure class="shot-frame replica-frame product-shot">
+        {p.replica === 'energy' ? <EnergyDashboard /> : p.replica === 'equipment' ? <EquipmentDashboard /> : p.replica === 'plantation' ? <PlantationDashboard /> : p.replica === 'custom' ? <CustomDashboard /> : <VisionDashboard />}
+      </figure>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap product-facts">
+      <div>
+        <h2>{t.included}</h2>
+        <ul class="product-list">{included.map((i) => <li>{i}</li>)}</ul>
+      </div>
+      <div>
+        <h2>{t.proven}</h2>
+        {p.proof.length ? <ul class="product-list proof">{p.proof.map((i) => <li>{i}</li>)}</ul> : <p class="product-note">{t.builtFor}</p>}
+      </div>
+      <div>
+        <h2>{t.problem}</h2>
+        <Placeholder what={t.phProblem} />
+      </div>
+      <div>
+        <h2>{t.results}</h2>
+        <Placeholder what={t.phResults} />
+      </div>
+      <div>
+        <h2>{t.who}</h2>
+        <Placeholder what={t.phWho} />
+      </div>
+      <div>
+        <h2>{t.time}</h2>
+        {deploymentKnown ? <p class="product-note">{p.deploymentTime}</p> : <Placeholder what={t.phTime} />}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <h2>{t.how}</h2>
+      <ol class="steps product-steps">
+        {processSteps[lang].map((s) => <li class="step"><h3>{s.title}</h3><p>{s.body}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  {cases.length > 0 && (
+    <section class="page-body">
+      <div class="wrap">
+        <div class="head-row">
+          <h2>{t.cases}</h2>
+          <a class="btn sm" href={`${blog}?category=Case%20Study`}>{t.allCases}</a>
+        </div>
+        <div class="posts">
+          {cases.map((c) => (
+            <a class="post" href={`${blog}/${c.slug}`}>
+              <div class="thumb"><PostImage src={c.image} width={400} height={250} /></div>
+              <small>{formatDate(c.date, lang)}</small>
+              <h3>{c.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</PageLayout>

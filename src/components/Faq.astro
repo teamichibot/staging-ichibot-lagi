@@ -53,9 +53,18 @@ const faqs: Record<'en' | 'id', [string, string][]> = {
     ]
   ]
 }
+// FAQPage structured data from the same questions, so search and AI answer
+// engines can read them as question-and-answer pairs.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: lang,
+  mainEntity: faqs[lang].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+}
 ---
 
 <section class="faq" style="padding-top:0">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="wrap">
     <div><h2>{t.title}</h2><p class="lede">{t.lede}</p></div>
     <div>

@@ -57,7 +57,7 @@ const action = `${localize('/contact', lang)}#contact-form`
 const waDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 5)}-${WHATSAPP_NUMBER.slice(5, 9)}-${WHATSAPP_NUMBER.slice(9)}`
 ---
 
-<PageLayout title={t.metaTitle} description={t.metaDesc} cta={false}>
+<PageLayout title={t.metaTitle} description={t.metaDesc} cta={false} breadcrumbs={[{ name: t.metaTitle.split(' — ')[0], path: localize('/contact', lang) }]}>
   <section class="page-head">
     <div class="wrap">
       <h1>{t.title}</h1>

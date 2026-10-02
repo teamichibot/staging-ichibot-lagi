@@ -9,6 +9,9 @@ import { FALLBACK_IMAGE, formatDate, getAllPosts, type Post } from '../lib/blog'
 import { renderMarkdown, videoEmbed } from '../lib/markdown'
 import PostImage from '../components/PostImage.astro'
 import { langFromUrl, localize } from '../i18n'
+import { tagFor } from '../lib/case-tags'
+import { productsFor } from '../data/products'
+import { productIcons } from '../data/product-icons'
 
 interface Props {
   post: Post
@@ -17,9 +20,16 @@ interface Props {
 const { post } = Astro.props
 const lang = langFromUrl(Astro.url)
 const blog = localize('/blog', lang)
+
+// A case study links to the product it demonstrates (found the way the
+// homepage's case cards tag it), so readers can go from proof to product.
+const isCase = ['Case Study', 'Studi Kasus'].includes(post.category)
+const tag = isCase ? tagFor(`${post.title} ${post.excerpt}`) : undefined
+const productKey = tag && ({ integration: 'custom' } as Record<string, string>)[tag.icon] || tag?.icon
+const relatedProduct = productKey ? productsFor(lang).find((p) => p.key === productKey) : undefined
 const t = {
-  en: { back: '← All articles', video: 'Related video', more: 'More articles', all: 'All articles' },
-  id: { back: '← Semua artikel', video: 'Video terkait', more: 'Artikel lainnya', all: 'Semua artikel' },
+  en: { back: '← All articles', video: 'Related video', more: 'More articles', all: 'All articles', product: 'Related product', see: 'See the product →' },
+  id: { back: '← Semua artikel', video: 'Video terkait', more: 'Artikel lainnya', all: 'Semua artikel', product: 'Produk terkait', see: 'Lihat produknya →' },
 }[lang]
 
 const html = renderMarkdown(post.content)
@@ -53,6 +63,7 @@ const schema = {
   description={post.excerpt || post.title}
   image={post.image || undefined}
   type="article"
+  breadcrumbs={[{ name: lang === 'id' ? 'Artikel' : 'Insights', path: blog }, { name: post.title, path: `${blog}/${post.slug}` }]}
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
 
@@ -85,6 +96,18 @@ const schema = {
             <iframe src={video.src} title={`Video: ${post.title}`} loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen />
           </div>
         </div>
+      )}
+
+      {relatedProduct && (
+        <a class="related-product" href={localize(`/products/${relatedProduct.slug}`, lang)} lang={lang}>
+          <span class="nav-ic"><svg viewBox="0 0 16 16" set:html={productIcons[relatedProduct.key]} /></span>
+          <span>
+            <small>{t.product}</small>
+            <b>{relatedProduct.name}</b>
+            <em>{relatedProduct.desc}</em>
+          </span>
+          <span class="related-product-go">{t.see}</span>
+        </a>
       )}
     </div>
   </article>

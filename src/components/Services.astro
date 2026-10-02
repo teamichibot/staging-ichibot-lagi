@@ -1,5 +1,6 @@
 ---
 import { langFromUrl } from '../i18n'
+import { processSteps } from '../data/process'
 
 const lang = langFromUrl(Astro.url)
 
@@ -40,24 +41,7 @@ const services = [
   },
 ]
 
-const steps = [
-  {
-    title: lang === 'id' ? 'Analisis' : 'Analysis',
-    body: lang === 'id' ? 'Kami mengidentifikasi masalah, lini yang terlibat, dan data yang dibutuhkan, yang menentukan cakupan survei lokasi.' : 'We identify the problem, the lines involved and the data needed, which defines what the site survey covers.',
-  },
-  {
-    title: lang === 'id' ? 'Survei lokasi' : 'Site survey',
-    body: lang === 'id' ? 'Kami memetakan mesin, data point, dan jaringan Anda, lalu mengusulkan produk atau cakupan custom yang tepat.' : 'We map your machines, data points and network, then propose the right product or custom scope.',
-  },
-  {
-    title: lang === 'id' ? 'Pilot di satu lini' : 'Pilot on one line',
-    body: lang === 'id' ? 'Jalankan dulu di satu lini atau area, sehingga Anda melihat hasilnya sebelum melangkah lebih jauh.' : 'Go live on a single line or area first, so you see results before committing further.',
-  },
-  {
-    title: lang === 'id' ? 'Perluas' : 'Scale up',
-    body: lang === 'id' ? 'Terapkan ke lebih banyak lini dan lokasi, dengan pelatihan dan dukungan untuk tim Anda.' : 'Roll out to more lines and sites, with training and support for your team.',
-  },
-]
+const steps = processSteps[lang]
 ---
 
 <section id="services" style="padding-top:0">

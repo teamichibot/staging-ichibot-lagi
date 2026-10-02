@@ -12,9 +12,11 @@ interface Props {
   image?: string
   /** Open Graph type: 'website' for pages, 'article' for blog posts. */
   type?: 'website' | 'article'
+  /** Trail from the homepage to this page (BreadcrumbList structured data). */
+  breadcrumbs?: { name: string; path: string }[]
 }
 
-const { title, description, image, type = 'website' } = Astro.props
+const { title, description, image, type = 'website', breadcrumbs } = Astro.props
 const canonical = new URL(Astro.url.pathname, Astro.site)
 const lang = langFromUrl(Astro.url)
 // Every page exists in both languages at the same path, /id-prefixed for Bahasa.
@@ -55,6 +57,16 @@ const schema = home && {
   ],
 }
 const skip = lang === 'id' ? 'Lewati ke konten' : 'Skip to content'
+const crumbs = breadcrumbs?.length && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ name: lang === 'id' ? 'Beranda' : 'Home', path: localize('/', lang) }, ...breadcrumbs].map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.path, Astro.site).href,
+  })),
+}
 ---
 
 <!doctype html>
@@ -86,6 +98,7 @@ const skip = lang === 'id' ? 'Lewati ke konten' : 'Skip to content'
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={shareImage} />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {crumbs && <script type="application/ld+json" set:html={JSON.stringify(crumbs)} />}
     <slot name="head" />
   </head>
   <body>

@@ -1,0 +1,10 @@
+---
+import ProductView from '../../../views/Product.astro'
+import { productBySlug } from '../../../data/products'
+import { langFromUrl } from '../../../i18n'
+
+const product = productBySlug(Astro.params.slug ?? '', langFromUrl(Astro.url))
+if (!product) return Astro.rewrite('/404')
+---
+
+<ProductView product={product} />

@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { tagFor } from './case-tags'
 
 export type CaseStudy = {
   slug: string
@@ -35,4 +36,14 @@ export async function getCaseStudies(limit = 12): Promise<CaseStudy[]> {
     return []
   }
   return (data ?? []) as CaseStudy[]
+}
+
+/** Product tags as case-tags names them; Custom shows the integration projects. */
+const TAG_FOR_PRODUCT: Record<string, string> = { energy: 'energy', equip: 'equip', plant: 'plant', vision: 'vision', custom: 'integration' }
+
+/** Case studies whose title and excerpt point at the given product (newest first). */
+export async function caseStudiesFor(productKey: string, limit = 3): Promise<CaseStudy[]> {
+  const want = TAG_FOR_PRODUCT[productKey]
+  const all = await getCaseStudies(30)
+  return all.filter((c) => tagFor(`${c.title} ${c.excerpt ?? ''}`)?.icon === want).slice(0, limit)
 }

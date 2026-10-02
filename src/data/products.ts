@@ -10,6 +10,8 @@
  */
 export type Product = {
   key: 'energy' | 'vision' | 'equip' | 'plant' | 'custom'
+  /** URL of the product's own page: /products/<slug> (and /id/products/<slug>). */
+  slug: string
   name: string
   desc: string
   included: string
@@ -41,6 +43,7 @@ export type Product = {
 export const products: Product[] = [
   {
     key: 'energy',
+    slug: 'smart-energy-monitoring',
     name: 'Smart energy monitoring',
     desc: 'See kWh, peak load and power quality per transformer, panel and line, in real time.',
     included: 'Power meters, edge gateway, energy dashboard template',
@@ -56,6 +59,7 @@ export const products: Product[] = [
   },
   {
     key: 'equip',
+    slug: 'smart-equipment-monitoring',
     name: 'Smart equipment monitoring',
     desc: 'Track pressure, temperature, vibration and status of compressors, pumps and vehicles before they fail.',
     included: 'Retrofit sensors, PLC integration, condition alerts',
@@ -75,6 +79,7 @@ export const products: Product[] = [
   },
   {
     key: 'plant',
+    slug: 'smart-plantation-system',
     name: 'Smart plantation system',
     desc: 'Solar-powered soil monitoring over LoRa for large oil palm plantations with no grid or signal.',
     included: 'Solar sensor nodes, LoRa gateway, soil dashboard',
@@ -90,6 +95,7 @@ export const products: Product[] = [
   },
   {
     key: 'vision',
+    slug: 'ai-vision-engine',
     name: 'AI Vision Engine',
     desc: 'Turn existing CCTV into automatic inspectors for PPE compliance, safety zones and oil spill detection.',
     included: 'Edge AI unit, pre-trained models, alert dashboard',
@@ -105,6 +111,7 @@ export const products: Product[] = [
   },
   {
     key: 'custom',
+    slug: 'custom',
     name: 'Custom',
     desc: 'Discuss a product built for your specific purpose, from the sensors on your machines to the dashboard your team uses.',
     included: 'Site survey, system design, hardware, software and integration',
@@ -163,3 +170,7 @@ const productsId: Record<Product['key'], Partial<Product>> = {
 /** The products with their copy in the given language. */
 export const productsFor = (lang: 'en' | 'id'): Product[] =>
   lang === 'id' ? products.map((p) => ({ ...p, ...productsId[p.key] })) : products
+
+/** The product whose page lives at /products/<slug>, in the given language. */
+export const productBySlug = (slug: string, lang: 'en' | 'id'): Product | undefined =>
+  productsFor(lang).find((p) => p.slug === slug)

@@ -1,0 +1,17 @@
+---
+/**
+ * A visible "to be supplied" marker for content the brief says must come
+ * from Ichibot (results, metrics, timelines, audiences): never filled with a
+ * plausible guess. Search the codebase for <Placeholder to find them all.
+ */
+import { langFromUrl } from '../i18n'
+
+interface Props {
+  /** what is missing, in the page's language */
+  what: string
+}
+const { what } = Astro.props
+const lang = langFromUrl(Astro.url)
+---
+
+<p class="placeholder"><b>{lang === 'id' ? 'Akan dilengkapi' : 'To be supplied'}</b>{what}</p>
