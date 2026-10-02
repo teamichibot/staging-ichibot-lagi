@@ -75,6 +75,38 @@ const crumbs = breadcrumbs?.length && {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    {/*
+      Default language. A visitor whose browser is set to Indonesian, or whose
+      clock is on an Indonesian time zone, is sent from an English page to the
+      same page under /id before it paints. Done in the browser, not by IP on
+      the server: pages are CDN-cached and the site sits behind Cloudflare, and
+      crawlers (English, US time) keep the English pages. A pick made with the
+      EN/ID switch is kept in a `lang` cookie for a year and always wins, both
+      ways: lang=en stays in English, lang=id goes to /id from any English URL.
+    */}
+    <script is:inline>
+      (function () {
+        try {
+          document.addEventListener('click', function (e) {
+            var a = e.target && e.target.closest && e.target.closest('.lang-switch a[hreflang]')
+            if (a) document.cookie = 'lang=' + a.getAttribute('hreflang') + '; path=/; max-age=31536000; samesite=lax'
+          })
+          if (document.documentElement.lang !== 'en') return
+          var picked = (document.cookie.match(/(?:^|; )lang=(en|id)/) || [])[1]
+          if (picked === 'en') return
+          if (picked !== 'id') {
+            var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']
+            var idLang = langs.some(function (l) { return /^(id|in)(-|$)/i.test(l) })
+            var tz = ''
+            try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '' } catch (_) {}
+            var idZone = /^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(tz)
+            if (!idLang && !idZone) return
+          }
+          var p = location.pathname
+          location.replace((p === '/' ? '/id' : '/id' + p) + location.search + location.hash)
+        } catch (_) {}
+      })()
+    </script>
     <title>{title}</title>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
