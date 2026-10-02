@@ -2,6 +2,7 @@
 import '@fontsource-variable/geist'
 import '../styles/global.css'
 import WhatsAppButton from '../components/WhatsAppButton.astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 import { basePath, langFromUrl, localize } from '../i18n'
 import { EMAIL, socials } from '../lib/contact'
 
@@ -105,5 +106,7 @@ const crumbs = breadcrumbs?.length && {
     <a class="skip-link" href="#main">{skip}</a>
     <slot />
     <WhatsAppButton />
+    {/* Core Web Vitals from real visitors, as the old site's <SpeedInsights /> sent */}
+    <SpeedInsights />
   </body>
 </html>

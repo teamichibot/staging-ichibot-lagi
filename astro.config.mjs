@@ -9,7 +9,9 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   site: 'https://www.ichibot.id',
   output: 'server',
-  adapter: vercel(),
+  // Vercel Web Analytics (visitors, page views): the old Next.js site sent
+  // them through <Analytics />; without this the dashboard reads zero.
+  adapter: vercel({ webAnalytics: { enabled: true } }),
   // No @astrojs/sitemap: pages render on the server, so src/pages/sitemap.xml.ts
   // builds the sitemap (pages and posts, both languages) per request.
   integrations: [mdx()],
