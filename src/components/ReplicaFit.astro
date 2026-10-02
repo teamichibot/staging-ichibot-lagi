@@ -27,7 +27,8 @@ const { width, label, ratio = 475 / 1040 } = Astro.props
    * keep the real screen's 16:10. A replica that is taller than the frame is first scaled
    * down, but never below 75% of its fit-to-width size so its text stays
    * legible; whatever still overflows is cropped behind a fade, like a
-   * window onto a larger screen. A scaled-down replica is centred.
+   * window onto a larger screen. A frame wider than the design (the product
+   * pages) scales the replica up to fill it.
    */
   const MIN_SHRINK = 0.75
   for (const fit of document.querySelectorAll<HTMLElement>('.replica-fit')) {
@@ -36,7 +37,9 @@ const { width, label, ratio = 475 / 1040 } = Astro.props
     const size = () => {
       const w = fit.clientWidth
       const h = Math.round(w * ratio)
-      const base = Math.min(1, w / inner.offsetWidth)
+      // fit to width both ways: a frame wider than the design (the product
+      // pages) scales the replica up rather than leaving side gutters
+      const base = w / inner.offsetWidth
       const s = Math.max(base * MIN_SHRINK, Math.min(base, h / inner.offsetHeight))
       const left = Math.max(0, (w - inner.offsetWidth * s) / 2)
       inner.style.transform = `translateX(${left}px) scale(${s})`
